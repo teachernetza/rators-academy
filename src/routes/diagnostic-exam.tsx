@@ -15,7 +15,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import {
   QuestionBank,
@@ -339,7 +338,7 @@ function StartScreen({
 }) {
   return (
     <div className="mx-auto max-w-xl text-center">
-      <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
+      <span className="inline-flex items-center gap-2 rounded-full border border-mint/40 bg-mint/10 px-3 py-1 text-xs font-medium text-primary shadow-[0_0_18px_-6px_var(--mint)]">
         <Sparkles className="h-3.5 w-3.5" /> Gratis · ~15 minutos
       </span>
       <h1 className="mt-6 font-heading text-3xl font-bold sm:text-4xl">
@@ -350,7 +349,7 @@ function StartScreen({
         nivel CEFR estimado y un reporte PDF descargable.
       </p>
 
-      <div className="mt-8 space-y-3 rounded-2xl border border-border bg-card p-6 text-left shadow-[var(--shadow-soft)]">
+      <div className="mt-8 space-y-3 rounded-2xl border border-mint/30 bg-card/80 p-6 text-left shadow-[var(--shadow-soft)] backdrop-blur">
         <label className="text-sm font-medium">¿Cuál es tu nombre?</label>
         <Input
           value={name}
@@ -392,7 +391,7 @@ function QuestionCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-soft)]">
+    <div className="rounded-2xl border border-border bg-card/80 p-5 shadow-[var(--shadow-soft)] backdrop-blur transition-all duration-500 hover:border-mint/50 hover:shadow-[var(--glow-mint)]">
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1">
           <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
@@ -437,10 +436,10 @@ function OptionRadio({
   return (
     <label
       className={cn(
-        "flex cursor-pointer items-center gap-3 rounded-lg border p-3 text-sm transition",
+        "flex cursor-pointer items-center gap-3 rounded-lg border p-3 text-sm transition-all duration-300",
         checked
-          ? "border-primary bg-primary/5"
-          : "border-border bg-background hover:border-primary/40",
+          ? "border-mint bg-mint/10 shadow-[0_0_18px_-8px_var(--mint)]"
+          : "border-border bg-background hover:-translate-y-0.5 hover:border-mint/50 hover:bg-mint/5",
       )}
     >
       <input
@@ -611,7 +610,7 @@ function VocabSection({
           return (
             <div
               key={q.id}
-              className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-soft)]"
+              className="rounded-2xl border border-border bg-card/80 p-5 shadow-[var(--shadow-soft)] backdrop-blur transition-all duration-500 hover:border-mint/50"
             >
               <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 Oración {i + 1}
@@ -622,7 +621,7 @@ function VocabSection({
                   type="button"
                   onClick={() => current && clear(q.id)}
                   className={cn(
-                    "inline-flex min-w-[100px] items-center justify-center rounded-md border-b-2 border-dashed px-2 py-0.5 text-sm font-semibold transition",
+                    "inline-flex min-w-[100px] items-center justify-center rounded-md border-b-2 border-dashed px-2 py-0.5 text-sm font-semibold transition-all duration-300",
                     current
                       ? "border-primary bg-primary/10 text-primary"
                       : "border-muted-foreground text-muted-foreground",
@@ -644,10 +643,10 @@ function VocabSection({
                       className={cn(
                         "rounded-full border px-3 py-1 text-sm transition",
                         current === w
-                          ? "border-primary bg-primary text-primary-foreground"
+                          ? "border-mint bg-mint text-primary shadow-[0_0_16px_-6px_var(--mint)]"
                           : inUse
                             ? "cursor-not-allowed border-border bg-muted text-muted-foreground/50 line-through"
-                            : "border-border bg-background hover:border-primary/50 hover:bg-primary/5",
+                            : "border-border bg-background transition-all duration-300 hover:-translate-y-0.5 hover:border-mint/60 hover:bg-mint/10",
                       )}
                     >
                       {w}
@@ -828,11 +827,11 @@ function ResultsScreen({
 
   return (
     <div>
-      <div className="rounded-2xl border-2 border-primary bg-card p-8 text-center shadow-[var(--shadow-elegant)]">
+      <div className="rounded-2xl border-2 border-mint bg-card p-8 text-center shadow-[var(--glow-mint)]">
         <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
           Nivel estimado (CEFR)
         </div>
-        <div className="mt-2 bg-[image:var(--gradient-primary)] bg-clip-text font-heading text-7xl font-black text-transparent">
+        <div className="mt-2 bg-[image:var(--gradient-hero)] bg-clip-text font-heading text-7xl font-black text-transparent">
           {scores.cefr}
         </div>
         <div className="mt-2 text-lg">
@@ -846,7 +845,7 @@ function ResultsScreen({
         )}
       </div>
 
-      <div className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-soft)]">
+      <div className="mt-6 rounded-2xl border border-mint/30 bg-card p-6 shadow-[var(--shadow-soft)]">
         <h3 className="font-heading text-lg font-semibold">Perfil de habilidades</h3>
         <div className="mt-4 flex justify-center">
           <canvas ref={radarRef} width={360} height={280} className="max-w-full" />
@@ -857,7 +856,7 @@ function ResultsScreen({
         {stats.map((s) => (
           <div
             key={s.label}
-            className="rounded-xl border border-border bg-card p-4 shadow-[var(--shadow-soft)]"
+            className="card-hover rounded-xl border border-border bg-card p-4 shadow-[var(--shadow-soft)]"
           >
             <div className="text-xs uppercase tracking-wide text-muted-foreground">
               {s.label}
