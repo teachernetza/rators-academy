@@ -1,44 +1,68 @@
-## Diagnóstico real
+# Rediseño visual: Landing + Examen Diagnóstico
 
-Tu sistema **no** es falso y el plan gratuito de Lovable Cloud **sí** soporta esto (crear usuarios vía Auth Admin API está incluido). El error real, visto en los logs del sitio publicado:
+Solo se tocan `/` (landing) y `/diagnostic-exam`. El login y el resto del LMS quedan intactos.
 
-```
-Error: Server function info not found for adminListUsers
-POST /_serverFn/adminListUsers → 500
-```
+## 1. Logo con glow verde (arregla el borde blanco)
 
-Causa: en `src/lib/admin.functions.ts` los `.handler(...)` de cada `createServerFn` usan helpers definidos a **nivel de módulo** (`admin()`, `assertAdmin()`, `getRole()`, `generatePassword()`). El transform de TanStack Start que separa server functions **elimina** el código de módulo al empaquetar el worker de producción; los handlers quedan huérfanos y no se registran en el manifest → 500 en producción, aunque en preview funciona porque el splitter se comporta distinto en dev.
+El logo se ve con un recuadro/borde porque el PNG tiene fondo blanco sobre un fondo casi blanco. Solución:
 
-Esto también afecta a `adminCreateUser`, `adminDeleteUser`, `adminToggleActive`, `adminUpdateUser`, `adminUpdateRole`, `adminResetPassword`, `adminListByRole`, `adminEnrollStudent`, `adminGetStats` — por eso "no puedes crear usuarios".
+- Envolver el logo del hero y el del header en un contenedor con halo verde menta difuso (doble capa: blur exterior + anillo interior), de modo que el borde blanco se lea como parte del glow y no como un recorte.
+- El glow respira suavemente (animación `pulse` lenta) y se intensifica en hover.
+- Mismo tratamiento, más sutil, para el icono del header.
 
-## Solución
+Se añade un token nuevo de acento verde menta (`--mint`) más brillante que el `--teal` actual, para que el glow contraste contra el azul marino `#0f3b4b`.
 
-Mover los helpers a un módulo server-only aparte y que los handlers los importen. Sin cambios de UI, sin cambios de DB, sin cambios de env vars.
+## 2. Sistema visual más moderno
 
-### Cambios
+**Tokens nuevos en `src/styles.css`:**
+- `--mint` (verde brillante del logo) + variantes glow
+- Gradiente `--gradient-hero` (marino → teal → menta)
+- Sombras `--glow-mint`, `--glow-primary`
+- Keyframes: `float`, `glow-pulse`, `shimmer`, `reveal-up`
 
-1. **Nuevo archivo `src/lib/admin-helpers.server.ts`** (server-only por el sufijo `.server.ts`, bloqueado del bundle cliente):
-   - Exporta `getSupabaseAdmin()` (obtiene `supabaseAdmin` dinámicamente).
-   - Exporta `assertAdmin(userId)`.
-   - Exporta `getRole(userId)`.
-   - Exporta `generatePassword(length?)`.
+**Efectos aplicados a landing y examen:**
+- Fondo con degradado animado suave y blobs que flotan lentamente detrás del hero.
+- Barra de progreso de scroll fija arriba (gradiente marino → menta).
+- Header que cambia de transparente a sólido con blur y sombra al hacer scroll.
+- Secciones que aparecen con fade + subida al entrar en viewport (IntersectionObserver, hook reutilizable `useReveal`).
+- Tarjetas con hover elevado, borde que se ilumina en menta y brillo que sigue al cursor.
+- Nav links con subrayado animado y estado activo según la sección visible durante el scroll.
+- Botones con transición de gradiente y glow al hover.
+- Botón flotante de WhatsApp con anillo pulsante.
+- Todo respeta `prefers-reduced-motion`.
 
-2. **Reescribir `src/lib/admin.functions.ts`**:
-   - Eliminar los helpers de módulo.
-   - Cada `.handler()` hace `const { assertAdmin, getSupabaseAdmin, ... } = await import("./admin-helpers.server")` en su primera línea y luego los usa.
-   - Nada más cambia: mismas firmas, mismos schemas Zod, mismo comportamiento.
+## 3. Precios corregidos
 
-3. **Verificación**:
-   - `tsgo` typecheck.
-   - `invoke-server-function` contra `/_serverFn/adminListUsers` con Authorization bearer para confirmar 200 (o 403 controlado, no 500).
-   - Revisar logs del worker para confirmar que ya no aparece "Server function info not found".
+Tarifa base: **$149 MXN / hora**.
 
-### Lo que NO cambia
+Tres paquetes mensuales (4 semanas), con descuento creciente:
 
-- `client.server.ts`, env vars, RLS, migraciones, UI, rutas — todo intacto.
-- Sigues teniendo `SUPABASE_SERVICE_ROLE_KEY` ya inyectado por Lovable Cloud (no hay que configurar nada manual).
-- El sitio publicado en `rators-academy-hub.lovable.app` recupera funcionalidad completa de admin tras el re-deploy automático.
+| Paquete | Horas/sem | Horas/mes | Precio lista | Desc. | Precio final | Por hora |
+|---|---|---|---|---|---|---|
+| Essential | 2 | 8 | $1,192 | 10% | **$1,073** | $134 |
+| Progress | 3 | 12 | $1,788 | 15% | **$1,520** | $127 |
+| Intensive | 4 | 16 | $2,384 | 20% | **$1,907** | $119 |
 
-## Sobre Vercel
+El descuento escalonado (10/15/20%) da motivo real para subir de paquete; el 20% que pediste queda en el paquete top. Si prefieres 20% plano en los tres, dilo y ajusto: $954 / $1,430 / $1,907.
 
-Tu app publicada corre en Lovable (`.lovable.app`), no en Vercel. El `vercel.json` existe pero no está activo en esta URL. Si además desplegas en Vercel, ahí sí tendrías que agregar manualmente `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, y las `VITE_*`. Pero para el problema actual, no hace falta tocar Vercel.
+**Sección de planes rediseñada:**
+- 1 tarjeta "Clase Suelta" ($149/hora, sin compromiso) + las 3 tarjetas mensuales.
+- "Progress" marcada como más popular con borde en gradiente y glow.
+- Cada tarjeta muestra precio tachado, precio final, ahorro mensual y precio por hora.
+- Toggle "ver precio por hora / precio total" con animación de números.
+- Cada botón abre WhatsApp con mensaje precargado del paquete específico.
+
+## 4. Página del examen
+
+Mismo lenguaje visual: fondo con gradiente animado, barra de progreso del examen con relleno gradiente y glow, tarjetas de sección con estado (pendiente / en curso / completa) en color, opciones de respuesta con feedback de color al seleccionar, transición entre secciones, y pantalla de resultados con el radar chart sobre un panel oscuro con glow menta.
+
+## Detalles técnicos
+
+- `src/styles.css`: tokens nuevos, keyframes, utilidades `@utility` (`glow-logo`, `card-hover`, `reveal`).
+- `src/hooks/use-reveal.ts`: IntersectionObserver para animaciones de entrada.
+- `src/hooks/use-scroll-progress.ts`: progreso de scroll + sección activa.
+- `src/lib/pricing.ts`: constantes y cálculo de paquetes (fuente única de precios).
+- `src/routes/index.tsx`: header, hero, secciones, planes.
+- `src/routes/diagnostic-exam.tsx`: solo capa de presentación; la lógica del examen y el PDF no se tocan.
+
+Sin cambios de backend, ni de rutas, ni de lógica de negocio.
