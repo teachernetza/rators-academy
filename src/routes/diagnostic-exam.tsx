@@ -134,19 +134,35 @@ function DiagnosticExam() {
   const progress = step === 0 ? 0 : Math.round(((step - 1) / 5) * 100);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="relative min-h-screen bg-background text-foreground">
+      <div
+        aria-hidden
+        className="tn-shimmer-bg pointer-events-none fixed inset-0 -z-20"
+        style={{
+          background:
+            "linear-gradient(165deg, var(--background) 0%, color-mix(in oklab, var(--mint) 9%, var(--background)) 55%, color-mix(in oklab, var(--primary) 8%, var(--background)) 100%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="tn-float pointer-events-none fixed -right-32 top-24 -z-10 h-[380px] w-[380px] rounded-full opacity-20 blur-3xl"
+        style={{ background: "var(--gradient-mint)" }}
+      />
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-lg">
+      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 shadow-[var(--shadow-soft)] backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[image:var(--gradient-primary)] text-primary-foreground">
+          <Link to="/" className="group flex items-center gap-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[image:var(--gradient-hero)] text-primary-foreground shadow-[var(--glow-mint)] transition-transform duration-500 group-hover:scale-110">
               <Sparkles className="h-5 w-5" />
             </div>
             <span className="font-heading text-base font-bold sm:text-lg">
               Examen Diagnóstico
             </span>
           </Link>
-          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
+          <Link
+            to="/"
+            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
             ← Volver al inicio
           </Link>
         </div>
@@ -156,14 +172,24 @@ function DiagnosticExam() {
               <span>
                 Paso {step} de 5 · {SECTION_NAMES[step - 1]}
               </span>
-              <span>{progress}%</span>
+              <span className="font-semibold text-primary">{progress}%</span>
             </div>
-            <Progress value={progress} className="h-2" />
+            <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full transition-[width] duration-500 ease-out"
+                style={{
+                  width: `${progress}%`,
+                  background: "var(--gradient-mint)",
+                  boxShadow: "var(--glow-mint)",
+                }}
+              />
+            </div>
           </div>
         )}
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:py-14">
+      <main key={step} className="animate-fade-in mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:py-14">
+
         {step === 0 && (
           <StartScreen
             name={studentName}
