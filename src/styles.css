@@ -182,3 +182,156 @@
     letter-spacing: -0.01em;
   }
 }
+
+/* ===== Brand: mint glow accent (landing + diagnostic exam) ===== */
+:root {
+  --mint: oklch(0.78 0.16 168);
+  --mint-strong: oklch(0.70 0.17 170);
+  --mint-soft: oklch(0.88 0.11 168);
+  --gradient-hero: linear-gradient(135deg, oklch(0.28 0.04 225), oklch(0.45 0.08 210) 45%, oklch(0.70 0.17 170));
+  --gradient-mint: linear-gradient(135deg, oklch(0.70 0.17 170), oklch(0.84 0.14 165));
+  --glow-mint: 0 0 40px oklch(0.78 0.16 168 / 0.45);
+  --glow-primary: 0 0 40px oklch(0.45 0.08 215 / 0.35);
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dark {
+  --mint: oklch(0.82 0.15 168);
+  --mint-strong: oklch(0.74 0.16 170);
+  --mint-soft: oklch(0.60 0.12 170);
+}
+
+@theme inline {
+  --color-mint: var(--mint);
+  --color-mint-strong: var(--mint-strong);
+  --color-mint-soft: var(--mint-soft);
+}
+
+@keyframes tn-float {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(0, -24px, 0) scale(1.04); }
+}
+@keyframes tn-glow-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+@keyframes tn-shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes tn-rise {
+  from { opacity: 0; transform: translate3d(0, 24px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@utility tn-float {
+  animation: tn-float 9s ease-in-out infinite;
+}
+
+@utility tn-shimmer-bg {
+  background-size: 200% 200%;
+  animation: tn-shimmer 14s ease infinite;
+}
+
+/* Logo halo: hides the white PNG edge behind a soft mint glow */
+@utility glow-logo {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -14%;
+    z-index: -1;
+    border-radius: 9999px;
+    background: radial-gradient(
+      circle at 50% 50%,
+      oklch(0.78 0.16 168 / 0.55) 0%,
+      oklch(0.78 0.16 168 / 0.22) 45%,
+      transparent 72%
+    );
+    filter: blur(18px);
+    animation: tn-glow-pulse 5s ease-in-out infinite;
+  }
+  & img {
+    border-radius: 1.25rem;
+    filter: drop-shadow(0 0 10px oklch(0.78 0.16 168 / 0.55))
+      drop-shadow(0 0 26px oklch(0.70 0.17 170 / 0.35));
+    transition: filter 500ms var(--ease-smooth), transform 500ms var(--ease-smooth);
+  }
+  &:hover img {
+    transform: translateY(-2px) scale(1.02);
+    filter: drop-shadow(0 0 14px oklch(0.78 0.16 168 / 0.8))
+      drop-shadow(0 0 40px oklch(0.70 0.17 170 / 0.5));
+  }
+}
+
+@utility glow-logo-sm {
+  & img {
+    filter: drop-shadow(0 0 6px oklch(0.78 0.16 168 / 0.5));
+    transition: filter 400ms var(--ease-smooth);
+  }
+  &:hover img {
+    filter: drop-shadow(0 0 12px oklch(0.78 0.16 168 / 0.85));
+  }
+}
+
+@utility card-hover {
+  transition:
+    transform 450ms var(--ease-smooth),
+    box-shadow 450ms var(--ease-smooth),
+    border-color 450ms var(--ease-smooth);
+  &:hover {
+    transform: translateY(-6px);
+    border-color: oklch(0.78 0.16 168 / 0.55);
+    box-shadow: 0 18px 45px -18px oklch(0.35 0.045 225 / 0.45), var(--glow-mint);
+  }
+}
+
+@utility reveal {
+  opacity: 0;
+  transform: translate3d(0, 26px, 0);
+  transition:
+    opacity 700ms var(--ease-smooth),
+    transform 700ms var(--ease-smooth);
+}
+
+@utility reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+@utility link-underline {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    height: 2px;
+    width: 100%;
+    border-radius: 2px;
+    background: var(--gradient-mint);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 350ms var(--ease-smooth);
+  }
+  &:hover::after,
+  &[data-active="true"]::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tn-float,
+  .tn-shimmer-bg,
+  .glow-logo::before {
+    animation: none !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
