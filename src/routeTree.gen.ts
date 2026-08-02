@@ -14,6 +14,7 @@ import { Route as DiagnosticExamRouteImport } from './routes/diagnostic-exam'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as AnnouncementsRouteImport } from './routes/announcements'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LabsIndexRouteImport } from './routes/labs.index'
 import { Route as TeacherStudentsRouteImport } from './routes/teacher/students'
 import { Route as TeacherProfileRouteImport } from './routes/teacher/profile'
 import { Route as TeacherPendingRouteImport } from './routes/teacher/pending'
@@ -69,6 +70,11 @@ const AnnouncementsRoute = AnnouncementsRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LabsIndexRoute = LabsIndexRouteImport.update({
+  id: '/labs/',
+  path: '/labs/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TeacherStudentsRoute = TeacherStudentsRouteImport.update({
@@ -257,6 +263,7 @@ export interface FileRoutesByFullPath {
   '/teacher/pending': typeof TeacherPendingRoute
   '/teacher/profile': typeof TeacherProfileRoute
   '/teacher/students': typeof TeacherStudentsRoute
+  '/labs/': typeof LabsIndexRoute
   '/admin/activities/$id': typeof AdminActivitiesIdRoute
   '/admin/courses/$courseId': typeof AdminCoursesCourseIdRoute
   '/api/public/seed': typeof ApiPublicSeedRoute
@@ -295,6 +302,7 @@ export interface FileRoutesByTo {
   '/teacher/pending': typeof TeacherPendingRoute
   '/teacher/profile': typeof TeacherProfileRoute
   '/teacher/students': typeof TeacherStudentsRoute
+  '/labs': typeof LabsIndexRoute
   '/admin/activities/$id': typeof AdminActivitiesIdRoute
   '/admin/courses/$courseId': typeof AdminCoursesCourseIdRoute
   '/api/public/seed': typeof ApiPublicSeedRoute
@@ -334,6 +342,7 @@ export interface FileRoutesById {
   '/teacher/pending': typeof TeacherPendingRoute
   '/teacher/profile': typeof TeacherProfileRoute
   '/teacher/students': typeof TeacherStudentsRoute
+  '/labs/': typeof LabsIndexRoute
   '/admin/activities/$id': typeof AdminActivitiesIdRoute
   '/admin/courses/$courseId': typeof AdminCoursesCourseIdRoute
   '/api/public/seed': typeof ApiPublicSeedRoute
@@ -374,6 +383,7 @@ export interface FileRouteTypes {
     | '/teacher/pending'
     | '/teacher/profile'
     | '/teacher/students'
+    | '/labs/'
     | '/admin/activities/$id'
     | '/admin/courses/$courseId'
     | '/api/public/seed'
@@ -412,6 +422,7 @@ export interface FileRouteTypes {
     | '/teacher/pending'
     | '/teacher/profile'
     | '/teacher/students'
+    | '/labs'
     | '/admin/activities/$id'
     | '/admin/courses/$courseId'
     | '/api/public/seed'
@@ -450,6 +461,7 @@ export interface FileRouteTypes {
     | '/teacher/pending'
     | '/teacher/profile'
     | '/teacher/students'
+    | '/labs/'
     | '/admin/activities/$id'
     | '/admin/courses/$courseId'
     | '/api/public/seed'
@@ -489,6 +501,7 @@ export interface RootRouteChildren {
   TeacherPendingRoute: typeof TeacherPendingRoute
   TeacherProfileRoute: typeof TeacherProfileRoute
   TeacherStudentsRoute: typeof TeacherStudentsRoute
+  LabsIndexRoute: typeof LabsIndexRoute
   ApiPublicSeedRoute: typeof ApiPublicSeedRoute
 }
 
@@ -527,6 +540,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/labs/': {
+      id: '/labs/'
+      path: '/labs'
+      fullPath: '/labs/'
+      preLoaderRoute: typeof LabsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/teacher/students': {
@@ -870,6 +890,7 @@ const rootRouteChildren: RootRouteChildren = {
   TeacherPendingRoute: TeacherPendingRoute,
   TeacherProfileRoute: TeacherProfileRoute,
   TeacherStudentsRoute: TeacherStudentsRoute,
+  LabsIndexRoute: LabsIndexRoute,
   ApiPublicSeedRoute: ApiPublicSeedRoute,
 }
 export const routeTree = rootRouteImport
