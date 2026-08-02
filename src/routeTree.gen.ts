@@ -14,6 +14,7 @@ import { Route as DiagnosticExamRouteImport } from './routes/diagnostic-exam'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as AnnouncementsRouteImport } from './routes/announcements'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LabsIndexRouteImport } from './routes/labs.index'
 import { Route as TeacherStudentsRouteImport } from './routes/teacher/students'
 import { Route as TeacherProfileRouteImport } from './routes/teacher/profile'
 import { Route as TeacherPendingRouteImport } from './routes/teacher/pending'
@@ -42,6 +43,7 @@ import { Route as TeacherActivitiesIdRouteImport } from './routes/teacher/activi
 import { Route as StudentCoursesCourseIdRouteImport } from './routes/student/courses.$courseId'
 import { Route as StudentCertificatesIdRouteImport } from './routes/student/certificates.$id'
 import { Route as StudentActivitiesAssignmentIdRouteImport } from './routes/student/activities.$assignmentId'
+import { Route as LabsLevelSlugRouteImport } from './routes/labs.$level.$slug'
 import { Route as ApiPublicSeedRouteImport } from './routes/api/public/seed'
 import { Route as AdminCoursesCourseIdRouteImport } from './routes/admin/courses.$courseId'
 import { Route as AdminActivitiesIdRouteImport } from './routes/admin/activities.$id'
@@ -69,6 +71,11 @@ const AnnouncementsRoute = AnnouncementsRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LabsIndexRoute = LabsIndexRouteImport.update({
+  id: '/labs/',
+  path: '/labs/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TeacherStudentsRoute = TeacherStudentsRouteImport.update({
@@ -213,6 +220,11 @@ const StudentActivitiesAssignmentIdRoute =
     path: '/$assignmentId',
     getParentRoute: () => StudentActivitiesRoute,
   } as any)
+const LabsLevelSlugRoute = LabsLevelSlugRouteImport.update({
+  id: '/labs/$level/$slug',
+  path: '/labs/$level/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicSeedRoute = ApiPublicSeedRouteImport.update({
   id: '/api/public/seed',
   path: '/api/public/seed',
@@ -257,9 +269,11 @@ export interface FileRoutesByFullPath {
   '/teacher/pending': typeof TeacherPendingRoute
   '/teacher/profile': typeof TeacherProfileRoute
   '/teacher/students': typeof TeacherStudentsRoute
+  '/labs/': typeof LabsIndexRoute
   '/admin/activities/$id': typeof AdminActivitiesIdRoute
   '/admin/courses/$courseId': typeof AdminCoursesCourseIdRoute
   '/api/public/seed': typeof ApiPublicSeedRoute
+  '/labs/$level/$slug': typeof LabsLevelSlugRoute
   '/student/activities/$assignmentId': typeof StudentActivitiesAssignmentIdRoute
   '/student/certificates/$id': typeof StudentCertificatesIdRoute
   '/student/courses/$courseId': typeof StudentCoursesCourseIdRoute
@@ -295,9 +309,11 @@ export interface FileRoutesByTo {
   '/teacher/pending': typeof TeacherPendingRoute
   '/teacher/profile': typeof TeacherProfileRoute
   '/teacher/students': typeof TeacherStudentsRoute
+  '/labs': typeof LabsIndexRoute
   '/admin/activities/$id': typeof AdminActivitiesIdRoute
   '/admin/courses/$courseId': typeof AdminCoursesCourseIdRoute
   '/api/public/seed': typeof ApiPublicSeedRoute
+  '/labs/$level/$slug': typeof LabsLevelSlugRoute
   '/student/activities/$assignmentId': typeof StudentActivitiesAssignmentIdRoute
   '/student/certificates/$id': typeof StudentCertificatesIdRoute
   '/student/courses/$courseId': typeof StudentCoursesCourseIdRoute
@@ -334,9 +350,11 @@ export interface FileRoutesById {
   '/teacher/pending': typeof TeacherPendingRoute
   '/teacher/profile': typeof TeacherProfileRoute
   '/teacher/students': typeof TeacherStudentsRoute
+  '/labs/': typeof LabsIndexRoute
   '/admin/activities/$id': typeof AdminActivitiesIdRoute
   '/admin/courses/$courseId': typeof AdminCoursesCourseIdRoute
   '/api/public/seed': typeof ApiPublicSeedRoute
+  '/labs/$level/$slug': typeof LabsLevelSlugRoute
   '/student/activities/$assignmentId': typeof StudentActivitiesAssignmentIdRoute
   '/student/certificates/$id': typeof StudentCertificatesIdRoute
   '/student/courses/$courseId': typeof StudentCoursesCourseIdRoute
@@ -374,9 +392,11 @@ export interface FileRouteTypes {
     | '/teacher/pending'
     | '/teacher/profile'
     | '/teacher/students'
+    | '/labs/'
     | '/admin/activities/$id'
     | '/admin/courses/$courseId'
     | '/api/public/seed'
+    | '/labs/$level/$slug'
     | '/student/activities/$assignmentId'
     | '/student/certificates/$id'
     | '/student/courses/$courseId'
@@ -412,9 +432,11 @@ export interface FileRouteTypes {
     | '/teacher/pending'
     | '/teacher/profile'
     | '/teacher/students'
+    | '/labs'
     | '/admin/activities/$id'
     | '/admin/courses/$courseId'
     | '/api/public/seed'
+    | '/labs/$level/$slug'
     | '/student/activities/$assignmentId'
     | '/student/certificates/$id'
     | '/student/courses/$courseId'
@@ -450,9 +472,11 @@ export interface FileRouteTypes {
     | '/teacher/pending'
     | '/teacher/profile'
     | '/teacher/students'
+    | '/labs/'
     | '/admin/activities/$id'
     | '/admin/courses/$courseId'
     | '/api/public/seed'
+    | '/labs/$level/$slug'
     | '/student/activities/$assignmentId'
     | '/student/certificates/$id'
     | '/student/courses/$courseId'
@@ -489,7 +513,9 @@ export interface RootRouteChildren {
   TeacherPendingRoute: typeof TeacherPendingRoute
   TeacherProfileRoute: typeof TeacherProfileRoute
   TeacherStudentsRoute: typeof TeacherStudentsRoute
+  LabsIndexRoute: typeof LabsIndexRoute
   ApiPublicSeedRoute: typeof ApiPublicSeedRoute
+  LabsLevelSlugRoute: typeof LabsLevelSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -527,6 +553,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/labs/': {
+      id: '/labs/'
+      path: '/labs'
+      fullPath: '/labs/'
+      preLoaderRoute: typeof LabsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/teacher/students': {
@@ -725,6 +758,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudentActivitiesAssignmentIdRouteImport
       parentRoute: typeof StudentActivitiesRoute
     }
+    '/labs/$level/$slug': {
+      id: '/labs/$level/$slug'
+      path: '/labs/$level/$slug'
+      fullPath: '/labs/$level/$slug'
+      preLoaderRoute: typeof LabsLevelSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/seed': {
       id: '/api/public/seed'
       path: '/api/public/seed'
@@ -870,18 +910,10 @@ const rootRouteChildren: RootRouteChildren = {
   TeacherPendingRoute: TeacherPendingRoute,
   TeacherProfileRoute: TeacherProfileRoute,
   TeacherStudentsRoute: TeacherStudentsRoute,
+  LabsIndexRoute: LabsIndexRoute,
   ApiPublicSeedRoute: ApiPublicSeedRoute,
+  LabsLevelSlugRoute: LabsLevelSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

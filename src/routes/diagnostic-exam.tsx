@@ -87,13 +87,28 @@ function DiagnosticExam() {
   // Hydrate from localStorage
   useEffect(() => {
     const saved = loadState();
-    if (saved) {
+    if (!saved) return;
+    try {
+      const a = { ...emptyAnswers(), ...(saved.answers ?? {}) };
+      const t = { ...emptyTranslations(), ...(saved.translations ?? {}) };
       setStudentName(saved.studentName || "");
-      setStep(saved.step || 0);
-      setAnswers({ ...emptyAnswers(), ...saved.answers });
-      setTranslations({ ...emptyTranslations(), ...saved.translations });
+      setAnswers(a);
+      setTranslations(t);
+      const savedStep = Number(saved.step) || 0;
+      if (savedStep >= 6) {
+        // Results screen was persisted without scores -> recompute, never blank.
+        setScores(computeScores(a, t));
+        setStep(6);
+      } else {
+        setStep(Math.max(0, Math.min(5, savedStep)));
+      }
+    } catch {
+      if (typeof window !== "undefined") localStorage.removeItem(STORAGE_KEY);
+      setStep(0);
+      setScores(null);
     }
   }, []);
+
 
   // Persist
   useEffect(() => {
@@ -271,7 +286,20 @@ function DiagnosticExam() {
           />
         )}
 
+        {step === 6 && !scores && (
+          <div className="rounded-2xl border border-border/60 bg-card/80 p-10 text-center backdrop-blur-xl">
+            <h2 className="font-heading text-xl font-bold">No pudimos recuperar tus resultados</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Tu sesión anterior quedó incompleta. Puedes empezar el examen de nuevo.
+            </p>
+            <Button className="mt-6" onClick={resetExam}>
+              <RotateCcw className="mr-2 h-4 w-4" /> Empezar de nuevo
+            </Button>
+          </div>
+        )}
+
         {step === 6 && scores && (
+
           <ResultsScreen
             studentName={studentName}
             scores={scores}
