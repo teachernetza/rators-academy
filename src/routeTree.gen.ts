@@ -43,6 +43,7 @@ import { Route as TeacherActivitiesIdRouteImport } from './routes/teacher/activi
 import { Route as StudentCoursesCourseIdRouteImport } from './routes/student/courses.$courseId'
 import { Route as StudentCertificatesIdRouteImport } from './routes/student/certificates.$id'
 import { Route as StudentActivitiesAssignmentIdRouteImport } from './routes/student/activities.$assignmentId'
+import { Route as LabsLevelSlugRouteImport } from './routes/labs.$level.$slug'
 import { Route as ApiPublicSeedRouteImport } from './routes/api/public/seed'
 import { Route as AdminCoursesCourseIdRouteImport } from './routes/admin/courses.$courseId'
 import { Route as AdminActivitiesIdRouteImport } from './routes/admin/activities.$id'
@@ -219,6 +220,11 @@ const StudentActivitiesAssignmentIdRoute =
     path: '/$assignmentId',
     getParentRoute: () => StudentActivitiesRoute,
   } as any)
+const LabsLevelSlugRoute = LabsLevelSlugRouteImport.update({
+  id: '/labs/$level/$slug',
+  path: '/labs/$level/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicSeedRoute = ApiPublicSeedRouteImport.update({
   id: '/api/public/seed',
   path: '/api/public/seed',
@@ -267,6 +273,7 @@ export interface FileRoutesByFullPath {
   '/admin/activities/$id': typeof AdminActivitiesIdRoute
   '/admin/courses/$courseId': typeof AdminCoursesCourseIdRoute
   '/api/public/seed': typeof ApiPublicSeedRoute
+  '/labs/$level/$slug': typeof LabsLevelSlugRoute
   '/student/activities/$assignmentId': typeof StudentActivitiesAssignmentIdRoute
   '/student/certificates/$id': typeof StudentCertificatesIdRoute
   '/student/courses/$courseId': typeof StudentCoursesCourseIdRoute
@@ -306,6 +313,7 @@ export interface FileRoutesByTo {
   '/admin/activities/$id': typeof AdminActivitiesIdRoute
   '/admin/courses/$courseId': typeof AdminCoursesCourseIdRoute
   '/api/public/seed': typeof ApiPublicSeedRoute
+  '/labs/$level/$slug': typeof LabsLevelSlugRoute
   '/student/activities/$assignmentId': typeof StudentActivitiesAssignmentIdRoute
   '/student/certificates/$id': typeof StudentCertificatesIdRoute
   '/student/courses/$courseId': typeof StudentCoursesCourseIdRoute
@@ -346,6 +354,7 @@ export interface FileRoutesById {
   '/admin/activities/$id': typeof AdminActivitiesIdRoute
   '/admin/courses/$courseId': typeof AdminCoursesCourseIdRoute
   '/api/public/seed': typeof ApiPublicSeedRoute
+  '/labs/$level/$slug': typeof LabsLevelSlugRoute
   '/student/activities/$assignmentId': typeof StudentActivitiesAssignmentIdRoute
   '/student/certificates/$id': typeof StudentCertificatesIdRoute
   '/student/courses/$courseId': typeof StudentCoursesCourseIdRoute
@@ -387,6 +396,7 @@ export interface FileRouteTypes {
     | '/admin/activities/$id'
     | '/admin/courses/$courseId'
     | '/api/public/seed'
+    | '/labs/$level/$slug'
     | '/student/activities/$assignmentId'
     | '/student/certificates/$id'
     | '/student/courses/$courseId'
@@ -426,6 +436,7 @@ export interface FileRouteTypes {
     | '/admin/activities/$id'
     | '/admin/courses/$courseId'
     | '/api/public/seed'
+    | '/labs/$level/$slug'
     | '/student/activities/$assignmentId'
     | '/student/certificates/$id'
     | '/student/courses/$courseId'
@@ -465,6 +476,7 @@ export interface FileRouteTypes {
     | '/admin/activities/$id'
     | '/admin/courses/$courseId'
     | '/api/public/seed'
+    | '/labs/$level/$slug'
     | '/student/activities/$assignmentId'
     | '/student/certificates/$id'
     | '/student/courses/$courseId'
@@ -503,6 +515,7 @@ export interface RootRouteChildren {
   TeacherStudentsRoute: typeof TeacherStudentsRoute
   LabsIndexRoute: typeof LabsIndexRoute
   ApiPublicSeedRoute: typeof ApiPublicSeedRoute
+  LabsLevelSlugRoute: typeof LabsLevelSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -745,6 +758,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudentActivitiesAssignmentIdRouteImport
       parentRoute: typeof StudentActivitiesRoute
     }
+    '/labs/$level/$slug': {
+      id: '/labs/$level/$slug'
+      path: '/labs/$level/$slug'
+      fullPath: '/labs/$level/$slug'
+      preLoaderRoute: typeof LabsLevelSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/seed': {
       id: '/api/public/seed'
       path: '/api/public/seed'
@@ -892,6 +912,7 @@ const rootRouteChildren: RootRouteChildren = {
   TeacherStudentsRoute: TeacherStudentsRoute,
   LabsIndexRoute: LabsIndexRoute,
   ApiPublicSeedRoute: ApiPublicSeedRoute,
+  LabsLevelSlugRoute: LabsLevelSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
