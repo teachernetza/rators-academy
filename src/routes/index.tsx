@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Loader2,
   Beaker,
-  MessagesSquare,
+  FlaskConical,
   GraduationCap,
   Check,
   Mail,
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Plataforma de inglés con Labs interactivos, Conversation Clubs y Masterclasses. Clases desde $149 MXN por hora y paquetes mensuales con hasta 20% de descuento.",
+          "Plataforma de inglés con Labs interactivos gratuitos, examen diagnóstico y Masterclasses. Clases desde $149 MXN por hora y paquetes mensuales con hasta 20% de descuento.",
       },
       { property: "og:title", content: "Teacher Netza Varo — Inglés moderno e interactivo" },
       {
@@ -65,7 +65,7 @@ const WA_URL = waUrl(
 );
 const EMAIL = "teacher.netza.varo@gmail.com";
 
-const SECTION_IDS = ["examen", "metodologia", "planes", "contacto"];
+const SECTION_IDS = ["examen", "labs", "metodologia", "planes", "contacto"];
 
 function Reveal({
   children,
@@ -90,6 +90,7 @@ function Landing() {
 
   const navLinks = [
     { href: "#examen", id: "examen", label: "Examen Diagnóstico" },
+    { href: "#labs", id: "labs", label: "Labs" },
     { href: "#metodologia", id: "metodologia", label: "Metodología" },
     { href: "#planes", id: "planes", label: "Planes" },
     { href: "#contacto", id: "contacto", label: "Contacto" },
@@ -388,9 +389,9 @@ function Landing() {
                   tint: "var(--gradient-primary)",
                 },
                 {
-                  icon: MessagesSquare,
-                  title: "Conversation Clubs",
-                  desc: "Sesiones 100% comunicativas para perder el miedo a hablar y desarrollar fluidez real.",
+                  icon: FlaskConical,
+                  title: "Labs por nivel",
+                  desc: "Prácticas gratuitas para visitantes, organizadas en básico, intermedio y avanzado.",
                   tint: "var(--gradient-mint)",
                 },
                 {
