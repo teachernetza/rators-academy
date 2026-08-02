@@ -286,7 +286,20 @@ function DiagnosticExam() {
           />
         )}
 
+        {step === 6 && !scores && (
+          <div className="rounded-2xl border border-border/60 bg-card/80 p-10 text-center backdrop-blur-xl">
+            <h2 className="font-heading text-xl font-bold">No pudimos recuperar tus resultados</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Tu sesión anterior quedó incompleta. Puedes empezar el examen de nuevo.
+            </p>
+            <Button className="mt-6" onClick={resetExam}>
+              <RotateCcw className="mr-2 h-4 w-4" /> Empezar de nuevo
+            </Button>
+          </div>
+        )}
+
         {step === 6 && scores && (
+
           <ResultsScreen
             studentName={studentName}
             scores={scores}
