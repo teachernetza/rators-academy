@@ -58,11 +58,12 @@ export async function generateDiagnosticPdf({ studentName, result }: Payload) {
   doc.setFillColor(...MINT);
   doc.rect(0, 34, W, 1.6, "F");
 
-  // Corner ornaments
+  // Corner ornament (bottom-left, away from the text blocks)
   doc.setFillColor(...MINT);
-  doc.circle(W - 18, H - 18, 26, "F");
+  doc.circle(2, H - 2, 22, "F");
   doc.setFillColor(...CREAM);
-  doc.circle(W - 18, H - 18, 22, "F");
+  doc.circle(2, H - 2, 18, "F");
+
 
   // Double frame
   doc.setDrawColor(...TEAL);
