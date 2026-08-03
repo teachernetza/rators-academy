@@ -314,9 +314,10 @@ function Landing() {
                       Descubre tu nivel real de inglés en 15 minutos
                     </h2>
                     <p className="mt-4 text-base text-white/90 sm:text-lg">
-                      Un examen diagnóstico creado por Teacher Netza que evalúa Grammar,
-                      Reading, Vocabulary, Writing y Listening. Al terminar recibes tu nivel
-                      CEFR estimado y un reporte PDF descargable con recomendaciones.
+                      Un examen diagnóstico creado por Teacher Netza que evalúa Listening,
+                      Reading y Vocabulary & Use of Language. Al terminar recibes tu nivel por
+                      habilidad y una Constancia de Nivel en PDF.
+
                     </p>
                     <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                       <Link to="/diagnostic-exam">
