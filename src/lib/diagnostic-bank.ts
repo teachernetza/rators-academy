@@ -1,184 +1,518 @@
-// Diagnostic exam question bank & scoring logic.
-// Adapted from Teacher Netza's standalone exam.
+// Diagnostic exam question bank & level-based scoring logic (v2).
+// Each question has 4 options: 2 wrong (level = null) and 2 correct,
+// each correct option mapped to a different CEFR level.
 
-export type McqQ = { id: string; q: string; q_es: string; opts: string[]; ans: number };
-export type ReadingQ = {
-  id: string;
-  text: string;
-  text_es: string;
-  q: string;
-  q_es: string;
-  opts: string[];
-  ans: number;
-};
-export type VocabSentence = { id: string; text: string; text_post: string; ans: string };
-export type WritingQ = { id: string; prompt: string; prompt_es: string };
-export type ListeningQ = {
-  id: string;
-  audio: string;
-  q: string;
-  q_es: string;
-  opts: string[];
-  ans: number;
-};
+export type Cefr = "A1" | "A2" | "B1" | "B2" | "C1";
 
-export const QuestionBank = {
-  mcq: [
-    { id: "m1", q: '"Excuse me, how much ___?"', q_es: '"Disculpe, ¿cuánto ___?"', opts: ["is this", "this is", "are this"], ans: 0 },
-    { id: "m2", q: 'A: "Nice to meet you." / B: "___"', q_es: 'A: "Encantado de conocerte." / B: "___"', opts: ["Nice to meet you too", "Same to you", "I am fine"], ans: 0 },
-    { id: "m3", q: '"I would ___ a cup of coffee, please."', q_es: '"Me ___ una taza de café, por favor."', opts: ["like", "want", "love"], ans: 0 },
-    { id: "m4", q: 'A: "How\'s it going?" / B: "___"', q_es: 'A: "¿Cómo te va?" / B: "___"', opts: ["Not bad, thanks", "I am go", "It goes well"], ans: 0 },
-    { id: "m5", q: '"What do you do for a ___?"', q_es: '"¿A qué te dedicas (para ganarte la ___)?"', opts: ["living", "work", "job"], ans: 0 },
-    { id: "m6", q: '"I\'m looking ___ to seeing you."', q_es: '"Estoy deseando (esperando con ansias) verte."', opts: ["forward", "ahead", "front"], ans: 0 },
-    { id: "m7", q: 'A: "I couldn\'t agree ___."', q_es: 'A: "No podría estar ___ de acuerdo."', opts: ["more", "much", "less"], ans: 0 },
-    { id: "m8", q: '"Make yourself at ___."', q_es: '"Siéntete como en ___."', opts: ["home", "house", "room"], ans: 0 },
-    { id: "m9", q: '"By the ___, what time is the meeting?"', q_es: '"Por ___, ¿a qué hora es la reunión?"', opts: ["way", "time", "road"], ans: 0 },
-    { id: "m10", q: '"It goes without ___ that we are thrilled to have you."', q_es: '"No hace falta ___ que estamos encantados de tenerte."', opts: ["saying", "talking", "speaking"], ans: 0 },
-    { id: "m11", q: '"Please ___ in mind that the schedule might change."', q_es: '"Por favor, ten en ___ que el horario podría cambiar."', opts: ["bear", "have", "put"], ans: 0 },
-    { id: "m12", q: '"Out of the ___, she decided to quit her job."', q_es: '"De la ___, ella decidió renunciar a su trabajo."', opts: ["blue", "red", "dark"], ans: 0 },
-  ] satisfies McqQ[],
-  reading: [
-    {
-      id: "r1",
-      text: "The new cafe downtown is very popular. It serves organic coffee and fresh pastries. However, it is quite small, so finding a table can be difficult during the morning rush. The prices are reasonable considering the quality.",
-      text_es: "El nuevo café del centro es muy popular. Sirve café orgánico y pasteles frescos. Sin embargo, es bastante pequeño, por lo que encontrar mesa puede ser difícil durante las mañanas. Los precios son razonables considerando la calidad.",
-      q: "What is a problem with the cafe?",
-      q_es: "¿Cuál es un problema con el café?",
-      opts: ["It is too expensive", "It lacks enough seating", "The food is stale"],
-      ans: 1,
-    },
-    {
-      id: "r2",
-      text: "Many experts suggest that walking for at least thirty minutes a day improves overall health. It reduces stress, boosts mood, and helps maintain a healthy weight. Plus, it requires no special equipment or gym membership, making it accessible to everyone.",
-      text_es: "Muchos expertos sugieren que caminar al menos treinta minutos al día mejora la salud. Reduce el estrés, mejora el estado de ánimo y ayuda a mantener un peso saludable. Además, no requiere equipo especial, haciéndolo accesible a todos.",
-      q: "What is a main advantage of walking mentioned?",
-      q_es: "¿Qué ventaja principal de caminar se menciona?",
-      opts: ["It requires a gym", "It builds huge muscles", "It is free and easy"],
-      ans: 2,
-    },
-    {
-      id: "r3",
-      text: "Next week, the city library will host a local author event. Visitors can meet the writer, buy signed copies of her latest mystery novel, and attend a free writing workshop. Registration is required online before Friday.",
-      text_es: "La próxima semana, la biblioteca organizará un evento de un autor local. Los visitantes pueden conocer al escritor, comprar copias firmadas de su novela y asistir a un taller gratuito. Se requiere registro en línea antes del viernes.",
-      q: "What must attendees do to participate in the workshop?",
-      q_es: "¿Qué deben hacer los asistentes para participar en el taller?",
-      opts: ["Buy a book", "Register on the internet", "Write a mystery novel"],
-      ans: 1,
-    },
-  ] satisfies ReadingQ[],
-  vocab: {
-    words: ["procrastinate", "eloquent", "meticulous", "resilient", "inevitable"],
-    sentences: [
-      { id: "v1", text: "If you always", text_post: ", you will never finish your work on time.", ans: "procrastinate" },
-      { id: "v2", text: "She is very", text_post: " and pays great attention to every small detail.", ans: "meticulous" },
-      { id: "v3", text: "The speaker was so", text_post: " that everyone was moved by his speech.", ans: "eloquent" },
-      { id: "v4", text: "Mistakes are", text_post: " when learning a new complex skill.", ans: "inevitable" },
-      { id: "v5", text: "Children are often highly", text_post: " and recover quickly from difficulties.", ans: "resilient" },
-    ] satisfies VocabSentence[],
-  },
-  writing: [
-    { id: "w1", prompt: "How do you politely decline an invitation to a party?", prompt_es: "¿Cómo rechazas educadamente una invitación a una fiesta?" },
-    { id: "w2", prompt: "Write a short message letting your boss know you are running 10 minutes late.", prompt_es: "Escribe un breve mensaje avisando a tu jefe que llegarás 10 minutos tarde." },
-    { id: "w3", prompt: "Ask a stranger for directions to the nearest subway station.", prompt_es: "Pídele a un extraño indicaciones para llegar a la estación de metro más cercana." },
-    { id: "w4", prompt: "How do you ask for the bill at a restaurant?", prompt_es: "¿Cómo pides la cuenta en un restaurante?" },
-    { id: "w5", prompt: "Write a brief response to say thank you for a gift.", prompt_es: "Escribe una breve respuesta para agradecer un regalo." },
-  ] satisfies WritingQ[],
-  listening: [
-    { id: "l1", audio: "The flight has been delayed by two hours.", q: "What happened to the flight?", q_es: "¿Qué le pasó al vuelo?", opts: ["It is late", "It departed early", "It was canceled"], ans: 0 },
-    { id: "l2", audio: "Would you mind closing the window?", q: "What is the speaker requesting?", q_es: "¿Qué está pidiendo el hablante?", opts: ["To shut the window", "To look outside", "To open the door"], ans: 0 },
-    { id: "l3", audio: "I used to play tennis a lot, but not anymore.", q: "Does the speaker play tennis now?", q_es: "¿El hablante juega tenis ahora?", opts: ["No", "Yes", "Sometimes"], ans: 0 },
-    { id: "l4", audio: "Let's call it a day and finish this tomorrow.", q: "What does the speaker want to do?", q_es: "¿Qué quiere hacer el hablante?", opts: ["Stop working", "Make a phone call", "Work late"], ans: 0 },
-    { id: "l5", audio: "It's pouring outside, don't forget your umbrella.", q: "What's the weather like?", q_es: "¿Cómo está el clima?", opts: ["Raining heavily", "Sunny", "Snowing"], ans: 0 },
-  ] satisfies ListeningQ[],
-};
+export const CEFR_SCALE: Cefr[] = ["A1", "A2", "B1", "B2", "C1"];
 
-export type Answers = {
-  mcq: Record<string, number>;
-  reading: Record<string, number>;
-  vocab: Record<string, string>;
-  writing: Record<string, string>;
-  listening: Record<string, number>;
-};
+export const CEFR_VALUE: Record<Cefr, number> = { A1: 1, A2: 2, B1: 3, B2: 4, C1: 5 };
 
-export type Translations = {
-  mcq: Record<string, boolean>;
-  reading: Record<string, boolean>;
-  vocab: Record<string, boolean>;
-  writing: Record<string, boolean>;
-  listening: Record<string, boolean>;
-};
-
-export type Scores = {
-  mcqPts: number;
-  readPts: number;
-  vocabPts: number;
-  listPts: number;
-  mcqPen: number;
-  readPen: number;
-  listPen: number;
-  writePen: number;
-  totalPenalties: number;
-  totalObjPoints: number;
-  cefr: "A1" | "A2" | "B1" | "B2";
-};
-
-export function computeScores(answers: Answers, translations: Translations): Scores {
-  let mcqPts = 0,
-    readPts = 0,
-    vocabPts = 0,
-    listPts = 0;
-  let mcqPen = 0,
-    readPen = 0,
-    listPen = 0,
-    writePen = 0;
-
-  QuestionBank.mcq.forEach((q) => {
-    if (answers.mcq[q.id] === q.ans) {
-      if (translations.mcq[q.id]) {
-        mcqPts += 0.5;
-        mcqPen++;
-      } else mcqPts += 1;
-    } else if (translations.mcq[q.id]) mcqPen++;
-  });
-  QuestionBank.reading.forEach((q) => {
-    if (answers.reading[q.id] === q.ans) {
-      if (translations.reading[q.id]) {
-        readPts += 0.5;
-        readPen++;
-      } else readPts += 1;
-    } else if (translations.reading[q.id]) readPen++;
-  });
-  QuestionBank.vocab.sentences.forEach((q) => {
-    if (answers.vocab[q.id] === q.ans) vocabPts += 1;
-  });
-  QuestionBank.listening.forEach((q) => {
-    if (answers.listening[q.id] === q.ans) {
-      if (translations.listening[q.id]) {
-        listPts += 0.5;
-        listPen++;
-      } else listPts += 1;
-    } else if (translations.listening[q.id]) listPen++;
-  });
-  Object.values(translations.writing).forEach((v) => {
-    if (v) writePen++;
-  });
-
-  const totalPenalties = mcqPen + readPen + listPen + writePen;
-  const totalObjPoints = mcqPts + readPts + vocabPts + listPts;
-
-  let cefr: Scores["cefr"] = "A1";
-  if (totalObjPoints >= 21) cefr = "B2";
-  else if (totalObjPoints >= 15) cefr = "B1";
-  else if (totalObjPoints >= 9) cefr = "A2";
-
-  return { mcqPts, readPts, vocabPts, listPts, mcqPen, readPen, listPen, writePen, totalPenalties, totalObjPoints, cefr };
+export function levelFromValue(v: number): Cefr {
+  const i = Math.max(0, Math.min(4, Math.round(v) - 1));
+  return CEFR_SCALE[i];
 }
 
-export const SECTION_NAMES = [
-  "Use of English",
-  "Reading",
-  "Vocabulary",
-  "Writing",
-  "Listening",
-  "Resultados",
-] as const;
+export const CEFR_DESCRIPTION: Record<Cefr, string> = {
+  A1: "Comprendes y usas expresiones cotidianas muy básicas.",
+  A2: "Te comunicas en situaciones simples y rutinarias.",
+  B1: "Manejas conversaciones cotidianas y textos claros con independencia.",
+  B2: "Te expresas con fluidez y precisión sobre temas complejos.",
+  C1: "Usas el idioma de forma flexible, natural y sofisticada.",
+};
+
+/** An answer option. `level` = null means incorrect (no value). */
+export type Option = { text: string; level: Cefr | null };
+
+export type Question = {
+  id: string;
+  q: string;
+  opts: Option[];
+};
+
+export type AudioItem = {
+  id: string;
+  audio: string;
+  questions: Question[];
+};
+
+export type ReadingPassage = {
+  id: string;
+  title: string;
+  kind: "short" | "long";
+  text: string;
+  questions: Question[];
+};
+
+export type SectionKey = "listening" | "reading" | "vocab";
+
+export const SECTION_NAMES: Record<SectionKey, string> = {
+  listening: "Listening",
+  reading: "Reading",
+  vocab: "Vocabulary & Use of Language",
+};
+
+export const SECTION_ORDER: SectionKey[] = ["listening", "reading", "vocab"];
+
+/* ------------------------------ LISTENING ------------------------------ */
+
+const listening: AudioItem[] = [
+  {
+    id: "a1",
+    audio:
+      "Attention passengers: flight 402 to Chicago has been delayed by two hours due to bad weather. Please stay near gate twelve, we will announce the new boarding time shortly.",
+    questions: [
+      {
+        id: "a1q1",
+        q: "What happened to flight 402?",
+        opts: [
+          { text: "It was cancelled.", level: null },
+          { text: "It left earlier than planned.", level: null },
+          { text: "It is late.", level: "A2" },
+          { text: "It has been pushed back a couple of hours.", level: "B2" },
+        ],
+      },
+      {
+        id: "a1q2",
+        q: "What should passengers do?",
+        opts: [
+          { text: "Go to the ticket office.", level: null },
+          { text: "Leave the airport.", level: null },
+          { text: "Wait close to gate twelve.", level: "A2" },
+          { text: "Remain in the vicinity of the gate until further notice.", level: "C1" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "a2",
+    audio:
+      "Hi Dan, it's Marta. I'm running about fifteen minutes late for our meeting because the traffic is terrible. Could you start without me and I'll join as soon as I get there?",
+    questions: [
+      {
+        id: "a2q1",
+        q: "Why is Marta calling?",
+        opts: [
+          { text: "To cancel the meeting.", level: null },
+          { text: "To ask for the address.", level: null },
+          { text: "To say she will arrive late.", level: "A2" },
+          { text: "To warn Dan that she has been held up in traffic.", level: "B2" },
+        ],
+      },
+      {
+        id: "a2q2",
+        q: "What does she ask Dan to do?",
+        opts: [
+          { text: "Wait for her outside.", level: null },
+          { text: "Call her back later.", level: null },
+          { text: "Begin the meeting without her.", level: "B1" },
+          { text: "Go ahead with the meeting and let her catch up.", level: "C1" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "a3",
+    audio:
+      "I used to play tennis almost every weekend, but since I started my new job I hardly ever find the time. I still watch the matches on television, though.",
+    questions: [
+      {
+        id: "a3q1",
+        q: "Does the speaker play tennis now?",
+        opts: [
+          { text: "Yes, every weekend.", level: null },
+          { text: "Yes, more than before.", level: null },
+          { text: "No, almost never.", level: "A1" },
+          { text: "No, he rarely gets the chance anymore.", level: "B2" },
+        ],
+      },
+      {
+        id: "a3q2",
+        q: "Why did the situation change?",
+        opts: [
+          { text: "He got injured.", level: null },
+          { text: "He lost interest in tennis.", level: null },
+          { text: "Because of his new job.", level: "A2" },
+          { text: "His new job leaves him little free time.", level: "B2" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "a4",
+    audio:
+      "Honestly, the restaurant was a bit of a letdown. The service was quick and the place looked lovely, but the food was bland and, for those prices, I expected far more.",
+    questions: [
+      {
+        id: "a4q1",
+        q: "What is the speaker's overall opinion?",
+        opts: [
+          { text: "She loved everything.", level: null },
+          { text: "She had no opinion.", level: null },
+          { text: "She was disappointed.", level: "B1" },
+          { text: "She found the experience underwhelming overall.", level: "C1" },
+        ],
+      },
+      {
+        id: "a4q2",
+        q: "What did she like?",
+        opts: [
+          { text: "The flavour of the food.", level: null },
+          { text: "The prices.", level: null },
+          { text: "The fast service and the place.", level: "A2" },
+          { text: "The prompt service and the pleasant setting.", level: "B2" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "a5",
+    audio:
+      "If I were you, I'd book the tickets well in advance. Last time we left it until the last minute and ended up paying almost double what we had planned.",
+    questions: [
+      {
+        id: "a5q1",
+        q: "What is the speaker doing?",
+        opts: [
+          { text: "Complaining about a flight.", level: null },
+          { text: "Asking for help.", level: null },
+          { text: "Giving advice.", level: "B1" },
+          { text: "Recommending a course of action based on experience.", level: "C1" },
+        ],
+      },
+      {
+        id: "a5q2",
+        q: "What happened last time?",
+        opts: [
+          { text: "They missed the trip.", level: null },
+          { text: "They got a discount.", level: null },
+          { text: "They paid much more money.", level: "A2" },
+          { text: "They ended up paying nearly twice as much.", level: "B2" },
+        ],
+      },
+    ],
+  },
+];
+
+/* ------------------------------- READING ------------------------------- */
+
+const reading: ReadingPassage[] = [
+  {
+    id: "r1",
+    kind: "short",
+    title: "The new cafe",
+    text: "The new cafe downtown is already very popular. It serves organic coffee and fresh pastries baked every morning. However, it is quite small, so finding a table during the morning rush can be difficult. Prices are reasonable considering the quality, and regulars say the staff remember their usual order after just a couple of visits.",
+    questions: [
+      {
+        id: "r1q1",
+        q: "What is the main problem with the cafe?",
+        opts: [
+          { text: "The coffee is expensive.", level: null },
+          { text: "The pastries are not fresh.", level: null },
+          { text: "There are not enough tables.", level: "A2" },
+          { text: "Its limited seating makes it hard to get a table at peak times.", level: "B2" },
+        ],
+      },
+      {
+        id: "r1q2",
+        q: "What does the text say about the prices?",
+        opts: [
+          { text: "They are the lowest in town.", level: null },
+          { text: "They keep going up.", level: null },
+          { text: "They are fair for the quality.", level: "B1" },
+          { text: "They are justified by the quality on offer.", level: "C1" },
+        ],
+      },
+      {
+        id: "r1q3",
+        q: "What do regular customers appreciate?",
+        opts: [
+          { text: "The free wifi.", level: null },
+          { text: "The large terrace.", level: null },
+          { text: "The staff know their usual order.", level: "A2" },
+          { text: "The personal attention they receive from the staff.", level: "B2" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "r2",
+    kind: "short",
+    title: "Library event",
+    text: "Next Thursday the city library will host a local author. Visitors can meet the writer, buy signed copies of her latest mystery novel and attend a free writing workshop. Places for the workshop are limited, so registration must be completed online before Friday. Those who miss the deadline may still attend the talk, but not the workshop.",
+    questions: [
+      {
+        id: "r2q1",
+        q: "What must attendees do to join the workshop?",
+        opts: [
+          { text: "Buy the novel.", level: null },
+          { text: "Arrive one hour early.", level: null },
+          { text: "Register on the internet.", level: "A1" },
+          { text: "Complete an online registration before the deadline.", level: "B2" },
+        ],
+      },
+      {
+        id: "r2q2",
+        q: "Why is registration necessary?",
+        opts: [
+          { text: "Because the workshop costs money.", level: null },
+          { text: "Because the author asked for it.", level: null },
+          { text: "Because there are only a few places.", level: "A2" },
+          { text: "Because capacity for the workshop is restricted.", level: "B2" },
+        ],
+      },
+      {
+        id: "r2q3",
+        q: "What can people who register late still do?",
+        opts: [
+          { text: "Nothing at all.", level: null },
+          { text: "Join the workshop anyway.", level: null },
+          { text: "Go to the talk.", level: "B1" },
+          { text: "Attend the talk, though not the workshop itself.", level: "C1" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "r3",
+    kind: "long",
+    title: "Remote work",
+    text: "When companies were forced to send their employees home, many managers feared that productivity would collapse. In practice, the opposite often happened: several studies found that people working from home completed the same amount of work in less time, largely because they were interrupted less frequently.\n\nStill, the picture is far from perfect. Younger employees, in particular, reported feeling isolated and said they were learning less from their colleagues, since the informal conversations that happen in an office rarely take place on a video call. Managers also struggled to assess performance without visible signs of effort, and some fell back on counting hours online rather than looking at results.\n\nMost organisations have therefore settled on a hybrid arrangement. Employees come into the office two or three days a week for meetings and collaborative work, and stay at home for tasks that require deep concentration. Experts warn, however, that hybrid work only succeeds when it is designed deliberately: if the days in the office are not planned around collaboration, staff simply do the same solitary work in a noisier place.",
+    questions: [
+      {
+        id: "r3q1",
+        q: "What did the studies mentioned find?",
+        opts: [
+          { text: "Productivity fell sharply at home.", level: null },
+          { text: "Employees worked longer hours.", level: null },
+          { text: "People did the same work in less time.", level: "B1" },
+          { text: "Output was maintained thanks to fewer interruptions.", level: "C1" },
+        ],
+      },
+      {
+        id: "r3q2",
+        q: "What problem affected younger employees most?",
+        opts: [
+          { text: "They had slower internet.", level: null },
+          { text: "They were given too much work.", level: null },
+          { text: "They felt alone and learned less.", level: "A2" },
+          { text: "Isolation limited the informal learning they got from colleagues.", level: "B2" },
+        ],
+      },
+      {
+        id: "r3q3",
+        q: "According to the experts, when does hybrid work fail?",
+        opts: [
+          { text: "When employees come in every day.", level: null },
+          { text: "When managers work from home too.", level: null },
+          { text: "When office days are not planned for working together.", level: "B1" },
+          {
+            text: "When the in-office days are not deliberately designed around collaboration.",
+            level: "C1",
+          },
+        ],
+      },
+    ],
+  },
+];
+
+/* ------------------- VOCABULARY & USE OF LANGUAGE ------------------- */
+
+const vocab: Question[] = [
+  {
+    id: "v1",
+    q: '"Excuse me, how much ___ this jacket?"',
+    opts: [
+      { text: "are", level: null },
+      { text: "do", level: null },
+      { text: "is", level: "A1" },
+      { text: "does this jacket cost", level: "A2" },
+    ],
+  },
+  {
+    id: "v2",
+    q: "Complete: “I ___ in this city since 2019.”",
+    opts: [
+      { text: "am living", level: null },
+      { text: "lived", level: null },
+      { text: "have lived", level: "B1" },
+      { text: "have been living", level: "B2" },
+    ],
+  },
+  {
+    id: "v3",
+    q: "Your boss asks for a report you have not finished. What do you say?",
+    opts: [
+      { text: "No, I don't do it.", level: null },
+      { text: "I no finish yet.", level: null },
+      { text: "I haven't finished it yet, sorry.", level: "B1" },
+      { text: "I'm still putting the finishing touches to it.", level: "C1" },
+    ],
+  },
+  {
+    id: "v4",
+    q: 'Choose the natural completion: "I\'m really looking ___ to the weekend."',
+    opts: [
+      { text: "ahead", level: null },
+      { text: "front", level: null },
+      { text: "forward", level: "A2" },
+      { text: "forward to unwinding", level: "B2" },
+    ],
+  },
+  {
+    id: "v5",
+    q: 'What does "out of the blue" mean?',
+    opts: [
+      { text: "In a sad mood.", level: null },
+      { text: "Outdoors.", level: null },
+      { text: "Suddenly and unexpectedly.", level: "B1" },
+      { text: "Without any warning whatsoever.", level: "C1" },
+    ],
+  },
+  {
+    id: "v6",
+    q: 'Complete: "If I ___ more time, I would travel across Asia."',
+    opts: [
+      { text: "will have", level: null },
+      { text: "have had", level: null },
+      { text: "had", level: "B1" },
+      { text: "were to have", level: "C1" },
+    ],
+  },
+  {
+    id: "v7",
+    q: "Someone is very careful with small details. He is…",
+    opts: [
+      { text: "reckless", level: null },
+      { text: "stubborn", level: null },
+      { text: "very careful", level: "A2" },
+      { text: "meticulous", level: "B2" },
+    ],
+  },
+  {
+    id: "v8",
+    q: 'Complete: "Please bear in ___ that the schedule may change."',
+    opts: [
+      { text: "head", level: null },
+      { text: "thought", level: null },
+      { text: "mind", level: "B1" },
+      { text: "mind, as it is subject to change", level: "C1" },
+    ],
+  },
+  {
+    id: "v9",
+    q: "How do you politely decline an invitation?",
+    opts: [
+      { text: "No, I don't want.", level: null },
+      { text: "Maybe no, bye.", level: null },
+      { text: "Sorry, I can't make it, but thank you.", level: "B1" },
+      { text: "I'm afraid I won't be able to make it, but thanks for thinking of me.", level: "C1" },
+    ],
+  },
+  {
+    id: "v10",
+    q: 'Choose the best word: "Children are often highly ___ and recover quickly from difficulties."',
+    opts: [
+      { text: "inevitable", level: null },
+      { text: "eloquent", level: null },
+      { text: "strong", level: "A2" },
+      { text: "resilient", level: "B2" },
+    ],
+  },
+  {
+    id: "v11",
+    q: 'Complete: "By the time we arrived, the film ___."',
+    opts: [
+      { text: "has started", level: null },
+      { text: "starts", level: null },
+      { text: "had started", level: "B2" },
+      { text: "had already been running for a while", level: "C1" },
+    ],
+  },
+  {
+    id: "v12",
+    q: 'What does "to call it a day" mean?',
+    opts: [
+      { text: "To make a phone call.", level: null },
+      { text: "To plan the next day.", level: null },
+      { text: "To stop working for now.", level: "B1" },
+      { text: "To wrap things up for the time being.", level: "C1" },
+    ],
+  },
+];
+
+export const QuestionBank = { listening, reading, vocab };
+
+/** All questions of a section, flattened. */
+export function sectionQuestions(section: SectionKey): Question[] {
+  if (section === "listening") return listening.flatMap((a) => a.questions);
+  if (section === "reading") return reading.flatMap((p) => p.questions);
+  return vocab;
+}
+
+export const TOTAL_QUESTIONS =
+  sectionQuestions("listening").length +
+  sectionQuestions("reading").length +
+  sectionQuestions("vocab").length;
+
+/* ------------------------------ SCORING ------------------------------ */
+
+/** answers: questionId -> selected option index */
+export type Answers = Record<string, number>;
+
+export type SectionResult = {
+  key: SectionKey;
+  label: string;
+  correct: number;
+  total: number;
+  /** 0..100, how well the learner performed relative to a C1 ceiling */
+  score: number;
+  level: Cefr;
+};
+
+export type ExamResult = {
+  sections: SectionResult[];
+  overall: Cefr;
+  overallScore: number;
+  totalCorrect: number;
+  totalQuestions: number;
+  version: 2;
+};
+
+function scoreSection(key: SectionKey): (answers: Answers) => SectionResult {
+  return (answers) => {
+    const qs = sectionQuestions(key);
+    let sum = 0;
+    let correct = 0;
+    qs.forEach((q) => {
+      const idx = answers[q.id];
+      const opt = typeof idx === "number" ? q.opts[idx] : undefined;
+      if (opt?.level) {
+        correct++;
+        sum += CEFR_VALUE[opt.level];
+      }
+    });
+    // Average level value across ALL questions of the section: wrong answers
+    // count as 0, so a learner who answers few items cannot reach C1.
+    const avg = qs.length ? sum / qs.length : 0;
+    const score = Math.round((avg / 5) * 100);
+    // Map the average back onto the scale with a soft floor at A1.
+    const level = levelFromValue(Math.max(1, avg));
+    return { key, label: SECTION_NAMES[key], correct, total: qs.length, score, level };
+  };
+}
+
+export function computeResult(answers: Answers): ExamResult {
+  const sections = SECTION_ORDER.map((k) => scoreSection(k)(answers));
+  const overallScore = Math.round(sections.reduce((a, s) => a + s.score, 0) / sections.length);
+  const overall = levelFromValue(Math.max(1, (overallScore / 100) * 5));
+  const totalCorrect = sections.reduce((a, s) => a + s.correct, 0);
+  return {
+    sections,
+    overall,
+    overallScore,
+    totalCorrect,
+    totalQuestions: TOTAL_QUESTIONS,
+    version: 2,
+  };
+}

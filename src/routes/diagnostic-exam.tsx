@@ -6,23 +6,30 @@ import {
   ArrowRight,
   Sparkles,
   Volume2,
-  Languages,
   Loader2,
   Download,
   RotateCcw,
   MessageCircle,
+  Headphones,
+  BookOpen,
+  Type,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import {
   QuestionBank,
-  computeScores,
+  computeResult,
+  sectionQuestions,
   SECTION_NAMES,
+  SECTION_ORDER,
+  CEFR_DESCRIPTION,
+  CEFR_SCALE,
+  CEFR_VALUE,
+  TOTAL_QUESTIONS,
   type Answers,
-  type Translations,
-  type Scores,
+  type ExamResult,
+  type Question,
 } from "@/lib/diagnostic-bank";
 import { generateDiagnosticPdf } from "@/lib/diagnostic-pdf";
 
@@ -33,82 +40,69 @@ export const Route = createFileRoute("/diagnostic-exam")({
       {
         name: "description",
         content:
-          "Descubre tu nivel real de inglés (CEFR A1–B2) en 15 minutos. Gramática, Reading, Vocabulary, Writing y Listening. Reporte PDF gratuito.",
+          "Descubre tu nivel real de inglés (A1–C1) en 15 minutos: Listening, Reading y Vocabulary. Recibe tu Constancia de Nivel en PDF, gratis.",
       },
       { property: "og:title", content: "Examen Diagnóstico de Inglés — Teacher Netza Varo" },
       {
         property: "og:description",
         content:
-          "Examen diagnóstico gratuito con reporte PDF. Mide gramática, lectura, escritura, vocabulario y comprensión auditiva.",
+          "Examen diagnóstico gratuito con Constancia de Nivel en PDF. Mide Listening, Reading y Vocabulary & Use of Language.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: DiagnosticExam,
 });
 
-const STORAGE_KEY = "netza.diagnostic.v1";
+const STORAGE_KEY = "netza.diagnostic.v2";
 const WA_NUMBER = "523231116425";
 
-function emptyAnswers(): Answers {
-  return { mcq: {}, reading: {}, vocab: {}, writing: {}, listening: {} };
-}
-function emptyTranslations(): Translations {
-  return { mcq: {}, reading: {}, vocab: {}, writing: {}, listening: {} };
-}
-
-type SavedState = {
-  studentName: string;
-  step: number;
-  answers: Answers;
-  translations: Translations;
-};
+type SavedState = { studentName: string; step: number; answers: Answers; version: 2 };
 
 function loadState(): SavedState | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
-    return JSON.parse(raw) as SavedState;
+    const parsed = JSON.parse(raw) as SavedState;
+    if (parsed?.version !== 2) return null;
+    return parsed;
   } catch {
     return null;
   }
 }
 
 function DiagnosticExam() {
-  // Step 0 = start screen, 1..5 = sections, 6 = results
+  // Step 0 = start, 1..3 = sections, 4 = results
   const [step, setStep] = useState(0);
   const [studentName, setStudentName] = useState("");
-  const [answers, setAnswers] = useState<Answers>(emptyAnswers);
-  const [translations, setTranslations] = useState<Translations>(emptyTranslations);
-  const [scores, setScores] = useState<Scores | null>(null);
+  const [answers, setAnswers] = useState<Answers>({});
+  const [result, setResult] = useState<ExamResult | null>(null);
   const [pdfLoading, setPdfLoading] = useState(false);
   const radarRef = useRef<HTMLCanvasElement>(null);
 
-  // Hydrate from localStorage
+  // Hydrate
   useEffect(() => {
     const saved = loadState();
     if (!saved) return;
     try {
-      const a = { ...emptyAnswers(), ...(saved.answers ?? {}) };
-      const t = { ...emptyTranslations(), ...(saved.translations ?? {}) };
+      const a: Answers = { ...(saved.answers ?? {}) };
       setStudentName(saved.studentName || "");
       setAnswers(a);
-      setTranslations(t);
       const savedStep = Number(saved.step) || 0;
-      if (savedStep >= 6) {
-        // Results screen was persisted without scores -> recompute, never blank.
-        setScores(computeScores(a, t));
-        setStep(6);
+      if (savedStep >= 4) {
+        setResult(computeResult(a));
+        setStep(4);
       } else {
-        setStep(Math.max(0, Math.min(5, savedStep)));
+        setStep(Math.max(0, Math.min(3, savedStep)));
       }
     } catch {
       if (typeof window !== "undefined") localStorage.removeItem(STORAGE_KEY);
       setStep(0);
-      setScores(null);
+      setResult(null);
     }
   }, []);
-
 
   // Persist
   useEffect(() => {
@@ -116,11 +110,10 @@ function DiagnosticExam() {
     if (step === 0 && !studentName) return;
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ studentName, step, answers, translations }),
+      JSON.stringify({ studentName, step, answers, version: 2 }),
     );
-  }, [studentName, step, answers, translations]);
+  }, [studentName, step, answers]);
 
-  // Scroll to top on step change
   useEffect(() => {
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
@@ -129,23 +122,28 @@ function DiagnosticExam() {
     if (typeof window !== "undefined") localStorage.removeItem(STORAGE_KEY);
     setStudentName("");
     setStep(0);
-    setAnswers(emptyAnswers());
-    setTranslations(emptyTranslations());
-    setScores(null);
+    setAnswers({});
+    setResult(null);
+  }
+
+  function answer(id: string, optIndex: number) {
+    setAnswers((a) => ({ ...a, [id]: optIndex }));
   }
 
   function goto(next: number) {
-    setStep(Math.max(0, Math.min(6, next)));
+    setStep(Math.max(0, Math.min(4, next)));
   }
 
   function finish() {
-    const s = computeScores(answers, translations);
-    setScores(s);
-    setStep(6);
+    setResult(computeResult(answers));
+    setStep(4);
     toast.success("¡Examen calificado!");
   }
 
-  const progress = step === 0 ? 0 : Math.round(((step - 1) / 5) * 100);
+  const answeredCount = useMemo(() => Object.keys(answers).length, [answers]);
+  const progress =
+    step === 0 ? 0 : Math.round((answeredCount / TOTAL_QUESTIONS) * 100);
+  const sectionKey = step >= 1 && step <= 3 ? SECTION_ORDER[step - 1] : null;
 
   return (
     <div className="relative min-h-screen bg-background text-foreground">
@@ -162,7 +160,7 @@ function DiagnosticExam() {
         className="tn-float pointer-events-none fixed -right-32 top-24 -z-10 h-[380px] w-[380px] rounded-full opacity-20 blur-3xl"
         style={{ background: "var(--gradient-mint)" }}
       />
-      {/* Header */}
+
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 shadow-[var(--shadow-soft)] backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
           <Link to="/" className="group flex items-center gap-2">
@@ -180,13 +178,15 @@ function DiagnosticExam() {
             ← Volver al inicio
           </Link>
         </div>
-        {step > 0 && step < 6 && (
+        {sectionKey && (
           <div className="mx-auto max-w-5xl px-4 pb-3 sm:px-6">
             <div className="mb-1 flex items-center justify-between text-xs text-muted-foreground">
               <span>
-                Paso {step} de 5 · {SECTION_NAMES[step - 1]}
+                Paso {step} de 3 · {SECTION_NAMES[sectionKey]}
               </span>
-              <span className="font-semibold text-primary">{progress}%</span>
+              <span className="font-semibold text-primary">
+                {answeredCount}/{TOTAL_QUESTIONS} · {progress}%
+              </span>
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
               <div
@@ -203,12 +203,11 @@ function DiagnosticExam() {
       </header>
 
       <main key={step} className="animate-fade-in mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:py-14">
-
         {step === 0 && (
           <StartScreen
             name={studentName}
             onName={setStudentName}
-            hasProgress={Object.values(answers).some((s) => Object.keys(s).length > 0)}
+            hasProgress={answeredCount > 0}
             onStart={() => {
               if (!studentName.trim()) {
                 toast.error("Escribe tu nombre para comenzar.");
@@ -220,73 +219,11 @@ function DiagnosticExam() {
           />
         )}
 
-        {step === 1 && (
-          <McqSection
-            answers={answers.mcq}
-            translations={translations.mcq}
-            onAnswer={(id, v) => setAnswers((a) => ({ ...a, mcq: { ...a.mcq, [id]: v } }))}
-            onTranslate={(id) =>
-              setTranslations((t) => ({ ...t, mcq: { ...t.mcq, [id]: !t.mcq[id] } }))
-            }
-          />
-        )}
+        {step === 1 && <ListeningSection answers={answers} onAnswer={answer} />}
+        {step === 2 && <ReadingSection answers={answers} onAnswer={answer} />}
+        {step === 3 && <VocabSection answers={answers} onAnswer={answer} />}
 
-        {step === 2 && (
-          <ReadingSection
-            answers={answers.reading}
-            translations={translations.reading}
-            onAnswer={(id, v) =>
-              setAnswers((a) => ({ ...a, reading: { ...a.reading, [id]: v } }))
-            }
-            onTranslate={(id) =>
-              setTranslations((t) => ({
-                ...t,
-                reading: { ...t.reading, [id]: !t.reading[id] },
-              }))
-            }
-          />
-        )}
-
-        {step === 3 && (
-          <VocabSection
-            answers={answers.vocab}
-            onChange={(v) => setAnswers((a) => ({ ...a, vocab: v }))}
-          />
-        )}
-
-        {step === 4 && (
-          <WritingSection
-            answers={answers.writing}
-            translations={translations.writing}
-            onAnswer={(id, v) =>
-              setAnswers((a) => ({ ...a, writing: { ...a.writing, [id]: v } }))
-            }
-            onTranslate={(id) =>
-              setTranslations((t) => ({
-                ...t,
-                writing: { ...t.writing, [id]: !t.writing[id] },
-              }))
-            }
-          />
-        )}
-
-        {step === 5 && (
-          <ListeningSection
-            answers={answers.listening}
-            translations={translations.listening}
-            onAnswer={(id, v) =>
-              setAnswers((a) => ({ ...a, listening: { ...a.listening, [id]: v } }))
-            }
-            onTranslate={(id) =>
-              setTranslations((t) => ({
-                ...t,
-                listening: { ...t.listening, [id]: !t.listening[id] },
-              }))
-            }
-          />
-        )}
-
-        {step === 6 && !scores && (
+        {step === 4 && !result && (
           <div className="rounded-2xl border border-border/60 bg-card/80 p-10 text-center backdrop-blur-xl">
             <h2 className="font-heading text-xl font-bold">No pudimos recuperar tus resultados</h2>
             <p className="mt-2 text-sm text-muted-foreground">
@@ -298,42 +235,34 @@ function DiagnosticExam() {
           </div>
         )}
 
-        {step === 6 && scores && (
-
+        {step === 4 && result && (
           <ResultsScreen
             studentName={studentName}
-            scores={scores}
+            result={result}
             radarRef={radarRef}
             onReset={resetExam}
+            pdfLoading={pdfLoading}
             onDownload={async () => {
               setPdfLoading(true);
               try {
-                const dataUrl = radarRef.current?.toDataURL("image/png") ?? null;
-                await generateDiagnosticPdf({
-                  studentName,
-                  answers,
-                  translations,
-                  scores,
-                  radarDataUrl: dataUrl,
-                });
-                toast.success("PDF generado.");
+                await generateDiagnosticPdf({ studentName, result });
+                toast.success("Constancia generada.");
               } catch (e) {
                 console.error(e);
-                toast.error("No se pudo generar el PDF.");
+                toast.error("No se pudo generar la constancia.");
               } finally {
                 setPdfLoading(false);
               }
             }}
-            pdfLoading={pdfLoading}
           />
         )}
 
-        {step > 0 && step < 6 && (
+        {step > 0 && step < 4 && (
           <div className="mt-10 flex items-center justify-between border-t border-border/60 pt-6">
             <Button variant="outline" onClick={() => goto(step - 1)} disabled={step === 1}>
               <ArrowLeft className="mr-2 h-4 w-4" /> Anterior
             </Button>
-            {step < 5 ? (
+            {step < 3 ? (
               <Button onClick={() => goto(step + 1)}>
                 Siguiente <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -364,6 +293,11 @@ function StartScreen({
   onReset: () => void;
   hasProgress: boolean;
 }) {
+  const blocks = [
+    { icon: Headphones, title: "Listening", desc: "5 audios · 10 preguntas" },
+    { icon: BookOpen, title: "Reading", desc: "3 lecturas · 9 preguntas" },
+    { icon: Type, title: "Vocabulary & Use", desc: "Gramática y modismos · 12 preguntas" },
+  ];
   return (
     <div className="mx-auto max-w-xl text-center">
       <span className="inline-flex items-center gap-2 rounded-full border border-mint/40 bg-mint/10 px-3 py-1 text-xs font-medium text-primary shadow-[0_0_18px_-6px_var(--mint)]">
@@ -373,9 +307,22 @@ function StartScreen({
         Descubre tu nivel real de inglés
       </h1>
       <p className="mt-4 text-muted-foreground">
-        5 secciones (Grammar, Reading, Vocabulary, Writing, Listening). Al final recibirás tu
-        nivel CEFR estimado y un reporte PDF descargable.
+        Cada pregunta tiene dos respuestas correctas de distinto nivel: elige la que realmente
+        usarías. Al terminar recibes tu <strong>Constancia de Nivel</strong> en PDF.
       </p>
+
+      <div className="mt-8 grid gap-3 sm:grid-cols-3">
+        {blocks.map((b) => (
+          <div
+            key={b.title}
+            className="rounded-xl border border-mint/25 bg-card/80 p-4 text-left shadow-[var(--shadow-soft)] backdrop-blur"
+          >
+            <b.icon className="h-5 w-5 text-primary" />
+            <div className="mt-2 font-heading text-sm font-bold">{b.title}</div>
+            <div className="text-xs text-muted-foreground">{b.desc}</div>
+          </div>
+        ))}
+      </div>
 
       <div className="mt-8 space-y-3 rounded-2xl border border-mint/30 bg-card/80 p-6 text-left shadow-[var(--shadow-soft)] backdrop-blur">
         <label className="text-sm font-medium">¿Cuál es tu nombre?</label>
@@ -385,7 +332,7 @@ function StartScreen({
           placeholder="Ej. María López"
           onKeyDown={(e) => e.key === "Enter" && onStart()}
         />
-        <div className="pt-2 flex flex-col gap-2 sm:flex-row">
+        <div className="flex flex-col gap-2 pt-2 sm:flex-row">
           <Button onClick={onStart} size="lg" className="w-full shadow-[var(--shadow-elegant)]">
             Comenzar examen
           </Button>
@@ -396,7 +343,7 @@ function StartScreen({
           )}
         </div>
         <p className="pt-2 text-xs text-muted-foreground">
-          Tip: usar el botón «Translate» reduce a la mitad el puntaje de esa pregunta.
+          Tu nombre aparecerá en la constancia final.
         </p>
       </div>
     </div>
@@ -404,84 +351,6 @@ function StartScreen({
 }
 
 /* --------------------------- REUSABLE PIECES --------------------------- */
-
-function QuestionCard({
-  index,
-  title,
-  translateActive,
-  onTranslate,
-  children,
-}: {
-  index: number;
-  title: React.ReactNode;
-  translateActive?: boolean;
-  onTranslate?: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="rounded-2xl border border-border bg-card/80 p-5 shadow-[var(--shadow-soft)] backdrop-blur transition-all duration-500 hover:border-mint/50 hover:shadow-[var(--glow-mint)]">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex-1">
-          <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            Pregunta {index}
-          </div>
-          <div className="mt-1 text-base font-medium leading-snug">{title}</div>
-        </div>
-        {onTranslate && (
-          <button
-            type="button"
-            onClick={onTranslate}
-            className={cn(
-              "flex shrink-0 items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-medium transition",
-              translateActive
-                ? "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-400"
-                : "border-border bg-secondary/60 text-muted-foreground hover:text-foreground",
-            )}
-          >
-            <Languages className="h-3.5 w-3.5" />
-            {translateActive ? "Ocultar ES (−50%)" : "Traducir"}
-          </button>
-        )}
-      </div>
-      <div className="mt-4 space-y-2">{children}</div>
-    </div>
-  );
-}
-
-function OptionRadio({
-  name,
-  value,
-  checked,
-  onChange,
-  label,
-}: {
-  name: string;
-  value: number;
-  checked: boolean;
-  onChange: () => void;
-  label: string;
-}) {
-  return (
-    <label
-      className={cn(
-        "flex cursor-pointer items-center gap-3 rounded-lg border p-3 text-sm transition-all duration-300",
-        checked
-          ? "border-mint bg-mint/10 shadow-[0_0_18px_-8px_var(--mint)]"
-          : "border-border bg-background hover:-translate-y-0.5 hover:border-mint/50 hover:bg-mint/5",
-      )}
-    >
-      <input
-        type="radio"
-        name={name}
-        value={value}
-        checked={checked}
-        onChange={onChange}
-        className="h-4 w-4 accent-[hsl(var(--primary))]"
-      />
-      <span>{label}</span>
-    </label>
-  );
-}
 
 function SectionHeading({ title, description }: { title: string; description: string }) {
   return (
@@ -492,265 +361,59 @@ function SectionHeading({ title, description }: { title: string; description: st
   );
 }
 
+function QuestionBlock({
+  q,
+  index,
+  answers,
+  onAnswer,
+}: {
+  q: Question;
+  index: number;
+  answers: Answers;
+  onAnswer: (id: string, v: number) => void;
+}) {
+  const selected = answers[q.id];
+  return (
+    <div className="rounded-2xl border border-border bg-card/80 p-5 shadow-[var(--shadow-soft)] backdrop-blur transition-all duration-500 hover:border-mint/50 hover:shadow-[var(--glow-mint)]">
+      <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        Pregunta {index}
+      </div>
+      <div className="mt-1 text-base font-medium leading-snug">{q.q}</div>
+      <div className="mt-4 space-y-2">
+        {q.opts.map((opt, oi) => (
+          <label
+            key={oi}
+            className={cn(
+              "flex cursor-pointer items-center gap-3 rounded-lg border p-3 text-sm transition-all duration-300",
+              selected === oi
+                ? "border-mint bg-mint/10 shadow-[0_0_18px_-8px_var(--mint)]"
+                : "border-border bg-background hover:-translate-y-0.5 hover:border-mint/50 hover:bg-mint/5",
+            )}
+          >
+            <input
+              type="radio"
+              name={`q-${q.id}`}
+              value={oi}
+              checked={selected === oi}
+              onChange={() => onAnswer(q.id, oi)}
+              className="h-4 w-4 accent-[hsl(var(--primary))]"
+            />
+            <span>{opt.text}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ------------------------------ SECTIONS ------------------------------ */
-
-function McqSection({
-  answers,
-  translations,
-  onAnswer,
-  onTranslate,
-}: {
-  answers: Record<string, number>;
-  translations: Record<string, boolean>;
-  onAnswer: (id: string, v: number) => void;
-  onTranslate: (id: string) => void;
-}) {
-  return (
-    <div>
-      <SectionHeading
-        title="Use of English"
-        description="12 preguntas de gramática y expresiones cotidianas."
-      />
-      <div className="space-y-4">
-        {QuestionBank.mcq.map((q, i) => {
-          const trans = !!translations[q.id];
-          return (
-            <QuestionCard
-              key={q.id}
-              index={i + 1}
-              translateActive={trans}
-              onTranslate={() => onTranslate(q.id)}
-              title={
-                <>
-                  <div>{q.q}</div>
-                  {trans && (
-                    <div className="mt-1 text-sm italic text-amber-700 dark:text-amber-400">
-                      {q.q_es}
-                    </div>
-                  )}
-                </>
-              }
-            >
-              {q.opts.map((opt, oi) => (
-                <OptionRadio
-                  key={oi}
-                  name={`mcq-${q.id}`}
-                  value={oi}
-                  checked={answers[q.id] === oi}
-                  onChange={() => onAnswer(q.id, oi)}
-                  label={opt}
-                />
-              ))}
-            </QuestionCard>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function ReadingSection({
-  answers,
-  translations,
-  onAnswer,
-  onTranslate,
-}: {
-  answers: Record<string, number>;
-  translations: Record<string, boolean>;
-  onAnswer: (id: string, v: number) => void;
-  onTranslate: (id: string) => void;
-}) {
-  return (
-    <div>
-      <SectionHeading title="Reading" description="3 lecturas cortas con una pregunta cada una." />
-      <div className="space-y-4">
-        {QuestionBank.reading.map((q, i) => {
-          const trans = !!translations[q.id];
-          return (
-            <QuestionCard
-              key={q.id}
-              index={i + 1}
-              translateActive={trans}
-              onTranslate={() => onTranslate(q.id)}
-              title={
-                <>
-                  <div className="rounded-lg bg-secondary/50 p-3 text-sm font-normal leading-relaxed">
-                    {trans ? q.text_es : q.text}
-                  </div>
-                  <div className="mt-3 font-medium">
-                    {trans ? q.q_es : q.q}
-                  </div>
-                </>
-              }
-            >
-              {q.opts.map((opt, oi) => (
-                <OptionRadio
-                  key={oi}
-                  name={`read-${q.id}`}
-                  value={oi}
-                  checked={answers[q.id] === oi}
-                  onChange={() => onAnswer(q.id, oi)}
-                  label={opt}
-                />
-              ))}
-            </QuestionCard>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function VocabSection({
-  answers,
-  onChange,
-}: {
-  answers: Record<string, string>;
-  onChange: (v: Record<string, string>) => void;
-}) {
-  const usedWords = useMemo(() => new Set(Object.values(answers)), [answers]);
-
-  function place(sentenceId: string, word: string) {
-    // Remove word from any other sentence, then set
-    const next: Record<string, string> = {};
-    Object.entries(answers).forEach(([k, v]) => {
-      if (v !== word && k !== sentenceId) next[k] = v;
-    });
-    next[sentenceId] = word;
-    onChange(next);
-  }
-
-  function clear(sentenceId: string) {
-    const next = { ...answers };
-    delete next[sentenceId];
-    onChange(next);
-  }
-
-  return (
-    <div>
-      <SectionHeading
-        title="Vocabulary"
-        description="Selecciona la palabra correcta para cada oración."
-      />
-      <div className="space-y-4">
-        {QuestionBank.vocab.sentences.map((q, i) => {
-          const current = answers[q.id];
-          return (
-            <div
-              key={q.id}
-              className="rounded-2xl border border-border bg-card/80 p-5 shadow-[var(--shadow-soft)] backdrop-blur transition-all duration-500 hover:border-mint/50"
-            >
-              <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                Oración {i + 1}
-              </div>
-              <p className="mt-2 text-base leading-relaxed">
-                {q.text}{" "}
-                <button
-                  type="button"
-                  onClick={() => current && clear(q.id)}
-                  className={cn(
-                    "inline-flex min-w-[100px] items-center justify-center rounded-md border-b-2 border-dashed px-2 py-0.5 text-sm font-semibold transition-all duration-300",
-                    current
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-muted-foreground text-muted-foreground",
-                  )}
-                >
-                  {current || "_______"}
-                </button>{" "}
-                {q.text_post}
-              </p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {QuestionBank.vocab.words.map((w) => {
-                  const inUse = usedWords.has(w) && current !== w;
-                  return (
-                    <button
-                      key={w}
-                      type="button"
-                      onClick={() => !inUse && place(q.id, w)}
-                      disabled={inUse}
-                      className={cn(
-                        "rounded-full border px-3 py-1 text-sm transition",
-                        current === w
-                          ? "border-mint bg-mint text-primary shadow-[0_0_16px_-6px_var(--mint)]"
-                          : inUse
-                            ? "cursor-not-allowed border-border bg-muted text-muted-foreground/50 line-through"
-                            : "border-border bg-background transition-all duration-300 hover:-translate-y-0.5 hover:border-mint/60 hover:bg-mint/10",
-                      )}
-                    >
-                      {w}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function WritingSection({
-  answers,
-  translations,
-  onAnswer,
-  onTranslate,
-}: {
-  answers: Record<string, string>;
-  translations: Record<string, boolean>;
-  onAnswer: (id: string, v: string) => void;
-  onTranslate: (id: string) => void;
-}) {
-  return (
-    <div>
-      <SectionHeading
-        title="Writing"
-        description="Responde en inglés con tus propias palabras. Escribe al menos 1 oración completa."
-      />
-      <div className="space-y-4">
-        {QuestionBank.writing.map((q, i) => {
-          const trans = !!translations[q.id];
-          return (
-            <QuestionCard
-              key={q.id}
-              index={i + 1}
-              translateActive={trans}
-              onTranslate={() => onTranslate(q.id)}
-              title={
-                <>
-                  <div>{q.prompt}</div>
-                  {trans && (
-                    <div className="mt-1 text-sm italic text-amber-700 dark:text-amber-400">
-                      {q.prompt_es}
-                    </div>
-                  )}
-                </>
-              }
-            >
-              <Textarea
-                value={answers[q.id] || ""}
-                onChange={(e) => onAnswer(q.id, e.target.value)}
-                placeholder="Write your answer in English..."
-                rows={3}
-              />
-            </QuestionCard>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
 
 function ListeningSection({
   answers,
-  translations,
   onAnswer,
-  onTranslate,
 }: {
-  answers: Record<string, number>;
-  translations: Record<string, boolean>;
+  answers: Answers;
   onAnswer: (id: string, v: number) => void;
-  onTranslate: (id: string) => void;
 }) {
   const [playing, setPlaying] = useState<string | null>(null);
 
@@ -769,51 +432,98 @@ function ListeningSection({
     window.speechSynthesis.speak(u);
   }
 
+  let n = 0;
   return (
     <div>
       <SectionHeading
         title="Listening"
-        description="Pulsa el botón para escuchar el audio. Puedes repetirlo cuantas veces necesites."
+        description="5 audios con 2 preguntas cada uno. Puedes repetir el audio las veces que necesites."
+      />
+      <div className="space-y-8">
+        {QuestionBank.listening.map((item, ai) => (
+          <div key={item.id} className="space-y-4">
+            <div className="flex flex-wrap items-center gap-3 rounded-xl border border-mint/30 bg-mint/5 p-4">
+              <span className="font-heading text-sm font-bold">Audio {ai + 1}</span>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => play(item.id, item.audio)}
+              >
+                <Volume2 className="mr-2 h-4 w-4" />
+                {playing === item.id ? "Reproduciendo..." : "Escuchar"}
+              </Button>
+            </div>
+            {item.questions.map((q) => {
+              n += 1;
+              return (
+                <QuestionBlock key={q.id} q={q} index={n} answers={answers} onAnswer={onAnswer} />
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ReadingSection({
+  answers,
+  onAnswer,
+}: {
+  answers: Answers;
+  onAnswer: (id: string, v: number) => void;
+}) {
+  let n = 0;
+  return (
+    <div>
+      <SectionHeading
+        title="Reading"
+        description="2 lecturas cortas y 1 lectura larga, con 3 preguntas cada una."
+      />
+      <div className="space-y-8">
+        {QuestionBank.reading.map((p) => (
+          <div key={p.id} className="space-y-4">
+            <div className="rounded-xl border border-mint/30 bg-secondary/40 p-5">
+              <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                {p.kind === "long" ? "Lectura larga" : "Lectura corta"} · {p.title}
+              </div>
+              <div className="mt-2 space-y-3 text-sm leading-relaxed">
+                {p.text.split("\n\n").map((para, i) => (
+                  <p key={i}>{para}</p>
+                ))}
+              </div>
+            </div>
+            {p.questions.map((q) => {
+              n += 1;
+              return (
+                <QuestionBlock key={q.id} q={q} index={n} answers={answers} onAnswer={onAnswer} />
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function VocabSection({
+  answers,
+  onAnswer,
+}: {
+  answers: Answers;
+  onAnswer: (id: string, v: number) => void;
+}) {
+  return (
+    <div>
+      <SectionHeading
+        title="Vocabulary & Use of Language"
+        description="Gramática, uso real del idioma, colocaciones y modismos."
       />
       <div className="space-y-4">
-        {QuestionBank.listening.map((q, i) => {
-          const trans = !!translations[q.id];
-          return (
-            <QuestionCard
-              key={q.id}
-              index={i + 1}
-              translateActive={trans}
-              onTranslate={() => onTranslate(q.id)}
-              title={
-                <>
-                  <div className="flex items-center gap-3">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => play(q.id, q.audio)}
-                    >
-                      <Volume2 className="mr-2 h-4 w-4" />
-                      {playing === q.id ? "Reproduciendo..." : "Escuchar"}
-                    </Button>
-                  </div>
-                  <div className="mt-3 font-medium">{trans ? q.q_es : q.q}</div>
-                </>
-              }
-            >
-              {q.opts.map((opt, oi) => (
-                <OptionRadio
-                  key={oi}
-                  name={`list-${q.id}`}
-                  value={oi}
-                  checked={answers[q.id] === oi}
-                  onChange={() => onAnswer(q.id, oi)}
-                  label={opt}
-                />
-              ))}
-            </QuestionCard>
-          );
-        })}
+        {sectionQuestions("vocab").map((q, i) => (
+          <QuestionBlock key={q.id} q={q} index={i + 1} answers={answers} onAnswer={onAnswer} />
+        ))}
       </div>
     </div>
   );
@@ -823,54 +533,67 @@ function ListeningSection({
 
 function ResultsScreen({
   studentName,
-  scores,
+  result,
   radarRef,
   onReset,
   onDownload,
   pdfLoading,
 }: {
   studentName: string;
-  scores: Scores;
+  result: ExamResult;
   radarRef: React.RefObject<HTMLCanvasElement | null>;
   onReset: () => void;
   onDownload: () => void;
   pdfLoading: boolean;
 }) {
   useEffect(() => {
-    drawRadar(radarRef.current, scores);
-  }, [scores, radarRef]);
+    drawRadar(radarRef.current, result);
+  }, [result, radarRef]);
 
-  const waMsg = `Hola Teacher Netza, acabo de terminar el examen diagnóstico. Mi nivel estimado es ${scores.cefr} (${scores.totalObjPoints.toFixed(1)}/25). Me gustaría más información sobre los planes.`;
+  const waMsg = `Hola Teacher Netza, acabo de terminar el examen diagnóstico. Mi nivel general es ${result.overall} (Listening ${result.sections[0].level}, Reading ${result.sections[1].level}, Vocabulary ${result.sections[2].level}). Me gustaría más información sobre los planes.`;
   const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waMsg)}`;
-
-  const stats = [
-    { label: "Use of English", value: `${scores.mcqPts} / 12`, penalty: scores.mcqPen },
-    {
-      label: "Reading + Vocabulary",
-      value: `${(scores.readPts + scores.vocabPts).toFixed(1)} / 8`,
-      penalty: scores.readPen,
-    },
-    { label: "Listening", value: `${scores.listPts} / 5`, penalty: scores.listPen },
-  ];
 
   return (
     <div>
       <div className="rounded-2xl border-2 border-mint bg-card p-8 text-center shadow-[var(--glow-mint)]">
         <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          Nivel estimado (CEFR)
+          Nivel general (MCER)
         </div>
         <div className="mt-2 bg-[image:var(--gradient-hero)] bg-clip-text font-heading text-7xl font-black text-transparent">
-          {scores.cefr}
+          {result.overall}
         </div>
         <div className="mt-2 text-lg">
-          <strong>{studentName}</strong> · {scores.totalObjPoints.toFixed(1)} / 25 pts objetivos
+          <strong>{studentName}</strong>
         </div>
-        {scores.totalPenalties > 0 && (
-          <div className="mt-1 text-sm text-amber-700 dark:text-amber-400">
-            Usaste {scores.totalPenalties} traducciones (−
-            {(scores.totalPenalties * 0.5).toFixed(1)} pts)
+        <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+          {CEFR_DESCRIPTION[result.overall]}
+        </p>
+      </div>
+
+      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+        {result.sections.map((s) => (
+          <div
+            key={s.key}
+            className="card-hover rounded-xl border border-border bg-card p-4 shadow-[var(--shadow-soft)]"
+          >
+            <div className="text-xs uppercase tracking-wide text-muted-foreground">{s.label}</div>
+            <div className="mt-1 font-heading text-3xl font-bold text-primary">{s.level}</div>
+            <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full"
+                style={{
+                  width: `${(CEFR_VALUE[s.level] / 5) * 100}%`,
+                  background: "var(--gradient-mint)",
+                }}
+              />
+            </div>
+            <div className="mt-2 flex justify-between text-[10px] text-muted-foreground">
+              {CEFR_SCALE.map((l) => (
+                <span key={l}>{l}</span>
+              ))}
+            </div>
           </div>
-        )}
+        ))}
       </div>
 
       <div className="mt-6 rounded-2xl border border-mint/30 bg-card p-6 shadow-[var(--shadow-soft)]">
@@ -878,25 +601,6 @@ function ResultsScreen({
         <div className="mt-4 flex justify-center">
           <canvas ref={radarRef} width={360} height={280} className="max-w-full" />
         </div>
-      </div>
-
-      <div className="mt-6 grid gap-3 sm:grid-cols-3">
-        {stats.map((s) => (
-          <div
-            key={s.label}
-            className="card-hover rounded-xl border border-border bg-card p-4 shadow-[var(--shadow-soft)]"
-          >
-            <div className="text-xs uppercase tracking-wide text-muted-foreground">
-              {s.label}
-            </div>
-            <div className="mt-1 font-heading text-2xl font-bold">{s.value}</div>
-            {s.penalty > 0 && (
-              <div className="mt-1 text-xs text-amber-700 dark:text-amber-400">
-                −{(s.penalty * 0.5).toFixed(1)} pts por traducción
-              </div>
-            )}
-          </div>
-        ))}
       </div>
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -911,7 +615,7 @@ function ResultsScreen({
           ) : (
             <Download className="mr-2 h-4 w-4" />
           )}
-          Descargar reporte PDF
+          Descargar mi constancia
         </Button>
         <a href={waUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
           <Button
@@ -936,30 +640,23 @@ function ResultsScreen({
 
 /* ------------------------------ RADAR ------------------------------ */
 
-function drawRadar(cv: HTMLCanvasElement | null, s: Scores) {
+function drawRadar(cv: HTMLCanvasElement | null, result: ExamResult) {
   if (!cv) return;
   const ctx = cv.getContext("2d");
   if (!ctx) return;
-  const w = cv.width,
-    h = cv.height;
-  const cX = w / 2,
-    cY = h / 2;
-  const radius = Math.min(w, h) / 2.8;
+  const w = cv.width;
+  const h = cv.height;
+  const cX = w / 2;
+  const cY = h / 2;
+  const radius = Math.min(w, h) / 2.9;
 
   ctx.clearRect(0, 0, w, h);
 
-  const data = [
-    (s.mcqPts / 12) * 100,
-    ((s.readPts + s.vocabPts) / 8) * 100,
-    (s.listPts / 5) * 100,
-    100 - s.writePen * 20,
-    100 - s.totalPenalties * (100 / 25),
-  ];
-  const labels = ["Grammar", "Reading", "Listening", "Writing", "Autonomy"];
-  const sides = 5;
+  const data = result.sections.map((s) => s.score);
+  const labels = ["Listening", "Reading", "Vocabulary"];
+  const sides = 3;
   const step = (Math.PI * 2) / sides;
 
-  // Grid
   ctx.strokeStyle = "rgba(148, 163, 184, 0.25)";
   ctx.lineWidth = 1;
   for (let ring = 1; ring <= 4; ring++) {
@@ -971,10 +668,10 @@ function drawRadar(cv: HTMLCanvasElement | null, s: Scores) {
       if (i === 0) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);
     }
+    ctx.closePath();
     ctx.stroke();
   }
 
-  // Axes + labels
   ctx.font = "600 11px 'Plus Jakarta Sans', system-ui, sans-serif";
   ctx.fillStyle = "#64748b";
   ctx.textAlign = "center";
@@ -985,13 +682,12 @@ function drawRadar(cv: HTMLCanvasElement | null, s: Scores) {
     ctx.moveTo(cX, cY);
     ctx.lineTo(cX + Math.cos(a) * radius, cY + Math.sin(a) * radius);
     ctx.stroke();
-    ctx.fillText(labels[i], cX + Math.cos(a) * (radius + 22), cY + Math.sin(a) * (radius + 16));
+    ctx.fillText(labels[i], cX + Math.cos(a) * (radius + 26), cY + Math.sin(a) * (radius + 18));
   }
 
-  // Data
   ctx.beginPath();
   for (let i = 0; i < sides; i++) {
-    const val = Math.max(0, data[i]);
+    const val = Math.max(4, data[i]);
     const a = i * step - Math.PI / 2;
     const x = cX + Math.cos(a) * (radius * (val / 100));
     const y = cY + Math.sin(a) * (radius * (val / 100));
@@ -999,14 +695,14 @@ function drawRadar(cv: HTMLCanvasElement | null, s: Scores) {
     else ctx.lineTo(x, y);
   }
   ctx.closePath();
-  ctx.fillStyle = "rgba(59, 91, 254, 0.25)";
+  ctx.fillStyle = "rgba(86, 214, 178, 0.28)";
   ctx.fill();
-  ctx.strokeStyle = "#3B5BFE";
+  ctx.strokeStyle = "#0f3b4b";
   ctx.lineWidth = 2;
   ctx.stroke();
 
   for (let i = 0; i < sides; i++) {
-    const val = Math.max(0, data[i]);
+    const val = Math.max(4, data[i]);
     const a = i * step - Math.PI / 2;
     const x = cX + Math.cos(a) * (radius * (val / 100));
     const y = cY + Math.sin(a) * (radius * (val / 100));
