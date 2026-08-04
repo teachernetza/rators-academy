@@ -1,0 +1,176 @@
+/* Teacher Netza — capa visual compartida para los Labs.
+   Se carga en cada lab embebido y unifica tipografía, superficies y acentos
+   con la marca, conservando los colores semánticos de cada actividad. */
+
+:root {
+  --tn-navy: #0f3b4b;
+  --tn-navy-600: #14536a;
+  --tn-navy-050: #eef5f7;
+  --tn-mint: #35d1a8;
+  --tn-mint-soft: #d8f7ee;
+  --tn-ink: #17303a;
+  --tn-muted: #5c7480;
+  --tn-line: #dfe9ed;
+  --tn-surface: #ffffff;
+  --tn-bg: #f5faf9;
+  --tn-shadow: 0 18px 45px -22px rgba(15, 59, 75, 0.35);
+  --tn-shadow-lg: 0 28px 65px -30px rgba(15, 59, 75, 0.45);
+}
+
+/* ---------- Tipografía ---------- */
+body,
+button,
+input,
+select,
+textarea {
+  font-family: "DM Sans", "Plus Jakarta Sans", system-ui, sans-serif !important;
+  color: var(--tn-ink);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+.font-black,
+.font-extrabold,
+nav span,
+.formula-box {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif !important;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Fondo ---------- */
+body {
+  background-color: var(--tn-bg) !important;
+  background-image:
+    radial-gradient(900px 420px at 12% -8%, rgba(53, 209, 168, 0.14), transparent 62%),
+    radial-gradient(760px 380px at 100% 0%, rgba(15, 59, 75, 0.1), transparent 60%) !important;
+  background-attachment: fixed;
+}
+
+/* ---------- Superficies ---------- */
+.soft-card,
+.bg-white {
+  background-color: var(--tn-surface);
+  border-radius: 1.5rem;
+  box-shadow: var(--tn-shadow);
+  border: 1px solid var(--tn-line);
+}
+
+nav.fixed,
+nav.sticky {
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--tn-line) !important;
+  box-shadow: 0 8px 30px -24px rgba(15, 59, 75, 0.6);
+}
+
+.visual-box {
+  border-radius: 1.25rem;
+  border-color: var(--tn-line);
+  box-shadow: var(--tn-shadow);
+}
+
+/* Utilidades de radio más suaves y consistentes */
+.rounded-xl {
+  border-radius: 1rem;
+}
+.rounded-2xl {
+  border-radius: 1.35rem;
+}
+.rounded-3xl {
+  border-radius: 1.75rem;
+}
+
+/* ---------- Acentos de marca ---------- */
+/* Índigo/azul genérico de los labs -> teal de marca */
+.bg-indigo-600,
+.bg-indigo-500,
+.bg-blue-600,
+.bg-slate-800,
+.bg-slate-900 {
+  background-color: var(--tn-navy) !important;
+}
+.hover\:bg-indigo-700:hover,
+.hover\:bg-blue-700:hover,
+.hover\:bg-slate-700:hover {
+  background-color: var(--tn-navy-600) !important;
+}
+.text-indigo-600,
+.text-indigo-500,
+.text-blue-600 {
+  color: var(--tn-navy-600) !important;
+}
+.bg-indigo-100,
+.bg-indigo-50,
+.bg-blue-50 {
+  background-color: var(--tn-navy-050) !important;
+}
+.border-indigo-500,
+.border-indigo-600,
+.border-blue-500 {
+  border-color: var(--tn-mint) !important;
+}
+.from-indigo-500,
+.from-indigo-600 {
+  --tw-gradient-from: var(--tn-navy) !important;
+}
+.to-indigo-500,
+.to-indigo-600,
+.to-purple-600,
+.to-blue-600 {
+  --tw-gradient-to: var(--tn-navy-600) !important;
+}
+
+/* Botones primarios con brillo menta al hover */
+button {
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.25s ease,
+    background-color 0.25s ease;
+}
+button:not(:disabled):hover {
+  box-shadow: 0 12px 28px -16px rgba(15, 59, 75, 0.55);
+}
+button:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+/* Foco accesible en menta */
+:focus-visible {
+  outline: 2px solid var(--tn-mint);
+  outline-offset: 2px;
+}
+
+.inline-input:focus,
+.dropdown-select:focus {
+  border-bottom-color: var(--tn-mint) !important;
+  background-color: var(--tn-mint-soft) !important;
+}
+
+/* Barras de progreso */
+.progress-bar,
+[class*="progress"] > div {
+  border-radius: 999px;
+}
+
+/* ---------- Colores semánticos conservados ---------- */
+/* Verde de acierto se alinea al menta de marca sin perder legibilidad */
+.correct,
+.inline-input.correct {
+  border-bottom-color: #0fa97f !important;
+  background-color: var(--tn-mint-soft) !important;
+  color: #0b6b52 !important;
+}
+/* Error, y los colores por categoría (condicionales, tiempos verbales,
+   tipos de preposición) se dejan tal cual vienen en cada lab. */
+
+/* ---------- Detalles ---------- */
+::-webkit-scrollbar-thumb {
+  background: #bcd2d9 !important;
+  border-radius: 10px;
+}
+::selection {
+  background: var(--tn-mint-soft);
+}
