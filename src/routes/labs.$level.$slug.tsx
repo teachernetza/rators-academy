@@ -1,27 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
-import { ArrowLeft, ExternalLink, Loader2 } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getLabHtml } from "@/lib/labs.functions";
-import { levelMeta } from "@/lib/labs";
+import { findLab, levelMeta } from "@/lib/labs";
 
 export const Route = createFileRoute("/labs/$level/$slug")({
   head: ({ params }) => {
+    const lab = findLab(params.level, params.slug);
     const lvl = levelMeta(params.level)?.label ?? "Lab";
-    const title = params.slug.replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase());
+    const title = lab?.title ?? params.slug.replace(/-/g, " ");
+    const description =
+      lab?.description ??
+      `Lab interactivo gratuito de inglés (${lvl}). Practica directo desde el navegador, sin registro.`;
     return {
       meta: [
         { title: `${title} · Lab ${lvl} — Teacher Netza Varo` },
-        {
-          name: "description",
-          content: `Lab interactivo gratuito de inglés (${lvl}): ${title}. Practica directo desde el navegador, sin registro.`,
-        },
+        { name: "description", content: description },
         { property: "og:title", content: `${title} · Lab de inglés ${lvl}` },
-        {
-          property: "og:description",
-          content: `Practica gratis con el lab interactivo "${title}" de Teacher Netza.`,
-        },
+        { property: "og:description", content: description },
         { property: "og:type", content: "article" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
@@ -32,12 +27,7 @@ export const Route = createFileRoute("/labs/$level/$slug")({
 
 function LabViewer() {
   const { level, slug } = Route.useParams();
-  const fetchLab = useServerFn(getLabHtml);
-  const q = useQuery({
-    queryKey: ["lab", level, slug],
-    queryFn: () => fetchLab({ data: { level, slug } }),
-  });
-
+  const lab = findLab(level, slug);
   const lvl = levelMeta(level);
 
   return (
@@ -51,11 +41,11 @@ function LabViewer() {
             <ArrowLeft className="h-4 w-4" /> Labs
           </Link>
           <span className="truncate font-heading text-sm font-semibold sm:text-base">
-            {q.data?.title ?? "Cargando lab…"}
+            {lab?.title ?? "Lab"}
             {lvl && <span className="ml-2 text-xs text-muted-foreground">· {lvl.label}</span>}
           </span>
-          {q.data?.sourceUrl ? (
-            <a href={q.data.sourceUrl} target="_blank" rel="noopener noreferrer">
+          {lab ? (
+            <a href={lab.file} target="_blank" rel="noopener noreferrer">
               <Button variant="ghost" size="sm">
                 <ExternalLink className="h-4 w-4" />
               </Button>
@@ -67,27 +57,21 @@ function LabViewer() {
       </header>
 
       <main className="flex flex-1 flex-col">
-        {q.isLoading && (
-          <div className="flex flex-1 items-center justify-center gap-2 text-muted-foreground">
-            <Loader2 className="h-5 w-5 animate-spin text-primary" /> Cargando lab…
-          </div>
-        )}
-        {!q.isLoading && !q.data && (
+        {!lab && (
           <div className="flex flex-1 flex-col items-center justify-center gap-4 p-10 text-center">
             <h1 className="font-heading text-2xl font-bold">Lab no encontrado</h1>
             <p className="max-w-md text-muted-foreground">
-              Este lab ya no existe o cambió de nombre en el repositorio.
+              Este lab ya no existe o cambió de nombre.
             </p>
             <Link to="/labs">
               <Button>Ver todos los labs</Button>
             </Link>
           </div>
         )}
-        {q.data && (
+        {lab && (
           <iframe
-            title={q.data.title}
-            srcDoc={q.data.html}
-            sandbox="allow-scripts allow-forms allow-popups allow-modals allow-downloads"
+            title={lab.title}
+            src={lab.file}
             className="animate-fade-in h-[calc(100vh-3.5rem)] w-full border-0 bg-white"
           />
         )}

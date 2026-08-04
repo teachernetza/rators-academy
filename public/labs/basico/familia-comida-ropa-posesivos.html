@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English Master Class: Family, Food, Clothes & Possessives</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            touch-action: manipulation; 
+            -webkit-tap-highlight-color: transparent;
+            background-color: #f8fafc;
+        }
+        
+        .slide-enter { animation: slideUpFade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hidden-slide { display: none !important; }
+        
+        /* Interactive Flip Cards */
+        .flip-card { perspective: 1000px; cursor: pointer; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 1rem; }
+        .flip-card-back { transform: rotateY(180deg); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        input[type="text"], select { font-size: 16px !important; } /* Prevenir zoom en iOS */
+
+        .pulse-soft { animation: pulseSoft 2s infinite; }
+        @keyframes pulseSoft {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .grammar-box { background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border: 1px solid #e2e8f0; }
+    </style>
+    <link rel="stylesheet" href="/labs/_brand.css">
+</head>
+<body class="text-slate-800 antialiased selection:bg-indigo-200">
+
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 z-40 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 h-16 md:h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/30">
+                    <i class="fas fa-graduation-cap text-lg md:text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-black text-sm md:text-lg leading-tight text-slate-800 tracking-tight truncate max-w-[150px] sm:max-w-xs">Master Class</h1>
+                    <p class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest" id="nav-topic-title">Intro</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2 md:gap-4">
+                <span id="slide-counter-nav" class="font-bold text-sm md:text-base text-slate-500 hidden sm:inline-block bg-slate-100 px-3 py-1 rounded-lg">1/20</span>
+                <button onclick="toggleDictionary()" class="flex items-center gap-2 bg-indigo-50 text-indigo-700 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold border border-indigo-100 hover:bg-indigo-100 transition shadow-sm text-xs md:text-sm">
+                    <i class="fas fa-book"></i> <span class="hidden sm:inline">Diccionario</span>
+                </button>
+            </div>
+        </div>
+        <div class="w-full bg-slate-100 h-1.5 md:h-2">
+            <div id="main-progress" class="bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500 h-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 pt-24 pb-32 min-h-screen relative" id="slides-container">
+        
+        <!-- SLIDE 0: INTRO -->
+        <section id="slide-0" class="slide-enter mt-4 md:mt-10">
+            <div class="bg-white rounded-[2rem] p-6 md:p-12 text-center shadow-2xl border border-slate-100 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-blue-50 via-indigo-50 to-white"></div>
+                <div class="relative z-10">
+                    <div class="w-24 h-24 md:w-32 md:h-32 bg-white rounded-3xl flex items-center justify-center text-5xl md:text-6xl mx-auto mb-6 shadow-xl border-4 border-white pulse-soft rotate-3">📚</div>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 mb-4 tracking-tight">English Master Class</h2>
+                    <p class="text-slate-600 mb-8 max-w-2xl mx-auto text-base md:text-xl font-medium">Un viaje interactivo de 20 lecciones para dominar vocabulario esencial y gramática clave en inglés.</p>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto mb-10 text-left">
+                        <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                            <div class="text-blue-500 text-2xl mb-2"><i class="fas fa-users"></i></div>
+                            <h4 class="font-bold text-blue-900 text-sm md:text-base">Family & "To Be"</h4>
+                        </div>
+                        <div class="bg-rose-50 p-4 rounded-2xl border border-rose-100">
+                            <div class="text-rose-500 text-2xl mb-2"><i class="fas fa-key"></i></div>
+                            <h4 class="font-bold text-rose-900 text-sm md:text-base">Possessives ('s, my, mine)</h4>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
+                            <div class="text-emerald-500 text-2xl mb-2"><i class="fas fa-hamburger"></i></div>
+                            <h4 class="font-bold text-emerald-900 text-sm md:text-base">Food Vocab</h4>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-2xl border border-amber-100">
+                            <div class="text-amber-500 text-2xl mb-2"><i class="fas fa-tshirt"></i></div>
+                            <h4 class="font-bold text-amber-900 text-sm md:text-base">Clothes Vocab</h4>
+                        </div>
+                    </div>
+                    
+                    <button onclick="nextSlide()" class="bg-slate-800 hover:bg-slate-900 text-white text-lg md:text-2xl font-black py-4 md:py-5 px-10 md:px-16 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1 w-full sm:w-auto">
+                        Comenzar Clase <i class="fas fa-rocket ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 1: FAMILY VOCAB -->
+        <section id="slide-1" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-blue-100 text-blue-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">1</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Family Members</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 mb-6">
+                <p class="text-slate-600 mb-6 text-lg font-medium">Toca las tarjetas para ver la traducción al español y escuchar la pronunciación.</p>
+                <div id="flashcards-family" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: VERB TO BE -->
+        <section id="slide-2" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-blue-100 text-blue-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">2</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Verb "To Be" (am, is, are)</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-8">
+                <p class="text-slate-600 mb-6 text-lg font-medium">Usamos el verbo <b>To Be</b> para identificar a las personas de nuestra familia o decir cómo son.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="grammar-box p-6 rounded-2xl text-center shadow-sm">
+                        <h3 class="text-3xl font-black text-blue-600 mb-2">am</h3>
+                        <p class="font-bold text-slate-500 mb-4 border-b border-slate-200 pb-2">I</p>
+                        <p class="text-lg font-medium">I <b>am</b> a brother.<br><span class="text-sm text-slate-400">(Yo soy un hermano)</span></p>
+                    </div>
+                    <div class="grammar-box p-6 rounded-2xl text-center shadow-sm relative border-blue-300 border-2">
+                        <div class="absolute -top-3 -right-3 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-lg">¡Muy usado!</div>
+                        <h3 class="text-3xl font-black text-blue-600 mb-2">is</h3>
+                        <p class="font-bold text-slate-500 mb-4 border-b border-slate-200 pb-2">He / She / It</p>
+                        <p class="text-lg font-medium">She <b>is</b> my mother.<br><span class="text-sm text-slate-400">(Ella es mi madre)</span></p>
+                    </div>
+                    <div class="grammar-box p-6 rounded-2xl text-center shadow-sm">
+                        <h3 class="text-3xl font-black text-blue-600 mb-2">are</h3>
+                        <p class="font-bold text-slate-500 mb-4 border-b border-slate-200 pb-2">You / We / They</p>
+                        <p class="text-lg font-medium">They <b>are</b> my parents.<br><span class="text-sm text-slate-400">(Ellos son mis padres)</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: QUIZ 1 -->
+        <section id="slide-3" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-indigo-100 text-indigo-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">3</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Practice: To Be & Family</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-8">
+                <div id="quiz-container-1" class="space-y-6">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: POSSESSIVE 'S SINGULAR -->
+        <section id="slide-4" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-rose-100 text-rose-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">4</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Possessive 's (Genitivo Sajón)</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-8 text-lg md:text-xl font-medium">En inglés, para decir que algo le pertenece a una persona, añadimos un apóstrofe y una S <b>('s)</b> al dueño.</p>
+                
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 font-mono text-lg md:text-2xl mb-10 font-black bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center">
+                    <span class="text-slate-800">El perro de John</span>
+                    <i class="fas fa-arrow-right text-rose-400 text-xl hidden md:block"></i>
+                    <i class="fas fa-arrow-down text-rose-400 text-xl md:hidden"></i>
+                    <span class="bg-rose-100 text-rose-800 px-4 py-2 rounded-xl shadow-sm border-2 border-rose-300">John's dog</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-rose-50 border-2 border-rose-200 rounded-2xl p-6 flex flex-col justify-center items-center text-center cursor-pointer hover:bg-rose-100 transition" onclick="playTTS('Mary\'s brother is tall.')">
+                        <div class="text-4xl mb-4">👦</div>
+                        <p class="font-black text-xl text-slate-800 mb-2">Mary<span class="text-rose-600">'s</span> brother is tall.</p>
+                        <p class="text-rose-700 font-bold">El hermano de Mary es alto.</p>
+                        <button class="mt-4 w-10 h-10 rounded-full bg-white text-rose-600 shadow flex items-center justify-center mx-auto"><i class="fas fa-volume-up"></i></button>
+                    </div>
+                    <div class="bg-rose-50 border-2 border-rose-200 rounded-2xl p-6 flex flex-col justify-center items-center text-center cursor-pointer hover:bg-rose-100 transition" onclick="playTTS('The cat\'s name is Luna.')">
+                        <div class="text-4xl mb-4">🐱</div>
+                        <p class="font-black text-xl text-slate-800 mb-2">The cat<span class="text-rose-600">'s</span> name is Luna.</p>
+                        <p class="text-rose-700 font-bold">El nombre del gato es Luna.</p>
+                        <button class="mt-4 w-10 h-10 rounded-full bg-white text-rose-600 shadow flex items-center justify-center mx-auto"><i class="fas fa-volume-up"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: POSSESSIVE 'S PLURAL -->
+        <section id="slide-5" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-rose-100 text-rose-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">5</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Possessive (Plurales)</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10">
+                <p class="text-slate-600 mb-8 text-lg font-medium">¿Qué pasa si el dueño ya es plural y termina en "s" (ej. parents, dogs)? <b>Solo agregamos el apóstrofe (').</b></p>
+                
+                <div class="bg-orange-50 border-l-8 border-orange-400 p-6 rounded-r-2xl mb-8 shadow-sm">
+                    <p class="text-xl font-black text-slate-800 mb-2">My parents<span class="text-orange-500 text-2xl">'</span> house is big.</p>
+                    <p class="text-orange-800 font-bold">La casa de mis padres es grande. (No se dice parents's)</p>
+                </div>
+                
+                <p class="text-slate-600 mb-4 text-lg font-medium">Pero si el plural es irregular (no termina en S), sí agregamos <b>'s</b>:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white border-2 border-slate-200 p-4 rounded-xl font-bold flex justify-between items-center">
+                        <span class="text-slate-700">Children (Niños)</span>
+                        <span class="bg-rose-100 text-rose-800 px-3 py-1 rounded">The children's toys</span>
+                    </div>
+                    <div class="bg-white border-2 border-slate-200 p-4 rounded-xl font-bold flex justify-between items-center">
+                        <span class="text-slate-700">Men (Hombres)</span>
+                        <span class="bg-rose-100 text-rose-800 px-3 py-1 rounded">The men's bathroom</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: QUIZ 2 -->
+        <section id="slide-6" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-indigo-100 text-indigo-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">6</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Practice: Possessive 's</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-8">
+                <div id="quiz-container-2" class="space-y-6">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: POSSESSIVE ADJECTIVES -->
+        <section id="slide-7" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-purple-100 text-purple-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">7</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Possessive Adjectives</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6">
+                <p class="text-slate-600 mb-6 text-lg font-medium">Van <b>antes</b> del objeto para decir de quién es. (Ej. Mi carro, tu libro).</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[500px]">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-600">
+                                <th class="p-4 rounded-tl-xl">Subject</th>
+                                <th class="p-4 text-purple-700 font-black">Adjective</th>
+                                <th class="p-4 rounded-tr-xl">Example</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-lg" id="table-adj">
+                            <!-- JS Populated to save space -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: POSSESSIVE PRONOUNS -->
+        <section id="slide-8" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-purple-100 text-purple-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">8</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Possessive Pronouns</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6">
+                <p class="text-slate-600 mb-6 text-lg font-medium">Van <b>al final</b> o reemplazan al objeto para no repetirlo. (Ej. El carro es <i>mío</i>).</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[500px]">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-600">
+                                <th class="p-4 rounded-tl-xl">Adjective (Antes)</th>
+                                <th class="p-4 text-purple-700 font-black">Pronoun (Final)</th>
+                                <th class="p-4 rounded-tr-xl">Example with To Be</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-lg" id="table-pro">
+                            <!-- JS Populated -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="bg-blue-50 p-4 mt-6 rounded-xl border border-blue-200 font-bold text-blue-800 text-center">
+                    This is <span class="underline">my</span> book. ➡️ This book is <span class="text-purple-600 underline">mine</span>.
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 9: QUIZ 3 -->
+        <section id="slide-9" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-indigo-100 text-indigo-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">9</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Practice: Adjectives vs Pronouns</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-8">
+                <div id="quiz-container-3" class="space-y-6">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 10: FOOD VOCAB 1 -->
+        <section id="slide-10" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-emerald-100 text-emerald-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">10</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Food Vocabulary (Part 1)</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 mb-6">
+                <p class="text-slate-600 mb-6 text-lg font-medium">Toca para descubrir el significado y pronunciación.</p>
+                <div id="flashcards-food-1" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 11: FOOD VOCAB 2 -->
+        <section id="slide-11" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-emerald-100 text-emerald-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">11</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Food Vocabulary (Part 2)</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 mb-6">
+                <div id="flashcards-food-2" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 12: FOOD + GRAMMAR CONTEXT -->
+        <section id="slide-12" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-emerald-100 text-emerald-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">12</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Food + Possessives</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-8">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Vamos a combinar lo aprendido. Lee y escucha estas oraciones.</p>
+                
+                <div class="space-y-4">
+                    <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl flex justify-between items-center hover:shadow-md transition cursor-pointer" onclick="playTTS('My mother\'s favorite food is chicken.')">
+                        <p class="text-xl font-bold text-slate-800">My mother<span class="text-rose-500">'s</span> favorite food <span class="text-blue-500">is</span> chicken. 🍗</p>
+                        <button class="w-10 h-10 rounded-full bg-white text-slate-600 shadow flex items-center justify-center shrink-0"><i class="fas fa-volume-up"></i></button>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl flex justify-between items-center hover:shadow-md transition cursor-pointer" onclick="playTTS('The pizza is mine.')">
+                        <p class="text-xl font-bold text-slate-800">The pizza <span class="text-blue-500">is</span> <span class="text-purple-500">mine</span>. 🍕</p>
+                        <button class="w-10 h-10 rounded-full bg-white text-slate-600 shadow flex items-center justify-center shrink-0"><i class="fas fa-volume-up"></i></button>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl flex justify-between items-center hover:shadow-md transition cursor-pointer" onclick="playTTS('Their apples are red.')">
+                        <p class="text-xl font-bold text-slate-800"><span class="text-purple-500">Their</span> apples <span class="text-blue-500">are</span> red. 🍎</p>
+                        <button class="w-10 h-10 rounded-full bg-white text-slate-600 shadow flex items-center justify-center shrink-0"><i class="fas fa-volume-up"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 13: QUIZ 4 -->
+        <section id="slide-13" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-indigo-100 text-indigo-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">13</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Practice: Food & Grammar</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-8">
+                <div id="quiz-container-4" class="space-y-6">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 14: CLOTHES VOCAB -->
+        <section id="slide-14" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-amber-100 text-amber-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">14</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Clothes Vocabulary</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 mb-6">
+                <p class="text-slate-600 mb-6 text-lg font-medium">Toca para descubrir el significado y pronunciación.</p>
+                <div id="flashcards-clothes" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 15: WHOSE IS THIS? -->
+        <section id="slide-15" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-amber-100 text-amber-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">15</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Whose is this? (¿De quién es?)</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Usamos la palabra <b>Whose</b> para preguntar a quién le pertenece algo, generalmente ropa u objetos. Se responde usando posesivos.</p>
+                
+                <div class="bg-amber-50 rounded-2xl p-6 border border-amber-200 mb-6 relative">
+                    <h3 class="text-2xl font-black text-amber-800 mb-4">Singular (is)</h3>
+                    <div class="flex items-center justify-between text-lg font-bold text-slate-700 bg-white p-4 rounded-xl shadow-sm mb-2" onclick="playTTS('Whose jacket is this?')">
+                        <span class="flex items-center gap-2">❓ <span class="text-amber-600">Whose</span> jacket <span class="text-blue-500">is</span> this?</span>
+                        <i class="fas fa-volume-up text-slate-400 cursor-pointer"></i>
+                    </div>
+                    <div class="flex items-center justify-between text-lg font-bold text-slate-700 bg-white p-4 rounded-xl shadow-sm" onclick="playTTS('It is mine.')">
+                        <span class="flex items-center gap-2">✅ It <span class="text-blue-500">is</span> <span class="text-purple-500">mine</span>. / It is John<span class="text-rose-500">'s</span>.</span>
+                        <i class="fas fa-volume-up text-slate-400 cursor-pointer"></i>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 rounded-2xl p-6 border border-amber-200">
+                    <h3 class="text-2xl font-black text-amber-800 mb-4">Plural (are) - Ej. Shoes, Pants</h3>
+                    <div class="flex items-center justify-between text-lg font-bold text-slate-700 bg-white p-4 rounded-xl shadow-sm mb-2" onclick="playTTS('Whose shoes are these?')">
+                        <span class="flex items-center gap-2">❓ <span class="text-amber-600">Whose</span> shoes <span class="text-blue-500">are</span> these?</span>
+                        <i class="fas fa-volume-up text-slate-400 cursor-pointer"></i>
+                    </div>
+                    <div class="flex items-center justify-between text-lg font-bold text-slate-700 bg-white p-4 rounded-xl shadow-sm" onclick="playTTS('They are hers.')">
+                        <span class="flex items-center gap-2">✅ They <span class="text-blue-500">are</span> <span class="text-purple-500">hers</span>. / They are Mark<span class="text-rose-500">'s</span>.</span>
+                        <i class="fas fa-volume-up text-slate-400 cursor-pointer"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 16: QUIZ 5 -->
+        <section id="slide-16" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-indigo-100 text-indigo-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">16</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Practice: Clothes & Whose</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-8">
+                <div id="quiz-container-5" class="space-y-6">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 17: INTERACTIVE READING -->
+        <section id="slide-17" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-teal-100 text-teal-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">17</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Reading: A Family Picnic</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10">
+                <p class="text-slate-600 mb-6 text-lg font-medium">Completa la historia seleccionando la palabra correcta en los espacios.</p>
+                
+                <div class="bg-teal-50 p-6 md:p-8 rounded-2xl border border-teal-200 text-lg md:text-xl leading-[2.5] md:leading-[3] text-slate-700 font-medium" id="dropdown-story">
+                    Today is Sunday. I 
+                    <select class="dropdown-select mx-1 p-2 bg-white border-2 border-slate-300 rounded-xl font-bold text-teal-700 cursor-pointer focus:outline-none" data-correct="am"><option value="">---</option><option value="am">am</option><option value="is">is</option></select> 
+                    at the park with my family. My 
+                    <select class="dropdown-select mx-1 p-2 bg-white border-2 border-slate-300 rounded-xl font-bold text-teal-700 cursor-pointer focus:outline-none" data-correct="mother's"><option value="">---</option><option value="mother">mother</option><option value="mother's">mother's</option></select> 
+                    name is Sarah. She loves food. Her favorite food 
+                    <select class="dropdown-select mx-1 p-2 bg-white border-2 border-slate-300 rounded-xl font-bold text-teal-700 cursor-pointer focus:outline-none" data-correct="is"><option value="">---</option><option value="is">is</option><option value="are">are</option></select> 
+                    pizza. Look at that red jacket. Whose jacket is it? It is 
+                    <select class="dropdown-select mx-1 p-2 bg-white border-2 border-slate-300 rounded-xl font-bold text-teal-700 cursor-pointer focus:outline-none" data-correct="my"><option value="">---</option><option value="my">my</option><option value="mine">mine</option></select> 
+                    jacket. So, the jacket is 
+                    <select class="dropdown-select mx-1 p-2 bg-white border-2 border-slate-300 rounded-xl font-bold text-teal-700 cursor-pointer focus:outline-none" data-correct="mine"><option value="">---</option><option value="my">my</option><option value="mine">mine</option></select>! 
+                    My brother David is playing. His shoes 
+                    <select class="dropdown-select mx-1 p-2 bg-white border-2 border-slate-300 rounded-xl font-bold text-teal-700 cursor-pointer focus:outline-none" data-correct="are"><option value="">---</option><option value="is">is</option><option value="are">are</option></select> 
+                    blue.
+                </div>
+                <button onclick="checkDropdowns('dropdown-story')" class="mt-8 bg-teal-600 text-white text-lg font-black py-4 px-8 rounded-xl shadow-lg hover:bg-teal-700 transition w-full md:w-auto">Evaluar Historia</button>
+                <div id="dropdown-feedback" class="hidden mt-4 p-5 rounded-xl font-bold text-lg border"></div>
+            </div>
+        </section>
+
+        <!-- SLIDE 18: READING COMPREHENSION QUIZ -->
+        <section id="slide-18" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-indigo-100 text-indigo-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">18</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Story Quiz</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-8">
+                <p class="text-slate-600 mb-6 text-lg font-medium">Responde según la historia que acabas de leer ("A Family Picnic").</p>
+                <div id="quiz-container-6" class="space-y-6">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 19: PRE-TEST -->
+        <section id="slide-19" class="hidden-slide mt-12 text-center">
+            <div class="w-32 h-32 bg-gradient-to-tr from-blue-500 via-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-6xl mx-auto mb-8 text-white shadow-2xl shadow-indigo-500/40 animate-bounce">🏆</div>
+            <h2 class="text-4xl md:text-6xl font-black text-slate-800 tracking-tight mb-4">¡Llegaste al Final!</h2>
+            <p class="text-slate-600 text-xl md:text-2xl font-medium max-w-2xl mx-auto mb-10">Es hora del <b class="text-indigo-600">Mega Examen de 15 preguntas</b>. Cubrirá familia, comida, ropa, verbo to be y posesivos.</p>
+            <button onclick="nextSlide(); startMegaQuiz();" class="bg-slate-900 hover:bg-black text-white text-2xl font-black py-5 px-16 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1">
+                Iniciar Mega Examen
+            </button>
+        </section>
+
+        <!-- SLIDE 20: MEGA QUIZ -->
+        <section id="slide-20" class="hidden-slide">
+            <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 p-6 md:p-12 max-w-3xl mx-auto relative overflow-hidden mt-4">
+                <div class="absolute top-0 left-0 w-full h-2 bg-slate-100">
+                    <div id="mega-quiz-progress" class="h-full bg-gradient-to-r from-emerald-400 to-green-500 transition-all duration-300" style="width: 0%"></div>
+                </div>
+
+                <div id="mega-quiz-area">
+                    <div class="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
+                        <span class="text-sm md:text-base font-bold text-slate-400 uppercase tracking-widest" id="mega-quiz-counter">Pregunta 1 de 15</span>
+                    </div>
+                    
+                    <h3 class="text-2xl md:text-4xl font-medium text-slate-800 mb-10 leading-relaxed text-center" id="mega-quiz-question">Question?</h3>
+                    
+                    <div id="mega-quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Options generated by JS -->
+                    </div>
+
+                    <div id="mega-quiz-feedback" class="hidden mt-8 p-5 rounded-2xl text-center font-bold text-xl border"></div>
+                </div>
+
+                <div id="mega-quiz-result" class="hidden text-center py-10">
+                    <div class="text-7xl mb-6" id="mq-emoji">🎉</div>
+                    <h3 class="text-4xl font-black text-slate-800 mb-4">¡Examen Completado!</h3>
+                    <p class="text-xl text-slate-600 mb-8 font-medium">Tu puntuación: <span id="mq-score" class="font-black text-indigo-600 text-4xl mx-2"></span> / 15</p>
+                    <button onclick="location.reload()" class="bg-indigo-600 text-white font-black text-xl py-4 px-10 rounded-2xl hover:bg-indigo-700 shadow-xl transition hover:-translate-y-1">Volver al Inicio</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-slate-200 p-4 md:p-6 z-30 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+            <div class="max-w-5xl mx-auto flex justify-between gap-4">
+                <button id="btn-prev" onclick="prevSlide()" class="flex-1 bg-slate-100 text-slate-600 font-black text-base md:text-lg py-3 md:py-4 px-4 rounded-2xl hover:bg-slate-200 transition opacity-50 cursor-not-allowed disabled">
+                    <i class="fas fa-arrow-left mr-2"></i> Atrás
+                </button>
+                <button id="btn-next" onclick="nextSlide()" class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-base md:text-lg py-3 md:py-4 px-4 rounded-2xl shadow-lg shadow-blue-500/30 transition hover:-translate-y-1">
+                    Siguiente <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- DICTIONARY MODAL -->
+    <div id="dictionary-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex justify-center items-end sm:items-center">
+        <div class="bg-white w-full sm:max-w-3xl h-[85vh] sm:h-[80vh] sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col slide-enter border border-slate-200">
+            <!-- Header -->
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-indigo-600 text-white sm:rounded-t-3xl rounded-t-3xl">
+                <div>
+                    <h3 class="font-black text-2xl flex items-center gap-3"><i class="fas fa-book-open"></i> Diccionario Class</h3>
+                </div>
+                <button onclick="toggleDictionary()" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="flex border-b border-slate-200 overflow-x-auto custom-scrollbar bg-slate-50 px-2">
+                <button onclick="switchDictTab('family')" id="tab-family" class="px-6 py-4 font-black text-base text-indigo-600 border-b-4 border-indigo-600 whitespace-nowrap"><i class="fas fa-users mr-2"></i> Family</button>
+                <button onclick="switchDictTab('food')" id="tab-food" class="px-6 py-4 font-bold text-base text-slate-400 border-b-4 border-transparent hover:text-slate-600 whitespace-nowrap"><i class="fas fa-hamburger mr-2"></i> Food</button>
+                <button onclick="switchDictTab('clothes')" id="tab-clothes" class="px-6 py-4 font-bold text-base text-slate-400 border-b-4 border-transparent hover:text-slate-600 whitespace-nowrap"><i class="fas fa-tshirt mr-2"></i> Clothes</button>
+                <button onclick="switchDictTab('grammar')" id="tab-grammar" class="px-6 py-4 font-bold text-base text-slate-400 border-b-4 border-transparent hover:text-slate-600 whitespace-nowrap"><i class="fas fa-spell-check mr-2"></i> Grammar</button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar bg-slate-50">
+                <div id="dict-family" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                <div id="dict-food" class="grid grid-cols-1 md:grid-cols-2 gap-3 hidden"></div>
+                <div id="dict-clothes" class="grid grid-cols-1 md:grid-cols-2 gap-3 hidden"></div>
+                <div id="dict-grammar" class="grid grid-cols-1 md:grid-cols-2 gap-3 hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA DICTIONARY ---
+        const dictData = {
+            family: [
+                { en: "Mother", es: "Madre", emoji: "👩" }, { en: "Father", es: "Padre", emoji: "👨" },
+                { en: "Brother", es: "Hermano", emoji: "👦" }, { en: "Sister", es: "Hermana", emoji: "👧" },
+                { en: "Grandmother", es: "Abuela", emoji: "👵" }, { en: "Grandfather", es: "Abuelo", emoji: "👴" },
+                { en: "Uncle", es: "Tío", emoji: "🧔" }, { en: "Aunt", es: "Tía", emoji: "👩‍🦱" },
+                { en: "Cousin", es: "Primo/a", emoji: "🧒" }, { en: "Parents", es: "Padres", emoji: "👫" }
+            ],
+            food: [
+                { en: "Apple", es: "Manzana", emoji: "🍎" }, { en: "Banana", es: "Plátano", emoji: "🍌" },
+                { en: "Bread", es: "Pan", emoji: "🍞" }, { en: "Meat", es: "Carne", emoji: "🥩" },
+                { en: "Chicken", es: "Pollo", emoji: "🍗" }, { en: "Pizza", es: "Pizza", emoji: "🍕" },
+                { en: "Salad", es: "Ensalada", emoji: "🥗" }, { en: "Water", es: "Agua", emoji: "💧" },
+                { en: "Milk", es: "Leche", emoji: "🥛" }, { en: "Juice", es: "Jugo", emoji: "🧃" }
+            ],
+            clothes: [
+                { en: "T-shirt", es: "Playera/Camiseta", emoji: "👕" }, { en: "Pants", es: "Pantalones", emoji: "👖" },
+                { en: "Dress", es: "Vestido", emoji: "👗" }, { en: "Skirt", es: "Falda", emoji: "🥻" },
+                { en: "Jacket", es: "Chamarra/Chaqueta", emoji: "🧥" }, { en: "Shoes", es: "Zapatos", emoji: "👞" },
+                { en: "Hat", es: "Sombrero/Gorra", emoji: "🧢" }, { en: "Socks", es: "Calcetines", emoji: "🧦" }
+            ],
+            grammar: [
+                { en: "My", es: "Mi / Mis", emoji: "1️⃣" }, { en: "Mine", es: "Mío / Míos", emoji: "🎯" },
+                { en: "Your", es: "Tu / Tus", emoji: "2️⃣" }, { en: "Yours", es: "Tuyo / Tuyos", emoji: "🎯" },
+                { en: "His", es: "Su (de él) / Suyo", emoji: "👦" }, { en: "Her / Hers", es: "Su (de ella) / Suyo", emoji: "👧" },
+                { en: "Our / Ours", es: "Nuestro", emoji: "👪" }, { en: "Their / Theirs", es: "Su (de ellos)", emoji: "👨‍👩‍👧‍👦" },
+                { en: "Whose", es: "¿De quién?", emoji: "❓" }
+            ]
+        };
+
+        // --- GRAMMAR TABLES DATA ---
+        const tableAdjData = [
+            { sub: "I (Yo)", adj: "My", ex: "My apple" }, { sub: "You (Tú)", adj: "Your", ex: "Your shoes" },
+            { sub: "He (Él)", adj: "His", ex: "His jacket" }, { sub: "She (Ella)", adj: "Her", ex: "Her mother" },
+            { sub: "It (Eso)", adj: "Its", ex: "Its toy" }, { sub: "We (Nosotros)", adj: "Our", ex: "Our family" },
+            { sub: "They (Ellos)", adj: "Their", ex: "Their food" }
+        ];
+
+        const tableProData = [
+            { adj: "My", pro: "Mine", ex: "The apple is <b>mine</b>." }, { adj: "Your", pro: "Yours", ex: "The shoes are <b>yours</b>." },
+            { adj: "His", pro: "His", ex: "The jacket is <b>his</b>." }, { adj: "Her", pro: "Hers", ex: "The dog is <b>hers</b>." },
+            { adj: "Our", pro: "Ours", ex: "The house is <b>ours</b>." }, { adj: "Their", pro: "Theirs", ex: "The food is <b>theirs</b>." }
+        ];
+
+        // --- QUIZZES DATA ---
+        const quizzesData = {
+            'quiz-container-1': [ // Family + To Be
+                { q: "My mother _____ very tall.", options: ["am", "is", "are"], ans: 1 },
+                { q: "I _____ a brother.", options: ["am", "is", "are"], ans: 0 },
+                { q: "My grandparents (abuelos) _____ old.", options: ["am", "is", "are"], ans: 2 }
+            ],
+            'quiz-container-2': [ // Possessive 's
+                { q: "The car belongs to Mark.", options: ["Mark car", "Marks car", "Mark's car"], ans: 2 },
+                { q: "The house belongs to my parents (plural).", options: ["My parents' house", "My parent's house", "My parents's house"], ans: 0 },
+                { q: "The toys of the children.", options: ["The childrens' toys", "The children's toys"], ans: 1 }
+            ],
+            'quiz-container-3': [ // Adj vs Pronoun
+                { q: "This is _____ book.", options: ["my", "mine"], ans: 0 },
+                { q: "The red car is _____.", options: ["her", "hers"], ans: 1 },
+                { q: "_____ family is big.", options: ["Our", "Ours"], ans: 0 }
+            ],
+            'quiz-container-4': [ // Food
+                { q: "My _____ favorite food is pizza.", options: ["sister's", "sisters's", "sister"], ans: 0 },
+                { q: "The apples _____ red.", options: ["is", "are"], ans: 1 },
+                { q: "I drink _____ every morning.", options: ["bread", "milk", "meat"], ans: 1 }
+            ],
+            'quiz-container-5': [ // Clothes & Whose
+                { q: "_____ shoes are these?", options: ["Who", "Whose"], ans: 1 },
+                { q: "Whose jacket is this? It is _____.", options: ["my", "mine", "I"], ans: 1 },
+                { q: "They are my _____ pants.", options: ["brother", "brother's", "brothers"], ans: 1 }
+            ],
+            'quiz-container-6': [ // Reading Comp
+                { q: "What is Sarah's favorite food?", options: ["Chicken", "Salad", "Pizza"], ans: 2 },
+                { q: "Whose red jacket is it?", options: ["David's", "Mine", "Sarah's"], ans: 1 },
+                { q: "What color are David's shoes?", options: ["Red", "Blue", "Black"], ans: 1 }
+            ]
+        };
+
+        // --- MEGA QUIZ DATA ---
+        const megaQuizQuestions = [
+            { q: "I _____ 15 years old.", options: ["am", "is", "are"], ans: 0 },
+            { q: "My father _____ a teacher.", options: ["am", "is", "are"], ans: 1 },
+            { q: "The dog belongs to John. It is _____ dog.", options: ["Johns", "John's", "John"], ans: 1 },
+            { q: "The house belongs to my brothers. It is my _____ house.", options: ["brother's", "brothers'", "brothers's"], ans: 1 },
+            { q: "This is _____ book.", options: ["mine", "my"], ans: 1 },
+            { q: "The blue pen is _____.", options: ["my", "mine"], ans: 1 },
+            { q: "The dress is _____.", options: ["her", "hers"], ans: 1 },
+            { q: "_____ house is very big. (Nuestra)", options: ["Ours", "Our"], ans: 1 },
+            { q: "A yellow fruit.", options: ["Apple", "Banana", "Meat"], ans: 1 },
+            { q: "I eat _____ with milk.", options: ["water", "bread", "shoes"], ans: 1 },
+            { q: "_____ shirt is this?", options: ["Who", "Whose"], ans: 1 },
+            { q: "It is my _____ hat.", options: ["grandfather's", "grandfathers'"], ans: 0 },
+            { q: "The shoes _____ black.", options: ["is", "are"], ans: 1 },
+            { q: "My parents _____ happy.", options: ["is", "are"], ans: 1 },
+            { q: "That pizza is _____! (Mía)", options: ["my", "mine"], ans: 1 }
+        ];
+
+        // --- STREAMING_CHUNK:Initialization and Core Functions... ---
+        const totalSlides = 21; // 0 to 20
+        let currentSlide = 0;
+        
+        const slideTitles = [
+            "Intro", "Family", "To Be", "Quiz 1", "Possessive 's", "Plural 's", "Quiz 2", 
+            "Adjectives", "Pronouns", "Quiz 3", "Food 1", "Food 2", "Grammar Context", "Quiz 4",
+            "Clothes", "Whose...?", "Quiz 5", "Reading", "Story Quiz", "Final Prep", "Mega Quiz"
+        ];
+
+        function updateNavUI() {
+            // Progress Bar
+            const progress = (currentSlide / (totalSlides - 1)) * 100;
+            document.getElementById('main-progress').style.width = `${progress}%`;
+
+            // Title and Counter
+            document.getElementById('nav-topic-title').innerText = slideTitles[currentSlide];
+            document.getElementById('slide-counter-nav').innerText = `${currentSlide + 1}/${totalSlides}`;
+
+            // Hide all slides
+            for (let i = 0; i < totalSlides; i++) {
+                const s = document.getElementById(`slide-${i}`);
+                if(s) {
+                    s.classList.add('hidden-slide');
+                    s.classList.remove('slide-enter');
+                }
+            }
+
+            // Show current
+            const current = document.getElementById(`slide-${currentSlide}`);
+            if (current) {
+                current.classList.remove('hidden-slide');
+                void current.offsetWidth; // trigger reflow
+                current.classList.add('slide-enter');
+            }
+
+            // Buttons logic
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+
+            if (currentSlide === 0) {
+                btnPrev.classList.add('opacity-50', 'cursor-not-allowed');
+                btnPrev.setAttribute('disabled', 'true');
+            } else {
+                btnPrev.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnPrev.removeAttribute('disabled');
+            }
+
+            if (currentSlide === totalSlides - 1 || currentSlide === 19) { 
+                // Hide Next on Mega Quiz & Final Prep
+                btnNext.classList.add('hidden');
+            } else {
+                btnNext.classList.remove('hidden');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.speechSynthesis.cancel();
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) { currentSlide++; updateNavUI(); }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) { currentSlide--; updateNavUI(); }
+        }
+
+        function playTTS(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); 
+                const msg = new SpeechSynthesisUtterance(text);
+                msg.lang = 'en-US'; 
+                msg.rate = 0.9;     
+                window.speechSynthesis.speak(msg);
+            }
+        }
+
+        // --- STREAMING_CHUNK:Generators for Flashcards and Tables... ---
+        function generateFlashcards(dataArray, containerId) {
+            const container = document.getElementById(containerId);
+            if(!container) return;
+            let html = '';
+            dataArray.forEach(item => {
+                html += `
+                <div class="flip-card h-28 md:h-32" onclick="this.classList.toggle('flipped'); if(this.classList.contains('flipped')) playTTS('${item.en}');">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-slate-50 border-2 border-slate-200 shadow-sm flex flex-col items-center justify-center p-2">
+                            <span class="text-4xl mb-2">${item.emoji}</span>
+                            <span class="font-bold text-slate-800 text-lg">${item.en}</span>
+                        </div>
+                        <div class="flip-card-back bg-indigo-600 border-2 border-indigo-600 shadow-md flex items-center justify-center p-2 text-white text-center">
+                            <span class="font-black text-lg md:text-xl">${item.es}</span>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function generateTables() {
+            const adjT = document.getElementById('table-adj');
+            let adjHtml = '';
+            tableAdjData.forEach((row, i) => {
+                const bg = i % 2 === 0 ? 'bg-white' : 'bg-slate-50';
+                adjHtml += `<tr class="${bg} border-b border-slate-100"><td class="p-4 font-medium">${row.sub}</td><td class="p-4 font-black text-purple-600">${row.adj}</td><td class="p-4">${row.ex}</td></tr>`;
+            });
+            adjT.innerHTML = adjHtml;
+
+            const proT = document.getElementById('table-pro');
+            let proHtml = '';
+            tableProData.forEach((row, i) => {
+                const bg = i % 2 === 0 ? 'bg-white' : 'bg-slate-50';
+                proHtml += `<tr class="${bg} border-b border-slate-100"><td class="p-4 font-medium">${row.adj}</td><td class="p-4 font-black text-purple-600">${row.pro}</td><td class="p-4">${row.ex}</td></tr>`;
+            });
+            proT.innerHTML = proHtml;
+        }
+
+        // --- STREAMING_CHUNK:Generators for Quizzes... ---
+        function renderQuiz(containerId) {
+            const container = document.getElementById(containerId);
+            if(!container || !quizzesData[containerId]) return;
+            const data = quizzesData[containerId];
+            
+            let html = '';
+            data.forEach((q, index) => {
+                const gridCols = q.options.length > 2 ? 'sm:grid-cols-3' : 'sm:grid-cols-2';
+                html += `
+                    <div class="bg-slate-50 p-5 md:p-6 rounded-2xl border border-slate-200" id="${containerId}-q-${index}">
+                        <p class="font-bold text-lg md:text-xl text-slate-800 mb-6">${index + 1}. ${q.q}</p>
+                        <div class="grid grid-cols-1 ${gridCols} gap-3 md:gap-4">
+                            ${q.options.map((opt, i) => `
+                                <button onclick="checkQuizAnswer('${containerId}', ${index}, ${i}, ${q.ans})" class="bg-white border-2 border-slate-200 text-slate-700 font-bold text-base md:text-lg py-3 px-4 rounded-xl hover:border-indigo-400 hover:bg-indigo-50 transition quiz-btn shadow-sm hover:-translate-y-0.5 w-full">
+                                    ${opt}
+                                </button>
+                            `).join('')}
+                        </div>
+                        <div id="${containerId}-feedback-${index}" class="hidden mt-4 font-bold text-base p-4 rounded-xl border"></div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function checkQuizAnswer(containerId, qIndex, selectedIndex, correctIndex) {
+            const qContainer = document.getElementById(`${containerId}-q-${qIndex}`);
+            const buttons = qContainer.querySelectorAll('.quiz-btn');
+            const feedback = document.getElementById(`${containerId}-feedback-${qIndex}`);
+            
+            buttons.forEach(b => {
+                b.disabled = true;
+                b.classList.remove('hover:border-indigo-400', 'hover:bg-indigo-50', 'hover:-translate-y-0.5');
+            });
+
+            feedback.classList.remove('hidden', 'bg-red-50', 'text-red-700', 'border-red-200', 'bg-green-50', 'text-green-700', 'border-green-200');
+
+            if (selectedIndex === correctIndex) {
+                buttons[selectedIndex].classList.replace('border-slate-200', 'border-green-500');
+                buttons[selectedIndex].classList.add('bg-green-500', 'text-white');
+                buttons[selectedIndex].classList.remove('text-slate-700', 'bg-white');
+                feedback.classList.add('bg-green-50', 'text-green-700', 'border-green-200');
+                feedback.innerHTML = '¡Correcto!';
+            } else {
+                buttons[selectedIndex].classList.replace('border-slate-200', 'border-red-500');
+                buttons[selectedIndex].classList.add('bg-red-500', 'text-white');
+                buttons[selectedIndex].classList.remove('text-slate-700', 'bg-white');
+                
+                buttons[correctIndex].classList.replace('border-slate-200', 'border-green-400');
+                buttons[correctIndex].classList.add('bg-green-50', 'text-green-800');
+                
+                feedback.classList.add('bg-red-50', 'text-red-700', 'border-red-200');
+                feedback.innerHTML = 'Incorrecto.';
+            }
+        }
+
+        // --- STREAMING_CHUNK:Interactive Dropdowns (Story)... ---
+        function checkDropdowns(containerId) {
+            const container = document.getElementById(containerId);
+            const selects = container.querySelectorAll('.dropdown-select');
+            let correctCount = 0;
+
+            selects.forEach(select => {
+                const correctAns = select.getAttribute('data-correct');
+                const userVal = select.value;
+
+                select.classList.remove('text-teal-700', 'text-green-700', 'text-red-700', 'border-slate-300', 'border-green-500', 'border-red-500', 'bg-white', 'bg-green-50', 'bg-red-50');
+
+                if (userVal === correctAns) {
+                    select.classList.add('text-green-700', 'border-green-500', 'bg-green-50');
+                    correctCount++;
+                } else {
+                    select.classList.add('text-red-700', 'border-red-500', 'bg-red-50');
+                }
+            });
+
+            const feedbackEl = document.getElementById('dropdown-feedback');
+            feedbackEl.classList.remove('hidden', 'bg-green-50', 'text-green-800', 'border-green-200', 'bg-amber-50', 'text-amber-800', 'border-amber-200');
+            
+            if (correctCount === selects.length) {
+                feedbackEl.classList.add('bg-green-50', 'text-green-800', 'border-green-200');
+                feedbackEl.innerHTML = '¡Perfecto! Has completado la historia correctamente.';
+            } else {
+                feedbackEl.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-200');
+                feedbackEl.innerHTML = `Tienes ${correctCount} de ${selects.length} correctas. ¡Sigue intentando!`;
+            }
+        }
+
+        // --- STREAMING_CHUNK:Mega Quiz Logic... ---
+        let megaQuizCurrent = 0;
+        let megaQuizScore = 0;
+
+        function startMegaQuiz() {
+            megaQuizQuestions.sort(() => Math.random() - 0.5); // Shuffle
+            megaQuizCurrent = 0;
+            megaQuizScore = 0;
+            renderMegaQuizQuestion();
+        }
+
+        function renderMegaQuizQuestion() {
+            if (megaQuizCurrent >= megaQuizQuestions.length) {
+                showMegaQuizResult();
+                return;
+            }
+
+            const q = megaQuizQuestions[megaQuizCurrent];
+            document.getElementById('mega-quiz-counter').innerText = `Pregunta ${megaQuizCurrent + 1} de ${megaQuizQuestions.length}`;
+            
+            let formattedQ = q.q.replace('_____', `<span id="mega-blank" class="inline-block px-1 border-b-4 border-dashed border-slate-300 text-indigo-500 font-bold mx-1 pb-1 min-w-[3rem] text-center">___</span>`);
+            document.getElementById('mega-quiz-question').innerHTML = formattedQ;
+            
+            const progress = ((megaQuizCurrent) / megaQuizQuestions.length) * 100;
+            document.getElementById('mega-quiz-progress').style.width = `${progress}%`;
+
+            let optionsHtml = '';
+            q.options.forEach((opt, i) => {
+                optionsHtml += `<button onclick="handleMegaQuizAnswer(${i}, ${q.ans})" class="mega-option w-full bg-slate-50 border-2 border-slate-200 text-slate-700 font-bold py-4 px-6 rounded-2xl hover:border-indigo-400 hover:bg-indigo-50 transition text-lg shadow-sm hover:-translate-y-0.5">${opt}</button>`;
+            });
+            document.getElementById('mega-quiz-options').innerHTML = optionsHtml;
+            document.getElementById('mega-quiz-feedback').classList.add('hidden');
+        }
+
+        function handleMegaQuizAnswer(selected, correct) {
+            const buttons = document.querySelectorAll('.mega-option');
+            buttons.forEach(b => b.disabled = true);
+
+            const feedback = document.getElementById('mega-quiz-feedback');
+            const blank = document.getElementById('mega-blank');
+            const q = megaQuizQuestions[megaQuizCurrent];
+
+            feedback.classList.remove('hidden', 'bg-green-50', 'text-green-700', 'border-green-200', 'bg-red-50', 'text-red-700', 'border-red-200');
+
+            if (selected === correct) {
+                buttons[selected].classList.replace('border-slate-200', 'border-green-500');
+                buttons[selected].classList.replace('bg-slate-50', 'bg-green-500');
+                buttons[selected].classList.replace('text-slate-700', 'text-white');
+                megaQuizScore++;
+                
+                if(blank) {
+                    blank.innerText = q.options[q.ans];
+                    blank.classList.replace('border-slate-300', 'border-green-400');
+                    blank.classList.replace('text-indigo-500', 'text-green-600');
+                }
+                
+                feedback.classList.add('bg-green-50', 'text-green-700', 'border', 'border-green-200');
+                feedback.innerHTML = '¡Correcto!';
+            } else {
+                buttons[selected].classList.replace('border-slate-200', 'border-red-500');
+                buttons[selected].classList.replace('bg-slate-50', 'bg-red-500');
+                buttons[selected].classList.replace('text-slate-700', 'text-white');
+                
+                buttons[correct].classList.replace('border-slate-200', 'border-green-400');
+                buttons[correct].classList.replace('bg-slate-50', 'bg-green-50');
+                
+                feedback.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200');
+                feedback.innerHTML = 'Incorrecto.';
+            }
+
+            setTimeout(() => {
+                megaQuizCurrent++;
+                renderMegaQuizQuestion();
+            }, 1200); // Wait 1.2s before next
+        }
+
+        function showMegaQuizResult() {
+            document.getElementById('mega-quiz-area').classList.add('hidden');
+            document.getElementById('mega-quiz-progress').style.width = `100%`;
+            const resultArea = document.getElementById('mega-quiz-result');
+            resultArea.classList.remove('hidden');
+            
+            document.getElementById('mq-score').innerText = megaQuizScore;
+            const emoji = document.getElementById('mq-emoji');
+            
+            if (megaQuizScore === 15) { emoji.innerText = '🏆'; }
+            else if (megaQuizScore >= 10) { emoji.innerText = '🌟'; }
+            else { emoji.innerText = '💪'; }
+        }
+
+        // --- STREAMING_CHUNK:Dictionary Modal Logic... ---
+        function toggleDictionary() {
+            const modal = document.getElementById('dictionary-modal');
+            modal.classList.toggle('hidden');
+            if(!modal.classList.contains('hidden')){
+                if(document.getElementById('dict-family').innerHTML === "") {
+                    renderDictionaryList(dictData.family, 'dict-family');
+                    renderDictionaryList(dictData.food, 'dict-food');
+                    renderDictionaryList(dictData.clothes, 'dict-clothes');
+                    renderDictionaryList(dictData.grammar, 'dict-grammar');
+                }
+            }
+        }
+
+        function switchDictTab(tabName) {
+            ['family', 'food', 'clothes', 'grammar'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.remove('text-indigo-600', 'border-indigo-600');
+                document.getElementById(`tab-${t}`).classList.add('text-slate-400', 'border-transparent');
+                document.getElementById(`dict-${t}`).classList.add('hidden');
+            });
+            document.getElementById(`tab-${tabName}`).classList.remove('text-slate-400', 'border-transparent');
+            document.getElementById(`tab-${tabName}`).classList.add('text-indigo-600', 'border-indigo-600');
+            document.getElementById(`dict-${tabName}`).classList.remove('hidden');
+        }
+
+        function renderDictionaryList(data, containerId) {
+            const container = document.getElementById(containerId);
+            let html = '';
+            data.forEach(item => {
+                html += `
+                    <div class="bg-white p-3 rounded-2xl border border-slate-200 flex items-center gap-3 hover:shadow-md hover:border-indigo-300 transition-all cursor-pointer" onclick="playTTS('${item.en}')">
+                        <div class="text-2xl bg-slate-50 w-12 h-12 rounded-xl flex items-center justify-center border border-slate-100 shadow-sm shrink-0">${item.emoji}</div>
+                        <div class="flex-1">
+                            <p class="font-bold text-slate-800 text-base">${item.en}</p>
+                            <p class="text-xs text-slate-500 font-medium">${item.es}</p>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                            <i class="fas fa-volume-up text-xs"></i>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // --- STREAMING_CHUNK:Bootstrapping Content on Load... ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup Flashcards
+            generateFlashcards(dictData.family, 'flashcards-family');
+            generateFlashcards(dictData.food.slice(0, 5), 'flashcards-food-1');
+            generateFlashcards(dictData.food.slice(5, 10), 'flashcards-food-2');
+            generateFlashcards(dictData.clothes, 'flashcards-clothes');
+            
+            // Setup Tables
+            generateTables();
+
+            // Setup Quizzes
+            renderQuiz('quiz-container-1');
+            renderQuiz('quiz-container-2');
+            renderQuiz('quiz-container-3');
+            renderQuiz('quiz-container-4');
+            renderQuiz('quiz-container-5');
+            renderQuiz('quiz-container-6');
+            
+            // Init Nav
+            updateNavUI();
+        });
+
+    </script>
+</body>
+</html>
