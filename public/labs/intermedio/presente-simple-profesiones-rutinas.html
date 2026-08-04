@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Professions, Routines & Abilities - Master Class</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+        
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            touch-action: manipulation; 
+            -webkit-tap-highlight-color: transparent;
+            background-color: #f8fafc;
+        }
+        
+        /* Smooth Slide Transitions */
+        .slide-enter { animation: slideUpFade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hidden-slide { display: none !important; }
+        
+        /* Interactive Flip Cards */
+        .flip-card { perspective: 1000px; cursor: pointer; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 1rem; }
+        .flip-card-back { transform: rotateY(180deg); }
+
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        /* Prevents iOS auto-zoom on inputs */
+        input[type="text"], select { font-size: 16px !important; }
+
+        .pulse-soft { animation: pulseSoft 2s infinite; }
+        @keyframes pulseSoft {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Chat Bubbles */
+        .chat-bubble-left { border-radius: 1.5rem 1.5rem 1.5rem 0.25rem; }
+        .chat-bubble-right { border-radius: 1.5rem 1.5rem 0.25rem 1.5rem; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-indigo-200">
+
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 z-40 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 h-16 md:h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-500/30">
+                    <i class="fas fa-chalkboard-teacher text-lg md:text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-black text-base md:text-xl leading-tight text-slate-800 tracking-tight">Master Class</h1>
+                    <p class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest" id="slide-counter">Slide 1 / 24</p>
+                </div>
+            </div>
+            
+            <button onclick="toggleDictionary()" class="flex items-center gap-2 bg-slate-50 text-slate-700 px-4 py-2 md:py-2.5 rounded-xl font-bold border border-slate-200 hover:bg-slate-100 transition shadow-sm text-sm md:text-base">
+                <i class="fas fa-book-open text-indigo-500"></i> <span class="hidden sm:inline">Diccionario</span>
+            </button>
+        </div>
+        <div class="w-full bg-slate-100 h-1.5 md:h-2">
+            <div id="main-progress" class="bg-gradient-to-r from-indigo-400 via-emerald-400 to-amber-400 h-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 pt-24 pb-32 min-h-screen">
+        
+        <!-- SLIDE 0: INTRO -->
+        <section id="slide-0" class="slide-enter mt-4 md:mt-12">
+            <div class="bg-white rounded-[2rem] p-6 md:p-12 text-center shadow-xl border border-slate-100 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-slate-50 to-white"></div>
+                <div class="relative z-10">
+                    <div class="w-24 h-24 md:w-32 md:h-32 bg-white rounded-full flex items-center justify-center text-6xl md:text-7xl mx-auto mb-6 shadow-2xl border-4 border-slate-50 pulse-soft">💼</div>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 mb-4 tracking-tight">Jobs, Routines & Abilities</h2>
+                    <p class="text-slate-600 mb-8 max-w-xl mx-auto text-lg md:text-xl font-medium">Aprende a describir profesiones, las acciones que realizan y lo que pueden hacer usando <b>To Be, Present Simple y Can</b> en conversaciones reales.</p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto mb-10 text-left">
+                        <div class="bg-indigo-50 p-4 rounded-2xl border border-indigo-100 flex gap-3 items-start">
+                            <div class="bg-indigo-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">1</div>
+                            <div>
+                                <h4 class="font-bold text-indigo-900">To Be (Profesiones)</h4>
+                                <p class="text-sm text-indigo-700">Identidad, ocupaciones y preguntas básicas.</p>
+                            </div>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-100 flex gap-3 items-start">
+                            <div class="bg-emerald-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">2</div>
+                            <div>
+                                <h4 class="font-bold text-emerald-900">Present Simple</h4>
+                                <p class="text-sm text-emerald-700">Acciones y rutinas en el trabajo.</p>
+                            </div>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-2xl border border-amber-100 flex gap-3 items-start">
+                            <div class="bg-amber-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">3</div>
+                            <div>
+                                <h4 class="font-bold text-amber-900">Can / Can't</h4>
+                                <p class="text-sm text-amber-700">Habilidades, preguntas y respuestas cortas.</p>
+                            </div>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-2xl border border-purple-100 flex gap-3 items-start">
+                            <div class="bg-purple-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">4</div>
+                            <div>
+                                <h4 class="font-bold text-purple-900">Conversación Final</h4>
+                                <p class="text-sm text-purple-700">Diálogos integrados y Mega Quiz.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="nextSlide()" class="bg-slate-800 hover:bg-slate-900 text-white text-xl md:text-2xl font-black py-4 md:py-5 px-12 md:px-16 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1 w-full sm:w-auto">
+                        Comenzar Clase <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 1: M1 Intro -->
+        <section id="slide-1" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-indigo-100 text-indigo-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">M1</span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">El Verbo To Be</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-8 md:p-12 text-center">
+                <div class="text-7xl mb-6">🧑‍⚕️</div>
+                <h3 class="text-3xl font-black text-indigo-600 mb-4">Ser o Estar (Identidad)</h3>
+                <p class="text-slate-600 text-xl font-medium max-w-2xl mx-auto">Usamos el verbo <b>To Be</b> para decir <i>quiénes somos</i> y a <i>qué nos dedicamos</i>. Es el verbo más importante para presentarnos en el trabajo.</p>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: Professions Flipcards -->
+        <section id="slide-2" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-indigo-100 text-indigo-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-briefcase"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Professions</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Toca las tarjetas para ver la traducción. Usa el botón de audio para practicar tu pronunciación.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" id="fc-professions">
+                    <!-- Loaded by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: To Be Affirmative -->
+        <section id="slide-3" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-indigo-100 text-indigo-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-plus"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">To Be: Affirmative</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Para conectar a la persona con su profesión usamos <b>am, is, are</b> + <b>a/an</b>.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-5 text-center">
+                        <div class="text-4xl mb-2">🙋‍♂️</div>
+                        <h4 class="font-black text-indigo-800 text-2xl mb-2">I am</h4>
+                        <p class="font-bold text-slate-700 bg-white py-2 rounded-xl border border-indigo-100">I am <span class="text-indigo-600">a</span> doctor.</p>
+                    </div>
+                    <div class="bg-cyan-50 border-2 border-cyan-200 rounded-2xl p-5 text-center">
+                        <div class="text-4xl mb-2">👑</div>
+                        <h4 class="font-black text-cyan-800 text-2xl mb-2">He / She / It is</h4>
+                        <p class="font-bold text-slate-700 bg-white py-2 rounded-xl border border-cyan-100">She is <span class="text-cyan-600">an</span> engineer.</p>
+                    </div>
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-5 text-center">
+                        <div class="text-4xl mb-2">👥</div>
+                        <h4 class="font-black text-blue-800 text-2xl mb-2">You / We / They are</h4>
+                        <p class="font-bold text-slate-700 bg-white py-2 rounded-xl border border-blue-100">They are teachers.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 border-l-8 border-yellow-400 p-5 rounded-r-2xl shadow-sm">
+                    <p class="text-yellow-900 font-bold"><i class="fas fa-exclamation-triangle text-yellow-600 mr-2"></i><b>Pro Tip:</b> En español decimos "Soy doctor", pero en inglés ES OBLIGATORIO usar "a" o "an" (un/una) para las profesiones singulares: "I am <b>a</b> doctor".</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: To Be Negative -->
+        <section id="slide-4" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-indigo-100 text-indigo-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-minus"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">To Be: Negative</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Solo agrega la palabra <b class="text-red-500">NOT</b> después del verbo To Be. Normalmente usamos contracciones al hablar.</p>
+                
+                <div class="space-y-4 font-bold text-lg md:text-xl">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex justify-between items-center">
+                        <span class="text-slate-700">I am <span class="text-red-500">not</span> a pilot.</span>
+                        <span class="bg-white px-3 py-1 rounded text-sm text-slate-500 border border-slate-200">I'm not</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex justify-between items-center">
+                        <span class="text-slate-700">He is <span class="text-red-500">not</span> a chef.</span>
+                        <span class="bg-white px-3 py-1 rounded text-sm text-slate-500 border border-slate-200">He isn't</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex justify-between items-center">
+                        <span class="text-slate-700">We are <span class="text-red-500">not</span> mechanics.</span>
+                        <span class="bg-white px-3 py-1 rounded text-sm text-slate-500 border border-slate-200">We aren't</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: To Be in Dialogues (NEW) -->
+        <section id="slide-5" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-indigo-100 text-indigo-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-comments"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">In Conversation (To Be)</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Para hacer preguntas de Sí/No, el verbo <b>To Be</b> cambia al principio. Mira estos diálogos:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Dialogue 1 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col gap-4">
+                        <div class="flex items-end gap-3">
+                            <div class="w-10 h-10 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-800 font-bold shrink-0">👩</div>
+                            <div class="bg-indigo-100 p-4 chat-bubble-left text-indigo-900 font-medium">Excuse me, <b>are you</b> a doctor?</div>
+                        </div>
+                        <div class="flex items-end gap-3 justify-end">
+                            <div class="bg-slate-800 text-white p-4 chat-bubble-right font-medium">No, <b>I'm not</b>. I am a nurse.</div>
+                            <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-bold shrink-0">👨</div>
+                        </div>
+                    </div>
+
+                    <!-- Dialogue 2 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col gap-4">
+                        <div class="flex items-end gap-3">
+                            <div class="w-10 h-10 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-800 font-bold shrink-0">🧑</div>
+                            <div class="bg-indigo-100 p-4 chat-bubble-left text-indigo-900 font-medium"><b>Is she</b> a teacher?</div>
+                        </div>
+                        <div class="flex items-end gap-3 justify-end">
+                            <div class="bg-slate-800 text-white p-4 chat-bubble-right font-medium">Yes, <b>she is</b>. She is an English teacher.</div>
+                            <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-bold shrink-0">👩</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: Quiz To Be -->
+        <section id="slide-6" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-indigo-100 text-indigo-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-check-double"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Practice: To Be</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10">
+                <h3 class="font-black text-2xl text-slate-800 mb-6 flex items-center gap-2 text-indigo-600"><i class="fas fa-gamepad"></i> Selecciona la opción correcta</h3>
+                <div id="quiz-tobe-container" class="space-y-6">
+                    <!-- Loaded by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: M2 Intro -->
+        <section id="slide-7" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-emerald-100 text-emerald-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">M2</span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Present Simple</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-8 md:p-12 text-center">
+                <div class="text-7xl mb-6">⚙️</div>
+                <h3 class="text-3xl font-black text-emerald-600 mb-4">Acciones y Rutinas</h3>
+                <p class="text-slate-600 text-xl font-medium max-w-2xl mx-auto">Ya sabemos <i>quiénes somos</i> (To Be). Ahora veremos <b>qué hacemos</b>. Usaremos verbos de acción para describir las rutinas de diferentes profesiones.</p>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: Actions Flipcards -->
+        <section id="slide-8" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-emerald-100 text-emerald-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-running"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Job Actions</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-8 text-lg font-medium">¿Qué hace cada profesional? Toca las tarjetas para traducir los verbos.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="fc-actions">
+                    <!-- Loaded by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 9: Present Simple No S -->
+        <section id="slide-9" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-emerald-100 text-emerald-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">I/You</span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Forma Base (Sin S)</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Para los sujetos <b>I, You, We, They</b>, el verbo se mantiene en su forma normal, sin agregarle nada.</p>
+                
+                <div class="flex flex-col gap-4 text-xl font-bold">
+                    <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-5 flex items-center justify-between">
+                        <span><span class="text-emerald-700">I</span> teach English.</span>
+                        <button onclick="playTTS('I teach English.')" class="w-10 h-10 rounded-full bg-white text-emerald-600 shadow-sm flex items-center justify-center"><i class="fas fa-volume-up"></i></button>
+                    </div>
+                    <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-5 flex items-center justify-between">
+                        <span><span class="text-emerald-700">They</span> build houses.</span>
+                        <button onclick="playTTS('They build houses.')" class="w-10 h-10 rounded-full bg-white text-emerald-600 shadow-sm flex items-center justify-center"><i class="fas fa-volume-up"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 10: Present Simple Rule of S -->
+        <section id="slide-10" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-emerald-100 text-emerald-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">He/She</span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">La Regla de la 'S'</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Si hablamos del trabajo de él (He) o ella (She), <b>el verbo muta</b> agregando -s, -es, o -ies.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+                        <div class="w-8 h-8 bg-emerald-200 rounded-full flex items-center justify-center text-emerald-700 font-black mb-3">+ S</div>
+                        <p class="font-mono bg-white p-2 rounded border border-emerald-100 text-sm mb-1">cook ➡️ cook<span class="text-emerald-600 font-bold">s</span></p>
+                        <p class="font-mono bg-white p-2 rounded border border-emerald-100 text-sm">design ➡️ design<span class="text-emerald-600 font-bold">s</span></p>
+                    </div>
+                    <div class="bg-teal-50 border border-teal-200 rounded-xl p-4">
+                        <div class="w-8 h-8 bg-teal-200 rounded-full flex items-center justify-center text-teal-700 font-black mb-3">+ ES (o, sh, ch)</div>
+                        <p class="font-mono bg-white p-2 rounded border border-teal-100 text-sm mb-1">teach ➡️ teach<span class="text-teal-600 font-bold">es</span></p>
+                        <p class="font-mono bg-white p-2 rounded border border-teal-100 text-sm">fix ➡️ fix<span class="text-teal-600 font-bold">es</span></p>
+                    </div>
+                    <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+                        <div class="w-8 h-8 bg-green-200 rounded-full flex items-center justify-center text-green-700 font-black mb-3">+ IES (Cons+Y)</div>
+                        <p class="font-mono bg-white p-2 rounded border border-green-100 text-sm mb-1">fly ➡️ fl<span class="text-green-600 font-bold">ies</span></p>
+                        <p class="font-mono bg-white p-2 rounded border border-green-100 text-sm">study ➡️ stud<span class="text-green-600 font-bold">ies</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 11: Present Simple Dialogues (NEW) -->
+        <section id="slide-11" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-emerald-100 text-emerald-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-comments"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">In Conversation (Routines)</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Usamos los auxiliares <b>Do</b> o <b>Does</b> para preguntar sobre rutinas y trabajos.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Dialogue 1 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col gap-4">
+                        <div class="flex items-end gap-3">
+                            <div class="w-10 h-10 rounded-full bg-emerald-200 flex items-center justify-center text-emerald-800 font-bold shrink-0">👩</div>
+                            <div class="bg-emerald-100 p-4 chat-bubble-left text-emerald-900 font-medium">What <b>do</b> you do? <i>(¿A qué te dedicas?)</i></div>
+                        </div>
+                        <div class="flex items-end gap-3 justify-end">
+                            <div class="bg-slate-800 text-white p-4 chat-bubble-right font-medium">I am a chef. I <b>cook</b> in a restaurant.</div>
+                            <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-bold shrink-0">👨</div>
+                        </div>
+                    </div>
+
+                    <!-- Dialogue 2 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col gap-4">
+                        <div class="flex items-end gap-3">
+                            <div class="w-10 h-10 rounded-full bg-emerald-200 flex items-center justify-center text-emerald-800 font-bold shrink-0">🧑</div>
+                            <div class="bg-emerald-100 p-4 chat-bubble-left text-emerald-900 font-medium">What <b>does</b> your brother do?</div>
+                        </div>
+                        <div class="flex items-end gap-3 justify-end">
+                            <div class="bg-slate-800 text-white p-4 chat-bubble-right font-medium">He is a pilot. He <b>flies</b> big planes.</div>
+                            <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-bold shrink-0">👩</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 12: Grammar Dropdown -->
+        <section id="slide-12" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-emerald-100 text-emerald-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-edit"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Practice: Grammar Rules</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10">
+                <p class="text-slate-600 font-medium mb-6 text-lg">Selecciona el verbo correcto prestando atención al sujeto (quién realiza la acción).</p>
+                
+                <div class="bg-slate-50 p-6 md:p-8 rounded-2xl border border-slate-200 text-lg md:text-xl leading-loose md:leading-loose shadow-inner text-slate-700 font-medium" id="dropdown-story">
+                    My brother Mark <select class="dropdown-select mx-1 p-2 bg-white border-2 border-slate-300 rounded-xl font-bold text-emerald-700" data-correct="is"><option value="">---</option><option value="am">am</option><option value="is">is</option><option value="are">are</option></select> a pilot. Every day, he <select class="dropdown-select mx-1 p-2 bg-white border-2 border-slate-300 rounded-xl font-bold text-emerald-700" data-correct="flies"><option value="">---</option><option value="fly">fly</option><option value="flys">flys</option><option value="flies">flies</option></select> large planes around the world. My parents <select class="dropdown-select mx-1 p-2 bg-white border-2 border-slate-300 rounded-xl font-bold text-emerald-700" data-correct="are"><option value="">---</option><option value="is">is</option><option value="are">are</option></select> teachers. They <select class="dropdown-select mx-1 p-2 bg-white border-2 border-slate-300 rounded-xl font-bold text-emerald-700" data-correct="teach"><option value="">---</option><option value="teach">teach</option><option value="teaches">teaches</option></select> math at a local school. I <select class="dropdown-select mx-1 p-2 bg-white border-2 border-slate-300 rounded-xl font-bold text-emerald-700" data-correct="am"><option value="">---</option><option value="am">am</option><option value="is">is</option></select> a chef, so I <select class="dropdown-select mx-1 p-2 bg-white border-2 border-slate-300 rounded-xl font-bold text-emerald-700" data-correct="cook"><option value="">---</option><option value="cook">cook</option><option value="cooks">cooks</option></select> delicious food for people.
+                </div>
+                
+                <button onclick="checkDropdowns('dropdown-story')" class="mt-8 bg-emerald-600 text-white text-lg font-black py-4 px-8 rounded-xl shadow-lg hover:bg-emerald-700 transition-colors w-full md:w-auto">Revisar Texto</button>
+                <div id="dropdown-feedback" class="hidden mt-4 p-5 rounded-xl font-bold text-lg border"></div>
+            </div>
+        </section>
+
+        <!-- SLIDE 13: Typing Challenge -->
+        <section id="slide-13" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-emerald-100 text-emerald-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-keyboard"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Typing Challenge</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10">
+                <p class="text-slate-500 font-medium mb-6">Traduce las siguientes acciones de trabajo al inglés. No te preocupes por puntos o mayúsculas.</p>
+                <div id="typing-container-actions" class="space-y-4">
+                    <!-- Loaded by JS -->
+                </div>
+                <button onclick="checkTyping('typing-container-actions')" class="mt-8 bg-emerald-600 text-white text-lg font-black py-4 px-8 rounded-xl shadow-lg hover:bg-emerald-700 transition-colors w-full md:w-auto">Revisar Traducciones</button>
+                <div id="typing-feedback-actions" class="hidden mt-4 p-5 rounded-xl font-bold text-lg border"></div>
+            </div>
+        </section>
+
+        <!-- SLIDE 14: M3 Intro -->
+        <section id="slide-14" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-amber-100 text-amber-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">M3</span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Abilities (Can / Can't)</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-8 md:p-12 text-center">
+                <div class="text-7xl mb-6">🦸‍♂️</div>
+                <h3 class="text-3xl font-black text-amber-600 mb-4">Habilidades en el Trabajo</h3>
+                <p class="text-slate-600 text-xl font-medium max-w-2xl mx-auto">Usamos el verbo auxiliar <b>Can</b> (poder) para hablar de lo que somos capaces de hacer debido a nuestra profesión o talento.</p>
+            </div>
+        </section>
+
+        <!-- SLIDE 15: Abilities Flipcards -->
+        <section id="slide-15" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-amber-100 text-amber-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-star"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Skills & Abilities</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Toca las tarjetas para conocer habilidades valiosas en el trabajo.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" id="fc-abilities">
+                    <!-- Loaded by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 16: Grammar Can / Can't -->
+        <section id="slide-16" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-amber-100 text-amber-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-balance-scale"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Rules of Can</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-6 text-lg font-medium">El verbo <b>Can</b> es especial: es igual para TODOS los sujetos y el verbo principal que le sigue nunca lleva 'S'.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-5">
+                        <h4 class="font-black text-amber-800 text-xl mb-4"><i class="fas fa-check text-green-500 mr-2"></i>Afirmativo</h4>
+                        <p class="font-bold text-slate-700 bg-white py-3 px-4 rounded-xl border border-amber-100 mb-2">I <span class="text-amber-600">can</span> code.</p>
+                        <p class="font-bold text-slate-700 bg-white py-3 px-4 rounded-xl border border-amber-100">She <span class="text-amber-600">can</span> fix cars.</p>
+                    </div>
+                    <div class="bg-orange-50 border-2 border-orange-200 rounded-2xl p-5">
+                        <h4 class="font-black text-orange-800 text-xl mb-4"><i class="fas fa-times text-red-500 mr-2"></i>Negativo</h4>
+                        <p class="font-bold text-slate-700 bg-white py-3 px-4 rounded-xl border border-orange-100 mb-2">I <span class="text-orange-600">can't</span> fly.</p>
+                        <p class="font-bold text-slate-700 bg-white py-3 px-4 rounded-xl border border-orange-100">He <span class="text-orange-600">can't</span> cook.</p>
+                    </div>
+                </div>
+
+                <div class="bg-red-50 border-l-8 border-red-500 p-5 rounded-r-2xl shadow-sm text-red-900 font-bold">
+                    <i class="fas fa-ban mr-2"></i><b>ERROR COMÚN:</b> NUNCA digas "She cans" o "She can cooks". Es simplemente "She can cook".
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 17: Expanded Can Questions (NEW/MODIFIED) -->
+        <section id="slide-17" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-amber-100 text-amber-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-question-circle"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Questions & Answers</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10 mb-6">
+                
+                <h3 class="text-xl font-bold text-amber-600 mb-4 border-b border-amber-100 pb-2">1. Yes / No Questions</h3>
+                <p class="text-slate-600 mb-4 font-medium">El modal <b>Can</b> salta al principio. Respondemos con respuestas cortas.</p>
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 mb-8 flex flex-col md:flex-row items-center gap-6 justify-between">
+                    <p class="text-2xl font-black text-slate-800 tracking-wide">
+                        <span class="text-amber-500">Can</span> you speak English?
+                    </p>
+                    <div class="flex gap-4">
+                        <span class="bg-green-100 text-green-800 px-4 py-2 rounded-xl font-bold shadow-sm">Yes, I can.</span>
+                        <span class="bg-red-100 text-red-800 px-4 py-2 rounded-xl font-bold shadow-sm">No, I can't.</span>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-bold text-amber-600 mb-4 border-b border-amber-100 pb-2">2. Wh- Questions (Preguntas Abiertas)</h3>
+                <p class="text-slate-600 mb-4 font-medium">Agrega palabras como <i>What, Where, When</i> antes de <b>Can</b>.</p>
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col md:flex-row items-center gap-6 justify-between">
+                    <p class="text-2xl font-black text-slate-800 tracking-wide">
+                        <span class="text-indigo-500">What</span> <span class="text-amber-500">can</span> she do?
+                    </p>
+                    <div class="flex gap-4">
+                        <span class="bg-white text-slate-800 border border-slate-300 px-4 py-2 rounded-xl font-bold shadow-sm">She can fix cars.</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SLIDE 18: Can Dialogues (NEW) -->
+        <section id="slide-18" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-amber-100 text-amber-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-handshake"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Job Interview (Can)</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Lee esta entrevista de trabajo para ver cómo hablamos de nuestras habilidades.</p>
+                
+                <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200 flex flex-col gap-5 max-w-2xl mx-auto shadow-inner">
+                    <div class="flex items-end gap-3">
+                        <div class="w-12 h-12 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold shrink-0 text-xl">👔</div>
+                        <div class="bg-white border border-slate-200 p-4 chat-bubble-left text-slate-800 font-medium shadow-sm">Welcome to the interview. <b>Can you</b> use a computer?</div>
+                    </div>
+                    
+                    <div class="flex items-end gap-3 justify-end">
+                        <div class="bg-amber-500 text-white p-4 chat-bubble-right font-medium shadow-sm"><b>Yes, I can.</b> I can type very fast and use office programs.</div>
+                        <div class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-bold shrink-0 text-xl">🧑‍💻</div>
+                    </div>
+
+                    <div class="flex items-end gap-3">
+                        <div class="w-12 h-12 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold shrink-0 text-xl">👔</div>
+                        <div class="bg-white border border-slate-200 p-4 chat-bubble-left text-slate-800 font-medium shadow-sm">Excellent. And <b>can you</b> speak French?</div>
+                    </div>
+
+                    <div class="flex items-end gap-3 justify-end">
+                        <div class="bg-amber-500 text-white p-4 chat-bubble-right font-medium shadow-sm"><b>No, I can't.</b> But I can speak English and Spanish!</div>
+                        <div class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-bold shrink-0 text-xl">🧑‍💻</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 19: Quiz Can -->
+        <section id="slide-19" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-amber-100 text-amber-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-tasks"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Practice: Can / Can't</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10">
+                <div id="quiz-can-container" class="space-y-6">
+                    <!-- Loaded by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 20: M4 Reading Intro & Text -->
+        <section id="slide-20" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-purple-100 text-purple-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">M4</span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Reading: The Chef</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 overflow-hidden mb-6">
+                <div class="bg-slate-900 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-white font-black text-2xl mb-1">A Day in the Kitchen</h3>
+                        <p class="text-slate-400 font-medium">To Be, Present Simple & Can.</p>
+                    </div>
+                    <button onclick="toggleStoryAudio()" class="w-14 h-14 bg-purple-500 rounded-full text-white flex items-center justify-center hover:bg-purple-400 transition-all shadow-[0_0_15px_rgba(168,85,247,0.5)] shrink-0 hover:scale-105">
+                        <i class="fas fa-play text-2xl" id="icon-play-story"></i>
+                    </button>
+                </div>
+                <div class="p-8 md:p-10 bg-purple-50/50 relative">
+                    <i class="fas fa-quote-left text-6xl text-purple-200 absolute top-6 left-6 opacity-50"></i>
+                    <p class="text-lg md:text-xl text-slate-700 leading-loose relative z-10 font-medium" id="story-text">
+                        Hello, my name is Mario. I am 35 years old and I am a chef. I work in a famous Italian restaurant in the city. Every morning, I buy fresh vegetables and meat at the market. I can cook delicious pasta and pizzas, but I can't bake cakes very well. My assistant, Luigi, is a baker. He bakes amazing bread. We work hard, but we are very happy!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 21: Reading Comprehension Quiz -->
+        <section id="slide-21" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-purple-100 text-purple-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-question"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Reading Comprehension</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10">
+                <div id="quiz-reading-container" class="space-y-6">
+                    <!-- Loaded by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 22: Interactive Dialogue Maker (NEW) -->
+        <section id="slide-22" class="hidden-slide slide-enter">
+            <div class="flex items-center gap-4 mb-6 md:mb-8">
+                <span class="bg-purple-100 text-purple-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-comment-dots"></i></span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">Complete the Chat</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 md:p-10">
+                <p class="text-slate-600 mb-6 text-lg font-medium">Selecciona las palabras correctas para completar esta conversación integrando todo lo que aprendiste.</p>
+                
+                <div class="bg-slate-100 p-6 md:p-8 rounded-3xl space-y-6 shadow-inner" id="interactive-chat">
+                    
+                    <div class="flex items-end gap-3">
+                        <div class="bg-white p-4 chat-bubble-left text-slate-800 font-medium shadow-sm w-full md:w-3/4 text-lg">
+                            Hi! What <select class="chat-select mx-1 p-1 bg-slate-100 border border-slate-300 rounded font-bold text-indigo-700" data-correct="do"><option value="">--</option><option value="are">are</option><option value="do">do</option></select> you do?
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-end gap-3 justify-end flex-row-reverse">
+                        <div class="bg-indigo-500 text-white p-4 chat-bubble-right font-medium shadow-sm w-full md:w-3/4 text-lg text-right">
+                            I <select class="chat-select mx-1 p-1 bg-indigo-600 border border-indigo-400 rounded font-bold text-white" data-correct="am"><option value="">--</option><option value="am">am</option><option value="do">do</option></select> a pilot. I <select class="chat-select mx-1 p-1 bg-indigo-600 border border-indigo-400 rounded font-bold text-white" data-correct="fly"><option value="">--</option><option value="fly">fly</option><option value="flies">flies</option></select> planes.
+                        </div>
+                    </div>
+
+                    <div class="flex items-end gap-3">
+                        <div class="bg-white p-4 chat-bubble-left text-slate-800 font-medium shadow-sm w-full md:w-3/4 text-lg">
+                            Wow! <select class="chat-select mx-1 p-1 bg-slate-100 border border-slate-300 rounded font-bold text-indigo-700" data-correct="Can"><option value="">--</option><option value="Do">Do</option><option value="Can">Can</option></select> you fly helicopters too?
+                        </div>
+                    </div>
+
+                    <div class="flex items-end gap-3 justify-end flex-row-reverse">
+                        <div class="bg-indigo-500 text-white p-4 chat-bubble-right font-medium shadow-sm w-full md:w-3/4 text-lg text-right">
+                            No, I <select class="chat-select mx-1 p-1 bg-indigo-600 border border-indigo-400 rounded font-bold text-white" data-correct="can't"><option value="">--</option><option value="am not">am not</option><option value="can't">can't</option></select>. Only planes.
+                        </div>
+                    </div>
+
+                </div>
+                
+                <button onclick="checkChatBuilder()" class="mt-8 bg-purple-600 text-white text-lg font-black py-4 px-8 rounded-xl shadow-lg hover:bg-purple-700 transition-colors w-full md:w-auto">Verificar Conversación</button>
+                <div id="chat-feedback" class="hidden mt-4 p-5 rounded-xl font-bold text-lg border"></div>
+            </div>
+        </section>
+
+        <!-- SLIDE 23: Mega Quiz Intro -->
+        <section id="slide-23" class="hidden-slide slide-enter mt-10">
+            <div class="text-center mb-10">
+                <div class="w-24 h-24 bg-gradient-to-tr from-slate-800 to-slate-600 rounded-3xl flex items-center justify-center text-5xl mx-auto mb-6 text-white shadow-xl transform rotate-3">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h2 class="text-4xl md:text-6xl font-black text-slate-800 tracking-tight">Mega Quiz Final</h2>
+                <p class="text-slate-500 mt-4 text-lg md:text-xl font-medium max-w-2xl mx-auto">Pon a prueba todo lo que aprendiste: Profesiones, Rutinas y Habilidades. Son 10 preguntas.</p>
+            </div>
+            <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 p-6 md:p-12 max-w-3xl mx-auto relative overflow-hidden">
+                <!-- Progress Quiz -->
+                <div class="absolute top-0 left-0 w-full h-2 bg-slate-100">
+                    <div id="mega-quiz-progress" class="h-full bg-slate-800 transition-all duration-300" style="width: 0%"></div>
+                </div>
+
+                <div id="mega-quiz-intro" class="text-center py-10">
+                    <button onclick="startMegaQuiz()" class="bg-slate-800 text-white text-xl font-black py-4 px-12 rounded-2xl hover:bg-slate-900 transition shadow-xl hover:-translate-y-1">¡Empezar Examen!</button>
+                </div>
+
+                <div id="mega-quiz-area" class="hidden">
+                    <div class="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
+                        <span class="text-sm md:text-base font-bold text-slate-400 uppercase tracking-widest" id="mega-quiz-counter">Pregunta 1 de 10</span>
+                    </div>
+                    
+                    <h3 class="text-2xl md:text-4xl font-medium text-slate-800 mb-10 leading-relaxed text-center" id="mega-quiz-question">Question?</h3>
+                    
+                    <div id="mega-quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Options generated by JS -->
+                    </div>
+
+                    <div id="mega-quiz-feedback" class="hidden mt-8 p-5 rounded-2xl text-center font-bold text-xl border"></div>
+                </div>
+
+                <div id="mega-quiz-result" class="hidden text-center py-10">
+                    <div class="text-7xl mb-6" id="mq-emoji">🎉</div>
+                    <h3 class="text-4xl font-black text-slate-800 mb-4">¡Completado!</h3>
+                    <p class="text-xl text-slate-600 mb-8 font-medium">Tu puntuación: <span id="mq-score" class="font-black text-slate-800 text-3xl mx-2"></span>/10</p>
+                    <button onclick="location.reload()" class="bg-slate-800 text-white font-black text-xl py-4 px-10 rounded-2xl hover:bg-slate-900 shadow-xl transition hover:-translate-y-1">Reiniciar Clase</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-md border-t border-slate-200 p-4 md:p-6 z-30 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+            <div class="max-w-5xl mx-auto flex justify-between gap-4">
+                <button id="btn-prev" onclick="prevSlide()" class="flex-1 bg-slate-100 text-slate-600 font-black text-lg py-4 px-4 rounded-2xl hover:bg-slate-200 transition opacity-50 cursor-not-allowed disabled">
+                    <i class="fas fa-arrow-left mr-2"></i> Atrás
+                </button>
+                <button id="btn-next" onclick="nextSlide()" class="flex-1 bg-slate-800 text-white font-black text-lg py-4 px-4 rounded-2xl shadow-lg transition hover:-translate-y-1">
+                    Siguiente <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- DICTIONARY MODAL -->
+    <div id="dictionary-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex justify-center items-end sm:items-center">
+        <div class="bg-white w-full sm:max-w-2xl h-[85vh] sm:h-[80vh] sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col slide-enter border border-slate-200">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-800 text-white sm:rounded-t-3xl rounded-t-3xl">
+                <div>
+                    <h3 class="font-black text-2xl flex items-center gap-3"><i class="fas fa-book-open"></i> Class Dictionary</h3>
+                    <p class="text-slate-300 text-sm font-medium mt-1">Jobs, Actions, Abilities</p>
+                </div>
+                <button onclick="toggleDictionary()" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="flex border-b border-slate-200 overflow-x-auto custom-scrollbar bg-slate-50 px-2 scroll-smooth">
+                <button onclick="switchDictTab('jobs')" id="tab-jobs" class="px-6 py-4 font-black text-base md:text-lg text-indigo-600 border-b-4 border-indigo-600 whitespace-nowrap"><i class="fas fa-briefcase mr-2"></i> Professions</button>
+                <button onclick="switchDictTab('verbs')" id="tab-verbs" class="px-6 py-4 font-bold text-base md:text-lg text-slate-400 border-b-4 border-transparent hover:text-slate-600 whitespace-nowrap"><i class="fas fa-running mr-2"></i> Actions</button>
+                <button onclick="switchDictTab('abilities')" id="tab-abilities" class="px-6 py-4 font-bold text-base md:text-lg text-slate-400 border-b-4 border-transparent hover:text-slate-600 whitespace-nowrap"><i class="fas fa-star mr-2"></i> Abilities</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar bg-slate-50">
+                <div id="dict-jobs" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                <div id="dict-verbs" class="grid grid-cols-1 md:grid-cols-2 gap-3 hidden"></div>
+                <div id="dict-abilities" class="grid grid-cols-1 md:grid-cols-2 gap-3 hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURES ---
+        const fcData = {
+            professions: [
+                { en: "Doctor", es: "Doctor/a", emoji: "🧑‍⚕️", color: "indigo" },
+                { en: "Teacher", es: "Maestro/a", emoji: "👨‍🏫", color: "indigo" },
+                { en: "Engineer", es: "Ingeniero/a", emoji: "👷", color: "indigo" },
+                { en: "Chef", es: "Cocinero/a", emoji: "🧑‍🍳", color: "indigo" },
+                { en: "Pilot", es: "Piloto", emoji: "👨‍✈️", color: "indigo" },
+                { en: "Mechanic", es: "Mecánico/a", emoji: "🔧", color: "indigo" },
+                { en: "Firefighter", es: "Bombero/a", emoji: "🧑‍🚒", color: "indigo" },
+                { en: "Police Officer", es: "Policía", emoji: "👮", color: "indigo" },
+                { en: "Farmer", es: "Granjero/a", emoji: "🧑‍🌾", color: "indigo" },
+                { en: "Musician", es: "Músico/a", emoji: "🧑‍🎤", color: "indigo" },
+                { en: "Dentist", es: "Dentista", emoji: "🦷", color: "indigo" },
+                { en: "Programmer", es: "Programador/a", emoji: "👨‍💻", color: "indigo" }
+            ],
+            actions: [
+                { en: "Cure", es: "Curar", emoji: "🩹", color: "emerald" },
+                { en: "Teach", es: "Enseñar", emoji: "📖", color: "emerald" },
+                { en: "Build", es: "Construir", emoji: "🏗️", color: "emerald" },
+                { en: "Cook", es: "Cocinar", emoji: "🍳", color: "emerald" },
+                { en: "Fly", es: "Volar", emoji: "✈️", color: "emerald" },
+                { en: "Fix", es: "Arreglar", emoji: "🛠️", color: "emerald" },
+                { en: "Rescue", es: "Rescatar", emoji: "🛟", color: "emerald" },
+                { en: "Protect", es: "Proteger", emoji: "🛡️", color: "emerald" },
+                { en: "Grow", es: "Cultivar", emoji: "🌱", color: "emerald" },
+                { en: "Play", es: "Tocar (música)", emoji: "🎵", color: "emerald" },
+                { en: "Clean", es: "Limpiar", emoji: "🪥", color: "emerald" },
+                { en: "Code", es: "Programar", emoji: "⌨️", color: "emerald" }
+            ],
+            abilities: [
+                { en: "Speak English", es: "Hablar inglés", emoji: "🗣️", color: "amber" },
+                { en: "Drive a car", es: "Conducir", emoji: "🚗", color: "amber" },
+                { en: "Use a computer", es: "Usar computadora", emoji: "💻", color: "amber" },
+                { en: "Lift heavy things", es: "Levantar peso", emoji: "🏋️", color: "amber" },
+                { en: "Work in a team", es: "Trabajar en equipo", emoji: "🤝", color: "amber" },
+                { en: "Solve problems", es: "Resolver problemas", emoji: "🧩", color: "amber" },
+                { en: "Speak in public", es: "Hablar en público", emoji: "🎤", color: "amber" },
+                { en: "Draw", es: "Dibujar", emoji: "🎨", color: "amber" },
+                { en: "Swim", es: "Nadar", emoji: "🏊", color: "amber" },
+                { en: "Write fast", es: "Escribir rápido", emoji: "✍️", color: "amber" },
+                { en: "Read maps", es: "Leer mapas", emoji: "🗺️", color: "amber" },
+                { en: "Bake", es: "Hornear", emoji: "🧁", color: "amber" }
+            ]
+        };
+
+        const quizzesData = {
+            'quiz-tobe-container': {
+                color: "indigo",
+                q: [
+                    { q: "I ________ a teacher.", options: ["am", "is", "are"], ans: 0 },
+                    { q: "She ________ an engineer.", options: ["am", "is", "are"], ans: 1 },
+                    { q: "They ________ doctors.", options: ["am", "is", "are"], ans: 2 },
+                    { q: "He ________ a mechanic. He is a pilot.", options: ["isn't", "aren't", "am not"], ans: 0 }
+                ]
+            },
+            'quiz-can-container': {
+                color: "amber",
+                q: [
+                    { q: "I am a pilot. I ________ fly a plane.", options: ["can", "can't", "cans"], ans: 0 },
+                    { q: "She is a chef, but she ________ bake cakes. She only makes pasta.", options: ["can", "can't", "doesn't can"], ans: 1 },
+                    { q: "________ you speak English?", options: ["Do", "Are", "Can"], ans: 2 },
+                    { q: "A mechanic ________ fix cars.", options: ["can fixes", "cans fix", "can fix"], ans: 2 }
+                ]
+            },
+            'quiz-reading-container': {
+                color: "purple",
+                q: [
+                    { q: "What is Mario's profession?", options: ["He is a baker", "He is a chef", "He is a pilot"], ans: 1 },
+                    { q: "What does Mario do every morning?", options: ["He buys vegetables", "He bakes cakes", "He flies a plane"], ans: 0 },
+                    { q: "What can't Mario do very well?", options: ["Cook pasta", "Bake cakes", "Speak Italian"], ans: 1 },
+                    { q: "Who is Luigi?", options: ["A chef", "Mario's brother", "A baker"], ans: 2 }
+                ]
+            }
+        };
+
+        const typingData = {
+            'typing-container-actions': [
+                { prompt: "Yo enseño inglés.", correct: ["i teach english"] },
+                { prompt: "Nosotros construimos casas.", correct: ["we build houses"] },
+                { prompt: "Ellos arreglan carros.", correct: ["they fix cars"] }
+            ]
+        };
+
+        const megaQuizQuestions = [
+            { q: "She _____ a nurse.", options: ["is", "are", "am"], ans: 0 },
+            { q: "I am a chef. I _____ delicious food.", options: ["cooks", "cook", "cooking"], ans: 1 },
+            { q: "A bird _____ fly.", options: ["can", "cans", "can't"], ans: 0 },
+            { q: "My brother is a mechanic. He _____ cars.", options: ["fix", "fixes", "fixs"], ans: 1 },
+            { q: "_____ you a doctor?", options: ["Are", "Do", "Can"], ans: 0 },
+            { q: "We _____ not pilots.", options: ["do", "are", "can"], ans: 1 },
+            { q: "_____ he speak Spanish?", options: ["Can", "Is", "Are"], ans: 0 },
+            { q: "They _____ at the university.", options: ["study", "studies", "studys"], ans: 0 },
+            { q: "A dog _____ talk.", options: ["can't", "don't", "isn't"], ans: 0 },
+            { q: "He is a teacher. He _____ math.", options: ["teach", "teachs", "teaches"], ans: 2 }
+        ];
+
+        // --- RENDER FLIP CARDS ---
+        function renderFlipCards(dataArray, containerId) {
+            const container = document.getElementById(containerId);
+            if(!container) return;
+            let html = '';
+            dataArray.forEach(item => {
+                html += `
+                    <div class="flip-card h-28 md:h-32" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-${item.color}-50 border-2 border-${item.color}-200 shadow-sm flex items-center justify-between p-4 md:p-6">
+                                <span class="text-4xl md:text-5xl">${item.emoji}</span>
+                                <span class="font-black text-xl md:text-2xl text-slate-800">${item.en}</span>
+                                <button onclick="playTTS('${item.en}'); event.stopPropagation();" class="w-10 h-10 rounded-full bg-white text-${item.color}-600 shadow flex items-center justify-center shrink-0"><i class="fas fa-volume-up"></i></button>
+                            </div>
+                            <div class="flip-card-back bg-${item.color}-600 border-2 border-${item.color}-600 shadow-md flex items-center justify-center p-4 text-white">
+                                <span class="font-black text-2xl text-center">${item.es}</span>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        // --- RENDER QUIZZES ---
+        function renderQuiz(containerId) {
+            const container = document.getElementById(containerId);
+            if(!container || !quizzesData[containerId]) return;
+            const data = quizzesData[containerId].q;
+            const color = quizzesData[containerId].color;
+            
+            let html = '';
+            data.forEach((q, index) => {
+                const gridCols = q.options.length > 2 ? 'sm:grid-cols-3' : 'sm:grid-cols-2';
+                html += `
+                    <div class="bg-slate-50 p-5 md:p-6 rounded-2xl border border-slate-200" id="${containerId}-q-${index}">
+                        <p class="font-bold text-lg md:text-xl text-slate-800 mb-6">${index + 1}. ${q.q}</p>
+                        <div class="grid grid-cols-1 ${gridCols} gap-3">
+                            ${q.options.map((opt, i) => `
+                                <button onclick="checkQuizAnswer('${containerId}', ${index}, ${i}, ${q.ans}, '${color}')" class="bg-white border-2 border-slate-200 text-slate-700 font-bold text-lg py-4 px-4 rounded-xl hover:border-${color}-400 hover:bg-${color}-50 transition quiz-btn w-full shadow-sm">
+                                    ${opt}
+                                </button>
+                            `).join('')}
+                        </div>
+                        <div id="${containerId}-feedback-${index}" class="hidden mt-5 font-bold text-base md:text-lg p-4 rounded-xl border"></div>
+                    </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function checkQuizAnswer(containerId, qIndex, selectedIndex, correctIndex, color) {
+            const qContainer = document.getElementById(`${containerId}-q-${qIndex}`);
+            const buttons = qContainer.querySelectorAll('.quiz-btn');
+            const feedback = document.getElementById(`${containerId}-feedback-${qIndex}`);
+            
+            buttons.forEach(b => { b.disabled = true; b.classList.remove(`hover:border-${color}-400`, `hover:bg-${color}-50`); });
+
+            if (selectedIndex === correctIndex) {
+                buttons[selectedIndex].classList.replace('border-slate-200', 'border-green-500');
+                buttons[selectedIndex].classList.add('bg-green-500', 'text-white', 'shadow-md');
+                buttons[selectedIndex].classList.remove('text-slate-700', 'bg-white');
+                feedback.classList.remove('hidden');
+                feedback.classList.add('bg-green-50', 'text-green-700', 'border-green-200');
+                feedback.innerHTML = '<i class="fas fa-check-circle text-xl mr-2"></i> ¡Correcto!';
+            } else {
+                buttons[selectedIndex].classList.replace('border-slate-200', 'border-red-500');
+                buttons[selectedIndex].classList.add('bg-red-500', 'text-white', 'shadow-md');
+                buttons[selectedIndex].classList.remove('text-slate-700', 'bg-white');
+                
+                buttons[correctIndex].classList.replace('border-slate-200', 'border-green-400');
+                buttons[correctIndex].classList.add('bg-green-50', 'text-green-800');
+                
+                feedback.classList.remove('hidden');
+                feedback.classList.add('bg-red-50', 'text-red-700', 'border-red-200');
+                feedback.innerHTML = '<i class="fas fa-times-circle text-xl mr-2"></i> Incorrecto.';
+            }
+        }
+
+        // --- RENDER TYPING ---
+        function renderTyping(containerId) {
+            const container = document.getElementById(containerId);
+            if(!container || !typingData[containerId]) return;
+            const data = typingData[containerId];
+
+            let html = '';
+            data.forEach((item, index) => {
+                html += `
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                        <p class="font-bold text-slate-700 mb-3 text-lg">🇲🇽 ${item.prompt}</p>
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">🇺🇸</span>
+                            <input type="text" id="${containerId}-input-${index}" class="flex-1 bg-slate-50 border-2 border-slate-200 rounded-xl py-3 px-4 focus:outline-none focus:border-emerald-500 font-bold text-slate-800 placeholder:text-slate-400" placeholder="Escribe en inglés...">
+                        </div>
+                    </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function cleanString(str) { return str.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim().replace(/\s+/g, ' '); }
+
+        function checkTyping(containerId) {
+            const data = typingData[containerId];
+            let allCorrect = true;
+            let feedbackHtml = '';
+
+            data.forEach((item, index) => {
+                const inputEl = document.getElementById(`${containerId}-input-${index}`);
+                const userVal = cleanString(inputEl.value);
+                const isCorrect = item.correct.some(ans => cleanString(ans) === userVal);
+
+                inputEl.classList.remove('border-slate-200', 'focus:border-emerald-500', 'border-red-400', 'border-green-500', 'bg-slate-50', 'bg-red-50', 'bg-green-50', 'text-green-800', 'text-red-800');
+
+                if (isCorrect) {
+                    inputEl.classList.add('border-green-500', 'bg-green-50', 'text-green-800');
+                } else {
+                    allCorrect = false;
+                    inputEl.classList.add('border-red-400', 'bg-red-50', 'text-red-800');
+                    feedbackHtml += `<p class="mb-2"><i class="fas fa-times-circle text-red-500"></i> #${index + 1}: <span class="font-bold text-red-700">${item.correct[0]}</span></p>`;
+                }
+            });
+
+            const feedbackEl = document.getElementById(`typing-feedback-actions`);
+            feedbackEl.classList.remove('hidden', 'bg-green-50', 'text-green-800', 'border-green-200', 'bg-red-50', 'text-red-800', 'border-red-200');
+            
+            if (allCorrect) {
+                feedbackEl.classList.add('bg-green-50', 'text-green-800', 'border-green-200');
+                feedbackEl.innerHTML = '<i class="fas fa-check-circle text-xl mr-2"></i> ¡Excelente! Todas las traducciones son correctas.';
+            } else {
+                feedbackEl.classList.add('bg-red-50', 'text-red-800', 'border-red-200');
+                feedbackEl.innerHTML = '<p class="mb-3 text-red-900"><i class="fas fa-exclamation-triangle"></i> Revisa las respuestas esperadas:</p>' + feedbackHtml;
+            }
+        }
+
+        function checkDropdowns(containerId) {
+            const container = document.getElementById(containerId);
+            const selects = container.querySelectorAll('.dropdown-select');
+            let correctCount = 0;
+
+            selects.forEach(select => {
+                const correctAns = select.getAttribute('data-correct');
+                const userVal = select.value;
+
+                select.classList.remove('text-emerald-700', 'text-green-700', 'text-red-700', 'border-slate-300', 'border-green-500', 'border-red-500', 'bg-white', 'bg-green-50', 'bg-red-50');
+
+                if (userVal === correctAns) {
+                    select.classList.add('text-green-700', 'border-green-500', 'bg-green-50');
+                    correctCount++;
+                } else {
+                    select.classList.add('text-red-700', 'border-red-500', 'bg-red-50');
+                }
+            });
+
+            const feedbackEl = document.getElementById('dropdown-feedback');
+            feedbackEl.classList.remove('hidden', 'bg-green-50', 'text-green-800', 'border-green-200', 'bg-amber-50', 'text-amber-800', 'border-amber-200');
+            
+            if (correctCount === selects.length) {
+                feedbackEl.classList.add('bg-green-50', 'text-green-800', 'border-green-200');
+                feedbackEl.innerHTML = '<i class="fas fa-check-circle text-xl mr-2"></i> ¡Perfecto! Aplicaste muy bien las reglas de la S y del To Be.';
+            } else {
+                feedbackEl.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-200');
+                feedbackEl.innerHTML = `<i class="fas fa-exclamation-triangle text-xl mr-2"></i> Tuviste ${correctCount} de ${selects.length} correctas. Revisa tus respuestas.`;
+            }
+        }
+
+        function checkChatBuilder() {
+            const container = document.getElementById('interactive-chat');
+            const selects = container.querySelectorAll('.chat-select');
+            let correctCount = 0;
+
+            selects.forEach(select => {
+                const correctAns = select.getAttribute('data-correct');
+                const userVal = select.value;
+                const isLeftBubble = select.classList.contains('text-indigo-700'); // Based on current setup
+
+                select.classList.remove('border-green-500', 'border-red-500', 'bg-green-50', 'bg-red-50', 'bg-green-600', 'bg-red-600');
+
+                if (userVal === correctAns) {
+                    if(isLeftBubble) { select.classList.add('border-green-500', 'bg-green-50'); }
+                    else { select.classList.add('border-green-400', 'bg-green-600'); }
+                    correctCount++;
+                } else {
+                    if(isLeftBubble) { select.classList.add('border-red-500', 'bg-red-50'); }
+                    else { select.classList.add('border-red-400', 'bg-red-600'); }
+                }
+            });
+
+            const feedbackEl = document.getElementById('chat-feedback');
+            feedbackEl.classList.remove('hidden', 'bg-green-50', 'text-green-800', 'border-green-200', 'bg-amber-50', 'text-amber-800', 'border-amber-200');
+            
+            if (correctCount === selects.length) {
+                feedbackEl.classList.add('bg-green-50', 'text-green-800', 'border-green-200');
+                feedbackEl.innerHTML = '<i class="fas fa-check-circle text-xl mr-2"></i> ¡Excelente! Completaste el diálogo correctamente.';
+            } else {
+                feedbackEl.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-200');
+                feedbackEl.innerHTML = `<i class="fas fa-exclamation-triangle text-xl mr-2"></i> Tuviste ${correctCount} de ${selects.length} correctas. Intenta de nuevo.`;
+            }
+        }
+
+        // --- SYSTEM NAVIGATION ---
+        let currentSlide = 0;
+        const totalSlides = 24; 
+
+        function updateNavUI() {
+            const progress = (currentSlide / (totalSlides - 1)) * 100;
+            document.getElementById('main-progress').style.width = `${progress}%`;
+            document.getElementById('slide-counter').innerText = `Slide ${currentSlide + 1} / ${totalSlides}`;
+
+            for (let i = 0; i < totalSlides; i++) {
+                const s = document.getElementById(`slide-${i}`);
+                if(s) { s.classList.add('hidden-slide'); s.classList.remove('slide-enter'); }
+            }
+
+            const current = document.getElementById(`slide-${currentSlide}`);
+            if (current) {
+                current.classList.remove('hidden-slide');
+                void current.offsetWidth; 
+                current.classList.add('slide-enter');
+            }
+
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+
+            if (currentSlide === 0) {
+                btnPrev.classList.add('opacity-50', 'cursor-not-allowed');
+                btnPrev.setAttribute('disabled', 'true');
+            } else {
+                btnPrev.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnPrev.removeAttribute('disabled');
+            }
+
+            if (currentSlide === totalSlides - 1) { btnNext.classList.add('hidden'); } 
+            else { btnNext.classList.remove('hidden'); }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.speechSynthesis.cancel();
+            if(isPlayingStory) toggleStoryAudio(); 
+        }
+
+        function nextSlide() { if (currentSlide < totalSlides - 1) { currentSlide++; updateNavUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateNavUI(); } }
+
+        // --- TTS & AUDIO ---
+        function playTTS(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); 
+                const msg = new SpeechSynthesisUtterance(text);
+                msg.lang = 'en-US'; 
+                msg.rate = 0.9;     
+                window.speechSynthesis.speak(msg);
+            }
+        }
+
+        let isPlayingStory = false;
+        let storyUtterance = null;
+        function toggleStoryAudio() {
+            const icon = document.getElementById('icon-play-story');
+            const text = document.getElementById('story-text').innerText;
+
+            if (!isPlayingStory) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    storyUtterance = new SpeechSynthesisUtterance(text);
+                    storyUtterance.lang = 'en-US';
+                    storyUtterance.rate = 0.85;
+                    
+                    storyUtterance.onend = () => {
+                        isPlayingStory = false;
+                        icon.classList.replace('fa-stop', 'fa-play');
+                    };
+
+                    window.speechSynthesis.speak(storyUtterance);
+                    isPlayingStory = true;
+                    icon.classList.replace('fa-play', 'fa-stop');
+                }
+            } else {
+                window.speechSynthesis.cancel();
+                isPlayingStory = false;
+                icon.classList.replace('fa-stop', 'fa-play');
+            }
+        }
+
+        // --- DICTIONARY ---
+        function toggleDictionary() {
+            const modal = document.getElementById('dictionary-modal');
+            modal.classList.toggle('hidden');
+            if(!modal.classList.contains('hidden')){
+                if(document.getElementById('dict-jobs').innerHTML === "") {
+                    renderDictionaryList(fcData.professions, 'dict-jobs');
+                    renderDictionaryList(fcData.actions, 'dict-verbs');
+                    renderDictionaryList(fcData.abilities, 'dict-abilities');
+                }
+            }
+        }
+
+        function switchDictTab(tabName) {
+            ['jobs', 'verbs', 'abilities'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.remove('text-indigo-600', 'border-indigo-600');
+                document.getElementById(`tab-${t}`).classList.add('text-slate-400', 'border-transparent');
+                document.getElementById(`dict-${t}`).classList.add('hidden');
+            });
+            document.getElementById(`tab-${tabName}`).classList.remove('text-slate-400', 'border-transparent');
+            document.getElementById(`tab-${tabName}`).classList.add('text-indigo-600', 'border-indigo-600');
+            document.getElementById(`dict-${tabName}`).classList.remove('hidden');
+        }
+
+        function renderDictionaryList(data, containerId) {
+            const container = document.getElementById(containerId);
+            let html = '';
+            data.forEach(item => {
+                html += `
+                    <div class="bg-white p-3 rounded-2xl border border-slate-200 flex items-center gap-3 hover:shadow-md transition-all cursor-pointer" onclick="playTTS('${item.en}')">
+                        <div class="text-2xl bg-slate-50 w-12 h-12 rounded-xl flex items-center justify-center border border-slate-100 shadow-sm shrink-0">${item.emoji}</div>
+                        <div class="flex-1">
+                            <p class="font-bold text-slate-800 text-base">${item.en}</p>
+                            <p class="text-xs text-slate-500 font-medium">${item.es}</p>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                            <i class="fas fa-volume-up text-xs"></i>
+                        </div>
+                    </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        // --- MEGA QUIZ LOGIC ---
+        let megaQuizCurrent = 0, megaQuizScore = 0;
+        function startMegaQuiz() {
+            document.getElementById('mega-quiz-intro').classList.add('hidden');
+            document.getElementById('mega-quiz-area').classList.remove('hidden');
+            megaQuizQuestions.sort(() => Math.random() - 0.5);
+            megaQuizCurrent = 0; megaQuizScore = 0;
+            renderMegaQuizQuestion();
+        }
+
+        function renderMegaQuizQuestion() {
+            if (megaQuizCurrent >= megaQuizQuestions.length) { showMegaQuizResult(); return; }
+            const q = megaQuizQuestions[megaQuizCurrent];
+            document.getElementById('mega-quiz-counter').innerText = `Pregunta ${megaQuizCurrent + 1} de ${megaQuizQuestions.length}`;
+            let formattedQ = q.q.replace('_____', `<span id="mega-blank" class="inline-block px-1 border-b-4 border-dashed border-slate-300 text-slate-400 font-bold mx-1 pb-1 min-w-[3rem] text-center">___</span>`);
+            document.getElementById('mega-quiz-question').innerHTML = formattedQ;
+            document.getElementById('mega-quiz-progress').style.width = `${((megaQuizCurrent) / megaQuizQuestions.length) * 100}%`;
+
+            let optionsHtml = '';
+            q.options.forEach((opt, i) => {
+                optionsHtml += `<button onclick="handleMegaQuizAnswer(${i}, ${q.ans})" class="mega-option w-full bg-slate-50 border-2 border-slate-200 text-slate-700 font-bold py-5 px-6 rounded-2xl hover:border-slate-400 hover:bg-slate-100 transition text-lg shadow-sm">${opt}</button>`;
+            });
+            document.getElementById('mega-quiz-options').innerHTML = optionsHtml;
+            document.getElementById('mega-quiz-feedback').classList.add('hidden');
+        }
+
+        function handleMegaQuizAnswer(selected, correct) {
+            const buttons = document.querySelectorAll('.mega-option');
+            buttons.forEach(b => b.disabled = true);
+            const feedback = document.getElementById('mega-quiz-feedback');
+            const blank = document.getElementById('mega-blank');
+            const q = megaQuizQuestions[megaQuizCurrent];
+            
+            feedback.classList.remove('hidden', 'bg-green-50', 'text-green-700', 'border-green-200', 'bg-red-50', 'text-red-700', 'border-red-200');
+
+            if (selected === correct) {
+                buttons[selected].classList.replace('border-slate-200', 'border-green-500');
+                buttons[selected].classList.replace('bg-slate-50', 'bg-green-500');
+                buttons[selected].classList.replace('text-slate-700', 'text-white');
+                megaQuizScore++;
+                if(blank) { blank.innerText = q.options[q.ans]; blank.classList.replace('border-slate-300', 'border-green-400'); blank.classList.replace('text-slate-400', 'text-green-600'); }
+                feedback.classList.add('bg-green-50', 'text-green-700', 'border', 'border-green-200');
+                feedback.innerHTML = '<i class="fas fa-check-circle text-2xl mr-2"></i> ¡Correcto!';
+            } else {
+                buttons[selected].classList.replace('border-slate-200', 'border-red-500');
+                buttons[selected].classList.replace('bg-slate-50', 'bg-red-500');
+                buttons[selected].classList.replace('text-slate-700', 'text-white');
+                buttons[correct].classList.replace('border-slate-200', 'border-green-400');
+                buttons[correct].classList.replace('bg-slate-50', 'bg-green-50');
+                feedback.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200');
+                feedback.innerHTML = '<i class="fas fa-times-circle text-2xl mr-2"></i> Incorrecto.';
+            }
+
+            setTimeout(() => { megaQuizCurrent++; renderMegaQuizQuestion(); }, 1800);
+        }
+
+        function showMegaQuizResult() {
+            document.getElementById('mega-quiz-area').classList.add('hidden');
+            document.getElementById('mega-quiz-progress').style.width = `100%`;
+            const resultArea = document.getElementById('mega-quiz-result');
+            resultArea.classList.remove('hidden');
+            document.getElementById('mq-score').innerText = megaQuizScore;
+            const emoji = document.getElementById('mq-emoji');
+            if (megaQuizScore === 10) { emoji.innerText = '🏆'; }
+            else if (megaQuizScore >= 7) { emoji.innerText = '🌟'; }
+            else { emoji.innerText = '💪'; }
+        }
+
+        // INIT
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNavUI();
+            renderFlipCards(fcData.professions, 'fc-professions');
+            renderFlipCards(fcData.actions, 'fc-actions');
+            renderFlipCards(fcData.abilities, 'fc-abilities');
+            renderQuiz('quiz-tobe-container');
+            renderQuiz('quiz-can-container');
+            renderQuiz('quiz-reading-container');
+            renderTyping('typing-container-actions');
+        });
+    </script>
+</body>
+</html>

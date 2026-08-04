@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Greetings & Family Master Class</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            touch-action: manipulation; 
+            -webkit-tap-highlight-color: transparent;
+            background-color: #f8fafc;
+        }
+        
+        .slide-enter { animation: slideUpFade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hidden-slide { display: none !important; }
+        
+        /* Flip Cards */
+        .flip-card { perspective: 1000px; cursor: pointer; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 1rem; }
+        .flip-card-back { transform: rotateY(180deg); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        select { font-size: 16px !important; }
+
+        .pulse-soft { animation: pulseSoft 2s infinite; }
+        @keyframes pulseSoft {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .chat-bubble-left { position: relative; background: #f1f5f9; border-radius: .4em; border-top-left-radius: 0; }
+        .chat-bubble-left::after { content: ''; position: absolute; left: 0; top: 0; width: 0; height: 0; border: 0.5em solid transparent; border-right-color: #f1f5f9; border-left: 0; border-top: 0; margin-top: 0; margin-left: -0.5em; }
+        
+        .chat-bubble-right { position: relative; background: #e0e7ff; border-radius: .4em; border-top-right-radius: 0; }
+        .chat-bubble-right::after { content: ''; position: absolute; right: 0; top: 0; width: 0; height: 0; border: 0.5em solid transparent; border-left-color: #e0e7ff; border-right: 0; border-top: 0; margin-top: 0; margin-right: -0.5em; }
+
+        .tree-container { display: flex; justify-content: center; padding: 20px 0; overflow-x: auto; scroll-behavior: smooth; }
+        .tree-container ul { padding-top: 20px; position: relative; transition: all 0.5s; display: flex; justify-content: center; padding-left: 0; margin: 0; }
+        .tree-container li { float: left; text-align: center; list-style-type: none; position: relative; padding: 20px 10px 0 10px; transition: all 0.5s; }
+        .tree-container li::before, .tree-container li::after { content: ''; position: absolute; top: 0; right: 50%; border-top: 3px solid #93c5fd; width: 50%; height: 20px; }
+        .tree-container li::after { right: auto; left: 50%; border-left: 3px solid #93c5fd; }
+        .tree-container li:only-child::after, .tree-container li:only-child::before { display: none; }
+        .tree-container li:only-child { padding-top: 0; }
+        .tree-container li:first-child::before, .tree-container li:last-child::after { border: 0 none; }
+        .tree-container li:last-child::before { border-right: 3px solid #93c5fd; border-radius: 0 8px 0 0; }
+        .tree-container li:first-child::after { border-radius: 8px 0 0 0; }
+        .tree-container ul ul::before { content: ''; position: absolute; top: 0; left: 50%; border-left: 3px solid #93c5fd; width: 0; height: 20px; margin-left: -1.5px; }
+        
+        .tree-node { background: #eff6ff; border: 2px solid #bfdbfe; padding: 10px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; width: 85px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin: 0 auto; cursor: pointer; transition: transform 0.2s; }
+        .tree-node:hover { transform: scale(1.05); background: #dbeafe; }
+        @media (min-width: 768px) { .tree-node { width: 110px; padding: 12px; } }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-indigo-200">
+
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 z-40 shadow-sm transition-colors duration-300" id="main-nav">
+        <div class="max-w-5xl mx-auto px-4 h-16 md:h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div id="nav-icon-bg" class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg transition-all duration-500">
+                    <i class="fas fa-hand-sparkles text-lg md:text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-black text-sm md:text-lg leading-tight text-slate-800 tracking-tight truncate max-w-[180px] sm:max-w-xs">Greetings & Family</h1>
+                    <p class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest" id="nav-topic-title">Intro</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2 md:gap-4">
+                <span id="slide-counter-nav" class="font-bold text-sm md:text-base text-slate-500 bg-slate-100 px-3 py-1 rounded-lg">1/13</span>
+                <button onclick="toggleDictionary()" class="flex items-center gap-2 bg-slate-50 text-slate-700 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold border border-slate-200 hover:bg-slate-100 transition shadow-sm text-xs md:text-sm">
+                    <i class="fas fa-book"></i> <span class="hidden sm:inline">Diccionario</span>
+                </button>
+            </div>
+        </div>
+        <div class="w-full bg-slate-100 h-1.5 md:h-2">
+            <div id="main-progress" class="bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 h-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 pt-24 pb-32 min-h-screen relative" id="slides-container">
+        
+        <section id="slide-0" class="slide-enter mt-4 md:mt-10">
+            <div class="bg-white rounded-[2rem] p-6 md:p-12 text-center shadow-2xl border border-slate-100 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-amber-50 to-white"></div>
+                <div class="relative z-10">
+                    <div class="w-24 h-24 md:w-32 md:h-32 bg-white rounded-3xl flex items-center justify-center text-5xl md:text-6xl mx-auto mb-6 shadow-xl border-4 border-white pulse-soft rotate-3">👋</div>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 mb-4 tracking-tight">Greetings & Family</h2>
+                    <p class="text-slate-600 mb-8 max-w-2xl mx-auto text-base md:text-xl font-medium">Clase Extendida: Aprende a saludar, despedirte, el vocabulario completo de la familia y a presentar a otros usando adjetivos posesivos.</p>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto mb-10 text-left">
+                        <div class="bg-amber-50 p-4 rounded-2xl border border-amber-100">
+                            <div class="text-amber-500 text-2xl mb-2"><i class="fas fa-sun"></i></div>
+                            <h4 class="font-bold text-amber-900 text-sm md:text-base">Greetings</h4>
+                        </div>
+                        <div class="bg-orange-50 p-4 rounded-2xl border border-orange-100">
+                            <div class="text-orange-500 text-2xl mb-2"><i class="fas fa-moon"></i></div>
+                            <h4 class="font-bold text-orange-900 text-sm md:text-base">Farewells</h4>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                            <div class="text-blue-500 text-2xl mb-2"><i class="fas fa-sitemap"></i></div>
+                            <h4 class="font-bold text-blue-900 text-sm md:text-base">Family Tree</h4>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-2xl border border-purple-100">
+                            <div class="text-purple-500 text-2xl mb-2"><i class="fas fa-hand-holding-heart"></i></div>
+                            <h4 class="font-bold text-purple-900 text-sm md:text-base">Possessives</h4>
+                        </div>
+                    </div>
+                    
+                    <button onclick="nextSlide()" class="bg-slate-800 hover:bg-slate-900 text-white text-lg md:text-2xl font-black py-4 md:py-5 px-10 md:px-16 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1 w-full sm:w-auto">
+                        Iniciar Clase <i class="fas fa-rocket ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-1" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-amber-100 text-amber-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">1</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Greetings (Saludos)</h2>
+            </div>
+            
+            <div class="bg-white rounded-3xl shadow-lg border border-amber-100 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-6 text-lg font-medium flex items-center gap-2">Toca las conversaciones para escuchar la pronunciación.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Informal -->
+                    <div class="bg-amber-50 p-6 rounded-3xl border border-amber-200">
+                        <h3 class="font-black text-amber-800 text-xl mb-4 border-b border-amber-200 pb-2">Informal (Friends & Family)</h3>
+                        
+                        <div class="space-y-4 cursor-pointer hover:bg-white p-2 rounded-xl transition" onclick="playTTS('Hi! How are you?')">
+                            <div class="flex gap-3">
+                                <div class="text-3xl mt-1">👦</div>
+                                <div class="chat-bubble-left p-3 shadow-sm border border-slate-200">
+                                    <p class="font-bold text-slate-800 text-lg">Hi! How are you?</p>
+                                    <p class="text-sm text-slate-500">¡Hola! ¿Cómo estás?</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 cursor-pointer hover:bg-white p-2 rounded-xl transition mt-2" onclick="playTTS('Hello! I am fine, thanks.')">
+                            <div class="flex gap-3 flex-row-reverse">
+                                <div class="text-3xl mt-1">👧</div>
+                                <div class="chat-bubble-right p-3 shadow-sm border border-indigo-100 text-right">
+                                    <p class="font-bold text-indigo-900 text-lg">Hello! I am fine, thanks.</p>
+                                    <p class="text-sm text-indigo-700">¡Hola! Estoy bien, gracias.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formal -->
+                    <div class="bg-blue-50 p-6 rounded-3xl border border-blue-200">
+                        <h3 class="font-black text-blue-800 text-xl mb-4 border-b border-blue-200 pb-2">Formal (Work & Polite)</h3>
+                        
+                        <div class="space-y-4 cursor-pointer hover:bg-white p-2 rounded-xl transition" onclick="playTTS('Good morning! Nice to meet you.')">
+                            <div class="flex gap-3">
+                                <div class="text-3xl mt-1">👨‍💼</div>
+                                <div class="chat-bubble-left p-3 shadow-sm border border-slate-200">
+                                    <p class="font-bold text-slate-800 text-lg">Good morning! Nice to meet you.</p>
+                                    <p class="text-sm text-slate-500">¡Buenos días! Gusto en conocerte.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 cursor-pointer hover:bg-white p-2 rounded-xl transition mt-2" onclick="playTTS('Good morning! Nice to meet you too.')">
+                            <div class="flex gap-3 flex-row-reverse">
+                                <div class="text-3xl mt-1">👩‍💼</div>
+                                <div class="chat-bubble-right p-3 shadow-sm border border-indigo-100 text-right">
+                                    <p class="font-bold text-indigo-900 text-lg">Good morning! Nice to meet you too.</p>
+                                    <p class="text-sm text-indigo-700">¡Buenos días! Gusto en conocerte también.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <p class="font-bold text-slate-700 mb-2">Vocabulario de tiempo:</p>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="bg-white px-3 py-1.5 rounded-lg border shadow-sm font-bold text-slate-600"><i class="fas fa-sun text-yellow-500"></i> Good morning (Mañana)</span>
+                        <span class="bg-white px-3 py-1.5 rounded-lg border shadow-sm font-bold text-slate-600"><i class="fas fa-cloud-sun text-orange-500"></i> Good afternoon (Tarde)</span>
+                        <span class="bg-white px-3 py-1.5 rounded-lg border shadow-sm font-bold text-slate-600"><i class="fas fa-moon text-indigo-500"></i> Good evening (Noche/Tarde-noche)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-2" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-orange-100 text-orange-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">2</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Farewells (Despedidas)</h2>
+            </div>
+            
+            <div class="bg-white rounded-3xl shadow-lg border border-orange-100 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-6 text-lg font-medium">Formas comunes de despedirse.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-orange-50 p-5 rounded-2xl border border-orange-200 text-center hover:bg-orange-100 transition cursor-pointer" onclick="playTTS('Goodbye')">
+                        <div class="text-4xl mb-3">👋</div>
+                        <h4 class="font-black text-xl text-slate-800">Goodbye / Bye</h4>
+                        <p class="text-orange-700 font-medium">Adiós</p>
+                    </div>
+                    
+                    <div class="bg-orange-50 p-5 rounded-2xl border border-orange-200 text-center hover:bg-orange-100 transition cursor-pointer" onclick="playTTS('See you later')">
+                        <div class="text-4xl mb-3">👀⏱️</div>
+                        <h4 class="font-black text-xl text-slate-800">See you later</h4>
+                        <p class="text-orange-700 font-medium">Nos vemos luego</p>
+                    </div>
+
+                    <div class="bg-orange-50 p-5 rounded-2xl border border-orange-200 text-center hover:bg-orange-100 transition cursor-pointer" onclick="playTTS('See you tomorrow')">
+                        <div class="text-4xl mb-3">📅</div>
+                        <h4 class="font-black text-xl text-slate-800">See you tomorrow</h4>
+                        <p class="text-orange-700 font-medium">Nos vemos mañana</p>
+                    </div>
+
+                    <div class="bg-orange-50 p-5 rounded-2xl border border-orange-200 text-center hover:bg-orange-100 transition cursor-pointer" onclick="playTTS('Have a nice day')">
+                        <div class="text-4xl mb-3">🌟</div>
+                        <h4 class="font-black text-xl text-slate-800">Have a nice day</h4>
+                        <p class="text-orange-700 font-medium">Ten un buen día</p>
+                    </div>
+
+                    <div class="bg-orange-50 p-5 rounded-2xl border border-orange-200 text-center hover:bg-orange-100 transition cursor-pointer md:col-span-2" onclick="playTTS('Good night')">
+                        <div class="text-4xl mb-3">🌙💤</div>
+                        <h4 class="font-black text-xl text-slate-800">Good night</h4>
+                        <p class="text-orange-700 font-medium">Buenas noches (Solo se usa al irse a dormir o despedirse muy tarde, ¡no para saludar!)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-3" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-amber-100 text-amber-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">3</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Practice: Greetings & Farewells</h2>
+            </div>
+            
+            <div class="bg-white rounded-3xl shadow-lg border border-amber-100 p-6 md:p-10">
+                <p class="text-slate-600 mb-6 text-lg font-medium">Selecciona la mejor respuesta tocando la opción correcta.</p>
+                <div id="quiz-greetings" class="space-y-6">
+                    <!-- Loaded by JS -->
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-4" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-blue-100 text-blue-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">4</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Family Vocabulary</h2>
+            </div>
+            
+            <div class="bg-white rounded-3xl shadow-lg border border-blue-100 p-6 md:p-8 mb-6">
+                <p class="text-slate-600 mb-6 text-lg font-medium flex items-center gap-2"><i class="fas fa-hand-pointer text-blue-500"></i> Toca las tarjetas para girarlas y escuchar la pronunciación.</p>
+                
+                <h3 class="font-bold text-slate-700 text-xl mb-3 border-b pb-2">Core Family</h3>
+                <div id="flashcards-family-1" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"></div>
+
+                <h3 class="font-bold text-slate-700 text-xl mb-3 border-b pb-2">Extended Family & Plurals</h3>
+                <div id="flashcards-family-2" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+                
+                <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 mt-6 font-medium text-blue-900 shadow-sm">
+                    💡 <b>Nota de Plurales:</b><br>
+                    Mother + Father = <b>Parents</b> (Padres)<br>
+                    Grandmother + Grandfather = <b>Grandparents</b> (Abuelos)<br>
+                    Brother + Sister = <b>Siblings</b> (Hermanos en general)
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-5" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-rose-100 text-rose-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">5</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Possessive 's (El Apóstrofe S)</h2>
+            </div>
+            
+            <div class="bg-white rounded-3xl shadow-lg border border-rose-100 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Antes de ver el árbol familiar, debes saber esto: En inglés, para decir que algo o alguien le pertenece a otra persona, agregamos <b>'s</b> al <b>dueño</b>.</p>
+                
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 font-mono text-lg md:text-2xl mb-10 font-black bg-rose-50 p-6 rounded-2xl border border-rose-200 text-center shadow-sm">
+                    <span class="text-slate-700">El hermano de <span class="text-rose-600">John</span></span>
+                    <i class="fas fa-arrow-right text-rose-400 text-xl hidden md:block"></i>
+                    <i class="fas fa-arrow-down text-rose-400 text-xl md:hidden"></i>
+                    <span class="bg-white text-slate-800 px-6 py-3 rounded-xl shadow-sm border-2 border-rose-300"><span class="text-rose-600">John's</span> brother</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white border-2 border-rose-200 rounded-2xl p-6 flex flex-col justify-center items-center text-center cursor-pointer hover:bg-rose-50 transition shadow-sm group" onclick="playTTS('Sarah is John\'s wife.')">
+                        <div class="text-4xl mb-4 bg-rose-100 w-16 h-16 rounded-full flex items-center justify-center">💍</div>
+                        <p class="font-black text-xl text-slate-800 mb-2">Sarah is John<span class="text-rose-600 text-2xl">'s</span> wife.</p>
+                        <p class="text-slate-500 font-medium mb-4">Sarah es la esposa de John.</p>
+                        <button class="w-10 h-10 rounded-full bg-rose-100 text-rose-600 shadow-sm flex items-center justify-center group-hover:scale-110 transition"><i class="fas fa-volume-up"></i></button>
+                    </div>
+                    <div class="bg-white border-2 border-rose-200 rounded-2xl p-6 flex flex-col justify-center items-center text-center cursor-pointer hover:bg-rose-50 transition shadow-sm group" onclick="playTTS('Lucy is Tom\'s sister.')">
+                        <div class="text-4xl mb-4 bg-rose-100 w-16 h-16 rounded-full flex items-center justify-center">👧</div>
+                        <p class="font-black text-xl text-slate-800 mb-2">Lucy is Tom<span class="text-rose-600 text-2xl">'s</span> sister.</p>
+                        <p class="text-slate-500 font-medium mb-4">Lucy es la hermana de Tom.</p>
+                        <button class="w-10 h-10 rounded-full bg-rose-100 text-rose-600 shadow-sm flex items-center justify-center group-hover:scale-110 transition"><i class="fas fa-volume-up"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-6" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-purple-100 text-purple-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">6</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Possessive Adjectives</h2>
+            </div>
+            
+            <div class="bg-white rounded-3xl shadow-lg border border-purple-100 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Los usamos para decir de quién es algo sin mencionar el nombre del dueño. Van <b>antes</b> de la persona o cosa. ¡No llevan 's!</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                    <!-- MY -->
+                    <div class="bg-purple-50 p-6 rounded-2xl border-2 border-purple-200 shadow-sm relative overflow-hidden group cursor-pointer" onclick="playTTS('I am Mary. Arthur is my husband.')">
+                        <h3 class="font-black text-3xl text-purple-800 mb-1">My <span class="text-base font-medium text-purple-600 ml-1">(Mi / Mis)</span></h3>
+                        <p class="text-slate-500 font-bold mb-3 uppercase tracking-wider text-[10px]">De: I (Yo)</p>
+                        <div class="bg-white p-4 rounded-xl border border-purple-100">
+                            <p class="text-sm font-bold text-slate-500 mb-1">I am Mary. 👵</p>
+                            <p class="font-bold text-slate-700 text-lg">Arthur is <span class="text-purple-600 underline">my</span> husband.</p>
+                        </div>
+                    </div>
+
+                    <!-- HIS -->
+                    <div class="bg-blue-50 p-6 rounded-2xl border-2 border-blue-200 shadow-sm relative overflow-hidden group cursor-pointer" onclick="playTTS('He is Tom. Lucy is his sister.')">
+                        <h3 class="font-black text-3xl text-blue-800 mb-1">His <span class="text-base font-medium text-blue-600 ml-1">(Su / Sus)</span></h3>
+                        <p class="text-slate-500 font-bold mb-3 uppercase tracking-wider text-[10px]">De: He (Él)</p>
+                        <div class="bg-white p-4 rounded-xl border border-blue-100">
+                            <p class="text-sm font-bold text-slate-500 mb-1">He is Tom. 👦</p>
+                            <p class="font-bold text-slate-700 text-lg">Lucy is <span class="text-blue-600 underline">his</span> sister.</p>
+                        </div>
+                    </div>
+
+                    <!-- HER -->
+                    <div class="bg-rose-50 p-6 rounded-2xl border-2 border-rose-200 shadow-sm relative overflow-hidden group cursor-pointer" onclick="playTTS('She is Sarah. John is her husband.')">
+                        <h3 class="font-black text-3xl text-rose-800 mb-1">Her <span class="text-base font-medium text-rose-600 ml-1">(Su / Sus)</span></h3>
+                        <p class="text-slate-500 font-bold mb-3 uppercase tracking-wider text-[10px]">De: She (Ella)</p>
+                        <div class="bg-white p-4 rounded-xl border border-rose-100">
+                            <p class="text-sm font-bold text-slate-500 mb-1">She is Sarah. 👩</p>
+                            <p class="font-bold text-slate-700 text-lg">John is <span class="text-rose-600 underline">her</span> husband.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-xl">
+                    <p class="font-bold text-amber-900"><i class="fas fa-exclamation-triangle text-amber-600 mr-2"></i>¡Ojo! His vs Her</p>
+                    <p class="text-amber-800 text-sm mt-1">En inglés, <b>His</b> se usa SÓLO si el "dueño" es hombre. <b>Her</b> se usa SÓLO si la "dueña" es mujer. No importa el género de la cosa poseída.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-7" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-purple-100 text-purple-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">7</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">More Possessives</h2>
+            </div>
+            
+            <div class="bg-white rounded-3xl shadow-lg border border-purple-100 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-8 text-lg font-medium">También tenemos palabras para indicar que algo es <b>Nuestro</b>, <b>Tuyo</b> o <b>De ellos</b>.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                    <!-- OUR -->
+                    <div class="bg-emerald-50 p-6 rounded-2xl border-2 border-emerald-200 shadow-sm relative overflow-hidden group cursor-pointer" onclick="playTTS('We are Tom and Lucy. Arthur is our grandfather.')">
+                        <h3 class="font-black text-3xl text-emerald-800 mb-1">Our <span class="text-base font-medium text-emerald-600 ml-1">(Nuestro)</span></h3>
+                        <p class="text-slate-500 font-bold mb-3 uppercase tracking-wider text-[10px]">De: We (Nosotros)</p>
+                        <div class="bg-white p-4 rounded-xl border border-emerald-100">
+                            <p class="text-sm font-bold text-slate-500 mb-1">We are Tom & Lucy. 👦👧</p>
+                            <p class="font-bold text-slate-700 text-lg">Arthur is <span class="text-emerald-600 underline">our</span> grandfather.</p>
+                        </div>
+                    </div>
+
+                    <!-- YOUR -->
+                    <div class="bg-teal-50 p-6 rounded-2xl border-2 border-teal-200 shadow-sm relative overflow-hidden group cursor-pointer" onclick="playTTS('Is this your family?')">
+                        <h3 class="font-black text-3xl text-teal-800 mb-1">Your <span class="text-base font-medium text-teal-600 ml-1">(Tu / Tus)</span></h3>
+                        <p class="text-slate-500 font-bold mb-3 uppercase tracking-wider text-[10px]">De: You (Tú)</p>
+                        <div class="bg-white p-4 rounded-xl border border-teal-100">
+                            <p class="text-sm font-bold text-slate-500 mb-1">Talking to a friend: 🗣️</p>
+                            <p class="font-bold text-slate-700 text-lg">Is this <span class="text-teal-600 underline">your</span> family?</p>
+                        </div>
+                    </div>
+
+                    <!-- THEIR -->
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-indigo-200 shadow-sm relative overflow-hidden group cursor-pointer" onclick="playTTS('They are John and Sarah. Tom is their son.')">
+                        <h3 class="font-black text-3xl text-indigo-800 mb-1">Their <span class="text-base font-medium text-indigo-600 ml-1">(Su de ellos)</span></h3>
+                        <p class="text-slate-500 font-bold mb-3 uppercase tracking-wider text-[10px]">De: They (Ellos)</p>
+                        <div class="bg-white p-4 rounded-xl border border-indigo-100">
+                            <p class="text-sm font-bold text-slate-500 mb-1">They are John & Sarah. 👫</p>
+                            <p class="font-bold text-slate-700 text-lg">Tom is <span class="text-indigo-600 underline">their</span> son.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-8" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-purple-100 text-purple-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">8</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Describing Families</h2>
+            </div>
+            
+            <div class="bg-white rounded-3xl shadow-lg border border-purple-100 p-6 md:p-10 mb-6">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Combinemos la <b>'s</b> y los <b>Adjetivos Posesivos</b> para presentar a la familia detalladamente.</p>
+                
+                <div class="bg-slate-50 rounded-3xl p-6 md:p-8 border border-slate-200 shadow-inner space-y-6">
+                    
+                    <div class="flex flex-col md:flex-row md:items-center gap-4 bg-white p-5 rounded-2xl shadow-sm cursor-pointer hover:border-purple-300 border-2 border-transparent transition" onclick="playTTS('Hello! This is my mother. Her name is Sarah. She is John\'s wife.')">
+                        <div class="text-5xl md:text-6xl bg-purple-100 rounded-full w-20 h-20 flex items-center justify-center shrink-0">👩</div>
+                        <div>
+                            <p class="text-xl md:text-2xl font-black text-slate-800 mb-1">"This is <span class="text-purple-600 underline">my</span> mother."</p>
+                            <p class="text-lg font-bold text-slate-600 mb-1">"<span class="text-rose-500 underline">Her</span> name is Sarah."</p>
+                            <p class="text-lg font-bold text-indigo-600">"She is John<span class="text-indigo-800">'s</span> wife."</p>
+                        </div>
+                        <i class="fas fa-volume-up text-purple-400 text-2xl md:ml-auto"></i>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row md:items-center gap-4 bg-white p-5 rounded-2xl shadow-sm cursor-pointer hover:border-blue-300 border-2 border-transparent transition" onclick="playTTS('Good morning. This is my grandfather. His name is Arthur. He is Mary\'s husband.')">
+                        <div class="text-5xl md:text-6xl bg-blue-100 rounded-full w-20 h-20 flex items-center justify-center shrink-0">👴</div>
+                        <div>
+                            <p class="text-xl md:text-2xl font-black text-slate-800 mb-1">"This is <span class="text-purple-600 underline">my</span> grandfather."</p>
+                            <p class="text-lg font-bold text-slate-600 mb-1">"<span class="text-blue-500 underline">His</span> name is Arthur."</p>
+                            <p class="text-lg font-bold text-indigo-600">"He is Mary<span class="text-indigo-800">'s</span> husband."</p>
+                        </div>
+                        <i class="fas fa-volume-up text-blue-400 text-2xl md:ml-auto"></i>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-9" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-blue-100 text-blue-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">9</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">The Family Tree</h2>
+            </div>
+            
+            <div class="bg-white rounded-3xl shadow-lg border border-blue-100 p-6 md:p-8 mb-6 relative overflow-hidden">
+                <p class="text-slate-600 mb-2 text-lg font-medium text-center">¡Ahora tienes todas las reglas! Toca cada miembro para escuchar cómo se relacionan usando la <b class="text-blue-600">'s</b>.</p>
+                
+                <div class="tree-container bg-slate-50 rounded-3xl border border-slate-200 mt-4 custom-scrollbar shadow-inner">
+                    <ul>
+                        <li>
+                            <div class="flex justify-center gap-4 md:gap-10 mb-4">
+                                <!-- Grandparents -->
+                                <div class="tree-node" onclick="playTTS('Arthur is Mary\'s husband. He is the grandfather.')">
+                                    <span class="text-4xl md:text-5xl mb-1">👴</span>
+                                    <p class="font-black text-blue-900 text-base md:text-lg">Arthur</p>
+                                    <p class="text-[10px] uppercase font-bold text-blue-600">Grandfather</p>
+                                </div>
+                                <div class="tree-node" onclick="playTTS('Mary is Arthur\'s wife. She is the grandmother.')">
+                                    <span class="text-4xl md:text-5xl mb-1">👵</span>
+                                    <p class="font-black text-blue-900 text-base md:text-lg">Mary</p>
+                                    <p class="text-[10px] uppercase font-bold text-blue-600">Grandmother</p>
+                                </div>
+                            </div>
+                            <ul>
+                                <li>
+                                    <div class="flex justify-center gap-2 md:gap-6 mb-4">
+                                        <!-- John's Brother (Uncle) & His Wife (Aunt) -->
+                                        <div class="flex flex-col items-center">
+                                            <div class="flex justify-center gap-2 md:gap-4 mb-4">
+                                                <div class="tree-node bg-indigo-50 border-indigo-200" onclick="playTTS('David is John\'s brother. He is Tom\'s uncle.')">
+                                                    <span class="text-4xl md:text-5xl mb-1">🧔</span>
+                                                    <p class="font-black text-indigo-900 text-base md:text-lg">David</p>
+                                                    <p class="text-[10px] uppercase font-bold text-indigo-600">Uncle</p>
+                                                </div>
+                                                <div class="tree-node bg-indigo-50 border-indigo-200" onclick="playTTS('Emma is David\'s wife. She is Tom\'s aunt.')">
+                                                    <span class="text-4xl md:text-5xl mb-1">👩‍🦰</span>
+                                                    <p class="font-black text-indigo-900 text-base md:text-lg">Emma</p>
+                                                    <p class="text-[10px] uppercase font-bold text-indigo-600">Aunt</p>
+                                                </div>
+                                            </div>
+                                            <ul>
+                                                <li>
+                                                    <div class="tree-node bg-teal-50 border-teal-200 mx-2" onclick="playTTS('Leo is Emma and David\'s son. He is Tom\'s cousin.')">
+                                                        <span class="text-3xl md:text-4xl mb-1">🧒</span>
+                                                        <p class="font-black text-teal-900 text-base">Leo</p>
+                                                        <p class="text-[10px] uppercase font-bold text-teal-600">Cousin</p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <!-- Parents (John & Sarah) -->
+                                        <div class="flex flex-col items-center">
+                                            <div class="flex justify-center gap-2 md:gap-4 mb-4">
+                                                <div class="tree-node bg-rose-50 border-rose-200" onclick="playTTS('John is Sarah\'s husband. He is the father.')">
+                                                    <span class="text-4xl md:text-5xl mb-1">👨</span>
+                                                    <p class="font-black text-rose-900 text-base md:text-lg">John</p>
+                                                    <p class="text-[10px] uppercase font-bold text-rose-600">Father</p>
+                                                </div>
+                                                <div class="tree-node bg-rose-50 border-rose-200" onclick="playTTS('Sarah is John\'s wife. She is the mother.')">
+                                                    <span class="text-4xl md:text-5xl mb-1">👩</span>
+                                                    <p class="font-black text-rose-900 text-base md:text-lg">Sarah</p>
+                                                    <p class="text-[10px] uppercase font-bold text-rose-600">Mother</p>
+                                                </div>
+                                            </div>
+                                            <ul>
+                                                <li>
+                                                    <div class="tree-node bg-emerald-50 border-emerald-200 mx-1 md:mx-2" onclick="playTTS('Tom is Sarah\'s son. He is Lucy\'s brother.')">
+                                                        <span class="text-3xl md:text-4xl mb-1">👦</span>
+                                                        <p class="font-black text-emerald-900 text-base">Tom</p>
+                                                        <p class="text-[10px] uppercase font-bold text-emerald-600">Son/Brother</p>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="tree-node bg-emerald-50 border-emerald-200 mx-1 md:mx-2" onclick="playTTS('Lucy is John\'s daughter. She is Tom\'s sister.')">
+                                                        <span class="text-3xl md:text-4xl mb-1">👧</span>
+                                                        <p class="font-black text-emerald-900 text-base">Lucy</p>
+                                                        <p class="text-[10px] uppercase font-bold text-emerald-600">Daughter</p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-10" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-blue-100 text-blue-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">10</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Practice: Family & Possessives</h2>
+            </div>
+            
+            <div class="bg-white rounded-3xl shadow-lg border border-blue-100 p-6 md:p-10">
+                <p class="text-slate-600 mb-6 text-lg font-medium">Basándote en el árbol genealógico, selecciona la respuesta que complete correctamente cada oración. ¡Usa tus conocimientos de la <b>'s</b> y de <b>his/her</b>!</p>
+                <div id="quiz-tree" class="space-y-6">
+                    <!-- Loaded by JS -->
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-11" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-teal-100 text-teal-700 font-black text-xl w-12 h-12 flex items-center justify-center rounded-2xl shadow-sm">11</span>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-800">Reading: Meet the Family</h2>
+            </div>
+            
+            <div class="bg-white rounded-3xl shadow-lg border border-teal-100 p-6 md:p-10">
+                <p class="text-slate-600 mb-6 text-lg font-medium">Completa el siguiente texto seleccionando la opción correcta en cada espacio.</p>
+                
+                <div class="bg-teal-50 p-6 md:p-10 rounded-3xl border border-teal-200 text-lg md:text-xl leading-[2.5] md:leading-[3] text-slate-700 font-medium shadow-inner" id="dropdown-story">
+                    <select class="dropdown-select mx-1 p-2 bg-white border-2 border-teal-300 rounded-xl font-bold text-teal-800 cursor-pointer focus:outline-none" data-correct="Hello"><option value="">---</option><option value="Goodbye">Goodbye</option><option value="Hello">Hello</option></select> 
+                    ! I am Leo. This is 
+                    <select class="dropdown-select mx-1 p-2 bg-white border-2 border-teal-300 rounded-xl font-bold text-teal-800 cursor-pointer focus:outline-none" data-correct="my"><option value="">---</option><option value="my">my</option><option value="her">her</option></select> 
+                    uncle. 
+                    <select class="dropdown-select mx-1 p-2 bg-white border-2 border-teal-300 rounded-xl font-bold text-teal-800 cursor-pointer focus:outline-none" data-correct="His"><option value="">---</option><option value="His">His</option><option value="Her">Her</option></select> 
+                    name is John. And this is my aunt. 
+                    <select class="dropdown-select mx-1 p-2 bg-white border-2 border-teal-300 rounded-xl font-bold text-teal-800 cursor-pointer focus:outline-none" data-correct="Her"><option value="">---</option><option value="His">His</option><option value="Her">Her</option></select> 
+                    name is Sarah. John and Sarah have two children. 
+                    <select class="dropdown-select mx-1 p-2 bg-white border-2 border-teal-300 rounded-xl font-bold text-teal-800 cursor-pointer focus:outline-none" data-correct="Their"><option value="">---</option><option value="Their">Their</option><option value="Our">Our</option></select> 
+                    children are Tom and Lucy. Well, it is late. 
+                    <select class="dropdown-select mx-1 p-2 bg-white border-2 border-teal-300 rounded-xl font-bold text-teal-800 cursor-pointer focus:outline-none" data-correct="Good night"><option value="">---</option><option value="Good morning">Good morning</option><option value="Good night">Good night</option></select> 
+                    !
+                </div>
+                
+                <button onclick="checkDropdowns('dropdown-story')" class="mt-8 bg-teal-600 text-white text-lg font-black py-4 px-8 rounded-xl shadow-lg hover:bg-teal-700 transition w-full md:w-auto hover:-translate-y-1">Evaluar Lectura</button>
+                <div id="dropdown-feedback" class="hidden mt-6 p-5 rounded-xl font-bold text-lg border"></div>
+            </div>
+        </section>
+
+        <section id="slide-12" class="hidden-slide">
+            <div id="mega-quiz-intro" class="text-center mt-12 mb-8 slide-enter">
+                <div class="w-32 h-32 bg-gradient-to-tr from-rose-500 via-orange-500 to-amber-500 rounded-full flex items-center justify-center text-6xl mx-auto mb-8 text-white shadow-2xl shadow-orange-500/40 animate-bounce">🏆</div>
+                <h2 class="text-4xl md:text-6xl font-black text-slate-800 tracking-tight mb-4">¡Examen Final!</h2>
+                <p class="text-slate-600 text-xl md:text-2xl font-medium max-w-2xl mx-auto mb-10">Un mega-examen de 12 preguntas. Combina saludos, despedidas, miembros de la familia y adjetivos posesivos. ¡No hay que escribir nada!</p>
+                <button onclick="startMegaQuiz();" class="bg-slate-900 hover:bg-black text-white text-2xl font-black py-5 px-16 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1 w-full sm:w-auto">
+                    Iniciar Examen
+                </button>
+            </div>
+
+            <!-- Quiz Container -->
+            <div id="mega-quiz-container" class="hidden bg-white rounded-3xl shadow-2xl border border-orange-100 p-6 md:p-12 max-w-3xl mx-auto relative overflow-hidden mt-4">
+                <div class="absolute top-0 left-0 w-full h-2 bg-slate-100">
+                    <div id="mega-quiz-progress" class="h-full bg-gradient-to-r from-emerald-400 to-green-500 transition-all duration-300" style="width: 0%"></div>
+                </div>
+
+                <div id="mega-quiz-area">
+                    <div class="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
+                        <span class="text-sm md:text-base font-bold text-slate-400 uppercase tracking-widest" id="mega-quiz-counter">Pregunta 1 de 12</span>
+                    </div>
+                    
+                    <h3 class="text-2xl md:text-4xl font-medium text-slate-800 mb-10 leading-relaxed text-center" id="mega-quiz-question">Question?</h3>
+                    
+                    <div id="mega-quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Options generated by JS -->
+                    </div>
+
+                    <div id="mega-quiz-feedback" class="hidden mt-8 p-5 rounded-2xl text-center font-bold text-xl border"></div>
+                </div>
+
+                <div id="mega-quiz-result" class="hidden text-center py-10 slide-enter">
+                    <div class="text-7xl mb-6" id="mq-emoji">🎉</div>
+                    <h3 class="text-4xl font-black text-slate-800 mb-4">¡Examen Completado!</h3>
+                    <p class="text-xl text-slate-600 mb-8 font-medium">Tu puntuación: <span id="mq-score" class="font-black text-indigo-600 text-5xl mx-2"></span> / 12</p>
+                    <button onclick="location.reload()" class="bg-gradient-to-r from-orange-500 to-rose-500 text-white font-black text-xl py-4 px-10 rounded-2xl shadow-xl transition hover:-translate-y-1 w-full sm:w-auto">Finalizar y Repetir</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-slate-200 p-4 md:p-6 z-30 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+            <div class="max-w-5xl mx-auto flex justify-between gap-4">
+                <button id="btn-prev" onclick="prevSlide()" class="flex-1 bg-slate-100 text-slate-600 font-black text-base md:text-lg py-3 md:py-4 px-4 rounded-2xl hover:bg-slate-200 transition opacity-50 cursor-not-allowed disabled">
+                    <i class="fas fa-arrow-left mr-2"></i> Atrás
+                </button>
+                <button id="btn-next" onclick="nextSlide()" class="flex-1 bg-slate-800 text-white font-black text-base md:text-lg py-3 md:py-4 px-4 rounded-2xl shadow-lg transition hover:-translate-y-1 transition-colors duration-300">
+                    Siguiente <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="dictionary-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex justify-center items-end sm:items-center">
+        <div class="bg-white w-full sm:max-w-3xl h-[85vh] sm:h-[80vh] sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col slide-enter border border-slate-200">
+            <!-- Header -->
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-800 text-white sm:rounded-t-3xl rounded-t-3xl">
+                <div>
+                    <h3 class="font-black text-2xl flex items-center gap-3"><i class="fas fa-book-open"></i> English Dictionary</h3>
+                </div>
+                <button onclick="toggleDictionary()" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="flex border-b border-slate-200 overflow-x-auto custom-scrollbar bg-slate-50 px-2">
+                <button onclick="switchDictTab('greetings')" id="tab-greetings" class="px-6 py-4 font-black text-base text-amber-600 border-b-4 border-amber-600 whitespace-nowrap"><i class="fas fa-sun mr-2"></i> Greetings</button>
+                <button onclick="switchDictTab('family')" id="tab-family" class="px-6 py-4 font-bold text-base text-slate-400 border-b-4 border-transparent hover:text-slate-600 whitespace-nowrap"><i class="fas fa-users mr-2"></i> Family</button>
+                <button onclick="switchDictTab('possessives')" id="tab-possessives" class="px-6 py-4 font-bold text-base text-slate-400 border-b-4 border-transparent hover:text-slate-600 whitespace-nowrap"><i class="fas fa-key mr-2"></i> Possessives</button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar bg-slate-50">
+                <div id="dict-greetings" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                <div id="dict-family" class="grid grid-cols-1 md:grid-cols-2 gap-3 hidden"></div>
+                <div id="dict-possessives" class="grid grid-cols-1 md:grid-cols-2 gap-3 hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- STREAMING_CHUNK:Data Structures ---
+        const dictData = {
+            greetings: [
+                { en: "Hello / Hi", es: "Hola", emoji: "👋" },
+                { en: "Good morning", es: "Buenos días", emoji: "🌅" },
+                { en: "Good afternoon", es: "Buenas tardes", emoji: "🌇" },
+                { en: "Good evening", es: "Buenas noches (saludo)", emoji: "🌆" },
+                { en: "How are you?", es: "¿Cómo estás?", emoji: "❓" },
+                { en: "Goodbye / Bye", es: "Adiós", emoji: "🏃" },
+                { en: "See you later", es: "Nos vemos luego", emoji: "⌚" },
+                { en: "Good night", es: "Buenas noches (despedida)", emoji: "🌙" }
+            ],
+            family: [
+                { en: "Mother", es: "Madre", emoji: "👩" }, { en: "Father", es: "Padre", emoji: "👨" },
+                { en: "Brother", es: "Hermano", emoji: "👦" }, { en: "Sister", es: "Hermana", emoji: "👧" },
+                { en: "Grandmother", es: "Abuela", emoji: "👵" }, { en: "Grandfather", es: "Abuelo", emoji: "👴" },
+                { en: "Uncle", es: "Tío", emoji: "🧔" }, { en: "Aunt", es: "Tía", emoji: "👩‍🦱" },
+                { en: "Cousin", es: "Primo/a", emoji: "🧒" }, { en: "Parents", es: "Padres", emoji: "👫" },
+                { en: "Siblings", es: "Hermanos", emoji: "👦👧" }, { en: "Grandparents", es: "Abuelos", emoji: "👴👵" }
+            ],
+            possessives: [
+                { en: "My", es: "Mi / Mis (Yo)", emoji: "1️⃣" },
+                { en: "His", es: "Su / Sus (de él)", emoji: "👨" },
+                { en: "Her", es: "Su / Sus (de ella)", emoji: "👩" },
+                { en: "Our", es: "Nuestro / Nuestra", emoji: "👪" },
+                { en: "Your", es: "Tu / Tus", emoji: "👉" },
+                { en: "Their", es: "Su / Sus (de ellos)", emoji: "👨‍👩‍👧‍👦" }
+            ]
+        };
+
+        const quizzesData = {
+            'quiz-greetings': [
+                { q: "It is 8:00 AM. What do you say?", options: ["Good night", "Good morning", "Good evening"], ans: 1 },
+                { q: "You meet your friend. You say: 'Hi! ______'", options: ["How are you?", "Goodbye!", "See you tomorrow."], ans: 0 },
+                { q: "You are going to sleep. You say:", options: ["Good afternoon", "Hello", "Good night"], ans: 2 }
+            ],
+            'quiz-tree': [
+                { q: "Arthur is John's ______.", options: ["father", "uncle", "brother"], ans: 0 },
+                { q: "Sarah is Tom's mother. Tom is ______ son.", options: ["his", "Sarah's", "her's"], ans: 1 },
+                { q: "Tom and Lucy are brother and sister. John is ______ father.", options: ["their", "our", "his"], ans: 0 },
+                { q: "David is John's brother. David is Tom's ______.", options: ["grandfather", "cousin", "uncle"], ans: 2 },
+                { q: "Emma is David's wife. Leo is ______ son.", options: ["their", "our", "her"], ans: 2 },
+                { q: "I am Tom. Lucy is ______ sister.", options: ["my", "his", "your"], ans: 0 }
+            ]
+        };
+
+        const megaQuizQuestions = [
+            { q: "It is 3:00 PM. You say: _____.", options: ["Good morning", "Good afternoon"], ans: 1 },
+            { q: "When you leave, you say: _____.", options: ["Goodbye", "Hello"], ans: 0 },
+            { q: "My mother's father is my _____.", options: ["Uncle", "Grandfather"], ans: 1 },
+            { q: "My father and mother are my _____.", options: ["Parents", "Siblings"], ans: 0 },
+            { q: "This is a boy. _____ name is Tom.", options: ["His", "Her"], ans: 0 },
+            { q: "This is a girl. _____ name is Lucy.", options: ["His", "Her"], ans: 1 },
+            { q: "This is the car of John. = It is _____ car.", options: ["Johns", "John's"], ans: 1 },
+            { q: "We are friends. This is _____ school.", options: ["my", "our"], ans: 1 },
+            { q: "Good night! = _____.", options: ["¡Buenos días!", "¡Buenas noches! (Al dormir)"], ans: 1 },
+            { q: "My sister and I are _____.", options: ["Parents", "Siblings"], ans: 1 },
+            { q: "The sister of my father is my _____.", options: ["Aunt", "Cousin"], ans: 0 },
+            { q: "They are students. _____ books are here.", options: ["Their", "Our"], ans: 0 }
+        ];
+
+        // --- STREAMING_CHUNK:Javascript Logic - Nav ---
+        const totalSlides = 13; // 0 to 12
+        let currentSlide = 0;
+        
+        const slideThemes = [
+            { color: 'amber', title: 'Intro' },
+            { color: 'amber', title: 'Greetings' },
+            { color: 'orange', title: 'Farewells' },
+            { color: 'amber', title: 'Quiz 1' },
+            { color: 'blue', title: 'Family Vocab' },
+            { color: 'rose', title: "Possessive 's" },
+            { color: 'purple', title: 'My, His, Her' },
+            { color: 'purple', title: 'Our, Your, Their' },
+            { color: 'purple', title: 'Describing' },
+            { color: 'blue', title: 'Family Tree' },
+            { color: 'blue', title: 'Tree Quiz' },
+            { color: 'teal', title: 'Reading' },
+            { color: 'rose', title: 'Mega Quiz' }
+        ];
+
+        function updateNavUI() {
+            const theme = slideThemes[currentSlide];
+            
+            // Progress Bar
+            const progress = (currentSlide / (totalSlides - 1)) * 100;
+            document.getElementById('main-progress').style.width = `${progress}%`;
+            
+            // Set colors based on theme
+            const colorMap = {
+                'amber': 'from-amber-400 to-orange-500',
+                'orange': 'from-orange-400 to-rose-500',
+                'blue': 'from-blue-400 to-indigo-500',
+                'purple': 'from-purple-500 to-fuchsia-500',
+                'teal': 'from-teal-400 to-emerald-500',
+                'rose': 'from-rose-500 to-pink-500'
+            };
+            const btnColorMap = {
+                'amber': 'bg-amber-600 hover:bg-amber-700',
+                'orange': 'bg-orange-600 hover:bg-orange-700',
+                'blue': 'bg-blue-600 hover:bg-blue-700',
+                'purple': 'bg-purple-600 hover:bg-purple-700',
+                'teal': 'bg-teal-600 hover:bg-teal-700',
+                'rose': 'bg-slate-800 hover:bg-slate-900' // Dark button for mega quiz
+            };
+            
+            const navIconBg = document.getElementById('nav-icon-bg');
+            navIconBg.className = `w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center text-white font-bold shadow-lg transition-all duration-500 bg-gradient-to-br ${colorMap[theme.color]}`;
+            
+            const btnNext = document.getElementById('btn-next');
+            btnNext.className = `flex-1 text-white font-black text-base md:text-lg py-3 md:py-4 px-4 rounded-2xl shadow-lg transition hover:-translate-y-1 transition-colors duration-300 ${btnColorMap[theme.color]}`;
+
+            document.getElementById('nav-topic-title').innerText = theme.title;
+            document.getElementById('slide-counter-nav').innerText = `${currentSlide + 1}/${totalSlides}`;
+
+            // Hide all slides
+            for (let i = 0; i < totalSlides; i++) {
+                const s = document.getElementById(`slide-${i}`);
+                if(s) {
+                    s.classList.add('hidden-slide');
+                    s.classList.remove('slide-enter');
+                }
+            }
+
+            // Show current
+            const current = document.getElementById(`slide-${currentSlide}`);
+            if (current) {
+                current.classList.remove('hidden-slide');
+                void current.offsetWidth; 
+                current.classList.add('slide-enter');
+            }
+
+            // Buttons logic
+            const btnPrev = document.getElementById('btn-prev');
+
+            if (currentSlide === 0) {
+                btnPrev.classList.add('opacity-50', 'cursor-not-allowed');
+                btnPrev.setAttribute('disabled', 'true');
+            } else {
+                btnPrev.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnPrev.removeAttribute('disabled');
+            }
+
+            if (currentSlide === totalSlides - 1) { 
+                btnNext.classList.add('hidden');
+            } else {
+                btnNext.classList.remove('hidden');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.speechSynthesis.cancel();
+        }
+
+        function nextSlide() { if (currentSlide < totalSlides - 1) { currentSlide++; updateNavUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateNavUI(); } }
+
+        function playTTS(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); 
+                const msg = new SpeechSynthesisUtterance(text);
+                msg.lang = 'en-US'; 
+                msg.rate = 0.9;     
+                window.speechSynthesis.speak(msg);
+            }
+        }
+
+        // --- STREAMING_CHUNK:Javascript Logic - Quizzes & Generators ---
+        function generateFlashcards(dataArray, containerId, themeColor = 'blue') {
+            const container = document.getElementById(containerId);
+            if(!container) return;
+            
+            const colorMap = {
+                'blue': { front: 'bg-blue-50 border-blue-200 text-blue-900', back: 'bg-blue-600 border-blue-600' }
+            };
+            const c = colorMap[themeColor];
+
+            let html = '';
+            dataArray.forEach(item => {
+                html += `
+                <div class="flip-card h-32 md:h-36" onclick="this.classList.toggle('flipped'); if(this.classList.contains('flipped')) playTTS('${item.en}');">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front ${c.front} border-2 shadow-sm flex flex-col items-center justify-center p-2 transition hover:shadow-md">
+                            <span class="text-4xl md:text-5xl mb-2 drop-shadow-sm">${item.emoji}</span>
+                            <span class="font-bold text-base md:text-lg text-center leading-tight">${item.en}</span>
+                        </div>
+                        <div class="flip-card-back ${c.back} border-2 shadow-md flex items-center justify-center p-3 text-white text-center">
+                            <span class="font-black text-lg md:text-xl">${item.es}</span>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderQuiz(containerId, themeColor = 'slate') {
+            const container = document.getElementById(containerId);
+            if(!container || !quizzesData[containerId]) return;
+            const data = quizzesData[containerId];
+            
+            let themeClass = 'border-slate-200 bg-slate-50';
+            let hoverClass = 'hover:border-indigo-400 hover:bg-indigo-50';
+            
+            if(themeColor === 'amber') { themeClass = 'border-amber-100 bg-amber-50/50'; hoverClass = 'hover:border-amber-400 hover:bg-amber-100'; }
+            if(themeColor === 'blue') { themeClass = 'border-blue-100 bg-blue-50/50'; hoverClass = 'hover:border-blue-400 hover:bg-blue-100'; }
+            if(themeColor === 'purple') { themeClass = 'border-purple-100 bg-purple-50/50'; hoverClass = 'hover:border-purple-400 hover:bg-purple-100'; }
+
+            let html = '';
+            data.forEach((q, index) => {
+                const gridCols = q.options.length > 2 ? 'sm:grid-cols-3' : 'sm:grid-cols-2';
+                html += `
+                    <div class="${themeClass} p-5 md:p-6 rounded-2xl border" id="${containerId}-q-${index}">
+                        <p class="font-bold text-lg md:text-xl text-slate-800 mb-6">${index + 1}. ${q.q}</p>
+                        <div class="grid grid-cols-1 ${gridCols} gap-3 md:gap-4">
+                            ${q.options.map((opt, i) => `
+                                <button onclick="checkQuizAnswer('${containerId}', ${index}, ${i}, ${q.ans})" class="bg-white border-2 border-slate-200 text-slate-700 font-bold text-base md:text-lg py-3 px-4 rounded-xl ${hoverClass} transition quiz-btn shadow-sm hover:-translate-y-0.5 w-full">
+                                    ${opt}
+                                </button>
+                            `).join('')}
+                        </div>
+                        <div id="${containerId}-feedback-${index}" class="hidden mt-4 font-bold text-base p-4 rounded-xl border"></div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function checkQuizAnswer(containerId, qIndex, selectedIndex, correctIndex) {
+            const qContainer = document.getElementById(`${containerId}-q-${qIndex}`);
+            const buttons = qContainer.querySelectorAll('.quiz-btn');
+            const feedback = document.getElementById(`${containerId}-feedback-${qIndex}`);
+            
+            buttons.forEach(b => {
+                b.disabled = true;
+                b.className = b.className.replace(/hover:[^\s]+/g, '');
+            });
+
+            feedback.classList.remove('hidden', 'bg-red-50', 'text-red-700', 'border-red-200', 'bg-green-50', 'text-green-700', 'border-green-200');
+
+            if (selectedIndex === correctIndex) {
+                buttons[selectedIndex].classList.replace('border-slate-200', 'border-green-500');
+                buttons[selectedIndex].classList.add('bg-green-500', 'text-white');
+                buttons[selectedIndex].classList.remove('text-slate-700', 'bg-white');
+                feedback.classList.add('bg-green-50', 'text-green-700', 'border-green-200');
+                feedback.innerHTML = '<i class="fas fa-check-circle mr-2"></i> ¡Correcto!';
+            } else {
+                buttons[selectedIndex].classList.replace('border-slate-200', 'border-red-500');
+                buttons[selectedIndex].classList.add('bg-red-500', 'text-white');
+                buttons[selectedIndex].classList.remove('text-slate-700', 'bg-white');
+                
+                buttons[correctIndex].classList.replace('border-slate-200', 'border-green-400');
+                buttons[correctIndex].classList.add('bg-green-50', 'text-green-800');
+                
+                feedback.classList.add('bg-red-50', 'text-red-700', 'border-red-200');
+                feedback.innerHTML = '<i class="fas fa-times-circle mr-2"></i> Incorrecto.';
+            }
+        }
+
+        function checkDropdowns(containerId) {
+            const container = document.getElementById(containerId);
+            const selects = container.querySelectorAll('.dropdown-select');
+            let correctCount = 0;
+
+            selects.forEach(select => {
+                const correctAns = select.getAttribute('data-correct');
+                const userVal = select.value;
+
+                select.classList.remove('text-teal-800', 'text-green-700', 'text-red-700', 'border-teal-300', 'border-green-500', 'border-red-500', 'bg-white', 'bg-green-50', 'bg-red-50');
+
+                if (userVal === correctAns) {
+                    select.classList.add('text-green-700', 'border-green-500', 'bg-green-50');
+                    correctCount++;
+                } else {
+                    select.classList.add('text-red-700', 'border-red-500', 'bg-red-50');
+                }
+            });
+
+            const feedbackEl = document.getElementById('dropdown-feedback');
+            feedbackEl.classList.remove('hidden', 'bg-green-50', 'text-green-800', 'border-green-200', 'bg-amber-50', 'text-amber-800', 'border-amber-200');
+            
+            if (correctCount === selects.length) {
+                feedbackEl.classList.add('bg-green-50', 'text-green-800', 'border-green-200');
+                feedbackEl.innerHTML = '<i class="fas fa-check-circle mr-2 text-xl"></i> ¡Perfecto! Has completado el texto correctamente.';
+            } else {
+                feedbackEl.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-200');
+                feedbackEl.innerHTML = `<i class="fas fa-exclamation-triangle mr-2 text-xl"></i> Tienes ${correctCount} de ${selects.length} correctas. ¡Sigue intentando!`;
+            }
+        }
+
+        // --- STREAMING_CHUNK:Javascript Logic - Mega Quiz & Modals ---
+        let megaQuizCurrent = 0;
+        let megaQuizScore = 0;
+
+        function startMegaQuiz() {
+            document.getElementById('mega-quiz-intro').classList.add('hidden');
+            document.getElementById('mega-quiz-container').classList.remove('hidden');
+            megaQuizQuestions.sort(() => Math.random() - 0.5); // Shuffle
+            megaQuizCurrent = 0;
+            megaQuizScore = 0;
+            renderMegaQuizQuestion();
+        }
+
+        function renderMegaQuizQuestion() {
+            if (megaQuizCurrent >= megaQuizQuestions.length) {
+                showMegaQuizResult();
+                return;
+            }
+
+            const q = megaQuizQuestions[megaQuizCurrent];
+            document.getElementById('mega-quiz-counter').innerText = `Pregunta ${megaQuizCurrent + 1} de ${megaQuizQuestions.length}`;
+            
+            let formattedQ = q.q.replace('_____', `<span id="mega-blank" class="inline-block px-1 border-b-4 border-dashed border-slate-300 text-indigo-500 font-bold mx-1 pb-1 min-w-[3rem] text-center">___</span>`);
+            document.getElementById('mega-quiz-question').innerHTML = formattedQ;
+            
+            const progress = ((megaQuizCurrent) / megaQuizQuestions.length) * 100;
+            document.getElementById('mega-quiz-progress').style.width = `${progress}%`;
+
+            let optionsHtml = '';
+            q.options.forEach((opt, i) => {
+                optionsHtml += `<button onclick="handleMegaQuizAnswer(${i}, ${q.ans})" class="mega-option w-full bg-slate-50 border-2 border-slate-200 text-slate-700 font-bold py-5 px-6 rounded-2xl hover:border-indigo-400 hover:bg-indigo-50 transition text-lg shadow-sm hover:-translate-y-0.5">${opt}</button>`;
+            });
+            document.getElementById('mega-quiz-options').innerHTML = optionsHtml;
+            document.getElementById('mega-quiz-feedback').classList.add('hidden');
+        }
+
+        function handleMegaQuizAnswer(selected, correct) {
+            const buttons = document.querySelectorAll('.mega-option');
+            buttons.forEach(b => {
+                b.disabled = true;
+                b.classList.remove('hover:border-indigo-400', 'hover:bg-indigo-50', 'hover:-translate-y-0.5');
+            });
+
+            const feedback = document.getElementById('mega-quiz-feedback');
+            const blank = document.getElementById('mega-blank');
+            const q = megaQuizQuestions[megaQuizCurrent];
+
+            feedback.classList.remove('hidden', 'bg-green-50', 'text-green-700', 'border-green-200', 'bg-red-50', 'text-red-700', 'border-red-200');
+
+            if (selected === correct) {
+                buttons[selected].classList.replace('border-slate-200', 'border-green-500');
+                buttons[selected].classList.replace('bg-slate-50', 'bg-green-500');
+                buttons[selected].classList.replace('text-slate-700', 'text-white');
+                megaQuizScore++;
+                
+                if(blank) {
+                    blank.innerText = q.options[q.ans];
+                    blank.classList.replace('border-slate-300', 'border-green-400');
+                    blank.classList.replace('text-indigo-500', 'text-green-600');
+                }
+                
+                feedback.classList.add('bg-green-50', 'text-green-700', 'border', 'border-green-200');
+                feedback.innerHTML = '<i class="fas fa-check-circle mr-2"></i> ¡Correcto!';
+            } else {
+                buttons[selected].classList.replace('border-slate-200', 'border-red-500');
+                buttons[selected].classList.replace('bg-slate-50', 'bg-red-500');
+                buttons[selected].classList.replace('text-slate-700', 'text-white');
+                
+                buttons[correct].classList.replace('border-slate-200', 'border-green-400');
+                buttons[correct].classList.replace('bg-slate-50', 'bg-green-50');
+                
+                feedback.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200');
+                feedback.innerHTML = '<i class="fas fa-times-circle mr-2"></i> Incorrecto.';
+            }
+
+            setTimeout(() => {
+                megaQuizCurrent++;
+                renderMegaQuizQuestion();
+            }, 1200);
+        }
+
+        function showMegaQuizResult() {
+            document.getElementById('mega-quiz-area').classList.add('hidden');
+            document.getElementById('mega-quiz-progress').style.width = `100%`;
+            const resultArea = document.getElementById('mega-quiz-result');
+            resultArea.classList.remove('hidden');
+            
+            document.getElementById('mq-score').innerText = megaQuizScore;
+            const emoji = document.getElementById('mq-emoji');
+            
+            if (megaQuizScore === 12) { emoji.innerText = '🏆'; }
+            else if (megaQuizScore >= 9) { emoji.innerText = '🌟'; }
+            else { emoji.innerText = '💪'; }
+        }
+
+        function toggleDictionary() {
+            const modal = document.getElementById('dictionary-modal');
+            modal.classList.toggle('hidden');
+            if(!modal.classList.contains('hidden')){
+                if(document.getElementById('dict-family').innerHTML === "") {
+                    renderDictionaryList(dictData.greetings, 'dict-greetings', 'text-amber-600', 'bg-amber-50');
+                    renderDictionaryList(dictData.family, 'dict-family', 'text-blue-600', 'bg-blue-50');
+                    renderDictionaryList(dictData.possessives, 'dict-possessives', 'text-purple-600', 'bg-purple-50');
+                }
+            }
+        }
+
+        function switchDictTab(tabName) {
+            ['greetings', 'family', 'possessives'].forEach(t => {
+                const tab = document.getElementById(`tab-${t}`);
+                tab.className = tab.className.replace(/text-[a-z]+-600/g, 'text-slate-400');
+                tab.className = tab.className.replace(/border-[a-z]+-600/g, 'border-transparent');
+                
+                document.getElementById(`dict-${t}`).classList.add('hidden');
+            });
+            
+            const activeTab = document.getElementById(`tab-${tabName}`);
+            const color = tabName === 'greetings' ? 'amber' : tabName === 'family' ? 'blue' : 'purple';
+            
+            activeTab.classList.remove('text-slate-400', 'border-transparent');
+            activeTab.classList.add(`text-${color}-600`, `border-${color}-600`);
+            
+            document.getElementById(`dict-${tabName}`).classList.remove('hidden');
+        }
+
+        function renderDictionaryList(data, containerId, textColorClass, bgClass) {
+            const container = document.getElementById(containerId);
+            let html = '';
+            data.forEach(item => {
+                html += `
+                    <div class="bg-white p-3 rounded-2xl border border-slate-200 flex items-center gap-3 hover:shadow-md transition-all cursor-pointer group" onclick="playTTS('${item.en}')">
+                        <div class="text-2xl ${bgClass} w-12 h-12 rounded-xl flex items-center justify-center border border-slate-100 shadow-sm shrink-0">${item.emoji}</div>
+                        <div class="flex-1">
+                            <p class="font-bold text-slate-800 text-base">${item.en}</p>
+                            <p class="text-xs text-slate-500 font-medium">${item.es}</p>
+                        </div>
+                        <div class="w-8 h-8 rounded-full ${bgClass} ${textColorClass} flex items-center justify-center shrink-0 group-hover:scale-110 transition">
+                            <i class="fas fa-volume-up text-xs"></i>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // --- STREAMING_CHUNK:Bootstrapping ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup Flashcards
+            generateFlashcards(dictData.family.slice(0, 8), 'flashcards-family-1', 'blue');
+            generateFlashcards(dictData.family.slice(8, 12), 'flashcards-family-2', 'blue');
+            
+            // Setup Quizzes (No Typing required)
+            renderQuiz('quiz-greetings', 'amber');
+            renderQuiz('quiz-tree', 'blue');
+            
+            // Init Nav
+            updateNavUI();
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Masterclass: Storytelling (Past & Future)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+        
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            touch-action: manipulation; 
+            -webkit-tap-highlight-color: transparent;
+            background-color: #f1f5f9;
+        }
+        
+        /* Animaciones de entrada */
+        .slide-enter { animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hidden-slide { display: none !important; }
+
+        /* Estilos de Tarjetas Suaves */
+        .soft-card {
+            background-color: white;
+            border-radius: 2rem;
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        /* Timeline Elements */
+        .timeline-line {
+            position: absolute; left: 50%; top: 0; bottom: 0; width: 4px; background: #e2e8f0; transform: translateX(-50%);
+        }
+        
+        /* Fórmulas Visuales */
+        .formula-box {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 0.5rem 1rem; border-radius: 1rem; font-weight: 900;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 2px solid rgba(255,255,255,0.5);
+            font-size: 1rem; letter-spacing: 0.5px;
+        }
+
+        /* Inputs y Selects */
+        .dropdown-select {
+            appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1em;
+            padding-right: 2rem !important; cursor: pointer; transition: all 0.3s ease;
+        }
+        
+        .inline-input {
+            width: 140px; text-align: center; border-bottom: 3px solid #cbd5e1;
+            background-color: rgba(255,255,255,0.8); font-weight: 800; color: #334155;
+            transition: all 0.3s ease; padding: 4px 8px; outline: none; border-radius: 4px 4px 0 0;
+        }
+        .inline-input:focus { border-bottom-color: #6366f1; background-color: #e0e7ff;}
+        .inline-input.correct { border-bottom-color: #10b981; color: #047857; background-color: #d1fae5; }
+        .inline-input.incorrect { border-bottom-color: #f43f5e; color: #be123c; background-color: #ffe4e6; animation: shake 0.4s; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+
+        /* Match Game */
+        .match-btn { transition: all 0.2s; cursor: pointer; user-select: none; }
+        .match-btn:active { transform: scale(0.95); }
+        .match-btn.selected { transform: scale(1.02); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.5); border-color: #8b5cf6; }
+        .match-btn.matched { background-color: #d1fae5; border-color: #10b981; color: #047857; opacity: 0.6; pointer-events: none; }
+        .match-btn.error { animation: shake 0.4s; background-color: #fee2e2; border-color: #ef4444; }
+
+        /* Sentence Builder */
+        .word-tag { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; user-select: none; }
+        .word-tag:active { transform: scale(0.92); }
+
+        /* Flip Cards para Vocabulario */
+        .flip-card { perspective: 1000px; cursor: pointer; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 1rem; }
+        .flip-card-back { transform: rotateY(180deg); }
+
+        /* Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        input[type="text"], select { font-size: 16px !important; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-purple-200">
+
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-lg border-b border-slate-200 z-40 shadow-sm transition-colors duration-500" id="main-nav">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 md:gap-4">
+                <div id="nav-icon" class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center text-white font-bold shadow-lg transition-all duration-500">
+                    <i class="fas fa-hourglass-half text-lg md:text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-black text-lg md:text-xl leading-tight text-slate-800 tracking-tight">Storyteller</h1>
+                    <p class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mt-1" id="nav-title">Introducción</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <span id="slide-counter" class="font-bold text-sm text-slate-400 hidden sm:block bg-slate-100 px-3 py-1 rounded-lg">1 / 10</span>
+                <button onclick="toggleDictionary()" class="flex items-center gap-2 bg-slate-800 text-white px-4 py-2 md:px-5 md:py-3 rounded-xl font-bold hover:bg-slate-700 transition shadow-md text-xs md:text-sm">
+                    <i class="fas fa-book"></i> <span class="hidden sm:inline">Diccionario</span>
+                </button>
+            </div>
+        </div>
+        <div class="w-full bg-slate-100 h-1.5 md:h-2">
+            <div id="main-progress" class="bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-500 h-full transition-all duration-500 rounded-r-full" style="width: 0%"></div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-5xl mx-auto px-4 pt-28 pb-40 min-h-screen relative">
+        
+        <!-- ========================================== -->
+        <!-- SLIDE 0: INTRO -->
+        <!-- ========================================== -->
+        <section id="slide-0" class="slide-enter mt-4">
+            <div class="soft-card p-6 md:p-14 text-center border-t-8 border-t-purple-500 relative overflow-hidden bg-gradient-to-b from-white to-purple-50/30">
+                <div class="absolute -top-20 -right-20 w-64 h-64 bg-purple-100 rounded-full blur-3xl opacity-60"></div>
+                
+                <div class="relative z-10">
+                    <div class="w-24 h-24 md:w-32 md:h-32 bg-purple-100 rounded-[2rem] flex items-center justify-center text-5xl md:text-7xl mx-auto mb-8 shadow-inner border-4 border-white transform rotate-3">🕰️</div>
+                    <h2 class="text-4xl md:text-6xl font-black text-slate-800 mb-6 tracking-tight">The Time Traveler</h2>
+                    <p class="text-slate-600 mb-10 max-w-2xl mx-auto text-lg md:text-xl font-medium leading-relaxed">Aprende a contar historias. Viajaremos al <b>Pasado</b> para recordar, usaremos <b>Phrasal Verbs</b> para darle estilo, y saltaremos al <b>Futuro</b> para hablar de nuestros planes.</p>
+                    
+                    <div class="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto mb-12 text-left">
+                        <div class="bg-indigo-50 p-5 rounded-2xl border border-indigo-100">
+                            <span class="text-3xl mb-2 block">⏪</span>
+                            <h4 class="font-black text-indigo-900 text-lg">El Pasado</h4>
+                            <p class="text-indigo-700 text-sm font-medium mt-1">Sucesos terminados y anécdotas.</p>
+                        </div>
+                        <div class="bg-teal-50 p-5 rounded-2xl border border-teal-100">
+                            <span class="text-3xl mb-2 block">🗣️</span>
+                            <h4 class="font-black text-teal-900 text-lg">Phrasal Verbs</h4>
+                            <p class="text-teal-700 text-sm font-medium mt-1">Verbos compuestos para historias nativas.</p>
+                        </div>
+                        <div class="bg-amber-50 p-5 rounded-2xl border border-amber-100">
+                            <span class="text-3xl mb-2 block">⏩</span>
+                            <h4 class="font-black text-amber-900 text-lg">El Futuro</h4>
+                            <p class="text-amber-700 text-sm font-medium mt-1">Planes (Going to) y promesas (Will).</p>
+                        </div>
+                    </div>
+                    
+                    <button onclick="nextSlide()" class="bg-purple-600 hover:bg-purple-700 text-white text-xl md:text-2xl font-black py-4 md:py-5 px-10 md:px-16 rounded-[2rem] shadow-xl shadow-purple-500/30 transition-all transform hover:-translate-y-1 w-full sm:w-auto">
+                        Empezar el Viaje <i class="fas fa-rocket ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 1: THE PAST SIMPLE -->
+        <!-- ========================================== -->
+        <section id="slide-1" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="bg-indigo-100 text-indigo-600 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm">1</span>
+                <h2 class="text-3xl md:text-5xl font-black text-slate-800">The Past Simple</h2>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 border-t-8 border-t-indigo-500">
+                <p class="text-slate-600 mb-8 text-xl font-medium">Usamos el Pasado Simple para hablar de acciones que <b>empezaron y terminaron en el pasado</b>. Es la herramienta principal para contar historias.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-10">
+                    <!-- Afirmative -->
+                    <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200">
+                        <h3 class="text-2xl font-black text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-plus-circle text-emerald-500"></i> Afirmativo</h3>
+                        <p class="text-slate-600 mb-4">El verbo cambia a pasado. Hay dos tipos de verbos:</p>
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                                <span class="font-bold text-indigo-600 uppercase text-xs tracking-wider">Regulares (+ed)</span>
+                                <p class="text-lg font-bold text-slate-700">I <b>visited</b> my hometown.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                                <span class="font-bold text-purple-600 uppercase text-xs tracking-wider">Irregulares (Cambian)</span>
+                                <p class="text-lg font-bold text-slate-700">We <b>went</b> to the countryside.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Negative / Question -->
+                    <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200">
+                        <h3 class="text-2xl font-black text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-minus-circle text-rose-500"></i> Negativo</h3>
+                        <p class="text-slate-600 mb-4">Usamos el auxiliar <b>didn't</b>. ¡Ojo! Como el auxiliar ya está en pasado, el verbo regresa a su forma normal.</p>
+                        
+                        <div class="bg-white p-5 rounded-xl border border-rose-100 shadow-sm relative mb-4">
+                            <div class="formula-box bg-rose-500 text-white mb-3 w-full">DIDN'T + VERBO NORMAL</div>
+                            <p class="text-lg font-bold text-slate-700">I <b>didn't visit</b> my family.</p>
+                            <p class="text-lg font-bold text-slate-700 mt-2">She <b>didn't go</b> abroad.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-indigo-50 border border-indigo-100 p-5 rounded-2xl flex items-start gap-4">
+                    <i class="fas fa-clock text-3xl text-indigo-400 mt-1"></i>
+                    <div>
+                        <h4 class="font-black text-indigo-900 text-lg">Time Expressions (Expresiones de tiempo)</h4>
+                        <p class="text-indigo-800 font-medium">Claves para tus historias: <i>yesterday</i> (ayer), <i>last week/month/year</i> (la semana/mes/año pasado), <i>two days ago</i> (hace dos días).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 2: THE FUTURE -->
+        <!-- ========================================== -->
+        <section id="slide-2" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="bg-amber-100 text-amber-600 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm">2</span>
+                <h2 class="text-3xl md:text-5xl font-black text-slate-800">The Future Tenses</h2>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 border-t-8 border-t-amber-500">
+                <p class="text-slate-600 mb-8 text-xl font-medium">Cuando en nuestra historia saltamos al futuro, tenemos dos caminos principales: <b>Will</b> y <b>Going to</b>.</p>
+                
+                <div class="flex flex-col md:flex-row gap-6">
+                    <!-- GOING TO -->
+                    <div class="flex-1 bg-amber-50 p-6 rounded-3xl border border-amber-200 relative">
+                        <h3 class="text-3xl font-black text-amber-600 mb-2">Going to</h3>
+                        <p class="font-bold text-amber-900 mb-4 uppercase text-sm tracking-wider">Planes e Intenciones Claras</p>
+                        <p class="text-slate-700 mb-4 font-medium">Lo usamos cuando <b>ya hemos decidido</b> hacer algo o hay evidencia de que va a pasar.</p>
+                        
+                        <div class="bg-white p-4 rounded-xl border border-amber-100 shadow-sm mb-4">
+                            <span class="text-xs font-bold text-slate-400 uppercase">Fórmula</span>
+                            <p class="text-amber-800 font-black mt-1">am/is/are + going to + verbo</p>
+                        </div>
+                        
+                        <p class="text-lg font-bold text-slate-800 border-l-4 border-amber-400 pl-3">"Next year, I <b>am going to travel</b> abroad."</p>
+                        <p class="text-sm text-slate-500 mt-1 italic">(Ya compré los boletos o lo tengo planeado).</p>
+                    </div>
+
+                    <!-- WILL -->
+                    <div class="flex-1 bg-cyan-50 p-6 rounded-3xl border border-cyan-200 relative">
+                        <h3 class="text-3xl font-black text-cyan-600 mb-2">Will</h3>
+                        <p class="font-bold text-cyan-900 mb-4 uppercase text-sm tracking-wider">Decisiones Rápidas y Promesas</p>
+                        <p class="text-slate-700 mb-4 font-medium">Lo usamos para decisiones tomadas en el momento, promesas o predicciones sin evidencia sólida.</p>
+                        
+                        <div class="bg-white p-4 rounded-xl border border-cyan-100 shadow-sm mb-4">
+                            <span class="text-xs font-bold text-slate-400 uppercase">Fórmula</span>
+                            <p class="text-cyan-800 font-black mt-1">will + verbo</p>
+                        </div>
+                        
+                        <p class="text-lg font-bold text-slate-800 border-l-4 border-cyan-400 pl-3">"I promise I <b>will visit</b> my relatives soon."</p>
+                        <p class="text-sm text-slate-500 mt-1 italic">(Es una promesa o intención, no hay plan fijo).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 3: VOCABULARY (PLACES & FAMILY) -->
+        <!-- ========================================== -->
+        <section id="slide-3" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="bg-rose-100 text-rose-600 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm">3</span>
+                <h2 class="text-3xl md:text-5xl font-black text-slate-800">Context: Places & Family</h2>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 border-t-8 border-t-rose-500">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Para contar buenas historias necesitas contextos. Toca las tarjetas para descubrir vocabulario avanzado.</p>
+                
+                <h3 class="font-black text-2xl text-slate-800 mb-4 border-b pb-2">📍 Places (Lugares)</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10" id="fc-places">
+                    <!-- JS Injected -->
+                </div>
+
+                <h3 class="font-black text-2xl text-slate-800 mb-4 border-b pb-2">👨‍👩‍👧‍👦 Extended Family (Familia Extendida)</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="fc-family">
+                    <!-- JS Injected -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 4: PHRASAL VERBS -->
+        <!-- ========================================== -->
+        <section id="slide-4" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="bg-teal-100 text-teal-600 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm">4</span>
+                <h2 class="text-3xl md:text-5xl font-black text-slate-800">Phrasal Verbs</h2>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 border-t-8 border-t-teal-500">
+                <p class="text-slate-600 mb-8 text-xl font-medium">Los Phrasal Verbs son verbos compuestos (Verbo + Preposición). Los nativos los usan muchísimo para contar anécdotas. <b>Aquí tienes los 6 esenciales para historias:</b></p>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white border-2 border-teal-100 p-5 rounded-2xl hover:border-teal-400 transition shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-teal-100 text-teal-700 font-black px-3 py-1 rounded-lg">1. Grow up</span>
+                            <span class="text-slate-400 font-bold">(Crecer)</span>
+                        </div>
+                        <p class="text-slate-700 font-medium">Pasado: <b>grew up</b></p>
+                        <p class="text-slate-500 italic text-sm mt-2">"I grew up in the countryside."</p>
+                    </div>
+
+                    <div class="bg-white border-2 border-teal-100 p-5 rounded-2xl hover:border-teal-400 transition shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-teal-100 text-teal-700 font-black px-3 py-1 rounded-lg">2. Bring up</span>
+                            <span class="text-slate-400 font-bold">(Criar / Mencionar tema)</span>
+                        </div>
+                        <p class="text-slate-700 font-medium">Pasado: <b>brought up</b></p>
+                        <p class="text-slate-500 italic text-sm mt-2">"My grandparents brought me up."</p>
+                    </div>
+
+                    <div class="bg-white border-2 border-teal-100 p-5 rounded-2xl hover:border-teal-400 transition shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-teal-100 text-teal-700 font-black px-3 py-1 rounded-lg">3. Set off</span>
+                            <span class="text-slate-400 font-bold">(Partir / Iniciar viaje)</span>
+                        </div>
+                        <p class="text-slate-700 font-medium">Pasado: <b>set off</b></p>
+                        <p class="text-slate-500 italic text-sm mt-2">"We set off early in the morning."</p>
+                    </div>
+
+                    <div class="bg-white border-2 border-teal-100 p-5 rounded-2xl hover:border-teal-400 transition shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-teal-100 text-teal-700 font-black px-3 py-1 rounded-lg">4. Look back on</span>
+                            <span class="text-slate-400 font-bold">(Recordar con nostalgia)</span>
+                        </div>
+                        <p class="text-slate-700 font-medium">Pasado: <b>looked back on</b></p>
+                        <p class="text-slate-500 italic text-sm mt-2">"When I look back on my childhood..."</p>
+                    </div>
+
+                    <div class="bg-white border-2 border-teal-100 p-5 rounded-2xl hover:border-teal-400 transition shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-teal-100 text-teal-700 font-black px-3 py-1 rounded-lg">5. Turn out</span>
+                            <span class="text-slate-400 font-bold">(Resultar ser al final)</span>
+                        </div>
+                        <p class="text-slate-700 font-medium">Pasado: <b>turned out</b></p>
+                        <p class="text-slate-500 italic text-sm mt-2">"The trip turned out to be amazing."</p>
+                    </div>
+
+                    <div class="bg-white border-2 border-teal-100 p-5 rounded-2xl hover:border-teal-400 transition shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-teal-100 text-teal-700 font-black px-3 py-1 rounded-lg">6. Look forward to</span>
+                            <span class="text-slate-400 font-bold">(Esperar con ansias)</span>
+                        </div>
+                        <p class="text-slate-700 font-medium">Pasado: <b>looked forward to</b></p>
+                        <p class="text-slate-500 italic text-sm mt-2">"I am looking forward to my next trip."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 5: PRACTICE 1 (MATCH PHRASAL VERBS) -->
+        <!-- ========================================== -->
+        <section id="slide-5" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="bg-purple-100 text-purple-600 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-gamepad"></i></span>
+                <h2 class="text-3xl md:text-5xl font-black text-slate-800">Practice 1: Match</h2>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 bg-slate-50 border border-slate-200">
+                <h3 class="text-2xl font-black text-purple-700 mb-2">Conecta los Phrasal Verbs</h3>
+                <p class="text-slate-600 mb-8 font-medium">Toca un Phrasal Verb en inglés (izquierda) y únelo con su significado correcto en español (derecha).</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8" id="match-phrasal-container">
+                    <div class="space-y-4" id="match-left-col"></div>
+                    <div class="space-y-4" id="match-right-col"></div>
+                </div>
+                
+                <div id="match-feedback" class="hidden mt-8 p-5 rounded-2xl font-bold text-xl border text-center"></div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 6: PRACTICE 2 (FILL IN THE BLANKS) -->
+        <!-- ========================================== -->
+        <section id="slide-6" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="bg-cyan-100 text-cyan-600 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-keyboard"></i></span>
+                <h2 class="text-3xl md:text-5xl font-black text-slate-800">Practice 2: Time Machine</h2>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 bg-slate-50 border border-slate-200">
+                <h3 class="text-2xl font-black text-cyan-700 mb-2">¿Pasado o Futuro?</h3>
+                <p class="text-slate-600 mb-8 font-medium">Lee la oración y el contexto. Luego, selecciona la forma correcta del verbo usando el menú desplegable.</p>
+                
+                <div class="space-y-6" id="fill-blanks-container">
+                    <!-- Populated by JS -->
+                </div>
+                
+                <button onclick="checkFillBlanks()" class="mt-10 bg-cyan-600 text-white font-black py-4 px-10 rounded-2xl shadow-lg hover:bg-cyan-700 hover:-translate-y-1 transition w-full md:w-auto">Revisar Tiempos</button>
+                <div id="fill-feedback" class="hidden mt-6 p-5 rounded-2xl font-bold text-xl border"></div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 7: PRACTICE 3 (STORY BUILDER) -->
+        <!-- ========================================== -->
+        <section id="slide-7" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="bg-rose-100 text-rose-600 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-layer-group"></i></span>
+                <h2 class="text-3xl md:text-5xl font-black text-slate-800">Practice 3: Story Builder</h2>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 bg-slate-50 border border-slate-200">
+                <h3 class="text-2xl font-black text-rose-700 mb-2">Arma la Anécdota</h3>
+                <p class="text-slate-600 mb-8 font-medium">Toca los bloques en el orden correcto para formar la oración. ¡Presta atención a los conectores (Suddenly, then) y a los phrasal verbs!</p>
+                
+                <div id="story-builder-container" class="space-y-10">
+                    <!-- Builders injected by JS -->
+                </div>
+
+                <button onclick="checkStoryBuilder()" class="mt-10 bg-rose-500 text-white font-black py-4 px-10 rounded-2xl shadow-lg hover:bg-rose-600 hover:-translate-y-1 transition w-full md:w-auto">Verificar Historia</button>
+                <div id="builder-feedback" class="hidden mt-6 p-5 rounded-2xl font-bold text-xl border"></div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 8: MEGA QUIZ -->
+        <!-- ========================================== -->
+        <section id="slide-8" class="hidden-slide">
+            
+            <div id="mega-quiz-intro" class="text-center mt-12 mb-8 slide-enter">
+                <div class="w-32 h-32 bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-6xl mx-auto mb-8 text-white shadow-2xl shadow-blue-500/40 animate-bounce">🏆</div>
+                <h2 class="text-4xl md:text-6xl font-black text-slate-800 tracking-tight mb-4">The Final Story</h2>
+                <p class="text-slate-600 text-xl md:text-2xl font-medium max-w-2xl mx-auto mb-10">Es el momento de demostrar que dominas el pasado, el futuro, los phrasal verbs y el vocabulario. <b class="text-indigo-600">Quiz de 10 preguntas.</b></p>
+                <button onclick="startMegaQuiz();" class="bg-slate-900 hover:bg-black text-white text-2xl font-black py-5 px-16 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1 w-full sm:w-auto">
+                    Iniciar Examen
+                </button>
+            </div>
+
+            <div id="mega-quiz-container" class="hidden bg-white rounded-3xl shadow-2xl border border-slate-200 p-6 md:p-12 max-w-3xl mx-auto relative overflow-hidden mt-4">
+                <div class="absolute top-0 left-0 w-full h-2 bg-slate-100">
+                    <div id="mega-quiz-progress" class="h-full bg-gradient-to-r from-emerald-400 to-green-500 transition-all duration-300" style="width: 0%"></div>
+                </div>
+
+                <div id="mega-quiz-area">
+                    <div class="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
+                        <span class="text-sm md:text-base font-bold text-slate-400 uppercase tracking-widest" id="mega-quiz-counter">Pregunta 1 de 10</span>
+                    </div>
+                    
+                    <h3 class="text-2xl md:text-3xl font-bold text-slate-800 mb-10 leading-relaxed text-center" id="mega-quiz-question">Question?</h3>
+                    
+                    <div id="mega-quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Options generated by JS -->
+                    </div>
+
+                    <div id="mega-quiz-feedback" class="hidden mt-8 p-5 rounded-2xl text-center font-bold text-xl border"></div>
+                </div>
+
+                <div id="mega-quiz-result" class="hidden text-center py-10 slide-enter">
+                    <div class="text-7xl mb-6" id="mq-emoji">🎉</div>
+                    <h3 class="text-4xl font-black text-slate-800 mb-4">¡Masterclass Completada!</h3>
+                    <p class="text-xl text-slate-600 mb-8 font-medium">Tu puntuación: <span id="mq-score" class="font-black text-indigo-600 text-5xl mx-2"></span> / 10</p>
+                    <button onclick="location.reload()" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black text-xl py-4 px-10 rounded-2xl shadow-xl transition hover:-translate-y-1 w-full sm:w-auto">Reiniciar Viaje</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-slate-200 p-4 md:p-6 z-30 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+            <div class="max-w-5xl mx-auto flex justify-between gap-4">
+                <button id="btn-prev" onclick="prevSlide()" class="flex-1 bg-slate-100 text-slate-600 font-black text-base md:text-lg py-3 md:py-4 px-4 rounded-2xl hover:bg-slate-200 transition opacity-50 cursor-not-allowed disabled">
+                    <i class="fas fa-arrow-left mr-2"></i> Atrás
+                </button>
+                <button id="btn-next" onclick="nextSlide()" class="flex-1 bg-slate-800 text-white font-black text-base md:text-lg py-3 md:py-4 px-4 rounded-2xl shadow-lg transition hover:-translate-y-1 transition-colors duration-300">
+                    Siguiente <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- DICTIONARY MODAL (Vocab & Phrasals) -->
+    <!-- ========================================== -->
+    <div id="dictionary-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex justify-center items-end sm:items-center">
+        <div class="bg-white w-full sm:max-w-4xl h-[85vh] sm:h-[85vh] sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col slide-enter border border-slate-200 overflow-hidden">
+            
+            <div class="p-5 md:p-6 border-b border-slate-100 flex justify-between items-center bg-slate-800 text-white">
+                <div>
+                    <h3 class="font-black text-2xl flex items-center gap-3"><i class="fas fa-book-open"></i> Story Dictionary</h3>
+                    <p class="text-slate-300 text-sm font-medium mt-1">Vocabulario y Verbos Irregulares</p>
+                </div>
+                <button onclick="toggleDictionary()" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="flex border-b border-slate-200 bg-slate-50 overflow-x-auto custom-scrollbar">
+                <button onclick="switchDictTab('verbs')" id="tab-verbs" class="flex-1 py-3 px-4 font-black text-slate-800 border-b-4 border-slate-800 bg-white">Irregular Verbs</button>
+                <button onclick="switchDictTab('phrasals')" id="tab-phrasals" class="flex-1 py-3 px-4 font-bold text-slate-500 border-b-4 border-transparent hover:bg-slate-100">Phrasal Verbs</button>
+                <button onclick="switchDictTab('vocab')" id="tab-vocab" class="flex-1 py-3 px-4 font-bold text-slate-500 border-b-4 border-transparent hover:bg-slate-100">Places & Family</button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="flex-1 overflow-y-auto p-4 custom-scrollbar bg-slate-50 relative">
+                
+                <!-- Verbs Tab -->
+                <div id="dict-verbs" class="block">
+                    <div class="grid grid-cols-2 bg-slate-200 p-3 rounded-t-xl font-bold text-slate-700 sticky top-0">
+                        <div>Presente (V1)</div>
+                        <div>Pasado Simple (V2)</div>
+                    </div>
+                    <div id="dict-verbs-list" class="bg-white rounded-b-xl border border-slate-200"></div>
+                </div>
+
+                <!-- Phrasals Tab -->
+                <div id="dict-phrasals" class="hidden space-y-3" id="dict-phrasals-list"></div>
+
+                <!-- Vocab Tab -->
+                <div id="dict-vocab" class="hidden space-y-6">
+                    <div>
+                        <h4 class="font-black text-lg text-slate-700 border-b pb-2 mb-3">Lugares (Places)</h4>
+                        <div id="dict-vocab-places" class="grid sm:grid-cols-2 gap-3"></div>
+                    </div>
+                    <div>
+                        <h4 class="font-black text-lg text-slate-700 border-b pb-2 mb-3">Familia (Family)</h4>
+                        <div id="dict-vocab-family" class="grid sm:grid-cols-2 gap-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- STREAMING_CHUNK:Data Definitions... ---
+        
+        // 1. Vocabulary Data
+        const vocabPlaces = [
+            { en: "Hometown", es: "Ciudad natal", emoji: "🏘️" },
+            { en: "Countryside", es: "El campo", emoji: "🏞️" },
+            { en: "Abroad", es: "En el extranjero", emoji: "✈️" },
+            { en: "Downtown", es: "Centro de la ciudad", emoji: "🏙️" },
+            { en: "Amusement park", es: "Parque de diversiones", emoji: "🎢" },
+            { en: "Neighborhood", es: "Vecindario", emoji: "🏡" }
+        ];
+
+        const vocabFamily = [
+            { en: "Ancestors", es: "Antepasados", emoji: "🕰️" },
+            { en: "Relatives", es: "Parientes / Familiares", emoji: "👨‍👩‍👧‍👦" },
+            { en: "Descendants", es: "Descendientes", emoji: "👶" },
+            { en: "Stepfather / Stepmother", es: "Padrastro / Madrastra", emoji: "👨‍👦" },
+            { en: "Siblings", es: "Hermanos (en general)", emoji: "👦👧" },
+            { en: "Only child", es: "Hijo/a único/a", emoji: "🧒" }
+        ];
+
+        const irregularVerbs = [
+            { v1: "be", v2: "was / were" }, { v1: "bring", v2: "brought" }, { v1: "buy", v2: "bought" },
+            { v1: "catch", v2: "caught" }, { v1: "come", v2: "came" }, { v1: "do", v2: "did" },
+            { v1: "eat", v2: "ate" }, { v1: "find", v2: "found" }, { v1: "fly", v2: "flew" },
+            { v1: "get", v2: "got" }, { v1: "give", v2: "gave" }, { v1: "go", v2: "went" },
+            { v1: "grow", v2: "grew" }, { v1: "have", v2: "had" }, { v1: "know", v2: "knew" },
+            { v1: "leave", v2: "left" }, { v1: "make", v2: "made" }, { v1: "meet", v2: "met" },
+            { v1: "say", v2: "said" }, { v1: "see", v2: "saw" }, { v1: "take", v2: "took" },
+            { v1: "tell", v2: "told" }, { v1: "think", v2: "thought" }, { v1: "write", v2: "wrote" }
+        ];
+
+        const phrasalVerbs = [
+            { en: "Grow up", past: "Grew up", es: "Crecer (hacerse mayor)" },
+            { en: "Bring up", past: "Brought up", es: "Criar a alguien / Mencionar un tema" },
+            { en: "Set off", past: "Set off", es: "Partir / Iniciar un viaje" },
+            { en: "Look back on", past: "Looked back on", es: "Recordar el pasado con nostalgia" },
+            { en: "Turn out", past: "Turned out", es: "Resultar ser al final" },
+            { en: "Look forward to", past: "Looked forward to", es: "Esperar algo con ansias" }
+        ];
+
+        // 2. Practice Data
+        const matchPhrasalData = [
+            { id: "pv1", en: "Grow up 🌱", es: "Crecer / Hacerse mayor" },
+            { id: "pv2", en: "Set off 🧳", es: "Iniciar un viaje" },
+            { id: "pv3", en: "Bring up 👶", es: "Criar a alguien" },
+            { id: "pv4", en: "Turn out 🎭", es: "Resultar ser al final" },
+            { id: "pv5", en: "Look back on 💭", es: "Recordar el pasado" },
+            { id: "pv6", en: "Look forward to 🤩", es: "Esperar con ansias" }
+        ];
+
+        const fillBlanksData = [
+            { 
+                context: "(En el pasado)", 
+                pre: "When I was young, I", 
+                opts: ["go", "went", "will go"], ans: "went", 
+                post: "to the countryside every summer." 
+            },
+            { 
+                context: "(Un plan seguro)", 
+                pre: "Next year, my relatives", 
+                opts: ["will travel", "are going to travel", "traveled"], ans: "are going to travel", 
+                post: "abroad." 
+            },
+            { 
+                context: "(En el pasado, negativo)", 
+                pre: "My ancestors", 
+                opts: ["didn't had", "don't have", "didn't have"], ans: "didn't have", 
+                post: "internet." 
+            },
+            { 
+                context: "(Promesa / Decisión rápida)", 
+                pre: "I promise I", 
+                opts: ["am going to visit", "will visit", "visited"], ans: "will visit", 
+                post: "my hometown soon." 
+            },
+            { 
+                context: "(Anécdota)", 
+                pre: "We packed our bags and", 
+                opts: ["set off", "will set off", "are setting off"], ans: "set off", 
+                post: "early in the morning." 
+            }
+        ];
+
+        const storyBuilderData = [
+            { id: "sb1", words: ["I", "grew", "up", "in", "a", "small", "hometown."], correct: "I grew up in a small hometown." },
+            { id: "sb2", words: ["Suddenly,", "the", "weather", "turned", "out", "to", "be", "bad."], correct: "Suddenly, the weather turned out to be bad." },
+            { id: "sb3", words: ["We", "didn't", "travel", "abroad", "last", "year."], correct: "We didn't travel abroad last year." },
+            { id: "sb4", words: ["I", "am", "looking", "forward", "to", "the", "next", "trip!"], correct: "I am looking forward to the next trip!" }
+        ];
+
+        const megaQuizQuestions = [
+            { q: "My grandparents _____ me up in the countryside.", options: ["brought", "bring", "bringed"], ans: 0 },
+            { q: "_____ you go to the amusement park yesterday?", options: ["Do", "Did", "Will"], ans: 1 },
+            { q: "I bought the tickets! We _____ fly abroad next month.", options: ["will", "are going to", "went"], ans: 1 },
+            { q: "I didn't _____ my relatives last week.", options: ["saw", "see", "seeing"], ans: 1 },
+            { q: "¿Qué significa 'Set off'?", options: ["Apagar", "Iniciar un viaje", "Recordar"], ans: 1 },
+            { q: "When I _____ back on my childhood, I smile.", options: ["look", "looks", "looked"], ans: 0 },
+            { q: "(Sin plan) I think it _____ rain tomorrow.", options: ["is going to", "will", "rained"], ans: 1 },
+            { q: "The party _____ out to be a disaster.", options: ["turn", "turned", "turning"], ans: 1 },
+            { q: "¿Cómo se dice 'Antepasados'?", options: ["Descendants", "Relatives", "Ancestors"], ans: 2 },
+            { q: "She _____ (not) grow up in downtown.", options: ["didn't", "wasn't", "doesn't"], ans: 0 }
+        ];
+
+
+        // --- STREAMING_CHUNK:Navigation Logic... ---
+        const totalSlides = 9; // 0 to 8
+        let currentSlide = 0;
+        
+        const slideThemes = [
+            { color: 'purple', title: 'Intro' }, // 0
+            { color: 'indigo', title: 'Past Simple' }, // 1
+            { color: 'amber', title: 'Future Tenses' }, // 2
+            { color: 'rose', title: 'Places & Family' }, // 3
+            { color: 'teal', title: 'Phrasal Verbs' }, // 4
+            { color: 'purple', title: 'Practice 1' }, // 5
+            { color: 'cyan', title: 'Practice 2' }, // 6
+            { color: 'rose', title: 'Practice 3' }, // 7
+            { color: 'slate', title: 'Mega Quiz' } // 8
+        ];
+
+        function updateNavUI() {
+            const theme = slideThemes[currentSlide];
+            
+            // Progress Bar
+            const progress = (currentSlide / (totalSlides - 1)) * 100;
+            document.getElementById('main-progress').style.width = `${progress}%`;
+            
+            const colorMap = {
+                'purple': 'from-purple-500 to-indigo-600',
+                'indigo': 'from-indigo-500 to-blue-600',
+                'amber': 'from-amber-400 to-orange-500',
+                'rose': 'from-rose-400 to-pink-600',
+                'teal': 'from-teal-400 to-emerald-500',
+                'cyan': 'from-cyan-400 to-blue-500',
+                'slate': 'from-slate-700 to-slate-900'
+            };
+            
+            const btnColorMap = {
+                'purple': 'bg-purple-600 hover:bg-purple-700',
+                'indigo': 'bg-indigo-600 hover:bg-indigo-700',
+                'amber': 'bg-amber-500 hover:bg-amber-600',
+                'rose': 'bg-rose-600 hover:bg-rose-700',
+                'teal': 'bg-teal-600 hover:bg-teal-700',
+                'cyan': 'bg-cyan-600 hover:bg-cyan-700',
+                'slate': 'bg-slate-800 hover:bg-slate-900'
+            };
+            
+            const navIconBg = document.getElementById('nav-icon');
+            navIconBg.className = `w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center text-white font-bold shadow-lg transition-colors duration-500 bg-gradient-to-br ${colorMap[theme.color]}`;
+            
+            const btnNext = document.getElementById('btn-next');
+            btnNext.className = `flex-1 text-white font-black text-base md:text-lg py-3 md:py-4 px-4 rounded-2xl shadow-lg transition hover:-translate-y-1 transition-colors duration-300 ${btnColorMap[theme.color]}`;
+
+            document.getElementById('nav-title').innerText = theme.title;
+            document.getElementById('slide-counter').innerText = `${currentSlide + 1} / ${totalSlides}`;
+
+            // Visibility
+            for (let i = 0; i < totalSlides; i++) {
+                const s = document.getElementById(`slide-${i}`);
+                if(s) { s.classList.add('hidden-slide'); s.classList.remove('slide-enter'); }
+            }
+            const current = document.getElementById(`slide-${currentSlide}`);
+            if (current) {
+                current.classList.remove('hidden-slide');
+                void current.offsetWidth; 
+                current.classList.add('slide-enter');
+            }
+
+            // Buttons State
+            const btnPrev = document.getElementById('btn-prev');
+            if (currentSlide === 0) {
+                btnPrev.classList.add('opacity-50', 'cursor-not-allowed');
+                btnPrev.setAttribute('disabled', 'true');
+            } else {
+                btnPrev.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnPrev.removeAttribute('disabled');
+            }
+
+            if (currentSlide === totalSlides - 1) { btnNext.classList.add('hidden'); } 
+            else { btnNext.classList.remove('hidden'); }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextSlide() { if (currentSlide < totalSlides - 1) { currentSlide++; updateNavUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateNavUI(); } }
+
+
+        // --- STREAMING_CHUNK:Render Content... ---
+        
+        function renderFlipCards(dataArray, containerId, color) {
+            const container = document.getElementById(containerId);
+            let html = '';
+            dataArray.forEach(item => {
+                html += `
+                <div class="flip-card h-32 md:h-36" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-${color}-50 border-2 border-${color}-200 text-${color}-900 shadow-sm flex flex-col items-center justify-center p-2 transition hover:shadow-md">
+                            <span class="text-4xl md:text-5xl mb-2">${item.emoji}</span>
+                            <span class="font-bold text-base md:text-lg text-center leading-tight">${item.en}</span>
+                        </div>
+                        <div class="flip-card-back bg-${color}-500 border-2 border-${color}-500 shadow-md flex items-center justify-center p-3 text-white text-center">
+                            <span class="font-black text-lg md:text-xl">${item.es}</span>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderDictionary() {
+            // Verbs
+            let verbsHtml = '';
+            irregularVerbs.forEach((v, i) => {
+                const bg = i % 2 === 0 ? 'bg-white' : 'bg-slate-50';
+                verbsHtml += `<div class="grid grid-cols-2 p-3 border-b border-slate-100 ${bg}"><div class="font-bold text-slate-700">${v.v1}</div><div class="font-black text-indigo-600">${v.v2}</div></div>`;
+            });
+            document.getElementById('dict-verbs-list').innerHTML = verbsHtml;
+
+            // Phrasals
+            let phrasalsHtml = '';
+            phrasalVerbs.forEach(v => {
+                phrasalsHtml += `
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-black text-teal-700 text-lg">${v.en} <span class="text-slate-400 font-medium text-sm ml-2">Past: ${v.past}</span></h4>
+                        <p class="text-slate-600 font-medium mt-1">${v.es}</p>
+                    </div>`;
+            });
+            document.getElementById('dict-phrasals').innerHTML = phrasalsHtml;
+
+            // Vocab
+            let placesHtml = '';
+            vocabPlaces.forEach(v => placesHtml += `<div class="bg-white p-3 rounded-lg border border-slate-200 flex items-center gap-3"><span class="text-2xl">${v.emoji}</span><div><p class="font-bold text-slate-800">${v.en}</p><p class="text-xs text-slate-500">${v.es}</p></div></div>`);
+            document.getElementById('dict-vocab-places').innerHTML = placesHtml;
+
+            let familyHtml = '';
+            vocabFamily.forEach(v => familyHtml += `<div class="bg-white p-3 rounded-lg border border-slate-200 flex items-center gap-3"><span class="text-2xl">${v.emoji}</span><div><p class="font-bold text-slate-800">${v.en}</p><p class="text-xs text-slate-500">${v.es}</p></div></div>`);
+            document.getElementById('dict-vocab-family').innerHTML = familyHtml;
+        }
+
+        function toggleDictionary() { document.getElementById('dictionary-modal').classList.toggle('hidden'); }
+
+        function switchDictTab(tabName) {
+            ['verbs', 'phrasals', 'vocab'].forEach(t => {
+                const tab = document.getElementById(`tab-${t}`);
+                tab.className = 'flex-1 py-3 px-4 font-bold text-slate-500 border-b-4 border-transparent hover:bg-slate-100 transition';
+                document.getElementById(`dict-${t}`).classList.add('hidden');
+                document.getElementById(`dict-${t}`).classList.remove('block');
+            });
+            
+            const activeTab = document.getElementById(`tab-${tabName}`);
+            activeTab.className = 'flex-1 py-3 px-4 font-black text-slate-800 border-b-4 border-slate-800 bg-white transition';
+            
+            document.getElementById(`dict-${tabName}`).classList.remove('hidden');
+            document.getElementById(`dict-${tabName}`).classList.add('block');
+        }
+
+
+        // --- STREAMING_CHUNK:Interactive Exercises... ---
+        
+        // 1. MATCH GAME (Phrasals)
+        let matchSelected = { left: null, right: null };
+        function initMatchGame() {
+            const leftCol = document.getElementById('match-left-col');
+            const rightCol = document.getElementById('match-right-col');
+            
+            let shuffledLeft = [...matchPhrasalData].sort(() => Math.random() - 0.5);
+            let shuffledRight = [...matchPhrasalData].sort(() => Math.random() - 0.5);
+
+            leftCol.innerHTML = shuffledLeft.map(item => `<button id="ml-${item.id}" onclick="selectMatch('left', '${item.id}')" class="match-btn w-full bg-white border-2 border-slate-200 font-bold text-lg text-slate-700 p-4 rounded-xl shadow-sm text-left hover:bg-purple-50">${item.en}</button>`).join('');
+            rightCol.innerHTML = shuffledRight.map(item => `<button id="mr-${item.id}" onclick="selectMatch('right', '${item.id}')" class="match-btn w-full bg-white border-2 border-slate-200 font-bold text-lg text-slate-700 p-4 rounded-xl shadow-sm text-left hover:bg-purple-50">${item.es}</button>`).join('');
+        }
+
+        function selectMatch(side, id) {
+            const elId = side === 'left' ? `ml-${id}` : `mr-${id}`;
+            const el = document.getElementById(elId);
+            if(el.classList.contains('matched')) return;
+
+            if(matchSelected[side]) {
+                const prevEl = document.getElementById(side === 'left' ? `ml-${matchSelected[side]}` : `mr-${matchSelected[side]}`);
+                if(prevEl) prevEl.classList.remove('selected');
+            }
+
+            if(matchSelected[side] === id) {
+                matchSelected[side] = null;
+                el.classList.remove('selected');
+            } else {
+                matchSelected[side] = id;
+                el.classList.add('selected');
+            }
+
+            if (matchSelected.left && matchSelected.right) {
+                const lEl = document.getElementById(`ml-${matchSelected.left}`);
+                const rEl = document.getElementById(`mr-${matchSelected.right}`);
+                
+                if (matchSelected.left === matchSelected.right) {
+                    lEl.classList.replace('selected', 'matched');
+                    rEl.classList.replace('selected', 'matched');
+                    checkMatchWin();
+                } else {
+                    lEl.classList.add('error'); rEl.classList.add('error');
+                    setTimeout(() => { lEl.classList.remove('error', 'selected'); rEl.classList.remove('error', 'selected'); }, 500);
+                }
+                matchSelected = { left: null, right: null };
+            }
+        }
+
+        function checkMatchWin() {
+            if (document.querySelectorAll('.match-btn.matched').length === matchPhrasalData.length * 2) {
+                const fb = document.getElementById('match-feedback');
+                fb.classList.remove('hidden');
+                fb.classList.add('bg-emerald-50', 'text-emerald-800', 'border-emerald-200');
+                fb.innerHTML = '<i class="fas fa-check-circle mr-2 text-2xl text-emerald-500"></i> ¡Perfecto! Ya dominas los phrasal verbs.';
+            }
+        }
+
+
+        // 2. FILL BLANKS (Dropdowns for Tenses)
+        function initFillBlanks() {
+            const container = document.getElementById('fill-blanks-container');
+            container.innerHTML = fillBlanksData.map((item, i) => `
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-lg font-medium text-slate-700 flex flex-col md:flex-row md:items-center gap-3">
+                    <span class="text-xs font-bold bg-cyan-100 text-cyan-800 px-2 py-1 rounded w-fit">${item.context}</span>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span>${item.pre}</span>
+                        <select id="fb-${i}" data-ans="${item.ans}" class="dropdown-select p-2 bg-slate-50 border-2 border-cyan-200 rounded-lg text-cyan-700 font-bold outline-none focus:border-cyan-500">
+                            <option value="">---</option>
+                            ${item.opts.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                        </select>
+                        <span>${item.post}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function checkFillBlanks() {
+            let correctCount = 0;
+            fillBlanksData.forEach((item, i) => {
+                const select = document.getElementById(`fb-${i}`);
+                const ans = select.getAttribute('data-ans');
+                const val = select.value;
+
+                select.classList.remove('bg-green-50', 'border-green-500', 'text-green-700', 'bg-red-50', 'border-red-500', 'text-red-700');
+
+                if (val === ans) {
+                    select.classList.add('bg-green-50', 'border-green-500', 'text-green-700');
+                    correctCount++;
+                } else {
+                    select.classList.add('bg-red-50', 'border-red-500', 'text-red-700');
+                }
+            });
+
+            const fb = document.getElementById('fill-feedback');
+            fb.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-800', 'border-emerald-200', 'bg-amber-50', 'text-amber-800', 'border-amber-200');
+            
+            if (correctCount === fillBlanksData.length) {
+                fb.classList.add('bg-emerald-50', 'text-emerald-800', 'border-emerald-200');
+                fb.innerHTML = '<i class="fas fa-check-circle mr-2 text-2xl text-emerald-500"></i> ¡Excelente! Viajas en el tiempo sin problemas.';
+            } else {
+                fb.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-200');
+                fb.innerHTML = `<i class="fas fa-exclamation-triangle mr-2 text-2xl text-amber-500"></i> Tienes ${correctCount} de ${fillBlanksData.length} correctas. Fíjate en el contexto (planes vs. pasado).`;
+            }
+        }
+
+
+        // 3. STORY BUILDER
+        let sbStates = [];
+        function initStoryBuilder() {
+            const container = document.getElementById('story-builder-container');
+            container.innerHTML = storyBuilderData.map((item, index) => {
+                let shuffled = [...item.words].sort(() => Math.random() - 0.5);
+                sbStates[index] = { selected: [], words: shuffled, correct: item.correct };
+                
+                return `
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative">
+                        <div class="absolute top-0 right-0 bg-rose-100 text-rose-600 font-black px-4 py-1 rounded-bl-2xl rounded-tr-xl text-sm shadow-sm">Historia ${index + 1}</div>
+                        <div class="min-h-[60px] bg-slate-50 border-2 border-dashed border-rose-200 rounded-xl mb-4 p-3 flex flex-wrap gap-2 items-center" id="sb-drop-${index}"></div>
+                        <div class="flex flex-wrap gap-2" id="sb-words-${index}">
+                            ${shuffled.map((word, wIdx) => `
+                                <button onclick="toggleSbWord(${index}, ${wIdx}, '${word.replace(/'/g, "\\'")}')" id="sb-btn-${index}-${wIdx}" class="word-tag bg-white border-2 border-slate-200 font-bold px-4 py-2 rounded-lg hover:border-rose-300 hover:text-rose-600 shadow-sm text-lg">${word}</button>
+                            `).join('')}
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        function toggleSbWord(bIndex, wIndex, word) {
+            const state = sbStates[bIndex];
+            const btn = document.getElementById(`sb-btn-${bIndex}-${wIndex}`);
+            const selectedIdx = state.selected.findIndex(item => item.wIndex === wIndex);
+            
+            if (selectedIdx > -1) {
+                state.selected.splice(selectedIdx, 1);
+                btn.classList.remove('opacity-30', 'cursor-not-allowed', 'scale-95');
+            } else {
+                state.selected.push({ wIndex, word });
+                btn.classList.add('opacity-30', 'cursor-not-allowed', 'scale-95');
+            }
+            updateSbUI(bIndex);
+        }
+
+        function updateSbUI(bIndex) {
+            const dropZone = document.getElementById(`sb-drop-${bIndex}`);
+            const state = sbStates[bIndex];
+            dropZone.innerHTML = state.selected.map((item) => `
+                <button onclick="toggleSbWord(${bIndex}, ${item.wIndex}, '${item.word.replace(/'/g, "\\'")}')" class="bg-rose-500 text-white font-bold px-4 py-2 rounded-lg shadow-md animate-[slideUpFade_0.2s_ease-out] hover:bg-rose-600 transition text-lg">${item.word}</button>
+            `).join('');
+        }
+
+        function checkStoryBuilder() {
+            let correctCount = 0;
+            storyBuilderData.forEach((item, index) => {
+                const state = sbStates[index];
+                const dropZone = document.getElementById(`sb-drop-${index}`);
+                const userSentence = state.selected.map(s => s.word).join(' ');
+                dropZone.classList.remove('border-rose-200', 'border-emerald-400', 'border-red-400', 'bg-slate-50', 'bg-emerald-50', 'bg-red-50');
+
+                if (userSentence === item.correct) {
+                    dropZone.classList.add('border-emerald-400', 'bg-emerald-50');
+                    correctCount++;
+                } else {
+                    dropZone.classList.add('border-red-400', 'bg-red-50');
+                }
+            });
+            
+            const fb = document.getElementById('builder-feedback');
+            fb.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-800', 'border-emerald-200', 'bg-amber-50', 'text-amber-800', 'border-amber-200');
+            
+            if (correctCount === storyBuilderData.length) {
+                fb.classList.add('bg-emerald-50', 'text-emerald-800', 'border-emerald-200');
+                fb.innerHTML = '<i class="fas fa-check-circle mr-2 text-2xl text-emerald-500"></i> ¡Perfecto! Tienes madera de storyteller.';
+            } else {
+                fb.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-200');
+                fb.innerHTML = `<i class="fas fa-exclamation-triangle mr-2 text-2xl text-amber-500"></i> Armaste bien ${correctCount} de ${storyBuilderData.length}. Fíjate en las mayúsculas para saber con qué palabra iniciar.`;
+            }
+        }
+
+
+        // --- STREAMING_CHUNK:Mega Quiz... ---
+        
+        let mqCurrent = 0;
+        let mqScore = 0;
+
+        function startMegaQuiz() {
+            document.getElementById('mega-quiz-intro').classList.add('hidden');
+            document.getElementById('mega-quiz-container').classList.remove('hidden');
+            megaQuizQuestions.sort(() => Math.random() - 0.5); // Shuffle qs
+            mqCurrent = 0;
+            mqScore = 0;
+            renderMegaQuizQuestion();
+        }
+
+        function renderMegaQuizQuestion() {
+            if (mqCurrent >= megaQuizQuestions.length) {
+                showMegaQuizResult();
+                return;
+            }
+
+            const q = megaQuizQuestions[mqCurrent];
+            document.getElementById('mega-quiz-counter').innerText = `Pregunta ${mqCurrent + 1} de ${megaQuizQuestions.length}`;
+            
+            let formattedQ = q.q.replace('_____', `<span id="mq-blank" class="inline-block px-2 border-b-4 border-dashed border-slate-300 text-slate-400 font-bold mx-1 pb-1 min-w-[3rem] text-center">___</span>`);
+            document.getElementById('mega-quiz-question').innerHTML = formattedQ;
+            
+            const progress = ((mqCurrent) / megaQuizQuestions.length) * 100;
+            document.getElementById('mega-quiz-progress').style.width = `${progress}%`;
+
+            let optionsHtml = '';
+            q.options.forEach((opt, i) => {
+                optionsHtml += `<button onclick="handleMegaQuizAnswer(${i}, ${q.ans})" class="mq-option w-full bg-slate-50 border-2 border-slate-200 text-slate-700 font-bold py-5 px-6 rounded-2xl hover:border-indigo-400 hover:bg-indigo-50 transition text-lg shadow-sm hover:-translate-y-0.5">${opt}</button>`;
+            });
+            document.getElementById('mega-quiz-options').innerHTML = optionsHtml;
+            document.getElementById('mega-quiz-feedback').classList.add('hidden');
+        }
+
+        function handleMegaQuizAnswer(selected, correct) {
+            const buttons = document.querySelectorAll('.mq-option');
+            buttons.forEach(b => {
+                b.disabled = true;
+                b.classList.remove('hover:border-indigo-400', 'hover:bg-indigo-50', 'hover:-translate-y-0.5');
+            });
+
+            const feedback = document.getElementById('mega-quiz-feedback');
+            const blank = document.getElementById('mq-blank');
+            const q = megaQuizQuestions[mqCurrent];
+
+            feedback.classList.remove('hidden', 'bg-green-50', 'text-green-700', 'border-green-200', 'bg-red-50', 'text-red-700', 'border-red-200');
+
+            if (selected === correct) {
+                buttons[selected].classList.replace('border-slate-200', 'border-emerald-500');
+                buttons[selected].classList.replace('bg-slate-50', 'bg-emerald-500');
+                buttons[selected].classList.replace('text-slate-700', 'text-white');
+                mqScore++;
+                
+                if(blank) {
+                    blank.innerText = q.options[q.ans];
+                    blank.classList.replace('border-slate-300', 'border-emerald-400');
+                    blank.classList.replace('text-slate-400', 'text-emerald-600');
+                }
+                
+                feedback.classList.add('bg-green-50', 'text-green-700', 'border', 'border-green-200');
+                feedback.innerHTML = '<i class="fas fa-check-circle mr-2 text-2xl"></i> ¡Correcto!';
+            } else {
+                buttons[selected].classList.replace('border-slate-200', 'border-rose-500');
+                buttons[selected].classList.replace('bg-slate-50', 'bg-rose-500');
+                buttons[selected].classList.replace('text-slate-700', 'text-white');
+                
+                buttons[correct].classList.replace('border-slate-200', 'border-emerald-400');
+                buttons[correct].classList.replace('bg-slate-50', 'bg-emerald-50');
+                
+                feedback.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200');
+                feedback.innerHTML = '<i class="fas fa-times-circle mr-2 text-2xl"></i> Incorrecto.';
+            }
+
+            setTimeout(() => {
+                mqCurrent++;
+                renderMegaQuizQuestion();
+            }, 1200);
+        }
+
+        function showMegaQuizResult() {
+            document.getElementById('mega-quiz-area').classList.add('hidden');
+            document.getElementById('mega-quiz-progress').style.width = `100%`;
+            const resultArea = document.getElementById('mega-quiz-result');
+            resultArea.classList.remove('hidden');
+            
+            document.getElementById('mq-score').innerText = mqScore;
+            const emoji = document.getElementById('mq-emoji');
+            
+            if (mqScore === 10) { emoji.innerText = '🏆'; }
+            else if (mqScore >= 7) { emoji.innerText = '🌟'; }
+            else { emoji.innerText = '💪'; }
+        }
+
+
+        // --- STREAMING_CHUNK:Bootstrapping... ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFlipCards(vocabPlaces, 'fc-places', 'rose');
+            renderFlipCards(vocabFamily, 'fc-family', 'rose');
+            renderDictionary();
+            
+            initMatchGame();
+            initFillBlanks();
+            initStoryBuilder();
+            
+            updateNavUI();
+        });
+
+    </script>
+</body>
+</html>

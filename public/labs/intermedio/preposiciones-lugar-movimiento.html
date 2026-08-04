@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Masterclass: Prepositions of State & Movement</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
+        
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            touch-action: manipulation; 
+            -webkit-tap-highlight-color: transparent;
+            background-color: #f8fafc;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        /* Smooth Slide Animations */
+        .slide-enter { animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hidden-slide { display: none !important; }
+
+        /* Soft Cards with Glassy touches */
+        .soft-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 2rem;
+            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.05), 0 0 0 1px rgba(226, 232, 240, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .soft-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+            background: inherit; z-index: 10;
+        }
+
+        /* Upgraded Visual Emojis */
+        .visual-box {
+            display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+            width: 90px; height: 90px; background: white; border-radius: 1.5rem;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08), inset 0 -4px 0 rgba(0,0,0,0.03); 
+            font-size: 2.8rem; line-height: 1; position: relative;
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            transition: transform 0.3s ease;
+        }
+        .visual-box:hover { transform: translateY(-3px); }
+        
+        /* Interactive Elements */
+        .match-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; user-select: none; }
+        .match-btn:active { transform: scale(0.96); }
+        .match-btn.selected { transform: scale(1.02); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.3); border-color: #a78bfa; background-color: #f5f3ff; }
+        .match-btn.matched { background-color: #ecfdf5; border-color: #6ee7b7; color: #047857; opacity: 0.7; pointer-events: none; transform: scale(0.98); }
+        .match-btn.error { animation: shake 0.4s; background-color: #fef2f2; border-color: #fca5a5; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            50% { transform: translateX(6px); }
+            75% { transform: translateX(-6px); }
+        }
+
+        /* Dropdowns and Inputs */
+        .dropdown-select {
+            appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 1.2em;
+            padding-right: 2.5rem !important; cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .dropdown-select:focus { box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2); }
+        
+        input[type="text"], select { font-size: 16px !important; }
+
+        /* Paths */
+        .path-dashed { stroke-dasharray: 6; animation: dash 2.5s linear infinite; }
+        @keyframes dash { to { stroke-dashoffset: -12; } }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="text-slate-700 antialiased selection:bg-indigo-100 selection:text-indigo-900">
+
+    <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-xl border-b border-slate-200/80 z-40 transition-colors duration-500" id="main-nav">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 md:gap-4">
+                <div id="nav-icon" class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-500/20 transition-all duration-500">
+                    <i class="fas fa-map-marker-alt text-lg md:text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-black text-lg md:text-xl leading-tight text-slate-800 tracking-tight">Prepositions</h1>
+                    <p class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mt-0.5" id="nav-title">Introducción</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3 md:gap-4">
+                <span id="slide-counter" class="font-bold text-sm text-slate-500 hidden sm:flex items-center bg-slate-100/80 px-3 py-1.5 rounded-xl border border-slate-200">1 / 11</span>
+                <button onclick="toggleDictionary()" class="flex items-center gap-2 bg-slate-800 text-white px-4 py-2.5 md:px-5 md:py-2.5 rounded-xl font-bold hover:bg-slate-700 transition-all shadow-md hover:shadow-lg text-xs md:text-sm active:scale-95">
+                    <i class="fas fa-book-open text-indigo-300"></i> <span class="hidden sm:inline">Diccionario</span>
+                </button>
+            </div>
+        </div>
+        <div class="w-full bg-slate-100 h-1.5">
+            <div id="main-progress" class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-full transition-all duration-500 rounded-r-full" style="width: 0%"></div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 pt-28 pb-40 min-h-screen relative">
+        
+        <!-- ======================================= -->
+        <!-- SLIDE 0: INTRO -->
+        <!-- ======================================= -->
+        <section id="slide-0" class="slide-enter mt-4">
+            <div class="soft-card p-6 md:p-12 text-center" style="border-top-color: #6366f1;">
+                <div class="absolute inset-0 bg-gradient-to-b from-indigo-50/50 to-transparent pointer-events-none"></div>
+                
+                <div class="relative z-10">
+                    <div class="flex justify-center gap-4 mb-8">
+                        <div class="w-20 h-20 md:w-28 md:h-28 bg-blue-50 rounded-[2rem] flex items-center justify-center text-4xl md:text-6xl shadow-md border border-blue-100 transform -rotate-6 transition hover:rotate-0">📍</div>
+                        <div class="w-20 h-20 md:w-28 md:h-28 bg-orange-50 rounded-[2rem] flex items-center justify-center text-4xl md:text-6xl shadow-md border border-orange-100 transform rotate-6 transition hover:rotate-0">🏃‍♂️</div>
+                    </div>
+                    
+                    <span class="inline-block px-4 py-1.5 rounded-full bg-indigo-100 text-indigo-700 font-bold text-sm tracking-wide mb-4 shadow-sm border border-indigo-200">The Ultimate Masterclass</span>
+                    <h2 class="text-4xl md:text-6xl font-black text-slate-800 mb-6 tracking-tight">State vs. Movement</h2>
+                    
+                    <p class="text-slate-600 mb-10 max-w-2xl mx-auto text-lg md:text-xl font-medium leading-relaxed">
+                        Las preposiciones nos dicen <b>dónde</b> están las cosas o <b>hacia dónde</b> van. El gran secreto para no equivocarse es observar <span class="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-md border border-yellow-300 font-bold">el verbo</span> que usas antes de ellas.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-12 text-left">
+                        <!-- State Intro -->
+                        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-3xl border border-blue-100 shadow-sm relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:scale-110 transition-transform">📍</div>
+                            <span class="inline-block bg-blue-200 text-blue-800 px-3 py-1 rounded-lg font-black text-xs tracking-widest uppercase mb-3 shadow-sm border border-blue-300">State</span>
+                            <h4 class="font-black text-blue-900 text-2xl mb-2">Estado Fijo</h4>
+                            <p class="text-blue-800/80 font-medium mb-4 text-sm">Indican una posición estática. Nos dicen dónde ESTÁ algo.</p>
+                            
+                            <div class="bg-white/80 backdrop-blur-sm p-3 rounded-xl shadow-sm border border-blue-100/50 mb-3">
+                                <p class="text-xs text-slate-500 font-bold uppercase mb-1">Verbo Clave:</p>
+                                <p class="font-bold text-blue-600 flex items-center gap-2"><i class="fas fa-tag"></i> To Be (am, is, are, was)</p>
+                            </div>
+                            <p class="font-bold text-slate-700 text-sm">"The cat <span class="bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded border border-blue-200">is in</span> the box."</p>
+                        </div>
+
+                        <!-- Movement Intro -->
+                        <div class="bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-3xl border border-orange-100 shadow-sm relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:scale-110 transition-transform">🏃‍♂️</div>
+                            <span class="inline-block bg-orange-200 text-orange-800 px-3 py-1 rounded-lg font-black text-xs tracking-widest uppercase mb-3 shadow-sm border border-orange-300">Movement</span>
+                            <h4 class="font-black text-orange-900 text-2xl mb-2">Movimiento</h4>
+                            <p class="text-orange-800/80 font-medium mb-4 text-sm">Indican dirección y trayectoria. Hacia dónde VA algo.</p>
+                            
+                            <div class="bg-white/80 backdrop-blur-sm p-3 rounded-xl shadow-sm border border-orange-100/50 mb-3">
+                                <p class="text-xs text-slate-500 font-bold uppercase mb-1">Verbos Clave:</p>
+                                <p class="font-bold text-orange-600 flex items-center gap-2"><i class="fas fa-bolt"></i> Go, walk, run, drive...</p>
+                            </div>
+                            <p class="font-bold text-slate-700 text-sm">"The cat <span class="bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded border border-orange-200">jumps into</span> the box."</p>
+                        </div>
+                    </div>
+                    
+                    <button onclick="nextSlide()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xl font-black py-4 px-12 rounded-2xl shadow-xl shadow-indigo-500/20 transition-all transform hover:-translate-y-1 w-full sm:w-auto active:scale-95">
+                        Comenzar la Clase <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-1" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-blue-100 text-blue-600 border border-blue-200 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm">1</span>
+                <div>
+                    <span class="inline-block bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md font-black text-[10px] tracking-widest uppercase mb-1 border border-blue-200">State</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 leading-none">The Big 3</h2>
+                </div>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 border-t-8 border-t-blue-400">
+                <div class="bg-blue-50/50 border border-blue-100 p-4 rounded-2xl mb-8 flex items-start gap-4">
+                    <i class="fas fa-info-circle text-blue-500 text-2xl mt-0.5"></i>
+                    <p class="text-slate-600 font-medium">Estas tres se usan con el <span class="bg-cyan-100 text-cyan-800 px-2 py-0.5 rounded border border-cyan-200 font-bold text-sm">verbo To Be</span> (is, are, am) para indicar la ubicación estática de alguien o algo.</p>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- IN -->
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow relative group">
+                        <div class="visual-box mx-auto mb-5 bg-blue-50/50 border-blue-100">
+                            <span class="relative z-10 text-4xl">📦</span>
+                            <span class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl">🍎</span>
+                        </div>
+                        <h3 class="text-3xl font-black text-blue-600 mb-1 text-center group-hover:scale-110 transition-transform">IN</h3>
+                        <p class="text-xs font-bold text-slate-400 uppercase text-center mb-5 tracking-wide">Dentro (Volumen)</p>
+                        <ul class="text-left space-y-3 text-sm font-bold text-slate-600">
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-emerald-400 mt-1"></i> <span>The apples <span class="bg-cyan-50 text-cyan-700 px-1 rounded border border-cyan-100">are</span> <span class="bg-blue-100 text-blue-700 px-1 rounded border border-blue-200">in</span> the box.</span></li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-emerald-400 mt-1"></i> <span>She <span class="bg-cyan-50 text-cyan-700 px-1 rounded border border-cyan-100">is</span> <span class="bg-blue-100 text-blue-700 px-1 rounded border border-blue-200">in</span> the car.</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- ON -->
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow relative group">
+                        <div class="visual-box mx-auto mb-5 bg-cyan-50/50 border-cyan-100 flex flex-col justify-end pb-3">
+                            <span class="text-3xl relative z-10 -mb-2">🍎</span>
+                            <div class="w-14 h-2.5 bg-slate-300 rounded-full mx-auto shadow-inner"></div>
+                        </div>
+                        <h3 class="text-3xl font-black text-cyan-600 mb-1 text-center group-hover:scale-110 transition-transform">ON</h3>
+                        <p class="text-xs font-bold text-slate-400 uppercase text-center mb-5 tracking-wide">Sobre (Superficie)</p>
+                        <ul class="text-left space-y-3 text-sm font-bold text-slate-600">
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-emerald-400 mt-1"></i> <span>The apple <span class="bg-cyan-50 text-cyan-700 px-1 rounded border border-cyan-100">is</span> <span class="bg-cyan-100 text-cyan-700 px-1 rounded border border-cyan-200">on</span> the table.</span></li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-emerald-400 mt-1"></i> <span>He <span class="bg-cyan-50 text-cyan-700 px-1 rounded border border-cyan-100">is</span> <span class="bg-cyan-100 text-cyan-700 px-1 rounded border border-cyan-200">on</span> the bus.</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- AT -->
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow relative group">
+                        <div class="visual-box mx-auto mb-5 bg-indigo-50/50 border-indigo-100">
+                            <i class="fas fa-map-marker-alt text-indigo-500 text-4xl"></i>
+                        </div>
+                        <h3 class="text-3xl font-black text-indigo-600 mb-1 text-center group-hover:scale-110 transition-transform">AT</h3>
+                        <p class="text-xs font-bold text-slate-400 uppercase text-center mb-5 tracking-wide">Punto / Lugar</p>
+                        <ul class="text-left space-y-3 text-sm font-bold text-slate-600">
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-emerald-400 mt-1"></i> <span>I <span class="bg-cyan-50 text-cyan-700 px-1 rounded border border-cyan-100">am</span> <span class="bg-indigo-100 text-indigo-700 px-1 rounded border border-indigo-200">at</span> the door.</span></li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-emerald-400 mt-1"></i> <span>She <span class="bg-cyan-50 text-cyan-700 px-1 rounded border border-cyan-100">is</span> <span class="bg-indigo-100 text-indigo-700 px-1 rounded border border-indigo-200">at</span> school.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-2" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-cyan-100 text-cyan-600 border border-cyan-200 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm">2</span>
+                <div>
+                    <span class="inline-block bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md font-black text-[10px] tracking-widest uppercase mb-1 border border-blue-200">State</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 leading-none">Spatial Relations</h2>
+                </div>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 border-t-8 border-t-cyan-400">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Estas 6 preposiciones también indican <b>estado</b>. Observa la bola roja (🔴) respecto a la caja (📦). Siempre con <span class="bg-cyan-100 text-cyan-800 px-2 py-0.5 rounded border border-cyan-200 font-bold text-sm">To Be</span>.</p>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-5">
+                    
+                    <div class="bg-white p-5 rounded-2xl border border-slate-100 text-center shadow-sm hover:shadow-md transition group">
+                        <div class="text-4xl mb-3 flex flex-col items-center group-hover:-translate-y-1 transition"><span>📦</span><span class="-mt-2">🔴</span></div>
+                        <h4 class="font-black text-cyan-600 text-xl mb-1">Under</h4>
+                        <p class="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wide">Debajo de</p>
+                        <p class="text-xs text-slate-500 font-bold leading-tight">The ball <span class="text-cyan-700 bg-cyan-50 px-1 rounded">is</span> <span class="bg-blue-100 text-blue-700 px-1 rounded">under</span> the box.</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-slate-100 text-center shadow-sm hover:shadow-md transition group">
+                        <div class="text-4xl mb-3 flex flex-col items-center relative h-12 group-hover:-translate-y-1 transition">
+                            <span class="absolute top-0">🔴</span>
+                            <span class="absolute bottom-0">📦</span>
+                        </div>
+                        <h4 class="font-black text-cyan-600 text-xl mb-1 mt-2">Above</h4>
+                        <p class="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wide">Arriba (sin tocar)</p>
+                        <p class="text-xs text-slate-500 font-bold leading-tight">The ball <span class="text-cyan-700 bg-cyan-50 px-1 rounded">is</span> <span class="bg-blue-100 text-blue-700 px-1 rounded">above</span> the box.</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-slate-100 text-center shadow-sm hover:shadow-md transition group">
+                        <div class="text-4xl mb-3 flex justify-center items-center gap-1 group-hover:-translate-y-1 transition">🔴📦</div>
+                        <h4 class="font-black text-cyan-600 text-xl mb-1">Next to</h4>
+                        <p class="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wide">Al lado de</p>
+                        <p class="text-xs text-slate-500 font-bold leading-tight">The ball <span class="text-cyan-700 bg-cyan-50 px-1 rounded">is</span> <span class="bg-blue-100 text-blue-700 px-1 rounded">next to</span> the box.</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-slate-100 text-center shadow-sm hover:shadow-md transition group">
+                        <div class="text-4xl mb-3 flex justify-center items-center relative h-10 group-hover:-translate-y-1 transition">
+                            <span class="opacity-40 text-3xl absolute -left-1 z-0">🔴</span>
+                            <span class="z-10 relative">📦</span>
+                        </div>
+                        <h4 class="font-black text-cyan-600 text-xl mb-1">Behind</h4>
+                        <p class="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wide">Detrás de</p>
+                        <p class="text-xs text-slate-500 font-bold leading-tight">The ball <span class="text-cyan-700 bg-cyan-50 px-1 rounded">is</span> <span class="bg-blue-100 text-blue-700 px-1 rounded">behind</span> the box.</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-slate-100 text-center shadow-sm hover:shadow-md transition group">
+                        <div class="text-4xl mb-3 flex justify-center items-center relative h-10 group-hover:-translate-y-1 transition">
+                            <span class="z-0 relative opacity-60 text-3xl">📦</span>
+                            <span class="absolute -right-2 bottom-0 z-10">🔴</span>
+                        </div>
+                        <h4 class="font-black text-cyan-600 text-xl mb-1">In front of</h4>
+                        <p class="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wide">En frente de</p>
+                        <p class="text-xs text-slate-500 font-bold leading-tight">The ball <span class="text-cyan-700 bg-cyan-50 px-1 rounded">is</span> <span class="bg-blue-100 text-blue-700 px-1 rounded">in front of</span> the box.</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-slate-100 text-center shadow-sm hover:shadow-md transition group">
+                        <div class="text-4xl mb-3 flex justify-center items-center gap-0.5 group-hover:-translate-y-1 transition"><span class="text-3xl">📦</span>🔴<span class="text-3xl">📦</span></div>
+                        <h4 class="font-black text-cyan-600 text-xl mb-1">Between</h4>
+                        <p class="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wide">Entre (dos)</p>
+                        <p class="text-xs text-slate-500 font-bold leading-tight">The ball <span class="text-cyan-700 bg-cyan-50 px-1 rounded">is</span> <span class="bg-blue-100 text-blue-700 px-1 rounded">between</span> them.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-3" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-orange-100 text-orange-600 border border-orange-200 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm">3</span>
+                <div>
+                    <span class="inline-block bg-orange-100 text-orange-700 px-2 py-0.5 rounded-md font-black text-[10px] tracking-widest uppercase mb-1 border border-orange-200">Movement</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 leading-none">The Basics</h2>
+                </div>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 border-t-8 border-t-orange-400">
+                <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 p-5 rounded-2xl mb-8 flex gap-4 items-start shadow-sm">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0 border border-amber-100"><i class="fas fa-exclamation text-amber-500 text-xl"></i></div>
+                    <div>
+                        <p class="font-black text-amber-900 text-lg mb-1">¡Cambio de Reglas!</p>
+                        <p class="text-sm text-amber-800/80 font-medium leading-relaxed">A partir de ahora, ya NO usamos <i>To Be</i>. Usamos <span class="bg-amber-200 text-amber-900 px-2 py-0.5 rounded shadow-sm">verbos de acción</span> (go, walk, run, drive). Estos verbos exigen preposiciones de dirección.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <!-- TO -->
+                    <div class="flex flex-col sm:flex-row items-center gap-6 bg-white p-5 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                        <div class="text-5xl flex items-center w-32 justify-center shrink-0">
+                            🏃‍♂️ <i class="fas fa-arrow-right text-orange-400 text-xl mx-2"></i> 🏫
+                        </div>
+                        <div class="text-center sm:text-left">
+                            <h3 class="text-2xl font-black text-orange-600 mb-1">TO</h3>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Hacia / Destino A</p>
+                            <p class="text-slate-600 text-sm mb-3">El destino final de un viaje o movimiento.</p>
+                            <p class="font-bold text-slate-700 bg-slate-50 p-2 rounded-lg border border-slate-100 inline-block text-sm">"I <span class="bg-amber-100 text-amber-800 px-1 rounded border border-amber-200">walk</span> <span class="bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded border border-orange-200 shadow-sm">to</span> school."</p>
+                        </div>
+                    </div>
+
+                    <!-- INTO -->
+                    <div class="flex flex-col sm:flex-row items-center gap-6 bg-white p-5 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                        <div class="text-5xl flex items-center w-32 justify-center shrink-0 relative h-16">
+                            <span class="absolute left-2 z-10 text-4xl">🏃‍♂️</span>
+                            <i class="fas fa-arrow-right text-amber-500 text-lg absolute left-1/2 transform -translate-x-1/2 z-20 bg-white rounded-full"></i>
+                            <span class="text-6xl opacity-40 absolute right-2 z-0">📦</span>
+                        </div>
+                        <div class="text-center sm:text-left">
+                            <h3 class="text-2xl font-black text-amber-600 mb-1">INTO</h3>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Hacia adentro (Movimiento)</p>
+                            <p class="text-slate-600 text-sm mb-3">La acción de entrar. (IN = Ya estás dentro. INTO = Estás entrando).</p>
+                            <p class="font-bold text-slate-700 bg-slate-50 p-2 rounded-lg border border-slate-100 inline-block text-sm">"He <span class="bg-amber-100 text-amber-800 px-1 rounded border border-amber-200">jumps</span> <span class="bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded border border-orange-200 shadow-sm">into</span> the pool."</p>
+                        </div>
+                    </div>
+
+                    <!-- OUT OF -->
+                    <div class="flex flex-col sm:flex-row items-center gap-6 bg-white p-5 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                        <div class="text-5xl flex items-center w-32 justify-center shrink-0 relative h-16">
+                            <span class="text-6xl opacity-40 absolute left-2 z-0">📦</span>
+                            <i class="fas fa-arrow-right text-red-400 text-lg absolute left-1/2 transform -translate-x-1/2 z-20 bg-white rounded-full"></i>
+                            <span class="absolute right-2 z-10 text-4xl">🏃‍♂️</span>
+                        </div>
+                        <div class="text-center sm:text-left">
+                            <h3 class="text-2xl font-black text-red-500 mb-1">OUT OF</h3>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Hacia afuera / Salir de</p>
+                            <p class="text-slate-600 text-sm mb-3">La acción contraria a 'into'. El movimiento de salir de un espacio.</p>
+                            <p class="font-bold text-slate-700 bg-slate-50 p-2 rounded-lg border border-slate-100 inline-block text-sm">"She <span class="bg-amber-100 text-amber-800 px-1 rounded border border-amber-200">gets</span> <span class="bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded border border-orange-200 shadow-sm">out of</span> the car."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-4" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-red-100 text-red-600 border border-red-200 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm">4</span>
+                <div>
+                    <span class="inline-block bg-orange-100 text-orange-700 px-2 py-0.5 rounded-md font-black text-[10px] tracking-widest uppercase mb-1 border border-orange-200">Movement</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 leading-none">Paths & Trails</h2>
+                </div>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 border-t-8 border-t-red-500">
+                <p class="text-slate-600 mb-8 text-lg font-medium">Describen la <b>trayectoria</b> (el camino) mientras usas <span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded border border-amber-200 font-bold text-sm">Action Verbs</span>.</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    
+                    <!-- ACROSS -->
+                    <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-2xl font-black text-red-500">ACROSS</h3>
+                            <span class="text-[10px] font-black bg-red-50 text-red-600 px-2 py-1 rounded-md uppercase border border-red-100">Cruzar</span>
+                        </div>
+                        <div class="text-3xl bg-slate-50/50 rounded-xl h-16 flex items-center justify-center mb-4 border border-slate-100 relative overflow-hidden">
+                            🛣️ <span class="absolute left-1/4 z-10 transform -translate-y-1 animate-[bounce_2s_infinite]">🚶‍♂️</span> 🛣️
+                            <svg class="absolute top-1/2 left-0 w-full h-2 z-0" style="transform: translateY(-50%)"><line x1="10%" y1="5" x2="90%" y2="5" stroke="#ef4444" stroke-width="3" stroke-linecap="round" class="path-dashed"/></svg>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-2 font-medium h-8">De un lado al otro (superficie).</p>
+                        <p class="font-bold text-slate-700 text-sm">She <span class="bg-amber-100 text-amber-800 px-1 rounded border border-amber-200">walks</span> <span class="bg-orange-100 text-orange-700 px-1 rounded border border-orange-200 shadow-sm">across</span> the street.</p>
+                    </div>
+
+                    <!-- THROUGH -->
+                    <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-2xl font-black text-rose-500">THROUGH</h3>
+                            <span class="text-[10px] font-black bg-rose-50 text-rose-600 px-2 py-1 rounded-md uppercase border border-rose-100">A través</span>
+                        </div>
+                        <div class="text-3xl bg-slate-50/50 rounded-xl h-16 flex items-center justify-center mb-4 border border-slate-100 relative overflow-hidden">
+                            🌲 <span class="relative z-10 mx-2 text-2xl">🚗</span> 🌲
+                            <svg class="absolute top-1/2 left-0 w-full h-2 z-0" style="transform: translateY(-50%)"><line x1="10%" y1="5" x2="90%" y2="5" stroke="#f43f5e" stroke-width="3" stroke-linecap="round" class="path-dashed"/></svg>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-2 font-medium h-8">Cruzar un espacio 3D (túnel, bosque).</p>
+                        <p class="font-bold text-slate-700 text-sm">We <span class="bg-amber-100 text-amber-800 px-1 rounded border border-amber-200">drive</span> <span class="bg-orange-100 text-orange-700 px-1 rounded border border-orange-200 shadow-sm">through</span> the forest.</p>
+                    </div>
+
+                    <!-- ALONG -->
+                    <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-2xl font-black text-pink-500">ALONG</h3>
+                            <span class="text-[10px] font-black bg-pink-50 text-pink-600 px-2 py-1 rounded-md uppercase border border-pink-100">A lo largo</span>
+                        </div>
+                        <div class="text-3xl bg-slate-50/50 rounded-xl h-16 flex items-center justify-center mb-4 border border-slate-100 relative overflow-hidden">
+                            🌊 <span class="inline-block transform -translate-y-2 text-2xl ml-2">🏃‍♀️</span>
+                            <svg class="absolute top-1/2 left-0 w-full h-2 z-0" style="transform: translateY(12px)"><line x1="30%" y1="5" x2="80%" y2="5" stroke="#ec4899" stroke-width="3" stroke-linecap="round" class="path-dashed"/></svg>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-2 font-medium h-8">Moverse en paralelo a algo largo.</p>
+                        <p class="font-bold text-slate-700 text-sm">They <span class="bg-amber-100 text-amber-800 px-1 rounded border border-amber-200">run</span> <span class="bg-orange-100 text-orange-700 px-1 rounded border border-orange-200 shadow-sm">along</span> the beach.</p>
+                    </div>
+
+                    <!-- OVER -->
+                    <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-2xl font-black text-fuchsia-500">OVER</h3>
+                            <span class="text-[10px] font-black bg-fuchsia-50 text-fuchsia-600 px-2 py-1 rounded-md uppercase border border-fuchsia-100">Por encima</span>
+                        </div>
+                        <div class="text-3xl bg-slate-50/50 rounded-xl h-16 flex items-center justify-center mb-4 border border-slate-100 relative overflow-hidden">
+                            <span class="absolute bottom-2 text-2xl z-10">🚧</span>
+                            <span class="absolute top-1 text-2xl z-20">🦘</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-2 font-medium h-8">Saltar o cruzar por encima de algo.</p>
+                        <p class="font-bold text-slate-700 text-sm">It <span class="bg-amber-100 text-amber-800 px-1 rounded border border-amber-200">jumps</span> <span class="bg-orange-100 text-orange-700 px-1 rounded border border-orange-200 shadow-sm">over</span> the fence.</p>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-5" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-purple-100 text-purple-600 border border-purple-200 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-bolt"></i></span>
+                <div>
+                    <span class="inline-block bg-purple-100 text-purple-700 px-2 py-0.5 rounded-md font-black text-[10px] tracking-widest uppercase mb-1 border border-purple-200">Golden Rule</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 leading-none">The Clash</h2>
+                </div>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 border-t-8 border-t-purple-500 bg-gradient-to-br from-white to-purple-50/50">
+                <div class="text-center max-w-xl mx-auto mb-10">
+                    <h3 class="text-2xl font-black text-purple-900 mb-3">¡No los mezcles!</h3>
+                    <p class="text-slate-600 font-medium">El error más común en inglés es usar una preposición de movimiento con el verbo <i>To Be</i> (que es de estado estático).</p>
+                </div>
+
+                <div class="space-y-6 max-w-2xl mx-auto">
+                    <!-- Error 1 -->
+                    <div class="relative bg-white rounded-3xl p-6 border-2 border-slate-100 shadow-md">
+                        <div class="flex items-center gap-4 mb-4 pb-4 border-b border-slate-100">
+                            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-500 shrink-0"><i class="fas fa-times text-xl"></i></div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Incorrecto</p>
+                                <p class="font-mono text-lg text-slate-700">"I <span class="bg-cyan-100 text-cyan-800 px-1 rounded font-bold">am</span> <span class="bg-orange-100 text-orange-700 px-1 rounded font-bold line-through">into</span> the house."</p>
+                            </div>
+                        </div>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
+                                <p class="text-[10px] font-black text-emerald-600 uppercase mb-1"><i class="fas fa-check mr-1"></i> Opción A (Todo Estado)</p>
+                                <p class="font-bold text-slate-700 text-sm">"I <span class="bg-cyan-100 text-cyan-800 px-1 rounded">am</span> <span class="bg-blue-100 text-blue-700 px-1 rounded shadow-sm border border-blue-200">in</span> the house."</p>
+                            </div>
+                            <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
+                                <p class="text-[10px] font-black text-emerald-600 uppercase mb-1"><i class="fas fa-check mr-1"></i> Opción B (Todo Movimiento)</p>
+                                <p class="font-bold text-slate-700 text-sm">"I <span class="bg-amber-100 text-amber-800 px-1 rounded">walk</span> <span class="bg-orange-100 text-orange-700 px-1 rounded shadow-sm border border-orange-200">into</span> the house."</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Error 2 -->
+                    <div class="relative bg-white rounded-3xl p-6 border-2 border-slate-100 shadow-md">
+                        <div class="flex items-center gap-4 mb-4 pb-4 border-b border-slate-100">
+                            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-500 shrink-0"><i class="fas fa-times text-xl"></i></div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Incorrecto</p>
+                                <p class="font-mono text-lg text-slate-700">"He <span class="bg-cyan-100 text-cyan-800 px-1 rounded font-bold">is</span> <span class="bg-orange-100 text-orange-700 px-1 rounded font-bold line-through">towards</span> the park."</p>
+                            </div>
+                        </div>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
+                                <p class="text-[10px] font-black text-emerald-600 uppercase mb-1"><i class="fas fa-check mr-1"></i> Opción A (Todo Estado)</p>
+                                <p class="font-bold text-slate-700 text-sm">"He <span class="bg-cyan-100 text-cyan-800 px-1 rounded">is</span> <span class="bg-blue-100 text-blue-700 px-1 rounded shadow-sm border border-blue-200">at</span> the park."</p>
+                            </div>
+                            <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
+                                <p class="text-[10px] font-black text-emerald-600 uppercase mb-1"><i class="fas fa-check mr-1"></i> Opción B (Todo Movimiento)</p>
+                                <p class="font-bold text-slate-700 text-sm">"He <span class="bg-amber-100 text-amber-800 px-1 rounded">runs</span> <span class="bg-orange-100 text-orange-700 px-1 rounded shadow-sm border border-orange-200">towards</span> the park."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-6" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-fuchsia-100 text-fuchsia-600 border border-fuchsia-200 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-link"></i></span>
+                <div>
+                    <span class="inline-block bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-black text-[10px] tracking-widest uppercase mb-1 border border-slate-200">Practice 1</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 leading-none">Match It</h2>
+                </div>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 bg-slate-50/50 border-t-8 border-t-fuchsia-400">
+                <p class="text-slate-600 mb-8 font-medium">Conecta la representación visual (izquierda) con su preposición correcta (derecha).</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8" id="match-modal-container">
+                    <div class="space-y-4" id="match-left-col"></div>
+                    <div class="space-y-4" id="match-right-col"></div>
+                </div>
+                
+                <div id="match-feedback" class="hidden mt-8 p-4 rounded-2xl font-bold text-lg border text-center transition-all shadow-sm"></div>
+            </div>
+        </section>
+
+        <section id="slide-7" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-teal-100 text-teal-600 border border-teal-200 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-list-ul"></i></span>
+                <div>
+                    <span class="inline-block bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-black text-[10px] tracking-widest uppercase mb-1 border border-slate-200">Practice 2</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 leading-none">Context Matters</h2>
+                </div>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 bg-slate-50/50 border-t-8 border-t-teal-400">
+                <p class="text-slate-600 mb-8 font-medium">Fíjate muy bien en el <b>verbo resaltado</b>. ¿Es el verbo <span class="bg-cyan-100 text-cyan-800 px-1 rounded text-xs font-bold border border-cyan-200">To Be</span> o es un <span class="bg-amber-100 text-amber-800 px-1 rounded text-xs font-bold border border-amber-200">Verbo de Acción</span>?</p>
+                
+                <div class="space-y-5" id="dropdown-context-container">
+                    <!-- Populated by JS -->
+                </div>
+                
+                <button onclick="checkDropdownContext()" class="mt-8 bg-teal-600 text-white font-black py-3.5 px-8 rounded-xl shadow-md hover:shadow-lg hover:bg-teal-500 transition-all w-full md:w-auto active:scale-95">Comprobar Respuestas</button>
+                <div id="dropdown-feedback" class="hidden mt-5 p-4 rounded-2xl font-bold text-lg border transition-all"></div>
+            </div>
+        </section>
+
+        <section id="slide-8" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-emerald-100 text-emerald-600 border border-emerald-200 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-keyboard"></i></span>
+                <div>
+                    <span class="inline-block bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-black text-[10px] tracking-widest uppercase mb-1 border border-slate-200">Practice 3</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 leading-none">The Builder</h2>
+                </div>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 bg-slate-50/50 border-t-8 border-t-emerald-400">
+                <p class="text-slate-600 mb-8 font-medium">Lee la pista en español y escribe la preposición correcta en inglés en los espacios vacíos.</p>
+                
+                <div class="space-y-5" id="detective-container">
+                    <!-- Populated by JS -->
+                </div>
+                
+                <button onclick="checkDetective()" class="mt-8 bg-emerald-600 text-white font-black py-3.5 px-8 rounded-xl shadow-md hover:shadow-lg hover:bg-emerald-500 transition-all w-full md:w-auto active:scale-95">Verificar Escritura</button>
+                <div id="detective-feedback" class="hidden mt-5 p-4 rounded-2xl font-bold text-lg border transition-all"></div>
+            </div>
+        </section>
+
+        <section id="slide-9" class="hidden-slide">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-pink-100 text-pink-600 border border-pink-200 font-black text-2xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm"><i class="fas fa-layer-group"></i></span>
+                <div>
+                    <span class="inline-block bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-black text-[10px] tracking-widest uppercase mb-1 border border-slate-200">Practice 4</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 leading-none">The Sorter</h2>
+                </div>
+            </div>
+            
+            <div class="soft-card p-6 md:p-10 bg-slate-50/50 border-t-8 border-t-pink-400 text-center">
+                <p class="text-slate-600 mb-6 font-medium">Clasifica la preposición mostrada. ¿Se usa para <span class="font-bold text-blue-600">Estado</span> (con To Be) o para <span class="font-bold text-orange-600">Movimiento</span> (con Acción)?</p>
+                
+                <div class="mb-8">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3" id="sorter-counter">Palabra 1 de 8</p>
+                    <div id="sorter-word" class="inline-block bg-white border-2 border-slate-200 shadow-lg rounded-3xl py-6 px-12 text-4xl font-black text-slate-800 tracking-tight transform transition-transform duration-300">
+                        ...
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
+                    <button onclick="handleSort('State')" class="bg-gradient-to-b from-blue-50 to-blue-100 border-2 border-blue-200 text-blue-700 rounded-2xl py-6 px-4 shadow-sm hover:shadow-md hover:border-blue-400 transition-all active:scale-95 group">
+                        <i class="fas fa-map-marker-alt text-3xl mb-2 text-blue-500 group-hover:scale-110 transition-transform"></i>
+                        <p class="font-black text-lg uppercase tracking-wide">State</p>
+                        <p class="text-xs font-bold opacity-70 mt-1">(To Be)</p>
+                    </button>
+                    <button onclick="handleSort('Movement')" class="bg-gradient-to-b from-orange-50 to-orange-100 border-2 border-orange-200 text-orange-700 rounded-2xl py-6 px-4 shadow-sm hover:shadow-md hover:border-orange-400 transition-all active:scale-95 group">
+                        <i class="fas fa-running text-3xl mb-2 text-orange-500 group-hover:scale-110 transition-transform"></i>
+                        <p class="font-black text-lg uppercase tracking-wide">Movement</p>
+                        <p class="text-xs font-bold opacity-70 mt-1">(Action)</p>
+                    </button>
+                </div>
+                
+                <div id="sorter-feedback" class="mt-6 h-10 font-bold text-lg flex items-center justify-center transition-all opacity-0"></div>
+                
+                <div id="sorter-end" class="hidden mt-6 bg-emerald-50 text-emerald-700 border border-emerald-200 p-4 rounded-xl font-bold">
+                    ¡Clasificación completada! Eres un maestro de la regla de oro.
+                </div>
+            </div>
+        </section>
+
+        <section id="slide-10" class="hidden-slide">
+            
+            <div id="mega-quiz-intro" class="text-center mt-10 mb-8 slide-enter">
+                <div class="w-32 h-32 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-[2.5rem] flex items-center justify-center text-6xl mx-auto mb-8 shadow-xl shadow-purple-500/30 transform rotate-3">🏆</div>
+                <h2 class="text-4xl md:text-6xl font-black text-slate-800 tracking-tight mb-4">The Final Challenge</h2>
+                <p class="text-slate-600 text-xl font-medium max-w-2xl mx-auto mb-10">Pon a prueba todo lo que aprendiste. <br><b class="text-purple-600">Quiz definitivo de 10 preguntas.</b></p>
+                <button onclick="startMegaQuiz();" class="bg-slate-800 hover:bg-slate-700 text-white text-xl font-black py-4 px-12 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1 w-full sm:w-auto active:scale-95">
+                    Iniciar Examen
+                </button>
+            </div>
+
+            <div id="mega-quiz-container" class="hidden soft-card p-6 md:p-12 max-w-3xl mx-auto mt-4" style="border-top-color: #a855f7;">
+                <div class="absolute top-0 left-0 w-full h-1.5 bg-slate-100 z-20">
+                    <div id="mega-quiz-progress" class="h-full bg-gradient-to-r from-indigo-400 to-purple-500 transition-all duration-300" style="width: 0%"></div>
+                </div>
+
+                <div id="mega-quiz-area" class="relative z-10 pt-4">
+                    <div class="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
+                        <span class="text-sm md:text-xs font-black text-slate-400 uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-lg" id="mega-quiz-counter">Pregunta 1 de 10</span>
+                    </div>
+                    
+                    <h3 class="text-2xl md:text-3xl font-black text-slate-800 mb-8 leading-relaxed text-center" id="mega-quiz-question">Question?</h3>
+                    
+                    <div id="mega-quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Options generated by JS -->
+                    </div>
+
+                    <div id="mega-quiz-feedback" class="hidden mt-6 p-4 rounded-xl text-center font-bold text-lg border transition-all"></div>
+                </div>
+
+                <div id="mega-quiz-result" class="hidden text-center py-10 slide-enter relative z-10">
+                    <div class="text-7xl mb-6" id="mq-emoji">🎉</div>
+                    <h3 class="text-4xl font-black text-slate-800 mb-3">¡Masterclass Completada!</h3>
+                    <p class="text-lg text-slate-600 mb-8 font-medium">Tu puntuación final: <span id="mq-score" class="font-black text-purple-600 text-4xl mx-2 bg-purple-50 px-4 py-1 rounded-2xl border border-purple-100"></span> / 10</p>
+                    <button onclick="location.reload()" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black text-lg py-3.5 px-10 rounded-xl shadow-lg transition-all hover:-translate-y-1 w-full sm:w-auto active:scale-95">Reiniciar Clase</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-xl border-t border-slate-200/80 p-4 md:p-5 z-30 shadow-[0_-10px_30px_rgba(0,0,0,0.03)]">
+            <div class="max-w-5xl mx-auto flex justify-between gap-4">
+                <button id="btn-prev" onclick="prevSlide()" class="flex-1 bg-slate-100 text-slate-600 font-black text-base py-3 px-4 rounded-xl hover:bg-slate-200 transition opacity-50 cursor-not-allowed disabled active:scale-95">
+                    <i class="fas fa-arrow-left mr-2 opacity-70"></i> Atrás
+                </button>
+                <button id="btn-next" onclick="nextSlide()" class="flex-1 bg-indigo-600 text-white font-black text-base py-3 px-4 rounded-xl shadow-md hover:shadow-lg hover:bg-indigo-500 transition-all active:scale-95">
+                    Siguiente <i class="fas fa-arrow-right ml-2 opacity-90"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <div id="dictionary-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 hidden flex justify-center items-end sm:items-center">
+        <div class="bg-white w-full sm:max-w-4xl h-[85vh] sm:h-[80vh] sm:rounded-[2rem] rounded-t-[2rem] shadow-2xl flex flex-col slide-enter border border-slate-200 overflow-hidden relative">
+            
+            <div class="p-5 md:p-6 border-b border-slate-100 flex justify-between items-center bg-slate-800 text-white">
+                <div>
+                    <h3 class="font-black text-2xl flex items-center gap-3"><i class="fas fa-book-open text-indigo-300"></i> Dictionary</h3>
+                    <p class="text-slate-300 text-xs font-bold mt-1 uppercase tracking-widest opacity-80">State vs Movement</p>
+                </div>
+                <button onclick="toggleDictionary()" class="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center transition text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-5 custom-scrollbar bg-slate-50 relative">
+                
+                <!-- State Section -->
+                <div class="mb-8">
+                    <div class="flex items-center gap-3 mb-5 border-b-2 border-blue-100 pb-3">
+                        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg font-black text-sm uppercase tracking-widest border border-blue-200 shadow-sm">State</span>
+                        <span class="text-sm font-bold text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">Usa con To Be</span>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4" id="dict-state"></div>
+                </div>
+                
+                <!-- Movement Section -->
+                <div>
+                    <div class="flex items-center gap-3 mb-5 border-b-2 border-orange-100 pb-3">
+                        <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-lg font-black text-sm uppercase tracking-widest border border-orange-200 shadow-sm">Movement</span>
+                        <span class="text-sm font-bold text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">Usa con Action Verbs</span>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4" id="dict-move"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        // --- Data Definitions ---
+        const cheatSheetState = [
+            { prep: "In", def: "Dentro de (volumen)", ex: "The cat is in the box." },
+            { prep: "On", def: "Sobre (superficie)", ex: "The book is on the table." },
+            { prep: "At", def: "En (punto específico)", ex: "She is at the door." },
+            { prep: "Under", def: "Debajo de", ex: "The dog is under the bed." },
+            { prep: "Above", def: "Arriba de (sin tocar)", ex: "The picture is above the sofa." },
+            { prep: "Next to", def: "Al lado de", ex: "He is next to me." },
+            { prep: "Behind", def: "Detrás de", ex: "The car is behind the bus." },
+            { prep: "In front of", def: "En frente de", ex: "I am in front of the TV." },
+            { prep: "Between", def: "Entre (dos cosas)", ex: "It is between A and B." }
+        ];
+
+        const cheatSheetMove = [
+            { prep: "To", def: "Hacia / A (Destino)", ex: "I walk to the park." },
+            { prep: "Into", def: "Hacia adentro", ex: "He jumps into the pool." },
+            { prep: "Out of", def: "Hacia afuera", ex: "She gets out of the room." },
+            { prep: "Across", def: "Cruzar (superficie)", ex: "We run across the street." },
+            { prep: "Through", def: "A través de (3D)", ex: "They drive through the tunnel." },
+            { prep: "Along", def: "A lo largo de", ex: "Walk along the river." },
+            { prep: "Over", def: "Por encima (obstáculo)", ex: "It jumps over the fence." },
+            { prep: "Past", def: "Pasando por", ex: "Drive past the bank." },
+            { prep: "Towards", def: "En dirección a", ex: "Running towards me." }
+        ];
+
+        const matchData = [
+            { id: "p1", visual: "📦🔴📦", ans: "Between" },
+            { id: "p2", visual: "🏃‍♂️ ➡️ 🚪", ans: "Into" },
+            { id: "p3", visual: "🚶‍♂️ 🌉", ans: "Across" },
+            { id: "p4", visual: "🍎 📘", ans: "On" }, // Simplified visual text
+            { id: "p5", visual: "🦘 🚧", ans: "Over" },
+            { id: "p6", visual: "🔴📦", ans: "Next to" }
+        ];
+
+        const dropdownContextData = [
+            { 
+                context: "(Hablando de ubicación física estática)", 
+                pre: "The keys", verbType: "To Be", verb: "are", opts: ["into", "on", "across"], ans: "on", post: "the table." 
+            },
+            { 
+                context: "(Acción de cruzar un túnel en auto)", 
+                pre: "We", verbType: "Action", verb: "drive", opts: ["through", "in", "above"], ans: "through", post: "the dark tunnel." 
+            },
+            { 
+                context: "(Llegando a un destino)", 
+                pre: "Every morning I", verbType: "Action", verb: "walk", opts: ["to", "at", "into"], ans: "to", post: "my office." 
+            },
+            { 
+                context: "(Posición fija entre dos cosas)", 
+                pre: "The pharmacy", verbType: "To Be", verb: "is", opts: ["along", "between", "over"], ans: "between", post: "the bank and the cafe." 
+            }
+        ];
+
+        const detectiveData = [
+            { hint: "(Hacia adentro del auto)", prompt: "He gets ____ the car.", correct: ["into"] },
+            { hint: "(Detrás de la puerta - Estado)", prompt: "The broom is ____ the door.", correct: ["behind"] },
+            { hint: "(Cruzar la calle - Movimiento)", prompt: "Don't run ____ the street!", correct: ["across"] },
+            { hint: "(Debajo de la mesa - Estado)", prompt: "The cat is sleeping ____ the table.", correct: ["under"] }
+        ];
+
+        // Sorter Data
+        const sorterWords = [
+            { word: "INTO", type: "Movement" }, { word: "IN", type: "State" },
+            { word: "TOWARDS", type: "Movement" }, { word: "AT", type: "State" },
+            { word: "THROUGH", type: "Movement" }, { word: "BEHIND", type: "State" },
+            { word: "ACROSS", type: "Movement" }, { word: "BETWEEN", type: "State" }
+        ];
+
+        const megaQuizQuestions = [
+            { q: "Si usas el verbo 'is' o 'are', ¿qué tipo de preposición debes usar?", options: ["De Movimiento", "De Estado", "Cualquiera"], ans: 1 },
+            { q: "The bird flies _____ the window. (Hacia adentro de la habitación)", options: ["in", "into", "at"], ans: 1 },
+            { q: "Encuentra el error en la regla de oro:", options: ["She goes into the bank.", "She is into the bank.", "She is in the bank."], ans: 1 },
+            { q: "We drove _____ the forest. (A través del bosque tridimensional)", options: ["across", "past", "through"], ans: 2 },
+            { q: "The cinema is _____ the restaurant and the library. (En medio)", options: ["next to", "between", "across"], ans: 1 },
+            { q: "I go _____ school by bus. (Destino final)", options: ["to", "at", "towards"], ans: 0 },
+            { q: "He walked _____ the river for two miles. (A lo largo de)", options: ["along", "across", "through"], ans: 0 },
+            { q: "The painting is _____ the sofa. (Arriba, en la pared, sin tocar el sofá)", options: ["on", "above", "over"], ans: 1 },
+            { q: "The athlete jumped _____ the hurdle (obstáculo).", options: ["above", "over", "past"], ans: 1 },
+            { q: "She is waiting _____ the bus stop. (Punto específico)", options: ["in", "on", "at"], ans: 2 }
+        ];
+
+        // --- STREAMING_CHUNK: Navigation & UI Updates ---
+        const totalSlides = 11; // 0 to 10
+        let currentSlide = 0;
+        
+        const slideThemes = [
+            { color: 'indigo', title: 'Intro' }, 
+            { color: 'blue', title: 'The Big 3' }, 
+            { color: 'cyan', title: 'Spatial State' }, 
+            { color: 'orange', title: 'Movement Basics' }, 
+            { color: 'red', title: 'Movement Paths' }, 
+            { color: 'purple', title: 'The Clash' }, 
+            { color: 'fuchsia', title: 'Practice 1' }, 
+            { color: 'teal', title: 'Practice 2' }, 
+            { color: 'emerald', title: 'Practice 3' }, 
+            { color: 'pink', title: 'Practice 4' }, 
+            { color: 'indigo', title: 'Mega Quiz' } 
+        ];
+
+        function updateNavUI() {
+            const theme = slideThemes[currentSlide];
+            
+            const progress = (currentSlide / (totalSlides - 1)) * 100;
+            document.getElementById('main-progress').style.width = `${progress}%`;
+            
+            const colorMap = {
+                'indigo': 'from-indigo-500 to-purple-500', 'blue': 'from-blue-400 to-cyan-500',
+                'cyan': 'from-cyan-400 to-teal-400', 'orange': 'from-orange-400 to-amber-500',
+                'red': 'from-red-400 to-rose-500', 'purple': 'from-purple-500 to-fuchsia-500',
+                'fuchsia': 'from-fuchsia-400 to-purple-500', 'teal': 'from-teal-400 to-emerald-400',
+                'emerald': 'from-emerald-400 to-green-400', 'pink': 'from-pink-400 to-rose-400'
+            };
+            
+            const btnColorMap = {
+                'indigo': 'bg-indigo-600 hover:bg-indigo-500', 'blue': 'bg-blue-600 hover:bg-blue-500',
+                'cyan': 'bg-cyan-600 hover:bg-cyan-500', 'orange': 'bg-orange-600 hover:bg-orange-500',
+                'red': 'bg-red-600 hover:bg-red-500', 'purple': 'bg-purple-600 hover:bg-purple-500',
+                'fuchsia': 'bg-fuchsia-600 hover:bg-fuchsia-500', 'teal': 'bg-teal-600 hover:bg-teal-500',
+                'emerald': 'bg-emerald-600 hover:bg-emerald-500', 'pink': 'bg-pink-600 hover:bg-pink-500'
+            };
+            
+            const navIconBg = document.getElementById('nav-icon');
+            navIconBg.className = `w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center text-white font-bold shadow-lg transition-colors duration-500 bg-gradient-to-br ${colorMap[theme.color] || colorMap['indigo']}`;
+            
+            const btnNext = document.getElementById('btn-next');
+            btnNext.className = `flex-1 text-white font-black text-base py-3 px-4 rounded-xl shadow-md transition-all active:scale-95 ${btnColorMap[theme.color] || btnColorMap['indigo']}`;
+
+            document.getElementById('nav-title').innerText = theme.title;
+            document.getElementById('slide-counter').innerText = `${currentSlide + 1} / ${totalSlides}`;
+
+            for (let i = 0; i < totalSlides; i++) {
+                const s = document.getElementById(`slide-${i}`);
+                if(s) { s.classList.add('hidden-slide'); s.classList.remove('slide-enter'); }
+            }
+            const current = document.getElementById(`slide-${currentSlide}`);
+            if (current) {
+                current.classList.remove('hidden-slide');
+                void current.offsetWidth; 
+                current.classList.add('slide-enter');
+            }
+
+            const btnPrev = document.getElementById('btn-prev');
+            if (currentSlide === 0) {
+                btnPrev.classList.add('opacity-50', 'cursor-not-allowed');
+                btnPrev.setAttribute('disabled', 'true');
+            } else {
+                btnPrev.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnPrev.removeAttribute('disabled');
+            }
+
+            if (currentSlide === totalSlides - 1) { btnNext.classList.add('hidden'); } 
+            else { btnNext.classList.remove('hidden'); }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextSlide() { if (currentSlide < totalSlides - 1) { currentSlide++; updateNavUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateNavUI(); } }
+
+        // --- STREAMING_CHUNK: Dictionary Builder ---
+        function renderCheatSheet() {
+            const containerState = document.getElementById('dict-state');
+            const containerMove = document.getElementById('dict-move');
+            
+            const buildHTML = (data, colorClass, borderClass, bgClass) => {
+                return data.map(item => `
+                    <div class="bg-white p-4 rounded-xl border ${borderClass} shadow-sm hover:shadow-md transition">
+                        <div class="font-black text-xl mb-1 ${colorClass} bg-white inline-block">${item.prep}</div>
+                        <p class="font-bold text-slate-600 text-sm mb-1">${item.def}</p>
+                        <p class="text-slate-500 italic text-xs bg-slate-50 p-2 rounded border border-slate-100">Ej: ${item.ex}</p>
+                    </div>`).join('');
+            };
+
+            containerState.innerHTML = buildHTML(cheatSheetState, 'text-blue-700', 'border-blue-100', 'bg-blue-50');
+            containerMove.innerHTML = buildHTML(cheatSheetMove, 'text-orange-700', 'border-orange-100', 'bg-orange-50');
+        }
+
+        function toggleDictionary() { document.getElementById('dictionary-modal').classList.toggle('hidden'); }
+
+        // --- STREAMING_CHUNK: Game Logic (Match) ---
+        let matchSelected = { left: null, right: null };
+        function initMatchGame() {
+            const leftCol = document.getElementById('match-left-col');
+            const rightCol = document.getElementById('match-right-col');
+            
+            let shuffledLeft = [...matchData].sort(() => Math.random() - 0.5);
+            let shuffledRight = [...matchData].sort(() => Math.random() - 0.5);
+
+            leftCol.innerHTML = shuffledLeft.map(item => `<button id="ml-${item.id}" onclick="selectMatch('left', '${item.id}')" class="match-btn w-full bg-white border-2 border-slate-200 font-black text-3xl text-slate-700 p-4 rounded-2xl shadow-sm text-center hover:border-fuchsia-300 h-20 flex items-center justify-center tracking-widest">${item.visual}</button>`).join('');
+            rightCol.innerHTML = shuffledRight.map(item => `<button id="mr-${item.id}" onclick="selectMatch('right', '${item.id}')" class="match-btn w-full bg-white border-2 border-slate-200 font-bold text-lg text-slate-700 p-4 rounded-2xl shadow-sm text-center hover:border-fuchsia-300 h-20 flex items-center justify-center uppercase tracking-wide">${item.ans}</button>`).join('');
+        }
+
+        function selectMatch(side, id) {
+            const elId = side === 'left' ? `ml-${id}` : `mr-${id}`;
+            const el = document.getElementById(elId);
+            if(el.classList.contains('matched')) return;
+
+            if(matchSelected[side]) {
+                const prevEl = document.getElementById(side === 'left' ? `ml-${matchSelected[side]}` : `mr-${matchSelected[side]}`);
+                if(prevEl) prevEl.classList.remove('selected');
+            }
+
+            if(matchSelected[side] === id) {
+                matchSelected[side] = null;
+                el.classList.remove('selected');
+            } else {
+                matchSelected[side] = id;
+                el.classList.add('selected');
+            }
+
+            if (matchSelected.left && matchSelected.right) {
+                const lEl = document.getElementById(`ml-${matchSelected.left}`);
+                const rEl = document.getElementById(`mr-${matchSelected.right}`);
+                
+                if (matchSelected.left === matchSelected.right) {
+                    lEl.classList.replace('selected', 'matched');
+                    rEl.classList.replace('selected', 'matched');
+                    checkMatchWin();
+                } else {
+                    lEl.classList.add('error'); rEl.classList.add('error');
+                    setTimeout(() => { lEl.classList.remove('error', 'selected'); rEl.classList.remove('error', 'selected'); }, 500);
+                }
+                matchSelected = { left: null, right: null };
+            }
+        }
+
+        function checkMatchWin() {
+            if (document.querySelectorAll('.match-btn.matched').length === matchData.length * 2) {
+                const fb = document.getElementById('match-feedback');
+                fb.classList.remove('hidden');
+                fb.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+                fb.innerHTML = '<i class="fas fa-check-circle mr-2 text-xl text-emerald-500"></i> ¡Perfecto! Excelente asociación visual.';
+            }
+        }
+
+        // --- STREAMING_CHUNK: Game Logic (Context) ---
+        function initDropdownContext() {
+            const container = document.getElementById('dropdown-context-container');
+            container.innerHTML = dropdownContextData.map((item, i) => {
+                let verbUI = item.verbType === 'To Be' ? 
+                    `<span class="bg-cyan-100 text-cyan-800 px-2 py-0.5 rounded border border-cyan-200 font-black text-sm uppercase">${item.verb}</span>` : 
+                    `<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded border border-amber-200 font-black text-sm uppercase">${item.verb}</span>`;
+
+                return `
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-lg font-medium text-slate-700 flex flex-col gap-3">
+                    <span class="text-xs font-bold text-slate-400 tracking-wide uppercase">${item.context}</span>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span>${item.pre}</span>
+                        ${verbUI}
+                        <select id="dd-${i}" data-ans="${item.ans}" class="dropdown-select p-2 bg-slate-50 border-2 border-slate-200 rounded-xl text-slate-700 font-bold outline-none focus:border-teal-400 focus:bg-white mx-1 text-base">
+                            <option value="">---</option>
+                            ${item.opts.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                        </select>
+                        <span>${item.post}</span>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function checkDropdownContext() {
+            let correctCount = 0;
+            dropdownContextData.forEach((item, i) => {
+                const select = document.getElementById(`dd-${i}`);
+                const ans = select.getAttribute('data-ans');
+                const val = select.value;
+
+                select.classList.remove('bg-emerald-50', 'border-emerald-400', 'text-emerald-700', 'bg-rose-50', 'border-rose-400', 'text-rose-700');
+
+                if (val === ans) {
+                    select.classList.add('bg-emerald-50', 'border-emerald-400', 'text-emerald-700');
+                    correctCount++;
+                } else {
+                    select.classList.add('bg-rose-50', 'border-rose-400', 'text-rose-700');
+                }
+            });
+
+            const fb = document.getElementById('dropdown-feedback');
+            fb.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-700', 'border-emerald-200', 'bg-amber-50', 'text-amber-800', 'border-amber-200');
+            
+            if (correctCount === dropdownContextData.length) {
+                fb.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+                fb.innerHTML = '<i class="fas fa-check-circle mr-2 text-xl text-emerald-500"></i> ¡Excelente! Identificaste la regla de oro.';
+            } else {
+                fb.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-200');
+                fb.innerHTML = `<i class="fas fa-exclamation-triangle mr-2 text-xl text-amber-500"></i> Tienes ${correctCount} de ${dropdownContextData.length} correctas. Revisa los verbos de color.`;
+            }
+        }
+
+        // --- STREAMING_CHUNK: Game Logic (Detective) ---
+        function initDetective() {
+            const container = document.getElementById('detective-container');
+            container.innerHTML = detectiveData.map((item, i) => {
+                let parts = item.prompt.split('____');
+                return `
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative">
+                    <p class="text-[11px] font-black text-slate-400 mb-2 uppercase tracking-widest">${item.hint}</p>
+                    <div class="flex items-center gap-2 flex-wrap text-lg font-bold text-slate-700">
+                        <span>${parts[0]}</span>
+                        <input type="text" id="det-${i}" data-ans="${item.correct.join(',')}" class="w-24 text-center bg-slate-50 border-b-4 border-slate-300 py-1.5 px-2 focus:outline-none focus:border-emerald-400 focus:bg-white rounded-t-xl transition text-emerald-600 text-base" placeholder="...">
+                        <span>${parts[1]}</span>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function checkDetective() {
+            let correctCount = 0;
+            detectiveData.forEach((item, i) => {
+                const input = document.getElementById(`det-${i}`);
+                const ansArray = input.getAttribute('data-ans').split(',');
+                const val = input.value.toLowerCase().trim();
+
+                input.classList.remove('border-emerald-400', 'bg-emerald-50', 'text-emerald-700', 'border-rose-400', 'bg-rose-50', 'text-rose-700');
+
+                if (ansArray.includes(val)) {
+                    input.classList.add('border-emerald-400', 'bg-emerald-50', 'text-emerald-700');
+                    correctCount++;
+                } else {
+                    input.classList.add('border-rose-400', 'bg-rose-50', 'text-rose-700');
+                }
+            });
+
+            const fb = document.getElementById('detective-feedback');
+            fb.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-700', 'border-emerald-200', 'bg-amber-50', 'text-amber-800', 'border-amber-200');
+            
+            if (correctCount === detectiveData.length) {
+                fb.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+                fb.innerHTML = '<i class="fas fa-check-circle mr-2 text-xl text-emerald-500"></i> ¡Perfecto! Escritura impecable.';
+            } else {
+                fb.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-200');
+                fb.innerHTML = `<i class="fas fa-exclamation-triangle mr-2 text-xl text-amber-500"></i> Corregiste bien ${correctCount} de ${detectiveData.length}.`;
+            }
+        }
+
+        // --- STREAMING_CHUNK: Game Logic (Sorter) ---
+        let sorterIndex = 0;
+        let shuffledSorter = [];
+
+        function initSorter() {
+            shuffledSorter = [...sorterWords].sort(() => Math.random() - 0.5);
+            sorterIndex = 0;
+            renderSorterWord();
+        }
+
+        function renderSorterWord() {
+            if(sorterIndex >= shuffledSorter.length) {
+                document.getElementById('sorter-word').style.display = 'none';
+                document.getElementById('sorter-counter').style.display = 'none';
+                document.getElementById('sorter-end').classList.remove('hidden');
+                document.getElementById('sorter-feedback').style.opacity = '0';
+                return;
+            }
+            document.getElementById('sorter-counter').innerText = `Palabra ${sorterIndex + 1} de ${shuffledSorter.length}`;
+            const wordEl = document.getElementById('sorter-word');
+            wordEl.innerText = shuffledSorter[sorterIndex].word;
+            wordEl.style.transform = 'scale(0.8)';
+            wordEl.style.opacity = '0';
+            
+            setTimeout(() => {
+                wordEl.style.transform = 'scale(1)';
+                wordEl.style.opacity = '1';
+            }, 50);
+        }
+
+        function handleSort(selectedType) {
+            if(sorterIndex >= shuffledSorter.length) return;
+            const currentItem = shuffledSorter[sorterIndex];
+            const fb = document.getElementById('sorter-feedback');
+            const wordEl = document.getElementById('sorter-word');
+
+            fb.style.opacity = '1';
+
+            if(currentItem.type === selectedType) {
+                fb.innerHTML = `<span class="text-emerald-500"><i class="fas fa-check-circle mr-2"></i> ¡Correcto!</span>`;
+                wordEl.style.transform = 'translateY(-20px) scale(1.1)';
+                wordEl.style.opacity = '0';
+            } else {
+                fb.innerHTML = `<span class="text-rose-500"><i class="fas fa-times-circle mr-2"></i> ¡Oops! Era ${currentItem.type}</span>`;
+                wordEl.classList.add('error');
+                setTimeout(() => wordEl.classList.remove('error'), 400);
+            }
+
+            sorterIndex++;
+            setTimeout(() => {
+                fb.style.opacity = '0';
+                renderSorterWord();
+            }, 800);
+        }
+
+
+        // --- STREAMING_CHUNK: Mega Quiz Logics ---
+        let mqCurrent = 0;
+        let mqScore = 0;
+
+        function startMegaQuiz() {
+            document.getElementById('mega-quiz-intro').classList.add('hidden');
+            document.getElementById('mega-quiz-container').classList.remove('hidden');
+            megaQuizQuestions.sort(() => Math.random() - 0.5); 
+            mqCurrent = 0;
+            mqScore = 0;
+            renderMegaQuizQuestion();
+        }
+
+        function renderMegaQuizQuestion() {
+            if (mqCurrent >= megaQuizQuestions.length) {
+                showMegaQuizResult();
+                return;
+            }
+
+            const q = megaQuizQuestions[mqCurrent];
+            document.getElementById('mega-quiz-counter').innerText = `Pregunta ${mqCurrent + 1} de ${megaQuizQuestions.length}`;
+            
+            let formattedQ = q.q.replace('_____', `<span id="mq-blank" class="inline-block px-2 border-b-4 border-dashed border-slate-300 text-slate-300 font-bold mx-1 pb-0.5 min-w-[3rem] text-center">___</span>`);
+            document.getElementById('mega-quiz-question').innerHTML = formattedQ;
+            
+            const progress = ((mqCurrent) / megaQuizQuestions.length) * 100;
+            document.getElementById('mega-quiz-progress').style.width = `${progress}%`;
+
+            let optionsHtml = '';
+            q.options.forEach((opt, i) => {
+                optionsHtml += `<button onclick="handleMegaQuizAnswer(${i}, ${q.ans})" class="mq-option w-full bg-white border-2 border-slate-200 text-slate-700 font-bold py-5 px-6 rounded-2xl hover:border-indigo-300 hover:bg-indigo-50 transition-all text-lg shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95">${opt}</button>`;
+            });
+            document.getElementById('mega-quiz-options').innerHTML = optionsHtml;
+            document.getElementById('mega-quiz-feedback').classList.add('hidden');
+        }
+
+        function handleMegaQuizAnswer(selected, correct) {
+            const buttons = document.querySelectorAll('.mq-option');
+            buttons.forEach(b => {
+                b.disabled = true;
+                b.classList.remove('hover:border-indigo-300', 'hover:bg-indigo-50', 'hover:-translate-y-0.5', 'hover:shadow-md');
+            });
+
+            const feedback = document.getElementById('mega-quiz-feedback');
+            const blank = document.getElementById('mq-blank');
+            const q = megaQuizQuestions[mqCurrent];
+
+            feedback.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-700', 'border-emerald-200', 'bg-rose-50', 'text-rose-700', 'border-rose-200');
+
+            if (selected === correct) {
+                buttons[selected].classList.replace('border-slate-200', 'border-emerald-400');
+                buttons[selected].classList.replace('bg-white', 'bg-emerald-500');
+                buttons[selected].classList.replace('text-slate-700', 'text-white');
+                mqScore++;
+                
+                if(blank) {
+                    blank.innerText = q.options[q.ans];
+                    blank.classList.replace('border-slate-300', 'border-emerald-400');
+                    blank.classList.replace('text-slate-300', 'text-emerald-600');
+                }
+                
+                feedback.classList.add('bg-emerald-50', 'text-emerald-700', 'border', 'border-emerald-200');
+                feedback.innerHTML = '<i class="fas fa-check-circle mr-2 text-xl"></i> ¡Correcto!';
+            } else {
+                buttons[selected].classList.replace('border-slate-200', 'border-rose-400');
+                buttons[selected].classList.replace('bg-white', 'bg-rose-500');
+                buttons[selected].classList.replace('text-slate-700', 'text-white');
+                
+                buttons[correct].classList.replace('border-slate-200', 'border-emerald-400');
+                buttons[correct].classList.replace('bg-white', 'bg-emerald-50');
+                
+                feedback.classList.add('bg-rose-50', 'text-rose-700', 'border', 'border-rose-200');
+                feedback.innerHTML = '<i class="fas fa-times-circle mr-2 text-xl"></i> Incorrecto.';
+            }
+
+            setTimeout(() => {
+                mqCurrent++;
+                renderMegaQuizQuestion();
+            }, 1200);
+        }
+
+        function showMegaQuizResult() {
+            document.getElementById('mega-quiz-area').classList.add('hidden');
+            document.getElementById('mega-quiz-progress').style.width = `100%`;
+            const resultArea = document.getElementById('mega-quiz-result');
+            resultArea.classList.remove('hidden');
+            
+            document.getElementById('mq-score').innerText = mqScore;
+            const emoji = document.getElementById('mq-emoji');
+            
+            if (mqScore === 10) { emoji.innerText = '🏆'; }
+            else if (mqScore >= 7) { emoji.innerText = '🌟'; }
+            else { emoji.innerText = '💪'; }
+        }
+
+        // --- STREAMING_CHUNK: DOM Init ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCheatSheet();
+            initMatchGame();
+            initDropdownContext();
+            initDetective();
+            initSorter(); // New Sorter game initialization
+            updateNavUI();
+        });
+
+    </script>
+</body>
+</html>
