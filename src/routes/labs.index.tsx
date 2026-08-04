@@ -1,12 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
 import { useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Beaker, Search, Sparkles, FlaskConical } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { listLabs } from "@/lib/labs.functions";
-import { LAB_LEVELS, type Lab } from "@/lib/labs";
+import { LABS, LAB_LEVELS, type Lab } from "@/lib/labs";
 import { useReveal } from "@/hooks/use-reveal";
 
 export const Route = createFileRoute("/labs/")({
@@ -49,16 +46,15 @@ function Reveal({
 }
 
 function LabsPage() {
-  const fetchLabs = useServerFn(listLabs);
-  const q = useQuery({ queryKey: ["labs"], queryFn: () => fetchLabs({}) });
   const [search, setSearch] = useState("");
 
-  const labs = q.data?.labs ?? [];
   const filtered = useMemo(() => {
     const s = search.trim().toLowerCase();
-    if (!s) return labs;
-    return labs.filter((l: Lab) => l.title.toLowerCase().includes(s));
-  }, [labs, search]);
+    if (!s) return LABS;
+    return LABS.filter(
+      (l) => l.title.toLowerCase().includes(s) || l.description.toLowerCase().includes(s),
+    );
+  }, [search]);
 
   return (
     <div className="relative min-h-screen bg-background text-foreground">
@@ -121,12 +117,6 @@ function LabsPage() {
           </div>
         </Reveal>
 
-        {q.data?.error && (
-          <p className="mt-8 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-center text-sm text-destructive">
-            {q.data.error}
-          </p>
-        )}
-
         <div className="mt-14 space-y-14">
           {LAB_LEVELS.map((lvl, li) => {
             const items = filtered.filter((l: Lab) => l.level === lvl.slug);
@@ -139,23 +129,15 @@ function LabsPage() {
                       <p className="mt-1 text-muted-foreground">{lvl.description}</p>
                     </div>
                     <span className="rounded-full border border-mint/40 bg-mint/10 px-3 py-1 text-xs font-semibold text-primary">
-                      {q.isLoading ? "…" : `${items.length} labs`}
+                      {items.length} {items.length === 1 ? "lab" : "labs"}
                     </span>
                   </div>
                 </Reveal>
 
                 <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {q.isLoading &&
-                    Array.from({ length: 3 }).map((_, i) => (
-                      <div
-                        key={i}
-                        className="h-36 animate-pulse rounded-2xl border border-border bg-card/60"
-                      />
-                    ))}
-
-                  {!q.isLoading && items.length === 0 && (
+                  {items.length === 0 && (
                     <div className="rounded-2xl border border-dashed border-border bg-card/50 p-8 text-center text-sm text-muted-foreground sm:col-span-2 lg:col-span-3">
-                      Aún no hay labs en este nivel. ¡Pronto habrá más!
+                      No hay labs que coincidan en este nivel.
                     </div>
                   )}
 
@@ -174,7 +156,8 @@ function LabsPage() {
                             <FlaskConical className="h-5 w-5" />
                           </div>
                           <h3 className="font-heading text-lg font-semibold">{lab.title}</h3>
-                          <p className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
+                          <p className="mt-2 text-sm text-muted-foreground">{lab.description}</p>
+                          <p className="mt-3 text-xs uppercase tracking-wide text-muted-foreground">
                             {lvl.label}
                           </p>
                         </div>
