@@ -1,25 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { ArrowLeft, ArrowRight, Beaker, Search, Sparkles, FlaskConical } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { ArrowLeft, ArrowRight, Beaker, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { LABS, LAB_LEVELS, type Lab } from "@/lib/labs";
+import { LAB_LEVELS, labsByLevel } from "@/lib/labs";
 import { useReveal } from "@/hooks/use-reveal";
 
 export const Route = createFileRoute("/labs/")({
   head: () => ({
     meta: [
-      { title: "Labs interactivos de inglés — Teacher Netza Varo" },
+      { title: "Labs interactivos de inglés A1–C1 — Teacher Netza Varo" },
       {
         name: "description",
         content:
-          "Prácticas interactivas gratuitas de inglés por nivel: básico, intermedio y avanzado. Sin registro, entra y practica desde el navegador.",
+          "Prácticas interactivas gratuitas de inglés organizadas por nivel MCER: A1, A2, B1, B2 y C1. Sin registro, entra y practica desde el navegador.",
       },
-      { property: "og:title", content: "Labs interactivos de inglés — gratis" },
+      { property: "og:title", content: "Labs interactivos de inglés A1–C1 — gratis" },
       {
         property: "og:description",
-        content:
-          "Practica inglés gratis con Labs interactivos organizados por nivel: básico, intermedio y avanzado.",
+        content: "Elige tu nivel MCER y practica inglés gratis con Labs interactivos.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -46,16 +43,6 @@ function Reveal({
 }
 
 function LabsPage() {
-  const [search, setSearch] = useState("");
-
-  const filtered = useMemo(() => {
-    const s = search.trim().toLowerCase();
-    if (!s) return LABS;
-    return LABS.filter(
-      (l) => l.title.toLowerCase().includes(s) || l.description.toLowerCase().includes(s),
-    );
-  }, [search]);
-
   return (
     <div className="relative min-h-screen bg-background text-foreground">
       <div
@@ -96,80 +83,50 @@ function LabsPage() {
               <Sparkles className="h-3.5 w-3.5" /> Gratis · Sin registro
             </span>
             <h1 className="mt-5 font-heading text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-              Labs interactivos de inglés
+              Elige tu nivel de inglés
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-              Prácticas creadas por Teacher Netza. Elige tu nivel, entra a un lab y practica
-              directamente desde el navegador.
+              Labs interactivos creados por Teacher Netza, organizados del A1 al C1 del Marco
+              Común Europeo. Entra a un nivel y practica desde el navegador.
             </p>
           </div>
         </Reveal>
 
-        <Reveal delay={100}>
-          <div className="mx-auto mt-8 flex max-w-md items-center gap-2 rounded-xl border border-border bg-card/80 px-3 shadow-[var(--shadow-soft)] backdrop-blur transition-colors focus-within:border-mint">
-            <Search className="h-4 w-4 text-muted-foreground" />
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Buscar un lab…"
-              className="border-0 bg-transparent shadow-none focus-visible:ring-0"
-            />
-          </div>
-        </Reveal>
-
-        <div className="mt-14 space-y-14">
-          {LAB_LEVELS.map((lvl, li) => {
-            const items = filtered.filter((l: Lab) => l.level === lvl.slug);
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {LAB_LEVELS.map((lvl, i) => {
+            const count = labsByLevel(lvl.slug).length;
             return (
-              <section key={lvl.slug}>
-                <Reveal delay={li * 80}>
-                  <div className="flex flex-wrap items-end justify-between gap-3">
-                    <div>
-                      <h2 className="font-heading text-2xl font-bold sm:text-3xl">{lvl.label}</h2>
-                      <p className="mt-1 text-muted-foreground">{lvl.description}</p>
-                    </div>
-                    <span className="rounded-full border border-mint/40 bg-mint/10 px-3 py-1 text-xs font-semibold text-primary">
-                      {items.length} {items.length === 1 ? "lab" : "labs"}
+              <Reveal key={lvl.slug} delay={i * 70}>
+                <Link
+                  to="/labs/$level"
+                  params={{ level: lvl.slug }}
+                  className="card-hover group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card/90 p-6 shadow-[var(--shadow-soft)] backdrop-blur"
+                  style={{ borderTop: `4px solid ${lvl.color}` }}
+                >
+                  <div>
+                    <span
+                      className="inline-flex items-center rounded-lg px-3 py-1 font-heading text-sm font-bold text-white"
+                      style={{ backgroundColor: lvl.color }}
+                    >
+                      {lvl.slug.toUpperCase()}
+                    </span>
+                    <h2 className="mt-4 font-heading text-xl font-semibold">{lvl.label}</h2>
+                    <p className="mt-2 text-sm font-medium" style={{ color: lvl.color }}>
+                      {lvl.tagline}
+                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground">{lvl.description}</p>
+                  </div>
+                  <div className="mt-6 flex items-center justify-between">
+                    <span className="text-xs uppercase tracking-wide text-muted-foreground">
+                      {count} {count === 1 ? "lab" : "labs"}
+                    </span>
+                    <span className="inline-flex items-center text-sm font-semibold text-primary">
+                      Entrar
+                      <ArrowRight className="ml-1.5 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
                   </div>
-                </Reveal>
-
-                <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {items.length === 0 && (
-                    <div className="rounded-2xl border border-dashed border-border bg-card/50 p-8 text-center text-sm text-muted-foreground sm:col-span-2 lg:col-span-3">
-                      No hay labs que coincidan en este nivel.
-                    </div>
-                  )}
-
-                  {items.map((lab: Lab, i: number) => (
-                    <Reveal key={`${lab.level}-${lab.slug}`} delay={i * 70}>
-                      <Link
-                        to="/labs/$level/$slug"
-                        params={{ level: lab.level, slug: lab.slug }}
-                        className="card-hover group flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card/90 p-6 shadow-[var(--shadow-soft)] backdrop-blur"
-                      >
-                        <div>
-                          <div
-                            className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl text-white transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
-                            style={{ background: "var(--gradient-mint)" }}
-                          >
-                            <FlaskConical className="h-5 w-5" />
-                          </div>
-                          <h3 className="font-heading text-lg font-semibold">{lab.title}</h3>
-                          <p className="mt-2 text-sm text-muted-foreground">{lab.description}</p>
-                          <p className="mt-3 text-xs uppercase tracking-wide text-muted-foreground">
-                            {lvl.label}
-                          </p>
-                        </div>
-                        <span className="mt-5 inline-flex items-center text-sm font-semibold text-primary">
-                          Practicar
-                          <ArrowRight className="ml-1.5 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                        </span>
-                      </Link>
-                    </Reveal>
-                  ))}
-                </div>
-              </section>
+                </Link>
+              </Reveal>
             );
           })}
         </div>
