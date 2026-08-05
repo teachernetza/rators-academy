@@ -284,8 +284,65 @@ function Landing() {
                 </div>
               </Reveal>
             </div>
+
+            {/* 3 TARJETAS DEL HERO */}
+            <div className="mx-auto mt-14 grid max-w-5xl gap-5 sm:grid-cols-3">
+              {[
+                {
+                  icon: ClipboardCheck,
+                  title: "Examen Diagnóstico",
+                  text: "Descubre tu nivel real (A1–C1) y recibe tu constancia en PDF.",
+                  cta: "Hacer examen",
+                  to: "/diagnostic-exam" as const,
+                },
+                {
+                  icon: FlaskConical,
+                  title: "Labs Interactivos",
+                  text: "Practica gratis con labs por nivel MCER, sin registro.",
+                  cta: "Entrar a los Labs",
+                  to: "/labs" as const,
+                },
+                {
+                  icon: Sparkles,
+                  title: "Planes de Clases",
+                  text: `Clases desde ${mxn(HOURLY_RATE)} por hora y paquetes con hasta 20% menos.`,
+                  cta: "Ver planes",
+                  href: "#planes",
+                },
+              ].map((c, i) => {
+                const Inner = (
+                  <div className="card-hover group flex h-full flex-col justify-between rounded-2xl border border-border bg-card/85 p-6 text-left shadow-[var(--shadow-soft)] backdrop-blur">
+                    <div>
+                      <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-[image:var(--gradient-mint)] text-primary-foreground transition-transform duration-500 group-hover:scale-110">
+                        <c.icon className="h-5 w-5" />
+                      </div>
+                      <h2 className="font-heading text-lg font-semibold">{c.title}</h2>
+                      <p className="mt-2 text-sm text-muted-foreground">{c.text}</p>
+                    </div>
+                    <span className="mt-5 inline-flex items-center text-sm font-semibold text-primary">
+                      {c.cta}
+                      <ArrowRight className="ml-1.5 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </span>
+                  </div>
+                );
+                return (
+                  <Reveal key={c.title} delay={200 + i * 80}>
+                    {c.to ? (
+                      <Link to={c.to} className="block h-full">
+                        {Inner}
+                      </Link>
+                    ) : (
+                      <a href={c.href} className="block h-full">
+                        {Inner}
+                      </a>
+                    )}
+                  </Reveal>
+                );
+              })}
+            </div>
           </div>
         </section>
+
 
         {/* EXAMEN DIAGNÓSTICO — HIGHLIGHT */}
         <section id="examen" className="relative overflow-hidden py-16 lg:py-20">
