@@ -37,6 +37,7 @@ import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
 import { Route as AdminCoursesRouteImport } from './routes/admin/courses'
 import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
+import { Route as LabsLevelIndexRouteImport } from './routes/labs.$level.index'
 import { Route as TeacherInboxSubmissionIdRouteImport } from './routes/teacher/inbox.$submissionId'
 import { Route as TeacherCoursesCourseIdRouteImport } from './routes/teacher/courses.$courseId'
 import { Route as TeacherActivitiesIdRouteImport } from './routes/teacher/activities.$id'
@@ -188,6 +189,11 @@ const AdminActivitiesRoute = AdminActivitiesRouteImport.update({
   path: '/admin/activities',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LabsLevelIndexRoute = LabsLevelIndexRouteImport.update({
+  id: '/labs/$level/',
+  path: '/labs/$level/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TeacherInboxSubmissionIdRoute =
   TeacherInboxSubmissionIdRouteImport.update({
     id: '/$submissionId',
@@ -280,6 +286,7 @@ export interface FileRoutesByFullPath {
   '/teacher/activities/$id': typeof TeacherActivitiesIdRoute
   '/teacher/courses/$courseId': typeof TeacherCoursesCourseIdRoute
   '/teacher/inbox/$submissionId': typeof TeacherInboxSubmissionIdRoute
+  '/labs/$level/': typeof LabsLevelIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -320,6 +327,7 @@ export interface FileRoutesByTo {
   '/teacher/activities/$id': typeof TeacherActivitiesIdRoute
   '/teacher/courses/$courseId': typeof TeacherCoursesCourseIdRoute
   '/teacher/inbox/$submissionId': typeof TeacherInboxSubmissionIdRoute
+  '/labs/$level': typeof LabsLevelIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -361,6 +369,7 @@ export interface FileRoutesById {
   '/teacher/activities/$id': typeof TeacherActivitiesIdRoute
   '/teacher/courses/$courseId': typeof TeacherCoursesCourseIdRoute
   '/teacher/inbox/$submissionId': typeof TeacherInboxSubmissionIdRoute
+  '/labs/$level/': typeof LabsLevelIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -403,6 +412,7 @@ export interface FileRouteTypes {
     | '/teacher/activities/$id'
     | '/teacher/courses/$courseId'
     | '/teacher/inbox/$submissionId'
+    | '/labs/$level/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -443,6 +453,7 @@ export interface FileRouteTypes {
     | '/teacher/activities/$id'
     | '/teacher/courses/$courseId'
     | '/teacher/inbox/$submissionId'
+    | '/labs/$level'
   id:
     | '__root__'
     | '/'
@@ -483,6 +494,7 @@ export interface FileRouteTypes {
     | '/teacher/activities/$id'
     | '/teacher/courses/$courseId'
     | '/teacher/inbox/$submissionId'
+    | '/labs/$level/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -516,6 +528,7 @@ export interface RootRouteChildren {
   LabsIndexRoute: typeof LabsIndexRoute
   ApiPublicSeedRoute: typeof ApiPublicSeedRoute
   LabsLevelSlugRoute: typeof LabsLevelSlugRoute
+  LabsLevelIndexRoute: typeof LabsLevelIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -716,6 +729,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminActivitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/labs/$level/': {
+      id: '/labs/$level/'
+      path: '/labs/$level'
+      fullPath: '/labs/$level/'
+      preLoaderRoute: typeof LabsLevelIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/teacher/inbox/$submissionId': {
       id: '/teacher/inbox/$submissionId'
       path: '/$submissionId'
@@ -913,6 +933,7 @@ const rootRouteChildren: RootRouteChildren = {
   LabsIndexRoute: LabsIndexRoute,
   ApiPublicSeedRoute: ApiPublicSeedRoute,
   LabsLevelSlugRoute: LabsLevelSlugRoute,
+  LabsLevelIndexRoute: LabsLevelIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
