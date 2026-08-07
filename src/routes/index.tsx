@@ -65,7 +65,7 @@ const WA_URL = waUrl(
 );
 const EMAIL = "teacher.netza.varo@gmail.com";
 
-const SECTION_IDS = ["examen", "labs", "metodologia", "planes", "contacto"];
+const SECTION_IDS = ["examen", "metodologia", "planes", "contacto"];
 
 function Reveal({
   children,
@@ -90,7 +90,7 @@ function Landing() {
 
   const navLinks = [
     { href: "#examen", id: "examen", label: "Examen Diagnóstico" },
-    { href: "#labs", id: "labs", label: "Labs" },
+    
     { href: "#metodologia", id: "metodologia", label: "Metodología" },
     { href: "#planes", id: "planes", label: "Planes" },
     { href: "#contacto", id: "contacto", label: "Contacto" },
@@ -294,13 +294,15 @@ function Landing() {
                   text: "Descubre tu nivel real (A1–C1) y recibe tu constancia en PDF.",
                   cta: "Hacer examen",
                   to: "/diagnostic-exam" as const,
+                  color: "#0f3b4b",
                 },
                 {
-                  icon: FlaskConical,
+                  icon: Beaker,
                   title: "Labs Interactivos",
-                  text: "Practica gratis con labs por nivel MCER, sin registro.",
+                  text: "Practica gratis con labs por nivel MCER (A1–C1), sin registro.",
                   cta: "Entrar a los Labs",
                   to: "/labs" as const,
+                  color: "#35d1a8",
                 },
                 {
                   icon: Sparkles,
@@ -308,18 +310,28 @@ function Landing() {
                   text: `Clases desde ${mxn(HOURLY_RATE)} por hora y paquetes con hasta 20% menos.`,
                   cta: "Ver planes",
                   href: "#planes",
+                  color: "#2bb3c9",
                 },
               ].map((c, i) => {
                 const Inner = (
-                  <div className="card-hover group flex h-full flex-col justify-between rounded-2xl border border-border bg-card/85 p-6 text-left shadow-[var(--shadow-soft)] backdrop-blur">
+                  <div
+                    className="card-hover group flex h-full flex-col justify-between rounded-2xl border border-border bg-card/85 p-6 text-left shadow-[var(--shadow-soft)] backdrop-blur"
+                    style={{ borderTop: `4px solid ${c.color}` }}
+                  >
                     <div>
-                      <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-[image:var(--gradient-mint)] text-primary-foreground transition-transform duration-500 group-hover:scale-110">
+                      <div
+                        className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl text-white transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
+                        style={{ backgroundColor: c.color }}
+                      >
                         <c.icon className="h-5 w-5" />
                       </div>
                       <h2 className="font-heading text-lg font-semibold">{c.title}</h2>
                       <p className="mt-2 text-sm text-muted-foreground">{c.text}</p>
                     </div>
-                    <span className="mt-5 inline-flex items-center text-sm font-semibold text-primary">
+                    <span
+                      className="mt-5 inline-flex items-center text-sm font-semibold"
+                      style={{ color: c.color }}
+                    >
                       {c.cta}
                       <ArrowRight className="ml-1.5 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
@@ -424,84 +436,6 @@ function Landing() {
           </div>
         </section>
 
-        {/* LABS — HIGHLIGHT */}
-        <section id="labs" className="relative overflow-hidden py-16 lg:py-20">
-          <div
-            aria-hidden
-            className="tn-float pointer-events-none absolute -right-24 top-10 -z-10 h-72 w-72 rounded-full opacity-20 blur-3xl"
-            style={{ background: "var(--gradient-mint)" }}
-          />
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <Reveal>
-              <div className="relative overflow-hidden rounded-3xl border border-mint/40 bg-card/80 p-8 shadow-[var(--shadow-elegant)] backdrop-blur sm:p-12">
-                <div className="grid gap-10 md:grid-cols-[1.1fr,1fr] md:items-center">
-                  <div>
-                    <span className="inline-flex items-center gap-2 rounded-full border border-mint/40 bg-mint/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
-                      <FlaskConical className="h-3.5 w-3.5" />
-                      Gratis para visitantes
-                    </span>
-                    <h2 className="mt-5 font-heading text-3xl font-bold leading-tight sm:text-4xl">
-                      Labs interactivos: practica inglés cuando quieras
-                    </h2>
-                    <p className="mt-4 text-base text-muted-foreground sm:text-lg">
-                      Ejercicios interactivos creados por Teacher Netza, organizados en tres
-                      niveles. Entra, elige un tema y practica directo desde el navegador. Sin
-                      registro y sin costo.
-                    </p>
-                    <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                      <Link to="/labs">
-                        <Button
-                          size="lg"
-                          className="group transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--glow-mint)]"
-                        >
-                          <Beaker className="mr-2 h-5 w-5" />
-                          Entrar a los Labs
-                          <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                        </Button>
-                      </Link>
-                      <a href="#planes">
-                        <Button
-                          size="lg"
-                          variant="outline"
-                          className="transition-all duration-300 hover:border-mint"
-                        >
-                          Ver planes
-                        </Button>
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="grid gap-3">
-                    {[
-                      { label: "Básico", desc: "Vocabulario esencial, verbo to be, presente simple." },
-                      { label: "Intermedio", desc: "Tiempos verbales, conectores y comprensión." },
-                      { label: "Avanzado", desc: "Estructuras complejas y producción real." },
-                    ].map((l, i) => (
-                      <Reveal key={l.label} delay={i * 90}>
-                        <Link
-                          to="/labs"
-                          className="card-hover group flex items-center gap-4 rounded-2xl border border-border bg-background/70 p-5"
-                        >
-                          <span
-                            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white transition-transform duration-500 group-hover:scale-110"
-                            style={{ background: "var(--gradient-mint)" }}
-                          >
-                            <FlaskConical className="h-5 w-5" />
-                          </span>
-                          <span>
-                            <span className="block font-heading font-semibold">{l.label}</span>
-                            <span className="block text-sm text-muted-foreground">{l.desc}</span>
-                          </span>
-                          <ArrowRight className="ml-auto h-4 w-4 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary" />
-                        </Link>
-                      </Reveal>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </section>
 
 
         {/* METODOLOGÍA */}
@@ -530,7 +464,7 @@ function Landing() {
                 {
                   icon: FlaskConical,
                   title: "Labs por nivel",
-                  desc: "Prácticas gratuitas para visitantes, organizadas en básico, intermedio y avanzado.",
+                  desc: "Prácticas gratuitas para visitantes, organizadas por nivel MCER, de A1 a C1.",
                   tint: "var(--gradient-mint)",
                 },
                 {
