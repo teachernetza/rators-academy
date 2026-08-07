@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Beaker, FlaskConical } from "lucide-react";
 import { icons } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { labsByLevel, levelMeta, type Lab } from "@/lib/labs";
 import { useReveal } from "@/hooks/use-reveal";
 
@@ -66,12 +67,15 @@ function LevelPage() {
             </div>
             <span className="font-heading text-base font-bold sm:text-lg">Labs</span>
           </Link>
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
           <Link
             to="/labs"
             className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4" /> Todos los niveles
           </Link>
+          </div>
         </div>
       </header>
 
