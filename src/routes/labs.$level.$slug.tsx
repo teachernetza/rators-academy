@@ -98,7 +98,3 @@ function LabViewer() {
     </div>
   );
 }
-      </main>
-    </div>
-  );
-}
