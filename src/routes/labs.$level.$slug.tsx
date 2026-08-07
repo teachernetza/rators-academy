@@ -72,7 +72,8 @@ function LabViewer() {
           <iframe
             title={lab.title}
             src={lab.file}
-            className="animate-fade-in h-[calc(100vh-3.5rem)] w-full border-0 bg-white"
+            className="animate-fade-in w-full flex-1 border-0 bg-white"
+            style={{ height: "calc(100dvh - 3.5rem)" }}
           />
         )}
       </main>
