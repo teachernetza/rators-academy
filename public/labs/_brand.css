@@ -250,12 +250,15 @@ div.fixed.bottom-0 > div > button {
   }
   nav .text-xl,
   nav .text-2xl,
-  nav span {
+  nav h1 {
     font-size: 0.95rem !important;
   }
-  nav > div > div:first-child,
-  nav span {
+  nav > div > div:first-child {
     min-width: 0;
+    overflow: hidden;
+  }
+  nav h1,
+  nav p {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
