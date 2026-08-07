@@ -296,3 +296,179 @@ div.fixed.bottom-0 > div > button {
     height: auto;
   }
 }
+
+/* ================= MODO OSCURO ================= */
+html.tn-dark {
+  --tn-navy: #12556c;
+  --tn-navy-600: #1a6d8a;
+  --tn-navy-050: #16303b;
+  --tn-ink: #e7f1f4;
+  --tn-muted: #9db4bd;
+  --tn-line: #24424f;
+  --tn-surface: #12252d;
+  --tn-bg: #0c1a20;
+  --tn-shadow: 0 18px 45px -22px rgba(0, 0, 0, 0.7);
+  --tn-shadow-lg: 0 28px 65px -30px rgba(0, 0, 0, 0.8);
+  color-scheme: dark;
+}
+
+html.tn-dark body {
+  background-color: var(--tn-bg) !important;
+  background-image:
+    radial-gradient(900px 420px at 12% -8%, rgba(53, 209, 168, 0.12), transparent 62%),
+    radial-gradient(760px 380px at 100% 0%, rgba(20, 83, 106, 0.28), transparent 60%) !important;
+  color: var(--tn-ink) !important;
+}
+
+/* Superficies */
+html.tn-dark .bg-white,
+html.tn-dark .soft-card,
+html.tn-dark .visual-box,
+html.tn-dark .bg-slate-50,
+html.tn-dark .bg-gray-50,
+html.tn-dark .bg-slate-100,
+html.tn-dark .bg-gray-100,
+html.tn-dark .bg-neutral-50,
+html.tn-dark .bg-neutral-100 {
+  background-color: var(--tn-surface) !important;
+  border-color: var(--tn-line) !important;
+}
+html.tn-dark .bg-slate-200,
+html.tn-dark .bg-gray-200 {
+  background-color: #1b3541 !important;
+}
+
+html.tn-dark nav.fixed,
+html.tn-dark nav.sticky,
+html.tn-dark div.fixed.bottom-0 > div {
+  background: rgba(18, 37, 45, 0.92) !important;
+  border-color: var(--tn-line) !important;
+}
+
+/* Texto */
+html.tn-dark,
+html.tn-dark body,
+html.tn-dark .text-slate-900,
+html.tn-dark .text-slate-800,
+html.tn-dark .text-slate-700,
+html.tn-dark .text-gray-900,
+html.tn-dark .text-gray-800,
+html.tn-dark .text-gray-700,
+html.tn-dark .text-black,
+html.tn-dark h1,
+html.tn-dark h2,
+html.tn-dark h3,
+html.tn-dark h4,
+html.tn-dark h5,
+html.tn-dark p,
+html.tn-dark li,
+html.tn-dark label,
+html.tn-dark span:not([class*="text-white"]):not([class*="bg-"]) {
+  color: var(--tn-ink) !important;
+}
+html.tn-dark .text-slate-600,
+html.tn-dark .text-slate-500,
+html.tn-dark .text-slate-400,
+html.tn-dark .text-gray-600,
+html.tn-dark .text-gray-500,
+html.tn-dark .text-gray-400 {
+  color: var(--tn-muted) !important;
+}
+
+/* Bordes y divisores */
+html.tn-dark .border-slate-100,
+html.tn-dark .border-slate-200,
+html.tn-dark .border-slate-300,
+html.tn-dark .border-gray-100,
+html.tn-dark .border-gray-200,
+html.tn-dark .border-gray-300,
+html.tn-dark .divide-slate-200 > * + * {
+  border-color: var(--tn-line) !important;
+}
+
+/* Campos de formulario */
+html.tn-dark input,
+html.tn-dark select,
+html.tn-dark textarea,
+html.tn-dark .inline-input,
+html.tn-dark .dropdown-select {
+  background-color: #16303b !important;
+  color: var(--tn-ink) !important;
+  border-color: var(--tn-line) !important;
+}
+html.tn-dark input::placeholder,
+html.tn-dark textarea::placeholder {
+  color: #7d97a1 !important;
+}
+html.tn-dark option {
+  background-color: #16303b;
+  color: var(--tn-ink);
+}
+
+/* Botones con superficies claras */
+html.tn-dark button.bg-white,
+html.tn-dark button.bg-slate-50,
+html.tn-dark button.bg-slate-100 {
+  background-color: #1b3541 !important;
+  color: var(--tn-ink) !important;
+  border-color: var(--tn-line) !important;
+}
+html.tn-dark .hover\:bg-slate-100:hover,
+html.tn-dark .hover\:bg-slate-50:hover,
+html.tn-dark .hover\:bg-gray-100:hover {
+  background-color: #234450 !important;
+}
+
+/* Chips y fondos suaves de color: se oscurecen conservando el tono */
+html.tn-dark [class*="bg-amber-50"],
+html.tn-dark [class*="bg-amber-100"],
+html.tn-dark [class*="bg-orange-50"],
+html.tn-dark [class*="bg-orange-100"],
+html.tn-dark [class*="bg-emerald-50"],
+html.tn-dark [class*="bg-emerald-100"],
+html.tn-dark [class*="bg-green-50"],
+html.tn-dark [class*="bg-green-100"],
+html.tn-dark [class*="bg-blue-50"],
+html.tn-dark [class*="bg-blue-100"],
+html.tn-dark [class*="bg-indigo-50"],
+html.tn-dark [class*="bg-indigo-100"],
+html.tn-dark [class*="bg-purple-50"],
+html.tn-dark [class*="bg-purple-100"],
+html.tn-dark [class*="bg-rose-50"],
+html.tn-dark [class*="bg-rose-100"],
+html.tn-dark [class*="bg-red-50"],
+html.tn-dark [class*="bg-red-100"],
+html.tn-dark [class*="bg-teal-50"],
+html.tn-dark [class*="bg-teal-100"],
+html.tn-dark [class*="bg-cyan-50"],
+html.tn-dark [class*="bg-cyan-100"],
+html.tn-dark [class*="bg-pink-50"],
+html.tn-dark [class*="bg-pink-100"],
+html.tn-dark [class*="bg-yellow-50"],
+html.tn-dark [class*="bg-yellow-100"] {
+  filter: brightness(0.32) saturate(1.5);
+}
+html.tn-dark [class*="bg-amber-50"] *,
+html.tn-dark [class*="bg-emerald-50"] *,
+html.tn-dark [class*="bg-blue-50"] *,
+html.tn-dark [class*="bg-indigo-50"] *,
+html.tn-dark [class*="bg-purple-50"] *,
+html.tn-dark [class*="bg-rose-50"] *,
+html.tn-dark [class*="bg-teal-50"] * {
+  filter: brightness(1.9);
+}
+
+/* Aciertos */
+html.tn-dark .correct,
+html.tn-dark .inline-input.correct {
+  background-color: rgba(53, 209, 168, 0.18) !important;
+  color: #7bf0cd !important;
+  border-bottom-color: #35d1a8 !important;
+}
+
+html.tn-dark ::-webkit-scrollbar-thumb {
+  background: #2c4d5b !important;
+}
+html.tn-dark ::selection {
+  background: rgba(53, 209, 168, 0.35);
+}
