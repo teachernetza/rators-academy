@@ -174,3 +174,122 @@ button:not(:disabled):active {
 ::selection {
   background: var(--tn-mint-soft);
 }
+
+/* ---------- Ancho de columna unificado ---------- */
+:root {
+  --tn-col: 1100px;
+  --tn-pad: 1.5rem;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+nav.fixed > div,
+nav.sticky > div,
+main,
+div.fixed.bottom-0 > div {
+  max-width: var(--tn-col) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: var(--tn-pad) !important;
+  padding-right: var(--tn-pad) !important;
+  width: 100%;
+}
+
+/* Bloques internos que quedaban demasiado angostos en pantallas grandes */
+@media (min-width: 1024px) {
+  main .max-w-xl {
+    max-width: 40rem;
+  }
+  main .max-w-2xl {
+    max-width: 52rem;
+  }
+  main .max-w-3xl {
+    max-width: 62rem;
+  }
+  main .max-w-4xl {
+    max-width: 70rem;
+  }
+  main > section {
+    padding-bottom: 1rem;
+  }
+}
+
+/* ---------- Barra inferior flotante ---------- */
+div.fixed.bottom-0 {
+  background: transparent !important;
+  border-top: 0 !important;
+  box-shadow: none !important;
+  padding: 0 0 1rem !important;
+  pointer-events: none;
+}
+div.fixed.bottom-0 > div {
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--tn-line);
+  border-radius: 1.5rem;
+  box-shadow: var(--tn-shadow-lg);
+  padding: 0.7rem !important;
+  gap: 0.7rem;
+}
+div.fixed.bottom-0 > div > button {
+  border-radius: 1.1rem !important;
+}
+
+/* ---------- Teléfono ---------- */
+@media (max-width: 640px) {
+  :root {
+    --tn-pad: 1rem;
+  }
+  nav.fixed > div,
+  nav.sticky > div {
+    height: 3.75rem !important;
+  }
+  nav .text-xl,
+  nav .text-2xl,
+  nav span {
+    font-size: 0.95rem !important;
+  }
+  nav > div > div:first-child,
+  nav span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  main {
+    padding-top: 5rem !important;
+    padding-bottom: 8.5rem !important;
+  }
+  main .grid-cols-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  main h1 {
+    font-size: 1.75rem !important;
+    line-height: 1.15 !important;
+  }
+  main h2 {
+    font-size: 1.4rem !important;
+    line-height: 1.2 !important;
+  }
+  div.fixed.bottom-0 {
+    padding-bottom: 0.6rem !important;
+  }
+  div.fixed.bottom-0 > div > button {
+    font-size: 0.9rem !important;
+    padding: 0.8rem 0.6rem !important;
+    min-height: 3rem;
+  }
+  [class*="h-[85vh]"] {
+    height: 88dvh !important;
+  }
+  main img,
+  main video,
+  main iframe {
+    max-width: 100%;
+    height: auto;
+  }
+}
