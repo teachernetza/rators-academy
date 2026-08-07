@@ -15,6 +15,7 @@ import {
   Type,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import {

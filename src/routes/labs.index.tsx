@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Beaker, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { LAB_LEVELS, labsByLevel } from "@/lib/labs";
 import { useReveal } from "@/hooks/use-reveal";
 
@@ -67,12 +68,15 @@ function LabsPage() {
             </div>
             <span className="font-heading text-base font-bold sm:text-lg">Labs</span>
           </Link>
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
           <Link
             to="/"
             className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4" /> Volver al inicio
           </Link>
+          </div>
         </div>
       </header>
 
