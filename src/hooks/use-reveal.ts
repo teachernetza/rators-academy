@@ -8,7 +8,10 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(delay = 0) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (typeof IntersectionObserver === "undefined") {
+    const reduced =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduced || typeof IntersectionObserver === "undefined") {
       setShown(true);
       return;
     }
@@ -21,7 +24,7 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(delay = 0) {
           }
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -60px 0px" },
+      { threshold: 0.05, rootMargin: "0px 0px 12% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
