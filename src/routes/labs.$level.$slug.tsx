@@ -1,6 +1,9 @@
+import { useEffect, useRef } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { useTheme } from "@/lib/theme";
 import { findLab, levelMeta } from "@/lib/labs";
 
 export const Route = createFileRoute("/labs/$level/$slug")({
@@ -29,6 +32,16 @@ function LabViewer() {
   const { level, slug } = Route.useParams();
   const lab = findLab(level, slug);
   const lvl = levelMeta(level);
+  const { resolved } = useTheme();
+  const frameRef = useRef<HTMLIFrameElement>(null);
+
+  const syncTheme = () => {
+    frameRef.current?.contentWindow?.postMessage(
+      { type: "tn-theme", theme: resolved },
+      "*",
+    );
+  };
+  useEffect(syncTheme, [resolved]);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
@@ -44,15 +57,18 @@ function LabViewer() {
             {lab?.title ?? "Lab"}
             {lvl && <span className="ml-2 text-xs text-muted-foreground">· {lvl.label}</span>}
           </span>
-          {lab ? (
-            <a href={lab.file} target="_blank" rel="noopener noreferrer">
-              <Button variant="ghost" size="sm">
-                <ExternalLink className="h-4 w-4" />
-              </Button>
-            </a>
-          ) : (
-            <span className="w-9" />
-          )}
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            {lab ? (
+              <a href={`${lab.file}?theme=${resolved}`} target="_blank" rel="noopener noreferrer">
+                <Button variant="ghost" size="sm">
+                  <ExternalLink className="h-4 w-4" />
+                </Button>
+              </a>
+            ) : (
+              <span className="w-9" />
+            )}
+          </div>
         </div>
       </header>
 
@@ -70,12 +86,18 @@ function LabViewer() {
         )}
         {lab && (
           <iframe
+            ref={frameRef}
+            onLoad={syncTheme}
             title={lab.title}
-            src={lab.file}
-            className="animate-fade-in w-full flex-1 border-0 bg-white"
+            src={`${lab.file}?theme=${resolved}`}
+            className="animate-fade-in w-full flex-1 border-0 bg-background"
             style={{ height: "calc(100dvh - 3.5rem)" }}
           />
         )}
+      </main>
+    </div>
+  );
+}
       </main>
     </div>
   );
