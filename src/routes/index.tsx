@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useReveal } from "@/hooks/use-reveal";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { useScrollProgress } from "@/hooks/use-scroll-progress";
 import { COMPUTED_PLANS, HOURLY_RATE, mxn } from "@/lib/pricing";
 
@@ -145,7 +146,8 @@ function Landing() {
             ))}
           </nav>
 
-          <div className="hidden items-center gap-3 md:flex">
+          <div className="hidden items-center gap-2 md:flex">
+            <ThemeToggle />
             <Link to="/login">
               <Button
                 size="sm"
@@ -156,14 +158,17 @@ function Landing() {
             </Link>
           </div>
 
-          <button
-            type="button"
-            className="transition-transform duration-300 active:scale-90 md:hidden"
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label="Abrir menú"
-          >
-            {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+          <div className="flex items-center gap-1 md:hidden">
+            <ThemeToggle />
+            <button
+              type="button"
+              className="transition-transform duration-300 active:scale-90"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="Abrir menú"
+            >
+              {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
 
         {menuOpen && (

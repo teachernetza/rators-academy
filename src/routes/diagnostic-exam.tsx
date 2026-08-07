@@ -171,12 +171,15 @@ function DiagnosticExam() {
               Examen Diagnóstico
             </span>
           </Link>
-          <Link
-            to="/"
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            ← Volver al inicio
-          </Link>
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <Link
+              to="/"
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              ← Volver al inicio
+            </Link>
+          </div>
         </div>
         {sectionKey && (
           <div className="mx-auto max-w-5xl px-4 pb-3 sm:px-6">
