@@ -192,6 +192,7 @@
   --mint-soft: oklch(0.88 0.11 168);
   /* Termina en un teal medio: el texto blanco encima siempre contrasta */
   --gradient-hero: linear-gradient(135deg, oklch(0.28 0.04 225), oklch(0.40 0.07 210) 45%, oklch(0.52 0.12 178));
+  --gradient-heading: linear-gradient(135deg, oklch(0.42 0.07 215), oklch(0.60 0.14 172));
   --gradient-mint: linear-gradient(135deg, oklch(0.70 0.17 170), oklch(0.84 0.14 165));
   --glow-mint: 0 0 40px oklch(0.78 0.16 168 / 0.45);
   --glow-primary: 0 0 40px oklch(0.45 0.08 215 / 0.35);
@@ -203,6 +204,7 @@
   --mint-strong: oklch(0.78 0.15 170);
   --mint-soft: oklch(0.66 0.12 170);
   --gradient-hero: linear-gradient(135deg, oklch(0.22 0.04 230), oklch(0.32 0.07 210) 45%, oklch(0.44 0.11 180));
+  --gradient-heading: linear-gradient(135deg, oklch(0.88 0.08 200), oklch(0.86 0.14 168));
   --shadow-elegant: 0 10px 30px -12px oklch(0 0 0 / 0.7);
   --shadow-soft: 0 2px 8px -2px oklch(0 0 0 / 0.5);
 }
@@ -358,4 +360,9 @@
 }
 .dark .tn-accent-text {
   color: color-mix(in oklab, var(--c) 80%, white);
+}
+
+/* Texto legible sobre superficies de acento claras (menta, degradados mint) */
+.tn-on-accent {
+  color: #0b1f26;
 }

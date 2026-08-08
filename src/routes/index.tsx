@@ -233,7 +233,7 @@ function Landing() {
                 </span>
                 <h1 className="mt-6 font-heading text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
                   Domina el inglés con un sistema{" "}
-                  <span className="bg-[image:var(--gradient-hero)] bg-clip-text text-transparent">
+                  <span className="bg-[image:var(--gradient-heading)] bg-clip-text text-transparent">
                     moderno, interactivo y a tu medida
                   </span>
                   .
@@ -569,7 +569,7 @@ function Landing() {
                     <div className="flex items-center justify-between gap-2">
                       <h3 className="font-heading text-2xl font-semibold">{p.name}</h3>
                       {p.highlight ? (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-[image:var(--gradient-mint)] px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-primary">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[image:var(--gradient-mint)] px-3 py-1 text-[11px] font-bold uppercase tracking-wide tn-on-accent">
                           <Star className="h-3 w-3" />
                           Más popular
                         </span>
@@ -682,7 +682,7 @@ function Landing() {
                   href={`mailto:${EMAIL}`}
                   className="card-hover group flex items-center gap-4 rounded-2xl border border-border bg-card p-6"
                 >
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[image:var(--gradient-hero)] text-primary-foreground transition-transform duration-500 group-hover:scale-110">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[image:var(--gradient-hero)] text-white transition-transform duration-500 group-hover:scale-110">
                     <Mail className="h-7 w-7" />
                   </div>
                   <div className="min-w-0 flex-1">
