@@ -591,3 +591,87 @@ html.tn-dark ::-webkit-scrollbar-thumb {
 html.tn-dark ::selection {
   background: rgba(53, 209, 168, 0.35);
 }
+
+/* ---------- Correcciones de contraste en modo oscuro ---------- */
+
+/* Degradados que terminan en blanco/tonos 50: se neutralizan */
+html.tn-dark [class*="bg-gradient-to"][class*="from-white"],
+html.tn-dark [class*="bg-gradient-to"][class*="to-white"],
+html.tn-dark [class*="bg-gradient-to"][class*="from-slate-50"],
+html.tn-dark [class*="bg-gradient-to"][class*="to-slate-50"],
+html.tn-dark [class*="bg-gradient-to"][class*="from-gray-50"],
+html.tn-dark [class*="bg-gradient-to"][class*="from-amber-50"],
+html.tn-dark [class*="bg-gradient-to"][class*="from-indigo-50"],
+html.tn-dark [class*="bg-gradient-to"][class*="from-blue-50"],
+html.tn-dark [class*="bg-gradient-to"][class*="from-purple-50"],
+html.tn-dark [class*="bg-gradient-to"][class*="from-orange-50"],
+html.tn-dark [class*="bg-gradient-to"][class*="from-emerald-50"],
+html.tn-dark [class*="bg-gradient-to"][class*="from-rose-50"],
+html.tn-dark [class*="bg-gradient-to"][class*="from-teal-50"],
+html.tn-dark [class*="bg-gradient-to"][class*="from-cyan-50"] {
+  background-image: none !important;
+  background-color: transparent !important;
+}
+
+/* Superficies blancas con opacidad (barras, tarjetas translúcidas) */
+html.tn-dark [class*="bg-white/"] {
+  background-color: rgba(18, 37, 45, 0.92) !important;
+}
+
+/* Texto sobre superficies de color sólido: se mantiene blanco */
+html.tn-dark .text-white,
+html.tn-dark [class*="bg-indigo-5"] .text-white,
+html.tn-dark [class*="bg-slate-8"],
+html.tn-dark [class*="bg-slate-9"] {
+  color: #ffffff !important;
+}
+
+/* Botones secundarios (Atrás) legibles */
+html.tn-dark button.bg-slate-100,
+html.tn-dark button.bg-slate-200,
+html.tn-dark button.bg-gray-100 {
+  background-color: #1e3a46 !important;
+  color: #cfe2e8 !important;
+}
+
+/* Bordes de acento demasiado oscuros */
+html.tn-dark [class*="border-slate-8"],
+html.tn-dark [class*="border-slate-9"],
+html.tn-dark [class*="border-t-slate-8"] {
+  border-color: var(--tn-line) !important;
+}
+
+/* Chips/etiquetas con fondo oscuro de marca sobre fondo oscuro */
+html.tn-dark .bg-indigo-600,
+html.tn-dark .bg-indigo-500,
+html.tn-dark .bg-blue-600,
+html.tn-dark .bg-slate-800,
+html.tn-dark .bg-slate-900 {
+  background-color: #1c6e8a !important;
+  color: #ffffff !important;
+}
+
+/* Tablas y divisores */
+html.tn-dark table th,
+html.tn-dark table td {
+  border-color: var(--tn-line) !important;
+}
+html.tn-dark thead,
+html.tn-dark tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+/* Iconos/emojis dentro de cuadros claros */
+html.tn-dark .shadow-sm,
+html.tn-dark .shadow,
+html.tn-dark .shadow-md,
+html.tn-dark .shadow-lg,
+html.tn-dark .shadow-xl {
+  box-shadow: var(--tn-shadow) !important;
+}
+
+/* Texto en tonos 700/800 sobre chips translúcidos: se aclara */
+html.tn-dark .text-slate-700,
+html.tn-dark .text-gray-700 {
+  color: #d6e6ec !important;
+}
