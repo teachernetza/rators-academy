@@ -379,7 +379,7 @@ function Landing() {
                   style={{ animationDelay: "-3s" }}
                 />
                 <div className="relative grid gap-10 md:grid-cols-[1.2fr,1fr] md:items-center">
-                  <div className="text-primary-foreground">
+                  <div className="text-white">
                     <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide backdrop-blur">
                       <Sparkles className="h-3.5 w-3.5" />
                       Gratis · Sin registro
