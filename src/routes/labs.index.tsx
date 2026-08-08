@@ -105,21 +105,17 @@ function LabsPage() {
                   to="/labs/$level"
                   params={{ level: lvl.slug }}
                   className="card-hover group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card/90 p-6 shadow-[var(--shadow-soft)] backdrop-blur"
-                  style={{ borderTop: `4px solid ${lvl.color}` }}
+                  style={{ borderTop: `4px solid ${lvl.color}`, "--c": lvl.color } as React.CSSProperties}
                 >
                   <div>
-                    <span
-                      className="inline-flex items-center rounded-lg px-3 py-1 font-heading text-sm font-bold text-white"
-                      style={{ backgroundColor: lvl.color }}
-                    >
+                    <span className="tn-accent-chip inline-flex items-center rounded-lg px-3 py-1 font-heading text-sm font-bold">
                       {lvl.slug.toUpperCase()}
                     </span>
                     <h2 className="mt-4 font-heading text-xl font-semibold">{lvl.label}</h2>
-                    <p className="mt-2 text-sm font-medium" style={{ color: lvl.color }}>
-                      {lvl.tagline}
-                    </p>
+                    <p className="tn-accent-text mt-2 text-sm font-medium">{lvl.tagline}</p>
                     <p className="mt-2 text-sm text-muted-foreground">{lvl.description}</p>
                   </div>
+
                   <div className="mt-6 flex items-center justify-between">
                     <span className="text-xs uppercase tracking-wide text-muted-foreground">
                       {count} {count === 1 ? "lab" : "labs"}
