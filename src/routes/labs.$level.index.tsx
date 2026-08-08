@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Beaker, FlaskConical } from "lucide-react";
 import { icons } from "lucide-react";
@@ -94,15 +95,18 @@ function LevelPage() {
             <Reveal>
               <div className="text-center">
                 <span
-                  className="inline-flex items-center rounded-lg px-3 py-1 font-heading text-sm font-bold text-white"
-                  style={{ backgroundColor: lvl.color }}
+                  className="tn-accent-chip inline-flex items-center rounded-lg px-3 py-1 font-heading text-sm font-bold"
+                  style={{ "--c": lvl.color } as CSSProperties}
                 >
                   {lvl.slug.toUpperCase()}
                 </span>
                 <h1 className="mt-5 font-heading text-3xl font-bold tracking-tight sm:text-4xl">
                   {lvl.label}
                 </h1>
-                <p className="mt-3 text-lg font-medium" style={{ color: lvl.color }}>
+                <p
+                  className="tn-accent-text mt-3 text-lg font-medium"
+                  style={{ "--c": lvl.color } as CSSProperties}
+                >
                   {lvl.tagline}
                 </p>
                 <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">{lvl.description}</p>
@@ -122,12 +126,11 @@ function LevelPage() {
                     to="/labs/$level/$slug"
                     params={{ level: lab.level, slug: lab.slug }}
                     className="card-hover group flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card/90 p-6 shadow-[var(--shadow-soft)] backdrop-blur"
-                    style={{ borderTop: `4px solid ${lab.color}` }}
+                    style={{ borderTop: `4px solid ${lab.color}`, "--c": lab.color } as CSSProperties}
                   >
                     <div>
                       <div
-                        className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl text-white transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
-                        style={{ backgroundColor: lab.color }}
+                        className="tn-accent-icon mb-4 flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
                       >
                         <LabIcon name={lab.icon} className="h-5 w-5" />
                       </div>
@@ -135,8 +138,7 @@ function LevelPage() {
                       <p className="mt-2 text-sm text-muted-foreground">{lab.description}</p>
                     </div>
                     <span
-                      className="mt-5 inline-flex items-center text-sm font-semibold"
-                      style={{ color: lab.color }}
+                      className="tn-accent-text mt-5 inline-flex items-center text-sm font-semibold"
                     >
                       Practicar
                       <ArrowRight className="ml-1.5 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

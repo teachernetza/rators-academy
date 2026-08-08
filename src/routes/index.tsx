@@ -299,7 +299,7 @@ function Landing() {
                   text: "Descubre tu nivel real (A1–C1) y recibe tu constancia en PDF.",
                   cta: "Hacer examen",
                   to: "/diagnostic-exam" as const,
-                  color: "#0f3b4b",
+                  color: "#f0a83c",
                 },
                 {
                   icon: Beaker,
@@ -321,12 +321,11 @@ function Landing() {
                 const Inner = (
                   <div
                     className="card-hover group flex h-full flex-col justify-between rounded-2xl border border-border bg-card/85 p-6 text-left shadow-[var(--shadow-soft)] backdrop-blur"
-                    style={{ borderTop: `4px solid ${c.color}` }}
+                    style={{ borderTop: `4px solid ${c.color}`, "--c": c.color } as CSSProperties}
                   >
                     <div>
                       <div
-                        className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl text-white transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
-                        style={{ backgroundColor: c.color }}
+                        className="tn-accent-icon mb-4 flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
                       >
                         <c.icon className="h-5 w-5" />
                       </div>
@@ -334,8 +333,7 @@ function Landing() {
                       <p className="mt-2 text-sm text-muted-foreground">{c.text}</p>
                     </div>
                     <span
-                      className="mt-5 inline-flex items-center text-sm font-semibold"
-                      style={{ color: c.color }}
+                      className="tn-accent-text mt-5 inline-flex items-center text-sm font-semibold"
                     >
                       {c.cta}
                       <ArrowRight className="ml-1.5 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
