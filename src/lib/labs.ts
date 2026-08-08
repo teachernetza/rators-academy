@@ -42,7 +42,7 @@ export const LAB_LEVELS: {
     label: "C1 · Avanzado",
     tagline: "Inglés natural, preciso y con estilo.",
     description: "Próximamente: labs de expresión avanzada y registro formal.",
-    color: "#0f3b4b",
+    color: "#f0a83c",
   },
 ];
 
