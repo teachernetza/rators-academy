@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { useAuth, dashboardPathFor } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
