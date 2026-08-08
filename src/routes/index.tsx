@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { useAuth, dashboardPathFor } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -232,7 +233,7 @@ function Landing() {
                 </span>
                 <h1 className="mt-6 font-heading text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
                   Domina el inglés con un sistema{" "}
-                  <span className="bg-[image:var(--gradient-hero)] bg-clip-text text-transparent">
+                  <span className="bg-[image:var(--gradient-heading)] bg-clip-text text-transparent">
                     moderno, interactivo y a tu medida
                   </span>
                   .
@@ -299,7 +300,7 @@ function Landing() {
                   text: "Descubre tu nivel real (A1–C1) y recibe tu constancia en PDF.",
                   cta: "Hacer examen",
                   to: "/diagnostic-exam" as const,
-                  color: "#0f3b4b",
+                  color: "#f0a83c",
                 },
                 {
                   icon: Beaker,
@@ -321,12 +322,11 @@ function Landing() {
                 const Inner = (
                   <div
                     className="card-hover group flex h-full flex-col justify-between rounded-2xl border border-border bg-card/85 p-6 text-left shadow-[var(--shadow-soft)] backdrop-blur"
-                    style={{ borderTop: `4px solid ${c.color}` }}
+                    style={{ borderTop: `4px solid ${c.color}`, "--c": c.color } as CSSProperties}
                   >
                     <div>
                       <div
-                        className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl text-white transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
-                        style={{ backgroundColor: c.color }}
+                        className="tn-accent-icon mb-4 flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
                       >
                         <c.icon className="h-5 w-5" />
                       </div>
@@ -334,8 +334,7 @@ function Landing() {
                       <p className="mt-2 text-sm text-muted-foreground">{c.text}</p>
                     </div>
                     <span
-                      className="mt-5 inline-flex items-center text-sm font-semibold"
-                      style={{ color: c.color }}
+                      className="tn-accent-text mt-5 inline-flex items-center text-sm font-semibold"
                     >
                       {c.cta}
                       <ArrowRight className="ml-1.5 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -379,7 +378,7 @@ function Landing() {
                   style={{ animationDelay: "-3s" }}
                 />
                 <div className="relative grid gap-10 md:grid-cols-[1.2fr,1fr] md:items-center">
-                  <div className="text-primary-foreground">
+                  <div className="text-white">
                     <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide backdrop-blur">
                       <Sparkles className="h-3.5 w-3.5" />
                       Gratis · Sin registro
@@ -397,7 +396,7 @@ function Landing() {
                       <Link to="/diagnostic-exam">
                         <Button
                           size="lg"
-                          className="group bg-white text-primary shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/90"
+                          className="group tn-on-accent bg-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/90"
                         >
                           <ClipboardCheck className="mr-2 h-5 w-5" />
                           Iniciar Examen Diagnóstico
@@ -570,7 +569,7 @@ function Landing() {
                     <div className="flex items-center justify-between gap-2">
                       <h3 className="font-heading text-2xl font-semibold">{p.name}</h3>
                       {p.highlight ? (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-[image:var(--gradient-mint)] px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-primary">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[image:var(--gradient-mint)] px-3 py-1 text-[11px] font-bold uppercase tracking-wide tn-on-accent">
                           <Star className="h-3 w-3" />
                           Más popular
                         </span>
@@ -683,7 +682,7 @@ function Landing() {
                   href={`mailto:${EMAIL}`}
                   className="card-hover group flex items-center gap-4 rounded-2xl border border-border bg-card p-6"
                 >
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[image:var(--gradient-hero)] text-primary-foreground transition-transform duration-500 group-hover:scale-110">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[image:var(--gradient-hero)] text-white transition-transform duration-500 group-hover:scale-110">
                     <Mail className="h-7 w-7" />
                   </div>
                   <div className="min-w-0 flex-1">

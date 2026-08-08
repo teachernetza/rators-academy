@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Beaker, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -63,7 +64,7 @@ function LabsPage() {
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 shadow-[var(--shadow-soft)] backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link to="/" className="group flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[image:var(--gradient-hero)] text-primary-foreground shadow-[var(--glow-mint)] transition-transform duration-500 group-hover:scale-110">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[image:var(--gradient-hero)] text-white shadow-[var(--glow-mint)] transition-transform duration-500 group-hover:scale-110">
               <Beaker className="h-5 w-5" />
             </div>
             <span className="font-heading text-base font-bold sm:text-lg">Labs</span>
@@ -105,21 +106,17 @@ function LabsPage() {
                   to="/labs/$level"
                   params={{ level: lvl.slug }}
                   className="card-hover group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card/90 p-6 shadow-[var(--shadow-soft)] backdrop-blur"
-                  style={{ borderTop: `4px solid ${lvl.color}` }}
+                  style={{ borderTop: `4px solid ${lvl.color}`, "--c": lvl.color } as CSSProperties}
                 >
                   <div>
-                    <span
-                      className="inline-flex items-center rounded-lg px-3 py-1 font-heading text-sm font-bold text-white"
-                      style={{ backgroundColor: lvl.color }}
-                    >
+                    <span className="tn-accent-chip inline-flex items-center rounded-lg px-3 py-1 font-heading text-sm font-bold">
                       {lvl.slug.toUpperCase()}
                     </span>
                     <h2 className="mt-4 font-heading text-xl font-semibold">{lvl.label}</h2>
-                    <p className="mt-2 text-sm font-medium" style={{ color: lvl.color }}>
-                      {lvl.tagline}
-                    </p>
+                    <p className="tn-accent-text mt-2 text-sm font-medium">{lvl.tagline}</p>
                     <p className="mt-2 text-sm text-muted-foreground">{lvl.description}</p>
                   </div>
+
                   <div className="mt-6 flex items-center justify-between">
                     <span className="text-xs uppercase tracking-wide text-muted-foreground">
                       {count} {count === 1 ? "lab" : "labs"}
