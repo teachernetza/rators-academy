@@ -342,3 +342,20 @@
     transition: none;
   }
 }
+
+/* ===== Acentos por nivel / lab: legibles en claro y oscuro =====
+   Se usan con style={{ "--c": color }} en la tarjeta. */
+.tn-accent-chip {
+  background-color: var(--c);
+  color: #0b1f26;
+}
+.tn-accent-icon {
+  background-color: var(--c);
+  color: #0b1f26;
+}
+.tn-accent-text {
+  color: color-mix(in oklab, var(--c) 72%, black);
+}
+.dark .tn-accent-text {
+  color: color-mix(in oklab, var(--c) 80%, white);
+}
