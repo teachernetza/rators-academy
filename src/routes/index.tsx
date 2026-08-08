@@ -396,7 +396,7 @@ function Landing() {
                       <Link to="/diagnostic-exam">
                         <Button
                           size="lg"
-                          className="group bg-white text-primary shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/90"
+                          className="group tn-on-accent bg-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/90"
                         >
                           <ClipboardCheck className="mr-2 h-5 w-5" />
                           Iniciar Examen Diagnóstico

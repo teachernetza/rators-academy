@@ -63,7 +63,7 @@ function LevelPage() {
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 shadow-[var(--shadow-soft)] backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link to="/labs" className="group flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[image:var(--gradient-hero)] text-primary-foreground shadow-[var(--glow-mint)]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[image:var(--gradient-hero)] text-white shadow-[var(--glow-mint)]">
               <Beaker className="h-5 w-5" />
             </div>
             <span className="font-heading text-base font-bold sm:text-lg">Labs</span>
