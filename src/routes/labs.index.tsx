@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Beaker, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -105,7 +106,7 @@ function LabsPage() {
                   to="/labs/$level"
                   params={{ level: lvl.slug }}
                   className="card-hover group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card/90 p-6 shadow-[var(--shadow-soft)] backdrop-blur"
-                  style={{ borderTop: `4px solid ${lvl.color}`, "--c": lvl.color } as React.CSSProperties}
+                  style={{ borderTop: `4px solid ${lvl.color}`, "--c": lvl.color } as CSSProperties}
                 >
                   <div>
                     <span className="tn-accent-chip inline-flex items-center rounded-lg px-3 py-1 font-heading text-sm font-bold">
