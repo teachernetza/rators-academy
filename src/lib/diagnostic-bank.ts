@@ -61,6 +61,296 @@ export const SECTION_ORDER: SectionKey[] = ["listening", "reading", "vocab"];
 
 const listening: AudioItem[] = [
   {
+    id: "coffee-shop",
+    title: "The Coffee Shop",
+    subtitle: "Ordering at a café · A1–A2",
+    src: "/audio/A1_Shorts_1.mp3",
+    questions: [
+      {
+        id: "csq1",
+        q: "What does the customer order?",
+        opts: [
+          { text: "A large tea and a sandwich.", level: null },
+          { text: "Two espressos.", level: null },
+          { text: "A medium cappuccino and a chocolate muffin.", level: "A1" },
+          { text: "A cappuccino, medium size, plus a chocolate muffin.", level: "A2" },
+        ],
+      },
+      {
+        id: "csq2",
+        q: "Is the order for here or to go?",
+        opts: [
+          { text: "For here, at a table.", level: null },
+          { text: "The customer does not decide.", level: null },
+          { text: "To go.", level: "A1" },
+          { text: "The customer asks for it to take away.", level: "A2" },
+        ],
+      },
+      {
+        id: "csq3",
+        q: "How does the customer pay?",
+        opts: [
+          { text: "With a credit card.", level: null },
+          { text: "With his phone.", level: null },
+          { text: "With five dollars in cash.", level: "A1" },
+          { text: "He hands over a five-dollar bill.", level: "A2" },
+        ],
+      },
+      {
+        id: "csq4",
+        q: 'What does "You can keep the change" mean?',
+        opts: [
+          { text: "Please give me my money back.", level: null },
+          { text: "I need coins, not bills.", level: null },
+          { text: "The extra money is a tip.", level: "A2" },
+          { text: "The customer is leaving the remaining money as a tip.", level: "B1" },
+        ],
+      },
+      {
+        id: "csq5",
+        q: 'How does the barista start the conversation?',
+        opts: [
+          { text: "By asking for the customer's name.", level: null },
+          { text: "By saying the shop is closing.", level: null },
+          { text: 'By asking "What can I get for you?"', level: "A1" },
+          { text: "By greeting him and asking what he would like today.", level: "A2" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "lost-in-city",
+    title: "Lost in the City",
+    subtitle: "Asking for directions in the street · A2–B1",
+    src: "/audio/B1_Shorts_2.mp3",
+    questions: [
+      {
+        id: "lcq1",
+        q: "What is the tourist looking for?",
+        opts: [
+          { text: "A hotel near the park.", level: null },
+          { text: "The airport bus stop.", level: null },
+          { text: "The main train station.", level: "A2" },
+          { text: "The city's main railway station.", level: "B1" },
+        ],
+      },
+      {
+        id: "lcq2",
+        q: "How far away is the place?",
+        opts: [
+          { text: "About an hour on foot.", level: null },
+          { text: "In another part of the city.", level: null },
+          { text: "Very close, two blocks away.", level: "A2" },
+          { text: "Quite close — only a couple of blocks straight ahead.", level: "B1" },
+        ],
+      },
+      {
+        id: "lcq3",
+        q: "Which landmark does the local mention?",
+        opts: [
+          { text: "A church.", level: null },
+          { text: "A supermarket.", level: null },
+          { text: "A bank.", level: "A2" },
+          { text: "A bank the tourist has to walk past.", level: "B1" },
+        ],
+      },
+      {
+        id: "lcq4",
+        q: "Where is the station once you pass the landmark?",
+        opts: [
+          { text: "On the right.", level: null },
+          { text: "Behind the tourist.", level: null },
+          { text: "On the left.", level: "A2" },
+          { text: "Right there on the left-hand side.", level: "B1" },
+        ],
+      },
+      {
+        id: "lcq5",
+        q: 'What does the local mean by "You can\'t miss it"?',
+        opts: [
+          { text: "You must hurry or the train leaves.", level: null },
+          { text: "It is easy to get lost there.", level: null },
+          { text: "It is very easy to find.", level: "A2" },
+          { text: "It is so visible that finding it takes no effort.", level: "B2" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "rescheduling",
+    title: "Rescheduling",
+    subtitle: "Two colleagues changing a meeting time · B1",
+    src: "/audio/B1_Shorts_3.mp3",
+    questions: [
+      {
+        id: "rsq1",
+        q: "What was originally planned?",
+        opts: [
+          { text: "A lunch with a client.", level: null },
+          { text: "A job interview in the morning.", level: null },
+          { text: "A project meeting at 3 PM.", level: "A2" },
+          { text: "A meeting about the project scheduled for three o'clock.", level: "B1" },
+        ],
+      },
+      {
+        id: "rsq2",
+        q: "Why does Sarah want to change it?",
+        opts: [
+          { text: "She is feeling ill.", level: null },
+          { text: "She forgot about the meeting.", level: null },
+          { text: "Something happened with a client.", level: "A2" },
+          { text: "Something urgent came up with one of her clients.", level: "B1" },
+        ],
+      },
+      {
+        id: "rsq3",
+        q: "What new time does she suggest?",
+        opts: [
+          { text: "Two o'clock.", level: null },
+          { text: "Tomorrow morning.", level: null },
+          { text: "Four o'clock.", level: "A2" },
+          { text: "She asks to push it back to 4 PM.", level: "B1" },
+        ],
+      },
+      {
+        id: "rsq4",
+        q: "How does her colleague react?",
+        opts: [
+          { text: "He is annoyed about the change.", level: null },
+          { text: "He cancels the meeting completely.", level: null },
+          { text: "He agrees, it is no problem.", level: "A2" },
+          { text: "He accepts easily and says the new time works for him.", level: "B1" },
+        ],
+      },
+      {
+        id: "rsq5",
+        q: 'What does "push it back" mean here?',
+        opts: [
+          { text: "To make the meeting shorter.", level: null },
+          { text: "To move it to an earlier time.", level: null },
+          { text: "To move it to a later time.", level: "B1" },
+          { text: "To postpone it to a later slot the same day.", level: "B2" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "tech-support",
+    title: "Tech Support",
+    subtitle: "A helpdesk phone call · B1–B2",
+    src: "/audio/B2_Shorts_4.mp3",
+    questions: [
+      {
+        id: "tsq1",
+        q: "What problem does the user report?",
+        opts: [
+          { text: "She lost her password.", level: null },
+          { text: "Her printer is not working.", level: null },
+          { text: "Her laptop screen froze and does not respond.", level: "B1" },
+          { text: "Her laptop has frozen completely and is unresponsive.", level: "B2" },
+        ],
+      },
+      {
+        id: "tsq2",
+        q: "Why is the situation urgent for her?",
+        opts: [
+          { text: "She has a flight in an hour.", level: null },
+          { text: "Her laptop battery is empty.", level: null },
+          { text: "She is in the middle of a report.", level: "B1" },
+          { text: "She is halfway through writing a report.", level: "B2" },
+        ],
+      },
+      {
+        id: "tsq3",
+        q: "What does Jason suggest?",
+        opts: [
+          { text: "Taking the laptop to a repair shop.", level: null },
+          { text: "Installing a new operating system.", level: null },
+          { text: "Holding the power button for ten seconds.", level: "B1" },
+          { text: "Holding down the power button to force a restart.", level: "B2" },
+        ],
+      },
+      {
+        id: "tsq4",
+        q: "What is the result of the suggestion?",
+        opts: [
+          { text: "Nothing happens and she has to call again.", level: null },
+          { text: "The laptop shuts down permanently.", level: null },
+          { text: "The laptop starts working again.", level: "B1" },
+          { text: "The machine begins to boot up once more.", level: "B2" },
+        ],
+      },
+      {
+        id: "tsq5",
+        q: "How would you describe Jason's tone?",
+        opts: [
+          { text: "Angry and impatient.", level: null },
+          { text: "Confused and unsure.", level: null },
+          { text: "Calm and helpful.", level: "B1" },
+          { text: "Patient and methodical throughout the call.", level: "B2" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "weekend-recap",
+    title: "Weekend Recap",
+    subtitle: "Two friends chatting on Monday morning · B2",
+    src: "/audio/B2_Shorts_5.mp3",
+    questions: [
+      {
+        id: "wrq1",
+        q: "What did the second friend do at the weekend?",
+        opts: [
+          { text: "He travelled to the coast.", level: null },
+          { text: "He worked overtime.", level: null },
+          { text: "He stayed at home and watched a series.", level: "B1" },
+          { text: "He stayed in and binge-watched a new sci-fi series.", level: "B2" },
+        ],
+      },
+      {
+        id: "wrq2",
+        q: "Why did he stay in?",
+        opts: [
+          { text: "He was ill.", level: null },
+          { text: "His car broke down.", level: null },
+          { text: "The weather was bad.", level: "B1" },
+          { text: "The weather was awful, so going out was unappealing.", level: "B2" },
+        ],
+      },
+      {
+        id: "wrq3",
+        q: 'What does "Did you get up to anything exciting?" mean?',
+        opts: [
+          { text: "Did you wake up early?", level: null },
+          { text: "Did you climb anywhere?", level: null },
+          { text: "Did you do anything interesting?", level: "B1" },
+          { text: "Did you do anything worth talking about?", level: "B2" },
+        ],
+      },
+      {
+        id: "wrq4",
+        q: "How does the first friend react to the answer?",
+        opts: [
+          { text: "He thinks it was a wasted weekend.", level: null },
+          { text: "He is disappointed his friend did not call him.", level: null },
+          { text: "He thinks it sounds perfect.", level: "B1" },
+          { text: "He sees the value in it and says it sounds ideal.", level: "B2" },
+        ],
+      },
+      {
+        id: "wrq5",
+        q: 'What does "take it easy and recharge" refer to?',
+        opts: [
+          { text: "Charging electronic devices.", level: null },
+          { text: "Doing intense exercise.", level: null },
+          { text: "Resting to get your energy back.", level: "B1" },
+          { text: "Slowing down deliberately in order to restore your energy.", level: "C1" },
+        ],
+      },
+    ],
+  },
+  {
     id: "weekend-plans",
     title: "Conversation: Plans for the Weekend",
     subtitle: "Two friends talking about a possible trip · B1",
