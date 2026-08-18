@@ -2,9 +2,6 @@
 // Each question has 4 options: 2 wrong (level = null) and 2 correct,
 // each correct option mapped to a different CEFR level.
 
-import aiUseAudio from "@/assets/B2_C1_Audio_AI_Use.mp3.asset.json";
-import weekendAudio from "@/assets/B1_Plans_for_the_weekend.mp3.asset.json";
-
 export type Cefr = "A1" | "A2" | "B1" | "B2" | "C1";
 
 export const CEFR_SCALE: Cefr[] = ["A1", "A2", "B1", "B2", "C1"];
@@ -67,7 +64,7 @@ const listening: AudioItem[] = [
     id: "weekend-plans",
     title: "Conversation: Plans for the Weekend",
     subtitle: "Two friends talking about a possible trip · B1",
-    src: weekendAudio.url,
+    src: "/audio/B1_Plans_for_the_weekend.mp3",
     questions: [
       {
         id: "wpq1",
@@ -131,7 +128,7 @@ const listening: AudioItem[] = [
     id: "ai-use",
     title: "Interview: AI in Daily Life",
     subtitle: "Sarah (interviewer) & Dr. Evans (AI specialist) · B2–C1",
-    src: aiUseAudio.url,
+    src: "/audio/B2_C1_Audio_AI_Use.mp3",
     questions: [
       {
         id: "aiq1",

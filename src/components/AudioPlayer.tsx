@@ -121,16 +121,7 @@ export function AudioPlayer({ src, className }: Props) {
               if (el) el.currentTime = v;
             }}
             className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-primary/20 accent-primary outline-none"
-            style={{
-              background: `linear-gradient(to right, hsl(var(--primary, 0 0% 0%)) 0%, transparent 0%)`,
-            }}
           />
-          <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-primary/15">
-            <div
-              className="h-full rounded-full bg-primary transition-[width] duration-150"
-              style={{ width: `${pct}%` }}
-            />
-          </div>
           <div className="mt-1 flex items-center justify-between text-[11px] tabular-nums text-muted-foreground">
             <span>{fmt(current)}</span>
             <span>{loading ? "Cargando…" : fmt(duration)}</span>
