@@ -33,6 +33,7 @@ import {
   type Question,
 } from "@/lib/diagnostic-bank";
 import { generateDiagnosticPdf } from "@/lib/diagnostic-pdf";
+import { AudioPlayer } from "@/components/AudioPlayer";
 
 export const Route = createFileRoute("/diagnostic-exam")({
   head: () => ({
@@ -439,9 +440,7 @@ function ListeningSection({
               {item.subtitle && (
                 <p className="text-xs text-muted-foreground">{item.subtitle}</p>
               )}
-              <audio controls preload="metadata" src={item.src} className="w-full">
-                Tu navegador no soporta la reproducción de audio.
-              </audio>
+              <AudioPlayer src={item.src} />
             </div>
             {item.questions.map((q) => {
               n += 1;

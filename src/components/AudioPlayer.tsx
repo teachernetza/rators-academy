@@ -62,8 +62,6 @@ export function AudioPlayer({ src, className }: Props) {
     void el.play().catch(() => setError(true));
   };
 
-  const pct = duration > 0 ? (current / duration) * 100 : 0;
-
   return (
     <div
       className={cn(
@@ -76,7 +74,6 @@ export function AudioPlayer({ src, className }: Props) {
         src={src}
         preload="none"
         playsInline
-        crossOrigin="anonymous"
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration || 0)}
         onDurationChange={(e) => setDuration(e.currentTarget.duration || 0)}
         onTimeUpdate={(e) => setCurrent(e.currentTarget.currentTime)}
