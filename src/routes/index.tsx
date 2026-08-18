@@ -417,7 +417,7 @@ function Landing() {
 
                   <ul className="grid gap-3 rounded-2xl border border-white/25 bg-white/10 p-5 text-white backdrop-blur">
                     {[
-                      { icon: Zap, text: "3 rubros: Listening (5 audios), Reading (3 lecturas) y Vocabulary & Use of Language." },
+                      { icon: Zap, text: "3 rubros: Listening (audio real), Reading (3 lecturas) y Vocabulary & Use of Language." },
                       { icon: ClipboardCheck, text: "Nivel por habilidad y nivel general (A1 – C1) al instante." },
                       { icon: FileDown, text: "Constancia de Nivel en PDF, lista para descargar y compartir." },
 

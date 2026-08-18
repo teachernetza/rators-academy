@@ -298,7 +298,7 @@ function StartScreen({
   hasProgress: boolean;
 }) {
   const blocks = [
-    { icon: Headphones, title: "Listening", desc: "5 audios · 10 preguntas" },
+    { icon: Headphones, title: "Listening", desc: "1 audio real · 5 preguntas" },
     { icon: BookOpen, title: "Reading", desc: "3 lecturas · 9 preguntas" },
     { icon: Type, title: "Vocabulary & Use", desc: "Gramática y modismos · 12 preguntas" },
   ];
