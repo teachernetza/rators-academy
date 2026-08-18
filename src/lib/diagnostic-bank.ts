@@ -2,6 +2,8 @@
 // Each question has 4 options: 2 wrong (level = null) and 2 correct,
 // each correct option mapped to a different CEFR level.
 
+import aiUseAudio from "@/assets/B2_C1_Audio_AI_Use.mp3.asset.json";
+
 export type Cefr = "A1" | "A2" | "B1" | "B2" | "C1";
 
 export const CEFR_SCALE: Cefr[] = ["A1", "A2", "B1", "B2", "C1"];
@@ -32,7 +34,10 @@ export type Question = {
 
 export type AudioItem = {
   id: string;
-  audio: string;
+  /** Public URL of the real recording (CDN asset). */
+  src: string;
+  title: string;
+  subtitle?: string;
   questions: Question[];
 };
 
