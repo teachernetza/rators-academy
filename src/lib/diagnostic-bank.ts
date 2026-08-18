@@ -3,6 +3,7 @@
 // each correct option mapped to a different CEFR level.
 
 import aiUseAudio from "@/assets/B2_C1_Audio_AI_Use.mp3.asset.json";
+import weekendAudio from "@/assets/B1_Plans_for_the_weekend.mp3.asset.json";
 
 export type Cefr = "A1" | "A2" | "B1" | "B2" | "C1";
 
