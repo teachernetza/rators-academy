@@ -58,141 +58,74 @@ export const SECTION_ORDER: SectionKey[] = ["listening", "reading", "vocab"];
 
 const listening: AudioItem[] = [
   {
-    id: "a1",
-    audio:
-      "Attention passengers: flight 402 to Chicago has been delayed by two hours due to bad weather. Please stay near gate twelve, we will announce the new boarding time shortly.",
+    id: "ai-use",
+    title: "Interview: AI in Daily Life",
+    subtitle: "Sarah (interviewer) & Dr. Evans (AI specialist) · B2–C1",
+    src: aiUseAudio.url,
     questions: [
       {
-        id: "a1q1",
-        q: "What happened to flight 402?",
+        id: "aiq1",
+        q: "According to Dr. Evans, how is AI currently used in healthcare?",
         opts: [
-          { text: "It was cancelled.", level: null },
-          { text: "It left earlier than planned.", level: null },
-          { text: "It is late.", level: "A2" },
-          { text: "It has been pushed back a couple of hours.", level: "B2" },
+          { text: "It is completely replacing medical staff.", level: null },
+          { text: "It is strictly used for administrative billing.", level: null },
+          { text: "It helps doctors find out what is wrong faster.", level: "B1" },
+          { text: "It assists physicians in diagnosing conditions far more rapidly.", level: "C1" },
         ],
       },
       {
-        id: "a1q2",
-        q: "What should passengers do?",
+        id: "aiq2",
+        q: "Which workplace tasks does he say generative AI is taking over?",
         opts: [
-          { text: "Go to the ticket office.", level: null },
-          { text: "Leave the airport.", level: null },
-          { text: "Wait close to gate twelve.", level: "A2" },
-          { text: "Remain in the vicinity of the gate until further notice.", level: "C1" },
-        ],
-      },
-    ],
-  },
-  {
-    id: "a2",
-    audio:
-      "Hi Dan, it's Marta. I'm running about fifteen minutes late for our meeting because the traffic is terrible. Could you start without me and I'll join as soon as I get there?",
-    questions: [
-      {
-        id: "a2q1",
-        q: "Why is Marta calling?",
-        opts: [
-          { text: "To cancel the meeting.", level: null },
-          { text: "To ask for the address.", level: null },
-          { text: "To say she will arrive late.", level: "A2" },
-          { text: "To warn Dan that she has been held up in traffic.", level: "B2" },
+          { text: "Hiring and firing employees.", level: null },
+          { text: "Repairing office equipment.", level: null },
+          { text: "Writing reports, working with data and personalising learning.", level: "B1" },
+          {
+            text: "Routine work such as drafting reports, analysing data and tailoring learning experiences.",
+            level: "C1",
+          },
         ],
       },
       {
-        id: "a2q2",
-        q: "What does she ask Dan to do?",
+        id: "aiq3",
+        q: 'What does Dr. Evans mean by describing AI as a "double-edged sword"?',
         opts: [
-          { text: "Wait for her outside.", level: null },
-          { text: "Call her back later.", level: null },
-          { text: "Begin the meeting without her.", level: "B1" },
-          { text: "Go ahead with the meeting and let her catch up.", level: "C1" },
-        ],
-      },
-    ],
-  },
-  {
-    id: "a3",
-    audio:
-      "I used to play tennis almost every weekend, but since I started my new job I hardly ever find the time. I still watch the matches on television, though.",
-    questions: [
-      {
-        id: "a3q1",
-        q: "Does the speaker play tennis now?",
-        opts: [
-          { text: "Yes, every weekend.", level: null },
-          { text: "Yes, more than before.", level: null },
-          { text: "No, almost never.", level: "A1" },
-          { text: "No, he rarely gets the chance anymore.", level: "B2" },
+          { text: "It is extremely dangerous and offers no real benefits.", level: null },
+          { text: "It can only be used by software engineers.", level: null },
+          { text: "It brings big benefits but also serious problems.", level: "B1" },
+          {
+            text: "It drives record productivity while raising critical risks at the same time.",
+            level: "B2",
+          },
         ],
       },
       {
-        id: "a3q2",
-        q: "Why did the situation change?",
+        id: "aiq4",
+        q: "Which concerns does he specifically mention?",
         opts: [
-          { text: "He got injured.", level: null },
-          { text: "He lost interest in tennis.", level: null },
-          { text: "Because of his new job.", level: "A2" },
-          { text: "His new job leaves him little free time.", level: "B2" },
-        ],
-      },
-    ],
-  },
-  {
-    id: "a4",
-    audio:
-      "Honestly, the restaurant was a bit of a letdown. The service was quick and the place looked lovely, but the food was bland and, for those prices, I expected far more.",
-    questions: [
-      {
-        id: "a4q1",
-        q: "What is the speaker's overall opinion?",
-        opts: [
-          { text: "She loved everything.", level: null },
-          { text: "She had no opinion.", level: null },
-          { text: "She was disappointed.", level: "B1" },
-          { text: "She found the experience underwhelming overall.", level: "C1" },
+          { text: "Rising electricity bills and slow internet.", level: null },
+          { text: "A shortage of computers worldwide.", level: null },
+          { text: "Privacy, unfair algorithms and losing jobs.", level: "B1" },
+          { text: "Data privacy, algorithmic bias and job displacement.", level: "C1" },
         ],
       },
       {
-        id: "a4q2",
-        q: "What did she like?",
+        id: "aiq5",
+        q: "What is the speakers' conclusion about the relationship between AI and humans?",
         opts: [
-          { text: "The flavour of the food.", level: null },
-          { text: "The prices.", level: null },
-          { text: "The fast service and the place.", level: "A2" },
-          { text: "The prompt service and the pleasant setting.", level: "B2" },
-        ],
-      },
-    ],
-  },
-  {
-    id: "a5",
-    audio:
-      "If I were you, I'd book the tickets well in advance. Last time we left it until the last minute and ended up paying almost double what we had planned.",
-    questions: [
-      {
-        id: "a5q1",
-        q: "What is the speaker doing?",
-        opts: [
-          { text: "Complaining about a flight.", level: null },
-          { text: "Asking for help.", level: null },
-          { text: "Giving advice.", level: "B1" },
-          { text: "Recommending a course of action based on experience.", level: "C1" },
-        ],
-      },
-      {
-        id: "a5q2",
-        q: "What happened last time?",
-        opts: [
-          { text: "They missed the trip.", level: null },
-          { text: "They got a discount.", level: null },
-          { text: "They paid much more money.", level: "A2" },
-          { text: "They ended up paying nearly twice as much.", level: "B2" },
+          { text: "AI will eliminate the need for human creativity at work.", level: null },
+          { text: "Humans must stop using AI until every privacy issue is solved.", level: null },
+          { text: "People should work with AI instead of fighting it.", level: "B1" },
+          {
+            text: "AI should augment human capabilities rather than replace human ingenuity.",
+            level: "C1",
+          },
         ],
       },
     ],
   },
 ];
+
 
 /* ------------------------------- READING ------------------------------- */
 
