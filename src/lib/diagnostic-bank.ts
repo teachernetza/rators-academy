@@ -63,6 +63,70 @@ export const SECTION_ORDER: SectionKey[] = ["listening", "reading", "vocab"];
 
 const listening: AudioItem[] = [
   {
+    id: "weekend-plans",
+    title: "Conversation: Plans for the Weekend",
+    subtitle: "Two friends talking about a possible trip · B1",
+    src: weekendAudio.url,
+    questions: [
+      {
+        id: "wpq1",
+        q: "What is Mark thinking about doing this weekend?",
+        opts: [
+          { text: "Moving to another city permanently.", level: null },
+          { text: "Working extra hours at the office.", level: null },
+          { text: "Going to the mountains and renting a cabin.", level: "A2" },
+          {
+            text: "Heading up to the mountains and booking a cabin for a couple of days.",
+            level: "B1",
+          },
+        ],
+      },
+      {
+        id: "wpq2",
+        q: "What does his plan depend on?",
+        opts: [
+          { text: "Whether his friends can pay for the trip.", level: null },
+          { text: "Whether his car gets repaired in time.", level: null },
+          { text: "The weather.", level: "A2" },
+          { text: "Whether the weather turns out to be nice.", level: "B1" },
+        ],
+      },
+      {
+        id: "wpq3",
+        q: "Who is Mark likely to travel with?",
+        opts: [
+          { text: "With his whole family.", level: null },
+          { text: "With a group of coworkers.", level: null },
+          { text: "Nobody, he goes alone.", level: "A2" },
+          { text: "Probably no one — he says he'd go by himself.", level: "B1" },
+        ],
+      },
+      {
+        id: "wpq4",
+        q: "What will Mark do if it rains all weekend?",
+        opts: [
+          { text: "He will go to the cabin anyway.", level: null },
+          { text: "He will visit his friend's house.", level: null },
+          { text: "He will stay at home and rest.", level: "A2" },
+          { text: "He'll stay home and catch up on some rest instead.", level: "B1" },
+        ],
+      },
+      {
+        id: "wpq5",
+        q: "Why is the other person interested in the trip?",
+        opts: [
+          { text: "Because she wants to drive Mark there.", level: null },
+          { text: "Because she owns a cabin in the mountains.", level: null },
+          { text: "She is looking for a good cabin too.", level: "A2" },
+          {
+            text: "She's been looking for a good cabin to stay at and wants the details.",
+            level: "B1",
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: "ai-use",
     title: "Interview: AI in Daily Life",
     subtitle: "Sarah (interviewer) & Dr. Evans (AI specialist) · B2–C1",
