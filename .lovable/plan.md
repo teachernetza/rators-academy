@@ -1,36 +1,21 @@
-# Reconectar GitHub y reactivar el deploy en Vercel
+# Reproductor de audio propio para el examen diagnóstico
 
-## Diagnóstico
+## Problema
+Los audios se cargan hoy desde el almacenamiento de assets de Lovable (`/__l5e/...`). Esas URLs son de infraestructura: caducan, exigen validación y no existen en el deploy de Vercel. Por eso el reproductor aparece vacío (0:00 / 0:00) y, cuando funciona, solo lo hace una vez. Además el `<audio controls>` nativo se ve distinto en cada navegador y en móvil bloquea la precarga.
 
-Los cambios de audio **sí están en el código**: el último commit del proyecto es `Added weekend plans audio` e incluye los dos MP3 reales (B1 "Plans for the Weekend" y B2–C1 "AI in Daily Life") con sus 10 preguntas y el reproductor HTML5.
+## Solución
+1. **Servir los MP3 desde el propio proyecto**: copiar los dos audios a `public/audio/` (`B1_Plans_for_the_weekend.mp3`, `B2_C1_Audio_AI_Use.mp3`) y referenciarlos como rutas fijas `/audio/....mp3`. Quedan dentro del repositorio (≈1.8 MB en total), viajan a GitHub y a Vercel, y se sirven como archivos estáticos públicos sin ningún filtro ni token.
+2. **Reproductor propio** (`src/components/AudioPlayer.tsx`) con el estilo de la plataforma (azul marino / turquesa, modo claro y oscuro):
+   - Botón grande play/pausa, barra de progreso arrastrable, tiempo actual / duración.
+   - Botones de −10s / +10s y control de velocidad (0.75x / 1x / 1.25x), útiles para comprensión auditiva.
+   - Estado de carga y mensaje de error con botón "Reintentar" si el archivo no responde.
+   - Compatible con móvil: carga bajo demanda al primer toque (evita el bloqueo de autoplay/preload en iOS) y usa `playsInline`.
+3. **Integración**: reemplazar el `<audio controls>` en la sección de Listening de `src/routes/diagnostic-exam.tsx` por este componente.
+4. **Limpieza**: eliminar los `*.mp3.asset.json` de `src/assets` y sus imports en `src/lib/diagnostic-bank.ts`.
 
-El problema no es el código, es la tubería: al mover el proyecto a otro workspace, la conexión de GitHub no se transfiere. Ahora mismo este proyecto solo empuja a su repositorio interno de Lovable, así que `teachernetza/rators-academy-hub` no recibe commits nuevos y Vercel, que despliega desde ese repo, nunca ve cambios.
+## Verificación
+Prueba automatizada en navegador: abrir el examen, llegar a Listening, pulsar play en ambos audios y confirmar que la duración y el tiempo avanzan; repetir play/pausa varias veces y revisar la consola por errores de red.
 
-Esto se resuelve desde la interfaz de Lovable y de Vercel — no hay nada que programar.
-
-## Pasos para ti
-
-1. **Reconectar GitHub en este workspace**
-   - En el chat, abre el menú **+** (abajo a la izquierda) → **GitHub** → conectar proyecto.
-   - Autoriza la app de Lovable en la cuenta `teachernetza` (solo puede haber una cuenta de GitHub conectada a la vez; si estaba ligada al workspace anterior, autorízala de nuevo aquí).
-   - Al elegir destino, apunta al repositorio existente `teachernetza/rators-academy-hub`, no crees uno nuevo.
-
-2. **Verificar que llegó el commit**
-   - Abre `https://github.com/teachernetza/rators-academy-hub/commits` y confirma que aparece el commit con los audios.
-   - Si no aparece, en Lovable haz un cambio mínimo para forzar un push y vuelve a revisar.
-
-3. **Verificar Vercel**
-   - En el proyecto de Vercel → Settings → Git: confirma que apunta a `teachernetza/rators-academy-hub` y a la rama correcta (`main`).
-   - En Deployments, confirma que el push disparó un build nuevo. Si no, usa **Redeploy** una vez.
-
-4. **Variables de entorno en Vercel**
-   - El backend necesita en Vercel: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_PROJECT_ID`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`. Sin ellas la app compila pero falla al cargar datos.
-   - Las funciones de administración (crear usuarios) además requieren `SUPABASE_SERVICE_ROLE_KEY`, que no está disponible en el plan gratuito de Lovable Cloud.
-
-## Después de reconectar
-
-Cuando confirmes que el repo ya recibe commits, reviso que el build de Vercel pase y que los dos audios se reproduzcan en `/diagnostic-exam` en la URL de Vercel.
-
-## Nota
-
-Mientras tanto, la app publicada de Lovable (`rators-academy-hub.lovable.app`) sí puede actualizarse hoy mismo con el botón de publicar, sin depender de GitHub ni Vercel.
+## Notas técnicas
+- Las rutas quedan absolutas (`/audio/...`), sin imports de bundler, para que sean idénticas en Lovable y Vercel.
+- El componente usa un único elemento `<audio>` oculto controlado por React (`timeupdate`, `loadedmetadata`, `error`), sin dependencias nuevas.
