@@ -419,44 +419,29 @@ function ListeningSection({
   answers: Answers;
   onAnswer: (id: string, v: number) => void;
 }) {
-  const [playing, setPlaying] = useState<string | null>(null);
-
-  function play(id: string, text: string) {
-    if (typeof window === "undefined" || !window.speechSynthesis) {
-      toast.error("Tu navegador no soporta síntesis de voz.");
-      return;
-    }
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "en-US";
-    u.rate = 0.95;
-    u.onstart = () => setPlaying(id);
-    u.onend = () => setPlaying(null);
-    u.onerror = () => setPlaying(null);
-    window.speechSynthesis.speak(u);
-  }
-
   let n = 0;
   return (
     <div>
       <SectionHeading
         title="Listening"
-        description="5 audios con 2 preguntas cada uno. Puedes repetir el audio las veces que necesites."
+        description="Escucha la grabación completa y responde. Puedes repetirla las veces que necesites."
       />
       <div className="space-y-8">
         {QuestionBank.listening.map((item, ai) => (
           <div key={item.id} className="space-y-4">
-            <div className="flex flex-wrap items-center gap-3 rounded-xl border border-mint/30 bg-mint/5 p-4">
-              <span className="font-heading text-sm font-bold">Audio {ai + 1}</span>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => play(item.id, item.audio)}
-              >
-                <Volume2 className="mr-2 h-4 w-4" />
-                {playing === item.id ? "Reproduciendo..." : "Escuchar"}
-              </Button>
+            <div className="space-y-3 rounded-xl border border-mint/30 bg-mint/5 p-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <Volume2 className="h-4 w-4 text-primary" />
+                <span className="font-heading text-sm font-bold">
+                  Audio {ai + 1} · {item.title}
+                </span>
+              </div>
+              {item.subtitle && (
+                <p className="text-xs text-muted-foreground">{item.subtitle}</p>
+              )}
+              <audio controls preload="metadata" src={item.src} className="w-full">
+                Tu navegador no soporta la reproducción de audio.
+              </audio>
             </div>
             {item.questions.map((q) => {
               n += 1;
@@ -470,6 +455,7 @@ function ListeningSection({
     </div>
   );
 }
+
 
 function ReadingSection({
   answers,
