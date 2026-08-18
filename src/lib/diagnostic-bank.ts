@@ -731,6 +731,42 @@ const vocab: Question[] = [
   },
 ];
 
+/* --------------------- DETERMINISTIC OPTION SHUFFLE --------------------- */
+// The bank is authored with the correct answers at the end. We shuffle each
+// question's options once, deterministically (seeded by the question id), so
+// the correct option can appear in any position but the exam is stable
+// between renders and the stored answer index stays valid.
+
+function seedFrom(id: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < id.length; i++) {
+    h ^= id.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function shuffleOptions(q: Question): void {
+  let s = seedFrom(q.id) || 1;
+  const rand = () => {
+    s ^= s << 13;
+    s ^= s >>> 17;
+    s ^= s << 5;
+    s >>>= 0;
+    return s / 4294967296;
+  };
+  for (let i = q.opts.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [q.opts[i], q.opts[j]] = [q.opts[j], q.opts[i]];
+  }
+}
+
+[
+  ...listening.flatMap((a) => a.questions),
+  ...reading.flatMap((p) => p.questions),
+  ...vocab,
+].forEach(shuffleOptions);
+
 export const QuestionBank = { listening, reading, vocab };
 
 /** All questions of a section, flattened. */
