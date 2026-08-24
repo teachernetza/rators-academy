@@ -130,6 +130,22 @@ export async function generateDiagnosticPdf({ studentName, result }: Payload) {
     { align: "center" },
   );
 
+  // Modality badge (quick / full)
+  const modeLabel =
+    result.mode === "quick"
+      ? `Examen rápido · ~7 min · ${result.totalQuestions} reactivos`
+      : `Examen completo · 15–20 min · ${result.totalQuestions} reactivos`;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8.5);
+  const badgeW = doc.getTextWidth(modeLabel) + 12;
+  doc.setFillColor(...MINT);
+  doc.roundedRect(W / 2 - badgeW / 2, 91.5, badgeW, 8, 4, 4, "F");
+  doc.setTextColor(...TEAL);
+  doc.text(modeLabel, W / 2, 96.8, { align: "center" });
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(...SLATE);
+
+
   // Overall seal (left)
   const sealX = 58;
   const sealY = 130;
