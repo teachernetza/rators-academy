@@ -1,10 +1,8 @@
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
-  useState,
 } from "react";
 
 export type Theme = "light" | "dark" | "system";
@@ -25,13 +23,6 @@ const ThemeContext = createContext<Ctx>({
   toggle: () => {},
 });
 
-function systemDark() {
-  return (
-    typeof window !== "undefined" &&
-    window.matchMedia?.("(prefers-color-scheme: dark)").matches
-  );
-}
-
 function apply(resolved: "light" | "dark") {
   if (typeof document === "undefined") return;
   const root = document.documentElement;
@@ -48,50 +39,24 @@ function apply(resolved: "light" | "dark") {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("system");
-  const [resolved, setResolved] = useState<"light" | "dark">("light");
-
+  // Dark mode temporarily disabled — the app is locked to light theme.
   useEffect(() => {
-    const stored = (localStorage.getItem(STORAGE_KEY) as Theme | null) ?? "system";
-    setThemeState(stored);
-  }, []);
-
-  useEffect(() => {
-    const next = theme === "system" ? (systemDark() ? "dark" : "light") : theme;
-    setResolved(next);
-    apply(next);
-    if (theme === "system") {
-      const mq = window.matchMedia("(prefers-color-scheme: dark)");
-      const onChange = () => {
-        const r = mq.matches ? "dark" : "light";
-        setResolved(r);
-        apply(r);
-      };
-      mq.addEventListener("change", onChange);
-      return () => mq.removeEventListener("change", onChange);
-    }
-  }, [theme]);
-
-  const setTheme = useCallback((t: Theme) => {
-    setThemeState(t);
     try {
-      localStorage.setItem(STORAGE_KEY, t);
+      localStorage.removeItem(STORAGE_KEY);
     } catch {
       /* ignore */
     }
+    apply("light");
   }, []);
 
-  const toggle = useCallback(() => {
-    setTheme(
-      (theme === "system" ? (systemDark() ? "dark" : "light") : theme) === "dark"
-        ? "light"
-        : "dark",
-    );
-  }, [theme, setTheme]);
-
-  const value = useMemo(
-    () => ({ theme, resolved, setTheme, toggle }),
-    [theme, resolved, setTheme, toggle],
+  const value = useMemo<Ctx>(
+    () => ({
+      theme: "light" as Theme,
+      resolved: "light" as const,
+      setTheme: () => {},
+      toggle: () => {},
+    }),
+    [],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
@@ -99,5 +64,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 export const useTheme = () => useContext(ThemeContext);
 
-/** Inline script that applies the stored theme before first paint (no FOUC). */
-export const themeInitScript = `(function(){try{var t=localStorage.getItem('${STORAGE_KEY}')||'system';var d=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d);document.documentElement.style.colorScheme=d?'dark':'light';}catch(e){}})();`;
+/** Inline script that keeps the document in light mode before first paint. */
+export const themeInitScript = `(function(){try{localStorage.removeItem('${STORAGE_KEY}');document.documentElement.classList.remove('dark');document.documentElement.style.colorScheme='light';}catch(e){}})();`;
+
