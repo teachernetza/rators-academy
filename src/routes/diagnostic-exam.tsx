@@ -559,8 +559,9 @@ function ReadingSection({
     <div>
       <SectionHeading
         title="Reading"
-        description="2 lecturas cortas y 1 lectura larga, con 3 preguntas cada una."
+        description={`${modeReading(mode).length} lecturas con preguntas de comprensión.`}
       />
+
       <div className="space-y-8">
         {modeReading(mode).map((p) => (
           <div key={p.id} className="space-y-4">
