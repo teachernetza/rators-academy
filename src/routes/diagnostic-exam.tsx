@@ -13,22 +13,26 @@ import {
   Headphones,
   BookOpen,
   Type,
+  Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import {
-  QuestionBank,
   computeResult,
-  sectionQuestions,
+  modeListening,
+  modeReading,
+  modeVocab,
+  totalQuestions,
+  EXAM_MODES,
   SECTION_NAMES,
   SECTION_ORDER,
   CEFR_DESCRIPTION,
   CEFR_SCALE,
   CEFR_VALUE,
-  TOTAL_QUESTIONS,
   type Answers,
+  type ExamMode,
   type ExamResult,
   type Question,
 } from "@/lib/diagnostic-bank";
@@ -57,10 +61,16 @@ export const Route = createFileRoute("/diagnostic-exam")({
   component: DiagnosticExam,
 });
 
-const STORAGE_KEY = "netza.diagnostic.v2";
+const STORAGE_KEY = "netza.diagnostic.v3";
 const WA_NUMBER = "523231116425";
 
-type SavedState = { studentName: string; step: number; answers: Answers; version: 2 };
+type SavedState = {
+  studentName: string;
+  step: number;
+  answers: Answers;
+  mode: ExamMode;
+  version: 3;
+};
 
 function loadState(): SavedState | null {
   if (typeof window === "undefined") return null;
@@ -68,7 +78,7 @@ function loadState(): SavedState | null {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as SavedState;
-    if (parsed?.version !== 2) return null;
+    if (parsed?.version !== 3) return null;
     return parsed;
   } catch {
     return null;
@@ -79,6 +89,7 @@ function DiagnosticExam() {
   // Step 0 = start, 1..3 = sections, 4 = results
   const [step, setStep] = useState(0);
   const [studentName, setStudentName] = useState("");
+  const [mode, setMode] = useState<ExamMode>("quick");
   const [answers, setAnswers] = useState<Answers>({});
   const [result, setResult] = useState<ExamResult | null>(null);
   const [pdfLoading, setPdfLoading] = useState(false);
@@ -91,10 +102,12 @@ function DiagnosticExam() {
     try {
       const a: Answers = { ...(saved.answers ?? {}) };
       setStudentName(saved.studentName || "");
+      const savedMode: ExamMode = saved.mode === "full" ? "full" : "quick";
+      setMode(savedMode);
       setAnswers(a);
       const savedStep = Number(saved.step) || 0;
       if (savedStep >= 4) {
-        setResult(computeResult(a));
+        setResult(computeResult(a, savedMode));
         setStep(4);
       } else {
         setStep(Math.max(0, Math.min(3, savedStep)));
@@ -112,9 +125,9 @@ function DiagnosticExam() {
     if (step === 0 && !studentName) return;
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ studentName, step, answers, version: 2 }),
+      JSON.stringify({ studentName, step, answers, mode, version: 3 }),
     );
-  }, [studentName, step, answers]);
+  }, [studentName, step, answers, mode]);
 
   useEffect(() => {
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
@@ -123,6 +136,7 @@ function DiagnosticExam() {
   function resetExam() {
     if (typeof window !== "undefined") localStorage.removeItem(STORAGE_KEY);
     setStudentName("");
+    setMode("quick");
     setStep(0);
     setAnswers({});
     setResult(null);
@@ -137,14 +151,26 @@ function DiagnosticExam() {
   }
 
   function finish() {
-    setResult(computeResult(answers));
+    setResult(computeResult(answers, mode));
     setStep(4);
     toast.success("¡Examen calificado!");
   }
 
-  const answeredCount = useMemo(() => Object.keys(answers).length, [answers]);
-  const progress =
-    step === 0 ? 0 : Math.round((answeredCount / TOTAL_QUESTIONS) * 100);
+  const total = useMemo(() => totalQuestions(mode), [mode]);
+  const answeredIds = useMemo(
+    () =>
+      new Set([
+        ...modeListening(mode).flatMap((a) => a.questions.map((q) => q.id)),
+        ...modeReading(mode).flatMap((p) => p.questions.map((q) => q.id)),
+        ...modeVocab(mode).map((q) => q.id),
+      ]),
+    [mode],
+  );
+  const answeredCount = useMemo(
+    () => Object.keys(answers).filter((id) => answeredIds.has(id)).length,
+    [answers, answeredIds],
+  );
+  const progress = step === 0 ? 0 : Math.round((answeredCount / total) * 100);
   const sectionKey = step >= 1 && step <= 3 ? SECTION_ORDER[step - 1] : null;
 
   return (
@@ -190,7 +216,7 @@ function DiagnosticExam() {
                 Paso {step} de 3 · {SECTION_NAMES[sectionKey]}
               </span>
               <span className="font-semibold text-primary">
-                {answeredCount}/{TOTAL_QUESTIONS} · {progress}%
+                {answeredCount}/{total} · {progress}%
               </span>
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
@@ -212,6 +238,8 @@ function DiagnosticExam() {
           <StartScreen
             name={studentName}
             onName={setStudentName}
+            mode={mode}
+            onMode={setMode}
             hasProgress={answeredCount > 0}
             onStart={() => {
               if (!studentName.trim()) {
@@ -224,9 +252,9 @@ function DiagnosticExam() {
           />
         )}
 
-        {step === 1 && <ListeningSection answers={answers} onAnswer={answer} />}
-        {step === 2 && <ReadingSection answers={answers} onAnswer={answer} />}
-        {step === 3 && <VocabSection answers={answers} onAnswer={answer} />}
+        {step === 1 && <ListeningSection mode={mode} answers={answers} onAnswer={answer} />}
+        {step === 2 && <ReadingSection mode={mode} answers={answers} onAnswer={answer} />}
+        {step === 3 && <VocabSection mode={mode} answers={answers} onAnswer={answer} />}
 
         {step === 4 && !result && (
           <div className="rounded-2xl border border-border/60 bg-card/80 p-10 text-center backdrop-blur-xl">
@@ -288,25 +316,51 @@ function DiagnosticExam() {
 function StartScreen({
   name,
   onName,
+  mode,
+  onMode,
   onStart,
   onReset,
   hasProgress,
 }: {
   name: string;
   onName: (v: string) => void;
+  mode: ExamMode;
+  onMode: (m: ExamMode) => void;
   onStart: () => void;
   onReset: () => void;
   hasProgress: boolean;
 }) {
-  const blocks = [
-    { icon: Headphones, title: "Listening", desc: "7 audios reales · 35 preguntas" },
-    { icon: BookOpen, title: "Reading", desc: "3 lecturas · 9 preguntas" },
-    { icon: Type, title: "Vocabulary & Use", desc: "Gramática y modismos · 12 preguntas" },
-  ];
+  const stats = (m: ExamMode) => ({
+    listening: modeListening(m),
+    reading: modeReading(m).length,
+    vocab: modeVocab(m).length,
+    total: totalQuestions(m),
+  });
+  const blocks = (m: ExamMode) => {
+    const s = stats(m);
+    return [
+      {
+        icon: Headphones,
+        title: "Listening",
+        desc: `${s.listening.length} audios reales · ${s.listening.reduce((a, x) => a + x.questions.length, 0)} preguntas`,
+      },
+      {
+        icon: BookOpen,
+        title: "Reading",
+        desc: `${s.reading} lecturas · ${modeReading(m).reduce((a, p) => a + p.questions.length, 0)} preguntas`,
+      },
+      {
+        icon: Type,
+        title: "Vocabulary & Use",
+        desc: `Gramática y modismos · ${s.vocab} preguntas`,
+      },
+    ];
+  };
+  const modes: ExamMode[] = ["quick", "full"];
   return (
     <div className="mx-auto max-w-xl text-center">
       <span className="inline-flex items-center gap-2 rounded-full border border-mint/40 bg-mint/10 px-3 py-1 text-xs font-medium text-primary shadow-[0_0_18px_-6px_var(--mint)]">
-        <Sparkles className="h-3.5 w-3.5" /> Gratis · ~15 minutos
+        <Sparkles className="h-3.5 w-3.5" /> Gratis · elige tu versión
       </span>
       <h1 className="mt-6 font-heading text-3xl font-bold sm:text-4xl">
         Descubre tu nivel real de inglés
@@ -316,8 +370,40 @@ function StartScreen({
         usarías. Al terminar recibes tu <strong>Constancia de Nivel</strong> en PDF.
       </p>
 
-      <div className="mt-8 grid gap-3 sm:grid-cols-3">
-        {blocks.map((b) => (
+      <div className="mt-8 grid gap-3 sm:grid-cols-2">
+        {modes.map((m) => {
+          const info = EXAM_MODES[m];
+          const s = stats(m);
+          const active = mode === m;
+          return (
+            <button
+              key={m}
+              type="button"
+              onClick={() => onMode(m)}
+              aria-pressed={active}
+              className={cn(
+                "rounded-2xl border p-5 text-left transition-all duration-300",
+                active
+                  ? "border-mint bg-mint/10 shadow-[var(--glow-mint)]"
+                  : "border-border bg-card/80 hover:-translate-y-0.5 hover:border-mint/50",
+              )}
+            >
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-primary" />
+                <span className="font-heading text-base font-bold">{info.label}</span>
+              </div>
+              <div className="mt-1 text-sm font-medium text-primary">{info.duration}</div>
+              <p className="mt-2 text-xs text-muted-foreground">{info.description}</p>
+              <div className="mt-3 text-xs font-semibold">
+                {s.listening.length} audios · {s.total} preguntas
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        {blocks(mode).map((b) => (
           <div
             key={b.title}
             className="rounded-xl border border-mint/25 bg-card/80 p-4 text-left shadow-[var(--shadow-soft)] backdrop-blur"
@@ -328,6 +414,7 @@ function StartScreen({
           </div>
         ))}
       </div>
+
 
       <div className="mt-8 space-y-3 rounded-2xl border border-mint/30 bg-card/80 p-6 text-left shadow-[var(--shadow-soft)] backdrop-blur">
         <label className="text-sm font-medium">¿Cuál es tu nombre?</label>
@@ -414,9 +501,11 @@ function QuestionBlock({
 /* ------------------------------ SECTIONS ------------------------------ */
 
 function ListeningSection({
+  mode,
   answers,
   onAnswer,
 }: {
+  mode: ExamMode;
   answers: Answers;
   onAnswer: (id: string, v: number) => void;
 }) {
@@ -428,7 +517,7 @@ function ListeningSection({
         description="Escucha la grabación completa y responde. Puedes repetirla las veces que necesites."
       />
       <div className="space-y-8">
-        {QuestionBank.listening.map((item, ai) => (
+        {modeListening(mode).map((item, ai) => (
           <div key={item.id} className="space-y-4">
             <div className="space-y-3 rounded-xl border border-mint/30 bg-mint/5 p-4">
               <div className="flex flex-wrap items-center gap-2">
@@ -457,9 +546,11 @@ function ListeningSection({
 
 
 function ReadingSection({
+  mode,
   answers,
   onAnswer,
 }: {
+  mode: ExamMode;
   answers: Answers;
   onAnswer: (id: string, v: number) => void;
 }) {
@@ -468,10 +559,11 @@ function ReadingSection({
     <div>
       <SectionHeading
         title="Reading"
-        description="2 lecturas cortas y 1 lectura larga, con 3 preguntas cada una."
+        description={`${modeReading(mode).length} lecturas con preguntas de comprensión.`}
       />
+
       <div className="space-y-8">
-        {QuestionBank.reading.map((p) => (
+        {modeReading(mode).map((p) => (
           <div key={p.id} className="space-y-4">
             <div className="rounded-xl border border-mint/30 bg-secondary/40 p-5">
               <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -497,9 +589,11 @@ function ReadingSection({
 }
 
 function VocabSection({
+  mode,
   answers,
   onAnswer,
 }: {
+  mode: ExamMode;
   answers: Answers;
   onAnswer: (id: string, v: number) => void;
 }) {
@@ -510,7 +604,7 @@ function VocabSection({
         description="Gramática, uso real del idioma, colocaciones y modismos."
       />
       <div className="space-y-4">
-        {sectionQuestions("vocab").map((q, i) => (
+        {modeVocab(mode).map((q, i) => (
           <QuestionBlock key={q.id} q={q} index={i + 1} answers={answers} onAnswer={onAnswer} />
         ))}
       </div>

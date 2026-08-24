@@ -1,6 +1,8 @@
-// Diagnostic exam question bank & level-based scoring logic (v2).
+// Diagnostic exam question bank & level-based scoring logic (v3).
 // Each question has 4 options: 2 wrong (level = null) and 2 correct,
 // each correct option mapped to a different CEFR level.
+// Options are length-balanced on purpose: the higher-level correct option is
+// NOT systematically the longest one, so length cannot be used as a shortcut.
 
 export type Cefr = "A1" | "A2" | "B1" | "B2" | "C1";
 
@@ -28,14 +30,18 @@ export type Question = {
   id: string;
   q: string;
   opts: Option[];
+  /** Included in the short (7 min) version of the exam. */
+  quick?: boolean;
 };
 
 export type AudioItem = {
   id: string;
-  /** Public URL of the real recording (CDN asset). */
+  /** Public URL of the real recording. */
   src: string;
   title: string;
   subtitle?: string;
+  /** Included in the short version of the exam. */
+  quick?: boolean;
   questions: Question[];
 };
 
@@ -44,6 +50,7 @@ export type ReadingPassage = {
   title: string;
   kind: "short" | "long";
   text: string;
+  quick?: boolean;
   questions: Question[];
 };
 
@@ -57,6 +64,26 @@ export const SECTION_NAMES: Record<SectionKey, string> = {
 
 export const SECTION_ORDER: SectionKey[] = ["listening", "reading", "vocab"];
 
+/* ------------------------------ EXAM MODES ------------------------------ */
+
+export type ExamMode = "quick" | "full";
+
+export const EXAM_MODES: Record<
+  ExamMode,
+  { label: string; duration: string; description: string }
+> = {
+  quick: {
+    label: "Examen rápido",
+    duration: "~7 minutos",
+    description: "5 audios cortos y una selección de lecturas y gramática.",
+  },
+  full: {
+    label: "Examen completo",
+    duration: "15–20 minutos",
+    description: "Los 7 audios, todas las lecturas y la sección completa de uso del idioma.",
+  },
+};
+
 /* ------------------------------ LISTENING ------------------------------ */
 
 const listening: AudioItem[] = [
@@ -65,55 +92,59 @@ const listening: AudioItem[] = [
     title: "The Coffee Shop",
     subtitle: "Ordering at a café · A1–A2",
     src: "/audio/A1_Shorts_1.mp3",
+    quick: true,
     questions: [
       {
         id: "csq1",
         q: "What does the customer order?",
+        quick: true,
         opts: [
-          { text: "A large tea and a sandwich.", level: null },
-          { text: "Two espressos.", level: null },
+          { text: "A large tea and a toasted cheese sandwich.", level: null },
+          { text: "Two espressos to share with a friend.", level: null },
           { text: "A medium cappuccino and a chocolate muffin.", level: "A1" },
-          { text: "A cappuccino, medium size, plus a chocolate muffin.", level: "A2" },
+          { text: "A medium cappuccino plus a chocolate muffin.", level: "A2" },
         ],
       },
       {
         id: "csq2",
         q: "Is the order for here or to go?",
+        quick: true,
         opts: [
-          { text: "For here, at a table.", level: null },
-          { text: "The customer does not decide.", level: null },
+          { text: "For here, at one of the small tables.", level: null },
+          { text: "The customer never actually decides.", level: null },
           { text: "To go.", level: "A1" },
-          { text: "The customer asks for it to take away.", level: "A2" },
+          { text: "To take away.", level: "A2" },
         ],
       },
       {
         id: "csq3",
         q: "How does the customer pay?",
         opts: [
-          { text: "With a credit card.", level: null },
-          { text: "With his phone.", level: null },
+          { text: "With a credit card he keeps in his wallet.", level: null },
+          { text: "With a payment app on his phone.", level: null },
           { text: "With five dollars in cash.", level: "A1" },
-          { text: "He hands over a five-dollar bill.", level: "A2" },
+          { text: "With a five-dollar bill.", level: "A2" },
         ],
       },
       {
         id: "csq4",
         q: 'What does "You can keep the change" mean?',
         opts: [
-          { text: "Please give me my money back.", level: null },
-          { text: "I need coins, not bills.", level: null },
+          { text: "Please give me all my money back now.", level: null },
+          { text: "I would prefer coins instead of bills.", level: null },
           { text: "The extra money is a tip.", level: "A2" },
-          { text: "The customer is leaving the remaining money as a tip.", level: "B1" },
+          { text: "The rest is a tip.", level: "B1" },
         ],
       },
       {
         id: "csq5",
-        q: 'How does the barista start the conversation?',
+        q: "How does the barista start the conversation?",
+        quick: true,
         opts: [
-          { text: "By asking for the customer's name.", level: null },
-          { text: "By saying the shop is closing.", level: null },
+          { text: "By asking the customer for his name.", level: null },
+          { text: "By saying the shop is about to close.", level: null },
           { text: 'By asking "What can I get for you?"', level: "A1" },
-          { text: "By greeting him and asking what he would like today.", level: "A2" },
+          { text: "By greeting him and taking his order.", level: "A2" },
         ],
       },
     ],
@@ -123,55 +154,59 @@ const listening: AudioItem[] = [
     title: "Lost in the City",
     subtitle: "Asking for directions in the street · A2–B1",
     src: "/audio/B1_Shorts_2.mp3",
+    quick: true,
     questions: [
       {
         id: "lcq1",
         q: "What is the tourist looking for?",
+        quick: true,
         opts: [
-          { text: "A hotel near the park.", level: null },
-          { text: "The airport bus stop.", level: null },
+          { text: "A hotel somewhere near the city park.", level: null },
+          { text: "The bus stop for the airport shuttle.", level: null },
           { text: "The main train station.", level: "A2" },
-          { text: "The city's main railway station.", level: "B1" },
+          { text: "The central railway station.", level: "B1" },
         ],
       },
       {
         id: "lcq2",
         q: "How far away is the place?",
+        quick: true,
         opts: [
-          { text: "About an hour on foot.", level: null },
-          { text: "In another part of the city.", level: null },
+          { text: "About an hour away if you walk there.", level: null },
+          { text: "In a completely different part of the city.", level: null },
           { text: "Very close, two blocks away.", level: "A2" },
-          { text: "Quite close — only a couple of blocks straight ahead.", level: "B1" },
+          { text: "Only a couple of blocks ahead.", level: "B1" },
         ],
       },
       {
         id: "lcq3",
         q: "Which landmark does the local mention?",
         opts: [
-          { text: "A church.", level: null },
-          { text: "A supermarket.", level: null },
+          { text: "An old church on the corner.", level: null },
+          { text: "A supermarket next to the square.", level: null },
           { text: "A bank.", level: "A2" },
-          { text: "A bank the tourist has to walk past.", level: "B1" },
+          { text: "A bank he has to walk past.", level: "B1" },
         ],
       },
       {
         id: "lcq4",
         q: "Where is the station once you pass the landmark?",
         opts: [
-          { text: "On the right.", level: null },
-          { text: "Behind the tourist.", level: null },
+          { text: "On the right-hand side of the avenue.", level: null },
+          { text: "Behind the tourist, back the other way.", level: null },
           { text: "On the left.", level: "A2" },
-          { text: "Right there on the left-hand side.", level: "B1" },
+          { text: "Right there, on your left.", level: "B1" },
         ],
       },
       {
         id: "lcq5",
         q: 'What does the local mean by "You can\'t miss it"?',
+        quick: true,
         opts: [
-          { text: "You must hurry or the train leaves.", level: null },
-          { text: "It is easy to get lost there.", level: null },
+          { text: "You must hurry or the train will leave.", level: null },
+          { text: "It is a place where people often get lost.", level: null },
           { text: "It is very easy to find.", level: "A2" },
-          { text: "It is so visible that finding it takes no effort.", level: "B2" },
+          { text: "It is impossible to overlook.", level: "B2" },
         ],
       },
     ],
@@ -181,55 +216,59 @@ const listening: AudioItem[] = [
     title: "Rescheduling",
     subtitle: "Two colleagues changing a meeting time · B1",
     src: "/audio/B1_Shorts_3.mp3",
+    quick: true,
     questions: [
       {
         id: "rsq1",
         q: "What was originally planned?",
+        quick: true,
         opts: [
-          { text: "A lunch with a client.", level: null },
-          { text: "A job interview in the morning.", level: null },
+          { text: "A lunch with an important client.", level: null },
+          { text: "A job interview early in the morning.", level: null },
           { text: "A project meeting at 3 PM.", level: "A2" },
-          { text: "A meeting about the project scheduled for three o'clock.", level: "B1" },
+          { text: "A project meeting at three o'clock.", level: "B1" },
         ],
       },
       {
         id: "rsq2",
         q: "Why does Sarah want to change it?",
+        quick: true,
         opts: [
-          { text: "She is feeling ill.", level: null },
-          { text: "She forgot about the meeting.", level: null },
+          { text: "She is feeling ill and wants to go home.", level: null },
+          { text: "She completely forgot about the meeting.", level: null },
           { text: "Something happened with a client.", level: "A2" },
-          { text: "Something urgent came up with one of her clients.", level: "B1" },
+          { text: "Something urgent came up with a client.", level: "B1" },
         ],
       },
       {
         id: "rsq3",
         q: "What new time does she suggest?",
         opts: [
-          { text: "Two o'clock.", level: null },
-          { text: "Tomorrow morning.", level: null },
+          { text: "Two o'clock, an hour earlier than planned.", level: null },
+          { text: "Tomorrow morning, first thing in the day.", level: null },
           { text: "Four o'clock.", level: "A2" },
-          { text: "She asks to push it back to 4 PM.", level: "B1" },
+          { text: "4 PM, an hour later.", level: "B1" },
         ],
       },
       {
         id: "rsq4",
         q: "How does her colleague react?",
         opts: [
-          { text: "He is annoyed about the change.", level: null },
-          { text: "He cancels the meeting completely.", level: null },
+          { text: "He is clearly annoyed about the change.", level: null },
+          { text: "He decides to cancel the meeting completely.", level: null },
           { text: "He agrees, it is no problem.", level: "A2" },
-          { text: "He accepts easily and says the new time works for him.", level: "B1" },
+          { text: "He accepts without any objection.", level: "B1" },
         ],
       },
       {
         id: "rsq5",
         q: 'What does "push it back" mean here?',
+        quick: true,
         opts: [
-          { text: "To make the meeting shorter.", level: null },
-          { text: "To move it to an earlier time.", level: null },
+          { text: "To make the meeting a little shorter.", level: null },
+          { text: "To move it to an earlier time slot.", level: null },
           { text: "To move it to a later time.", level: "B1" },
-          { text: "To postpone it to a later slot the same day.", level: "B2" },
+          { text: "To postpone it.", level: "B2" },
         ],
       },
     ],
@@ -239,55 +278,59 @@ const listening: AudioItem[] = [
     title: "Tech Support",
     subtitle: "A helpdesk phone call · B1–B2",
     src: "/audio/B2_Shorts_4.mp3",
+    quick: true,
     questions: [
       {
         id: "tsq1",
         q: "What problem does the user report?",
+        quick: true,
         opts: [
-          { text: "She lost her password.", level: null },
-          { text: "Her printer is not working.", level: null },
+          { text: "She has lost the password to her account.", level: null },
+          { text: "Her office printer has stopped working.", level: null },
           { text: "Her laptop screen froze and does not respond.", level: "B1" },
-          { text: "Her laptop has frozen completely and is unresponsive.", level: "B2" },
+          { text: "Her laptop is completely unresponsive.", level: "B2" },
         ],
       },
       {
         id: "tsq2",
         q: "Why is the situation urgent for her?",
+        quick: true,
         opts: [
-          { text: "She has a flight in an hour.", level: null },
-          { text: "Her laptop battery is empty.", level: null },
+          { text: "She has a flight leaving in about an hour.", level: null },
+          { text: "Her laptop battery is almost completely empty.", level: null },
           { text: "She is in the middle of a report.", level: "B1" },
-          { text: "She is halfway through writing a report.", level: "B2" },
+          { text: "She is halfway through a report.", level: "B2" },
         ],
       },
       {
         id: "tsq3",
         q: "What does Jason suggest?",
         opts: [
-          { text: "Taking the laptop to a repair shop.", level: null },
-          { text: "Installing a new operating system.", level: null },
+          { text: "Taking the laptop to a repair shop nearby.", level: null },
+          { text: "Installing a completely new operating system.", level: null },
           { text: "Holding the power button for ten seconds.", level: "B1" },
-          { text: "Holding down the power button to force a restart.", level: "B2" },
+          { text: "Forcing a restart with the power button.", level: "B2" },
         ],
       },
       {
         id: "tsq4",
         q: "What is the result of the suggestion?",
         opts: [
-          { text: "Nothing happens and she has to call again.", level: null },
-          { text: "The laptop shuts down permanently.", level: null },
+          { text: "Nothing happens, so she has to call again later.", level: null },
+          { text: "The laptop shuts down and never turns on again.", level: null },
           { text: "The laptop starts working again.", level: "B1" },
-          { text: "The machine begins to boot up once more.", level: "B2" },
+          { text: "The machine boots up again.", level: "B2" },
         ],
       },
       {
         id: "tsq5",
         q: "How would you describe Jason's tone?",
+        quick: true,
         opts: [
-          { text: "Angry and impatient.", level: null },
-          { text: "Confused and unsure.", level: null },
+          { text: "Angry and impatient with the caller.", level: null },
+          { text: "Confused and unsure about the problem.", level: null },
           { text: "Calm and helpful.", level: "B1" },
-          { text: "Patient and methodical throughout the call.", level: "B2" },
+          { text: "Patient and methodical.", level: "B2" },
         ],
       },
     ],
@@ -297,55 +340,59 @@ const listening: AudioItem[] = [
     title: "Weekend Recap",
     subtitle: "Two friends chatting on Monday morning · B2",
     src: "/audio/B2_Shorts_5.mp3",
+    quick: true,
     questions: [
       {
         id: "wrq1",
         q: "What did the second friend do at the weekend?",
+        quick: true,
         opts: [
-          { text: "He travelled to the coast.", level: null },
-          { text: "He worked overtime.", level: null },
+          { text: "He travelled to the coast with some friends.", level: null },
+          { text: "He worked overtime at the office on Saturday.", level: null },
           { text: "He stayed at home and watched a series.", level: "B1" },
-          { text: "He stayed in and binge-watched a new sci-fi series.", level: "B2" },
+          { text: "He binge-watched a sci-fi series at home.", level: "B2" },
         ],
       },
       {
         id: "wrq2",
         q: "Why did he stay in?",
+        quick: true,
         opts: [
-          { text: "He was ill.", level: null },
-          { text: "His car broke down.", level: null },
+          { text: "He was ill and needed to stay in bed.", level: null },
+          { text: "His car broke down on Friday evening.", level: null },
           { text: "The weather was bad.", level: "B1" },
-          { text: "The weather was awful, so going out was unappealing.", level: "B2" },
+          { text: "The weather was awful.", level: "B2" },
         ],
       },
       {
         id: "wrq3",
         q: 'What does "Did you get up to anything exciting?" mean?',
         opts: [
-          { text: "Did you wake up early?", level: null },
-          { text: "Did you climb anywhere?", level: null },
+          { text: "Did you manage to wake up early on Sunday?", level: null },
+          { text: "Did you climb up anywhere during the weekend?", level: null },
           { text: "Did you do anything interesting?", level: "B1" },
-          { text: "Did you do anything worth talking about?", level: "B2" },
+          { text: "Did you do anything worth mentioning?", level: "B2" },
         ],
       },
       {
         id: "wrq4",
         q: "How does the first friend react to the answer?",
         opts: [
-          { text: "He thinks it was a wasted weekend.", level: null },
-          { text: "He is disappointed his friend did not call him.", level: null },
+          { text: "He thinks the whole weekend was completely wasted.", level: null },
+          { text: "He is disappointed that his friend did not call him.", level: null },
           { text: "He thinks it sounds perfect.", level: "B1" },
-          { text: "He sees the value in it and says it sounds ideal.", level: "B2" },
+          { text: "He says it sounds ideal.", level: "B2" },
         ],
       },
       {
         id: "wrq5",
         q: 'What does "take it easy and recharge" refer to?',
+        quick: true,
         opts: [
-          { text: "Charging electronic devices.", level: null },
-          { text: "Doing intense exercise.", level: null },
+          { text: "Charging your electronic devices before the week starts.", level: null },
+          { text: "Doing intense exercise to get back into shape.", level: null },
           { text: "Resting to get your energy back.", level: "B1" },
-          { text: "Slowing down deliberately in order to restore your energy.", level: "C1" },
+          { text: "Slowing down to restore your energy.", level: "C1" },
         ],
       },
     ],
@@ -360,56 +407,50 @@ const listening: AudioItem[] = [
         id: "wpq1",
         q: "What is Mark thinking about doing this weekend?",
         opts: [
-          { text: "Moving to another city permanently.", level: null },
-          { text: "Working extra hours at the office.", level: null },
+          { text: "Moving to another city permanently for work.", level: null },
+          { text: "Working extra hours at the office all weekend.", level: null },
           { text: "Going to the mountains and renting a cabin.", level: "A2" },
-          {
-            text: "Heading up to the mountains and booking a cabin for a couple of days.",
-            level: "B1",
-          },
+          { text: "Heading to the mountains and booking a cabin.", level: "B1" },
         ],
       },
       {
         id: "wpq2",
         q: "What does his plan depend on?",
         opts: [
-          { text: "Whether his friends can pay for the trip.", level: null },
-          { text: "Whether his car gets repaired in time.", level: null },
+          { text: "Whether his friends can help him pay for the trip.", level: null },
+          { text: "Whether his car gets repaired before Saturday.", level: null },
           { text: "The weather.", level: "A2" },
-          { text: "Whether the weather turns out to be nice.", level: "B1" },
+          { text: "Whether the weather is nice.", level: "B1" },
         ],
       },
       {
         id: "wpq3",
         q: "Who is Mark likely to travel with?",
         opts: [
-          { text: "With his whole family.", level: null },
-          { text: "With a group of coworkers.", level: null },
+          { text: "With his whole family, including the children.", level: null },
+          { text: "With a group of coworkers from his office.", level: null },
           { text: "Nobody, he goes alone.", level: "A2" },
-          { text: "Probably no one — he says he'd go by himself.", level: "B1" },
+          { text: "Probably no one — he'd go by himself.", level: "B1" },
         ],
       },
       {
         id: "wpq4",
         q: "What will Mark do if it rains all weekend?",
         opts: [
-          { text: "He will go to the cabin anyway.", level: null },
-          { text: "He will visit his friend's house.", level: null },
+          { text: "He will go to the cabin anyway and wait indoors.", level: null },
+          { text: "He will visit a friend's house in the countryside.", level: null },
           { text: "He will stay at home and rest.", level: "A2" },
-          { text: "He'll stay home and catch up on some rest instead.", level: "B1" },
+          { text: "He'll stay home and catch up on rest.", level: "B1" },
         ],
       },
       {
         id: "wpq5",
         q: "Why is the other person interested in the trip?",
         opts: [
-          { text: "Because she wants to drive Mark there.", level: null },
-          { text: "Because she owns a cabin in the mountains.", level: null },
+          { text: "Because she offered to drive Mark to the mountains.", level: null },
+          { text: "Because she already owns a cabin in that area.", level: null },
           { text: "She is looking for a good cabin too.", level: "A2" },
-          {
-            text: "She's been looking for a good cabin to stay at and wants the details.",
-            level: "B1",
-          },
+          { text: "She's been hunting for a good cabin herself.", level: "B1" },
         ],
       },
     ],
@@ -424,44 +465,38 @@ const listening: AudioItem[] = [
         id: "aiq1",
         q: "According to Dr. Evans, how is AI currently used in healthcare?",
         opts: [
-          { text: "It is completely replacing medical staff.", level: null },
-          { text: "It is strictly used for administrative billing.", level: null },
+          { text: "It is completely replacing doctors and medical staff.", level: null },
+          { text: "It is strictly limited to administrative billing tasks.", level: null },
           { text: "It helps doctors find out what is wrong faster.", level: "B1" },
-          { text: "It assists physicians in diagnosing conditions far more rapidly.", level: "C1" },
+          { text: "It speeds up diagnosis for physicians.", level: "C1" },
         ],
       },
       {
         id: "aiq2",
         q: "Which workplace tasks does he say generative AI is taking over?",
         opts: [
-          { text: "Hiring and firing employees.", level: null },
-          { text: "Repairing office equipment.", level: null },
+          { text: "Hiring and firing employees across whole departments.", level: null },
+          { text: "Repairing office equipment and computer hardware.", level: null },
           { text: "Writing reports, working with data and personalising learning.", level: "B1" },
-          {
-            text: "Routine work such as drafting reports, analysing data and tailoring learning experiences.",
-            level: "C1",
-          },
+          { text: "Drafting reports, analysing data and tailoring learning.", level: "C1" },
         ],
       },
       {
         id: "aiq3",
         q: 'What does Dr. Evans mean by describing AI as a "double-edged sword"?',
         opts: [
-          { text: "It is extremely dangerous and offers no real benefits.", level: null },
-          { text: "It can only be used by software engineers.", level: null },
+          { text: "That it is extremely dangerous and offers no real benefits.", level: null },
+          { text: "That only trained software engineers are able to use it.", level: null },
           { text: "It brings big benefits but also serious problems.", level: "B1" },
-          {
-            text: "It drives record productivity while raising critical risks at the same time.",
-            level: "B2",
-          },
+          { text: "It boosts productivity yet creates critical risks.", level: "B2" },
         ],
       },
       {
         id: "aiq4",
         q: "Which concerns does he specifically mention?",
         opts: [
-          { text: "Rising electricity bills and slow internet.", level: null },
-          { text: "A shortage of computers worldwide.", level: null },
+          { text: "Rising electricity bills and unreliable internet connections.", level: null },
+          { text: "A worldwide shortage of computers and other devices.", level: null },
           { text: "Privacy, unfair algorithms and losing jobs.", level: "B1" },
           { text: "Data privacy, algorithmic bias and job displacement.", level: "C1" },
         ],
@@ -470,19 +505,15 @@ const listening: AudioItem[] = [
         id: "aiq5",
         q: "What is the speakers' conclusion about the relationship between AI and humans?",
         opts: [
-          { text: "AI will eliminate the need for human creativity at work.", level: null },
-          { text: "Humans must stop using AI until every privacy issue is solved.", level: null },
+          { text: "That AI will remove the need for human creativity at work.", level: null },
+          { text: "That people must stop using AI until privacy is solved.", level: null },
           { text: "People should work with AI instead of fighting it.", level: "B1" },
-          {
-            text: "AI should augment human capabilities rather than replace human ingenuity.",
-            level: "C1",
-          },
+          { text: "AI should augment, not replace, human ingenuity.", level: "C1" },
         ],
       },
     ],
   },
 ];
-
 
 /* ------------------------------- READING ------------------------------- */
 
@@ -491,36 +522,50 @@ const reading: ReadingPassage[] = [
     id: "r1",
     kind: "short",
     title: "The new cafe",
+    quick: true,
     text: "The new cafe downtown is already very popular. It serves organic coffee and fresh pastries baked every morning. However, it is quite small, so finding a table during the morning rush can be difficult. Prices are reasonable considering the quality, and regulars say the staff remember their usual order after just a couple of visits.",
     questions: [
       {
         id: "r1q1",
         q: "What is the main problem with the cafe?",
+        quick: true,
         opts: [
-          { text: "The coffee is expensive.", level: null },
-          { text: "The pastries are not fresh.", level: null },
+          { text: "The coffee is far more expensive than elsewhere.", level: null },
+          { text: "The pastries are not baked on the same day.", level: null },
           { text: "There are not enough tables.", level: "A2" },
-          { text: "Its limited seating makes it hard to get a table at peak times.", level: "B2" },
+          { text: "Its limited seating fills up at peak times.", level: "B2" },
         ],
       },
       {
         id: "r1q2",
         q: "What does the text say about the prices?",
+        quick: true,
         opts: [
-          { text: "They are the lowest in town.", level: null },
-          { text: "They keep going up.", level: null },
+          { text: "They are said to be the lowest in the whole town.", level: null },
+          { text: "They have been going up month after month.", level: null },
           { text: "They are fair for the quality.", level: "B1" },
-          { text: "They are justified by the quality on offer.", level: "C1" },
+          { text: "They are justified by the quality.", level: "C1" },
         ],
       },
       {
         id: "r1q3",
         q: "What do regular customers appreciate?",
+        quick: true,
         opts: [
-          { text: "The free wifi.", level: null },
-          { text: "The large terrace.", level: null },
+          { text: "The free wifi and the quiet working atmosphere.", level: null },
+          { text: "The large terrace overlooking the main street.", level: null },
           { text: "The staff know their usual order.", level: "A2" },
-          { text: "The personal attention they receive from the staff.", level: "B2" },
+          { text: "The personal attention from the staff.", level: "B2" },
+        ],
+      },
+      {
+        id: "r1q4",
+        q: "Which sentence best summarises the text?",
+        opts: [
+          { text: "A cheap cafe that nobody in the area has discovered yet.", level: null },
+          { text: "A large cafe with plenty of space but average coffee.", level: null },
+          { text: "A good little cafe that gets very busy.", level: "B1" },
+          { text: "A quality cafe let down only by its size.", level: "C1" },
         ],
       },
     ],
@@ -529,36 +574,88 @@ const reading: ReadingPassage[] = [
     id: "r2",
     kind: "short",
     title: "Library event",
+    quick: true,
     text: "Next Thursday the city library will host a local author. Visitors can meet the writer, buy signed copies of her latest mystery novel and attend a free writing workshop. Places for the workshop are limited, so registration must be completed online before Friday. Those who miss the deadline may still attend the talk, but not the workshop.",
     questions: [
       {
         id: "r2q1",
         q: "What must attendees do to join the workshop?",
+        quick: true,
         opts: [
-          { text: "Buy the novel.", level: null },
-          { text: "Arrive one hour early.", level: null },
+          { text: "Buy a signed copy of the author's new novel.", level: null },
+          { text: "Arrive at the library at least one hour early.", level: null },
           { text: "Register on the internet.", level: "A1" },
-          { text: "Complete an online registration before the deadline.", level: "B2" },
+          { text: "Sign up online before the deadline.", level: "B2" },
         ],
       },
       {
         id: "r2q2",
         q: "Why is registration necessary?",
+        quick: true,
         opts: [
-          { text: "Because the workshop costs money.", level: null },
-          { text: "Because the author asked for it.", level: null },
+          { text: "Because the writing workshop has an entrance fee.", level: null },
+          { text: "Because the author personally asked the library for it.", level: null },
           { text: "Because there are only a few places.", level: "A2" },
-          { text: "Because capacity for the workshop is restricted.", level: "B2" },
+          { text: "Because capacity is restricted.", level: "B2" },
         ],
       },
       {
         id: "r2q3",
         q: "What can people who register late still do?",
+        quick: true,
         opts: [
-          { text: "Nothing at all.", level: null },
-          { text: "Join the workshop anyway.", level: null },
+          { text: "Nothing at all; they must wait for the next event.", level: null },
+          { text: "Join the workshop anyway if there is a free seat.", level: null },
           { text: "Go to the talk.", level: "B1" },
-          { text: "Attend the talk, though not the workshop itself.", level: "C1" },
+          { text: "Attend the talk, but not the workshop.", level: "C1" },
+        ],
+      },
+      {
+        id: "r2q4",
+        q: "What kind of book is the author presenting?",
+        opts: [
+          { text: "A historical biography of a local politician.", level: null },
+          { text: "A collection of poems written during the pandemic.", level: null },
+          { text: "A mystery novel.", level: "A2" },
+          { text: "Her most recent mystery.", level: "B1" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "r4",
+    kind: "short",
+    title: "A change of plan",
+    text: "The council announced last month that the old market would be demolished to make room for a car park. After hundreds of residents signed a petition, the decision was reviewed. The building will now be restored and reopened as a food hall, with the stalls rented at a reduced price to the traders who worked there before. Work is expected to take two years, and the traders will move to a temporary site nearby in the meantime.",
+    questions: [
+      {
+        id: "r4q1",
+        q: "What was the council's original plan?",
+        opts: [
+          { text: "To restore the old market and rent it out cheaply.", level: null },
+          { text: "To move all the traders to a new shopping centre.", level: null },
+          { text: "To knock the market down and build a car park.", level: "A2" },
+          { text: "To demolish the market for parking space.", level: "B1" },
+        ],
+      },
+      {
+        id: "r4q2",
+        q: "Why did the plan change?",
+        opts: [
+          { text: "Because the building turned out to be too old to demolish.", level: null },
+          { text: "Because the council could not afford the demolition work.", level: null },
+          { text: "Because many residents signed a petition.", level: "B1" },
+          { text: "Because of public pressure.", level: "B2" },
+        ],
+      },
+      {
+        id: "r4q3",
+        q: "What will happen to the original traders?",
+        opts: [
+          { text: "They will have to look for premises in another district.", level: null },
+          { text: "They will pay the same rent as any new business there.", level: null },
+          { text: "They will move nearby and pay less rent later.", level: "B1" },
+          { text: "They will relocate temporarily, then return cheaply.", level: "C1" },
         ],
       },
     ],
@@ -573,33 +670,40 @@ const reading: ReadingPassage[] = [
         id: "r3q1",
         q: "What did the studies mentioned find?",
         opts: [
-          { text: "Productivity fell sharply at home.", level: null },
-          { text: "Employees worked longer hours.", level: null },
+          { text: "That productivity fell sharply once people worked at home.", level: null },
+          { text: "That employees ended up working much longer hours.", level: null },
           { text: "People did the same work in less time.", level: "B1" },
-          { text: "Output was maintained thanks to fewer interruptions.", level: "C1" },
+          { text: "Output held up thanks to fewer interruptions.", level: "C1" },
         ],
       },
       {
         id: "r3q2",
         q: "What problem affected younger employees most?",
         opts: [
-          { text: "They had slower internet.", level: null },
-          { text: "They were given too much work.", level: null },
+          { text: "They had slower internet connections than their colleagues.", level: null },
+          { text: "They were given far too much work to handle alone.", level: null },
           { text: "They felt alone and learned less.", level: "A2" },
-          { text: "Isolation limited the informal learning they got from colleagues.", level: "B2" },
+          { text: "Isolation cut off their informal learning.", level: "B2" },
         ],
       },
       {
         id: "r3q3",
         q: "According to the experts, when does hybrid work fail?",
         opts: [
-          { text: "When employees come in every day.", level: null },
-          { text: "When managers work from home too.", level: null },
+          { text: "When employees decide to come into the office every day.", level: null },
+          { text: "When the managers themselves also work from home.", level: null },
           { text: "When office days are not planned for working together.", level: "B1" },
-          {
-            text: "When the in-office days are not deliberately designed around collaboration.",
-            level: "C1",
-          },
+          { text: "When in-office days lack a collaborative purpose.", level: "C1" },
+        ],
+      },
+      {
+        id: "r3q4",
+        q: "How did some managers measure performance?",
+        opts: [
+          { text: "By asking each team to grade its own weekly output.", level: null },
+          { text: "By visiting the employees at home once a month.", level: null },
+          { text: "By counting the hours people were online.", level: "B1" },
+          { text: "By tracking online hours rather than results.", level: "B2" },
         ],
       },
     ],
@@ -612,16 +716,18 @@ const vocab: Question[] = [
   {
     id: "v1",
     q: '"Excuse me, how much ___ this jacket?"',
+    quick: true,
     opts: [
       { text: "are", level: null },
       { text: "do", level: null },
       { text: "is", level: "A1" },
-      { text: "does this jacket cost", level: "A2" },
+      { text: "does it cost", level: "A2" },
     ],
   },
   {
     id: "v2",
     q: "Complete: “I ___ in this city since 2019.”",
+    quick: true,
     opts: [
       { text: "am living", level: null },
       { text: "lived", level: null },
@@ -632,11 +738,12 @@ const vocab: Question[] = [
   {
     id: "v3",
     q: "Your boss asks for a report you have not finished. What do you say?",
+    quick: true,
     opts: [
-      { text: "No, I don't do it.", level: null },
-      { text: "I no finish yet.", level: null },
+      { text: "No, I don't do it right now, sorry.", level: null },
+      { text: "I no finish yet, tomorrow maybe.", level: null },
       { text: "I haven't finished it yet, sorry.", level: "B1" },
-      { text: "I'm still putting the finishing touches to it.", level: "C1" },
+      { text: "I'm just putting the finishing touches.", level: "C1" },
     ],
   },
   {
@@ -652,16 +759,18 @@ const vocab: Question[] = [
   {
     id: "v5",
     q: 'What does "out of the blue" mean?',
+    quick: true,
     opts: [
-      { text: "In a sad mood.", level: null },
-      { text: "Outdoors.", level: null },
+      { text: "In a rather sad or gloomy mood.", level: null },
+      { text: "Somewhere outdoors, under the sky.", level: null },
       { text: "Suddenly and unexpectedly.", level: "B1" },
-      { text: "Without any warning whatsoever.", level: "C1" },
+      { text: "Without any warning.", level: "C1" },
     ],
   },
   {
     id: "v6",
     q: 'Complete: "If I ___ more time, I would travel across Asia."',
+    quick: true,
     opts: [
       { text: "will have", level: null },
       { text: "have had", level: null },
@@ -675,7 +784,7 @@ const vocab: Question[] = [
     opts: [
       { text: "reckless", level: null },
       { text: "stubborn", level: null },
-      { text: "very careful", level: "A2" },
+      { text: "very careful indeed", level: "A2" },
       { text: "meticulous", level: "B2" },
     ],
   },
@@ -686,22 +795,24 @@ const vocab: Question[] = [
       { text: "head", level: null },
       { text: "thought", level: null },
       { text: "mind", level: "B1" },
-      { text: "mind, as it is subject to change", level: "C1" },
+      { text: "mind, as it may vary", level: "C1" },
     ],
   },
   {
     id: "v9",
     q: "How do you politely decline an invitation?",
+    quick: true,
     opts: [
-      { text: "No, I don't want.", level: null },
-      { text: "Maybe no, bye.", level: null },
+      { text: "No, I don't want to go with you.", level: null },
+      { text: "Maybe no, bye, see you later.", level: null },
       { text: "Sorry, I can't make it, but thank you.", level: "B1" },
-      { text: "I'm afraid I won't be able to make it, but thanks for thinking of me.", level: "C1" },
+      { text: "I'm afraid I won't be able to make it.", level: "C1" },
     ],
   },
   {
     id: "v10",
     q: 'Choose the best word: "Children are often highly ___ and recover quickly from difficulties."',
+    quick: true,
     opts: [
       { text: "inevitable", level: null },
       { text: "eloquent", level: null },
@@ -716,17 +827,58 @@ const vocab: Question[] = [
       { text: "has started", level: null },
       { text: "starts", level: null },
       { text: "had started", level: "B2" },
-      { text: "had already been running for a while", level: "C1" },
+      { text: "had already been running", level: "C1" },
     ],
   },
   {
     id: "v12",
     q: 'What does "to call it a day" mean?',
+    quick: true,
     opts: [
-      { text: "To make a phone call.", level: null },
-      { text: "To plan the next day.", level: null },
+      { text: "To make an important phone call.", level: null },
+      { text: "To plan what to do tomorrow.", level: null },
       { text: "To stop working for now.", level: "B1" },
-      { text: "To wrap things up for the time being.", level: "C1" },
+      { text: "To wrap things up.", level: "C1" },
+    ],
+  },
+  {
+    id: "v13",
+    q: 'Complete: "Could you ___ the meeting to Friday? I have a conflict on Thursday."',
+    opts: [
+      { text: "delay off", level: null },
+      { text: "put down", level: null },
+      { text: "move", level: "B1" },
+      { text: "put off", level: "B2" },
+    ],
+  },
+  {
+    id: "v14",
+    q: 'Choose the correct collocation: "She ___ a difficult decision after weeks of thinking."',
+    opts: [
+      { text: "did", level: null },
+      { text: "performed", level: null },
+      { text: "made", level: "A2" },
+      { text: "reached", level: "B2" },
+    ],
+  },
+  {
+    id: "v15",
+    q: 'Complete: "If she had left earlier, she ___ the train."',
+    opts: [
+      { text: "would catch", level: null },
+      { text: "will have caught", level: null },
+      { text: "would have caught", level: "B2" },
+      { text: "wouldn't have missed", level: "C1" },
+    ],
+  },
+  {
+    id: "v16",
+    q: "You are writing a formal email. Which opening is the most appropriate?",
+    opts: [
+      { text: "Hey! What's up? Quick thing I wanted to ask you.", level: null },
+      { text: "Hello you, I write for asking one question please.", level: null },
+      { text: "Dear Ms. Reed, I'm writing about the invoice.", level: "B1" },
+      { text: "Dear Ms. Reed, I am writing regarding the invoice.", level: "C1" },
     ],
   },
 ];
@@ -769,17 +921,40 @@ function shuffleOptions(q: Question): void {
 
 export const QuestionBank = { listening, reading, vocab };
 
-/** All questions of a section, flattened. */
-export function sectionQuestions(section: SectionKey): Question[] {
-  if (section === "listening") return listening.flatMap((a) => a.questions);
-  if (section === "reading") return reading.flatMap((p) => p.questions);
-  return vocab;
+/** Audio items shown for a given exam mode. */
+export function modeListening(mode: ExamMode): AudioItem[] {
+  if (mode === "full") return listening;
+  return listening
+    .filter((a) => a.quick)
+    .map((a) => ({ ...a, questions: a.questions.filter((q) => q.quick) }));
 }
 
-export const TOTAL_QUESTIONS =
-  sectionQuestions("listening").length +
-  sectionQuestions("reading").length +
-  sectionQuestions("vocab").length;
+/** Reading passages shown for a given exam mode. */
+export function modeReading(mode: ExamMode): ReadingPassage[] {
+  if (mode === "full") return reading;
+  return reading
+    .filter((p) => p.quick)
+    .map((p) => ({ ...p, questions: p.questions.filter((q) => q.quick) }));
+}
+
+/** Vocabulary questions for a given exam mode. */
+export function modeVocab(mode: ExamMode): Question[] {
+  return mode === "full" ? vocab : vocab.filter((q) => q.quick);
+}
+
+/** All questions of a section, flattened, for a given exam mode. */
+export function sectionQuestions(section: SectionKey, mode: ExamMode = "full"): Question[] {
+  if (section === "listening") return modeListening(mode).flatMap((a) => a.questions);
+  if (section === "reading") return modeReading(mode).flatMap((p) => p.questions);
+  return modeVocab(mode);
+}
+
+export function totalQuestions(mode: ExamMode): number {
+  return SECTION_ORDER.reduce((a, k) => a + sectionQuestions(k, mode).length, 0);
+}
+
+export const TOTAL_QUESTIONS = totalQuestions("full");
+export const QUICK_QUESTIONS = totalQuestions("quick");
 
 /* ------------------------------ SCORING ------------------------------ */
 
@@ -802,12 +977,13 @@ export type ExamResult = {
   overallScore: number;
   totalCorrect: number;
   totalQuestions: number;
-  version: 2;
+  mode: ExamMode;
+  version: 3;
 };
 
-function scoreSection(key: SectionKey): (answers: Answers) => SectionResult {
+function scoreSection(key: SectionKey, mode: ExamMode): (answers: Answers) => SectionResult {
   return (answers) => {
-    const qs = sectionQuestions(key);
+    const qs = sectionQuestions(key, mode);
     let sum = 0;
     let correct = 0;
     qs.forEach((q) => {
@@ -828,8 +1004,8 @@ function scoreSection(key: SectionKey): (answers: Answers) => SectionResult {
   };
 }
 
-export function computeResult(answers: Answers): ExamResult {
-  const sections = SECTION_ORDER.map((k) => scoreSection(k)(answers));
+export function computeResult(answers: Answers, mode: ExamMode = "full"): ExamResult {
+  const sections = SECTION_ORDER.map((k) => scoreSection(k, mode)(answers));
   const overallScore = Math.round(sections.reduce((a, s) => a + s.score, 0) / sections.length);
   const overall = levelFromValue(Math.max(1, (overallScore / 100) * 5));
   const totalCorrect = sections.reduce((a, s) => a + s.correct, 0);
@@ -838,7 +1014,8 @@ export function computeResult(answers: Answers): ExamResult {
     overall,
     overallScore,
     totalCorrect,
-    totalQuestions: TOTAL_QUESTIONS,
-    version: 2,
+    totalQuestions: totalQuestions(mode),
+    mode,
+    version: 3,
   };
 }
