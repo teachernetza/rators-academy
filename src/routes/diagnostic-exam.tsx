@@ -13,6 +13,7 @@ import {
   Headphones,
   BookOpen,
   Type,
+  Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -500,9 +501,11 @@ function QuestionBlock({
 /* ------------------------------ SECTIONS ------------------------------ */
 
 function ListeningSection({
+  mode,
   answers,
   onAnswer,
 }: {
+  mode: ExamMode;
   answers: Answers;
   onAnswer: (id: string, v: number) => void;
 }) {
@@ -514,7 +517,7 @@ function ListeningSection({
         description="Escucha la grabación completa y responde. Puedes repetirla las veces que necesites."
       />
       <div className="space-y-8">
-        {QuestionBank.listening.map((item, ai) => (
+        {modeListening(mode).map((item, ai) => (
           <div key={item.id} className="space-y-4">
             <div className="space-y-3 rounded-xl border border-mint/30 bg-mint/5 p-4">
               <div className="flex flex-wrap items-center gap-2">
@@ -543,9 +546,11 @@ function ListeningSection({
 
 
 function ReadingSection({
+  mode,
   answers,
   onAnswer,
 }: {
+  mode: ExamMode;
   answers: Answers;
   onAnswer: (id: string, v: number) => void;
 }) {
@@ -557,7 +562,7 @@ function ReadingSection({
         description="2 lecturas cortas y 1 lectura larga, con 3 preguntas cada una."
       />
       <div className="space-y-8">
-        {QuestionBank.reading.map((p) => (
+        {modeReading(mode).map((p) => (
           <div key={p.id} className="space-y-4">
             <div className="rounded-xl border border-mint/30 bg-secondary/40 p-5">
               <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -583,9 +588,11 @@ function ReadingSection({
 }
 
 function VocabSection({
+  mode,
   answers,
   onAnswer,
 }: {
+  mode: ExamMode;
   answers: Answers;
   onAnswer: (id: string, v: number) => void;
 }) {
@@ -596,7 +603,7 @@ function VocabSection({
         description="Gramática, uso real del idioma, colocaciones y modismos."
       />
       <div className="space-y-4">
-        {sectionQuestions("vocab").map((q, i) => (
+        {modeVocab(mode).map((q, i) => (
           <QuestionBlock key={q.id} q={q} index={i + 1} answers={answers} onAnswer={onAnswer} />
         ))}
       </div>
