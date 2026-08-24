@@ -19,16 +19,19 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import {
-  QuestionBank,
   computeResult,
-  sectionQuestions,
+  modeListening,
+  modeReading,
+  modeVocab,
+  totalQuestions,
+  EXAM_MODES,
   SECTION_NAMES,
   SECTION_ORDER,
   CEFR_DESCRIPTION,
   CEFR_SCALE,
   CEFR_VALUE,
-  TOTAL_QUESTIONS,
   type Answers,
+  type ExamMode,
   type ExamResult,
   type Question,
 } from "@/lib/diagnostic-bank";
@@ -57,10 +60,16 @@ export const Route = createFileRoute("/diagnostic-exam")({
   component: DiagnosticExam,
 });
 
-const STORAGE_KEY = "netza.diagnostic.v2";
+const STORAGE_KEY = "netza.diagnostic.v3";
 const WA_NUMBER = "523231116425";
 
-type SavedState = { studentName: string; step: number; answers: Answers; version: 2 };
+type SavedState = {
+  studentName: string;
+  step: number;
+  answers: Answers;
+  mode: ExamMode;
+  version: 3;
+};
 
 function loadState(): SavedState | null {
   if (typeof window === "undefined") return null;
@@ -68,7 +77,7 @@ function loadState(): SavedState | null {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as SavedState;
-    if (parsed?.version !== 2) return null;
+    if (parsed?.version !== 3) return null;
     return parsed;
   } catch {
     return null;
@@ -79,6 +88,7 @@ function DiagnosticExam() {
   // Step 0 = start, 1..3 = sections, 4 = results
   const [step, setStep] = useState(0);
   const [studentName, setStudentName] = useState("");
+  const [mode, setMode] = useState<ExamMode>("quick");
   const [answers, setAnswers] = useState<Answers>({});
   const [result, setResult] = useState<ExamResult | null>(null);
   const [pdfLoading, setPdfLoading] = useState(false);
@@ -91,10 +101,12 @@ function DiagnosticExam() {
     try {
       const a: Answers = { ...(saved.answers ?? {}) };
       setStudentName(saved.studentName || "");
+      const savedMode: ExamMode = saved.mode === "full" ? "full" : "quick";
+      setMode(savedMode);
       setAnswers(a);
       const savedStep = Number(saved.step) || 0;
       if (savedStep >= 4) {
-        setResult(computeResult(a));
+        setResult(computeResult(a, savedMode));
         setStep(4);
       } else {
         setStep(Math.max(0, Math.min(3, savedStep)));
@@ -112,9 +124,9 @@ function DiagnosticExam() {
     if (step === 0 && !studentName) return;
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ studentName, step, answers, version: 2 }),
+      JSON.stringify({ studentName, step, answers, mode, version: 3 }),
     );
-  }, [studentName, step, answers]);
+  }, [studentName, step, answers, mode]);
 
   useEffect(() => {
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
@@ -123,6 +135,7 @@ function DiagnosticExam() {
   function resetExam() {
     if (typeof window !== "undefined") localStorage.removeItem(STORAGE_KEY);
     setStudentName("");
+    setMode("quick");
     setStep(0);
     setAnswers({});
     setResult(null);
@@ -137,14 +150,26 @@ function DiagnosticExam() {
   }
 
   function finish() {
-    setResult(computeResult(answers));
+    setResult(computeResult(answers, mode));
     setStep(4);
     toast.success("¡Examen calificado!");
   }
 
-  const answeredCount = useMemo(() => Object.keys(answers).length, [answers]);
-  const progress =
-    step === 0 ? 0 : Math.round((answeredCount / TOTAL_QUESTIONS) * 100);
+  const total = useMemo(() => totalQuestions(mode), [mode]);
+  const answeredIds = useMemo(
+    () =>
+      new Set([
+        ...modeListening(mode).flatMap((a) => a.questions.map((q) => q.id)),
+        ...modeReading(mode).flatMap((p) => p.questions.map((q) => q.id)),
+        ...modeVocab(mode).map((q) => q.id),
+      ]),
+    [mode],
+  );
+  const answeredCount = useMemo(
+    () => Object.keys(answers).filter((id) => answeredIds.has(id)).length,
+    [answers, answeredIds],
+  );
+  const progress = step === 0 ? 0 : Math.round((answeredCount / total) * 100);
   const sectionKey = step >= 1 && step <= 3 ? SECTION_ORDER[step - 1] : null;
 
   return (
@@ -190,7 +215,7 @@ function DiagnosticExam() {
                 Paso {step} de 3 · {SECTION_NAMES[sectionKey]}
               </span>
               <span className="font-semibold text-primary">
-                {answeredCount}/{TOTAL_QUESTIONS} · {progress}%
+                {answeredCount}/{total} · {progress}%
               </span>
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
@@ -212,6 +237,8 @@ function DiagnosticExam() {
           <StartScreen
             name={studentName}
             onName={setStudentName}
+            mode={mode}
+            onMode={setMode}
             hasProgress={answeredCount > 0}
             onStart={() => {
               if (!studentName.trim()) {
@@ -224,9 +251,9 @@ function DiagnosticExam() {
           />
         )}
 
-        {step === 1 && <ListeningSection answers={answers} onAnswer={answer} />}
-        {step === 2 && <ReadingSection answers={answers} onAnswer={answer} />}
-        {step === 3 && <VocabSection answers={answers} onAnswer={answer} />}
+        {step === 1 && <ListeningSection mode={mode} answers={answers} onAnswer={answer} />}
+        {step === 2 && <ReadingSection mode={mode} answers={answers} onAnswer={answer} />}
+        {step === 3 && <VocabSection mode={mode} answers={answers} onAnswer={answer} />}
 
         {step === 4 && !result && (
           <div className="rounded-2xl border border-border/60 bg-card/80 p-10 text-center backdrop-blur-xl">
