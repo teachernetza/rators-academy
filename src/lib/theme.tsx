@@ -1,10 +1,8 @@
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
-  useState,
 } from "react";
 
 export type Theme = "light" | "dark" | "system";
@@ -24,13 +22,6 @@ const ThemeContext = createContext<Ctx>({
   setTheme: () => {},
   toggle: () => {},
 });
-
-function systemDark() {
-  return (
-    typeof window !== "undefined" &&
-    window.matchMedia?.("(prefers-color-scheme: dark)").matches
-  );
-}
 
 function apply(resolved: "light" | "dark") {
   if (typeof document === "undefined") return;
