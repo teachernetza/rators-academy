@@ -389,10 +389,11 @@ function Landing() {
 
                     <p className="mt-4 text-base text-white/90 sm:text-lg">
                       Un examen diagnóstico creado por Teacher Netza que evalúa Listening,
-                      Reading y Vocabulary & Use of Language. Al terminar recibes tu nivel por
-                      habilidad y una Constancia de Nivel en PDF.
-
+                      Reading y Vocabulary & Use of Language. Elige la versión rápida (~7 min) o
+                      la completa (15–20 min) y recibe tu nivel por habilidad y una Constancia de
+                      Nivel en PDF.
                     </p>
+
                     <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                       <Link to="/diagnostic-exam">
                         <Button
