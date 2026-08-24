@@ -315,25 +315,51 @@ function DiagnosticExam() {
 function StartScreen({
   name,
   onName,
+  mode,
+  onMode,
   onStart,
   onReset,
   hasProgress,
 }: {
   name: string;
   onName: (v: string) => void;
+  mode: ExamMode;
+  onMode: (m: ExamMode) => void;
   onStart: () => void;
   onReset: () => void;
   hasProgress: boolean;
 }) {
-  const blocks = [
-    { icon: Headphones, title: "Listening", desc: "7 audios reales · 35 preguntas" },
-    { icon: BookOpen, title: "Reading", desc: "3 lecturas · 9 preguntas" },
-    { icon: Type, title: "Vocabulary & Use", desc: "Gramática y modismos · 12 preguntas" },
-  ];
+  const stats = (m: ExamMode) => ({
+    listening: modeListening(m),
+    reading: modeReading(m).length,
+    vocab: modeVocab(m).length,
+    total: totalQuestions(m),
+  });
+  const blocks = (m: ExamMode) => {
+    const s = stats(m);
+    return [
+      {
+        icon: Headphones,
+        title: "Listening",
+        desc: `${s.listening.length} audios reales · ${s.listening.reduce((a, x) => a + x.questions.length, 0)} preguntas`,
+      },
+      {
+        icon: BookOpen,
+        title: "Reading",
+        desc: `${s.reading} lecturas · ${modeReading(m).reduce((a, p) => a + p.questions.length, 0)} preguntas`,
+      },
+      {
+        icon: Type,
+        title: "Vocabulary & Use",
+        desc: `Gramática y modismos · ${s.vocab} preguntas`,
+      },
+    ];
+  };
+  const modes: ExamMode[] = ["quick", "full"];
   return (
     <div className="mx-auto max-w-xl text-center">
       <span className="inline-flex items-center gap-2 rounded-full border border-mint/40 bg-mint/10 px-3 py-1 text-xs font-medium text-primary shadow-[0_0_18px_-6px_var(--mint)]">
-        <Sparkles className="h-3.5 w-3.5" /> Gratis · ~15 minutos
+        <Sparkles className="h-3.5 w-3.5" /> Gratis · elige tu versión
       </span>
       <h1 className="mt-6 font-heading text-3xl font-bold sm:text-4xl">
         Descubre tu nivel real de inglés
@@ -343,8 +369,40 @@ function StartScreen({
         usarías. Al terminar recibes tu <strong>Constancia de Nivel</strong> en PDF.
       </p>
 
-      <div className="mt-8 grid gap-3 sm:grid-cols-3">
-        {blocks.map((b) => (
+      <div className="mt-8 grid gap-3 sm:grid-cols-2">
+        {modes.map((m) => {
+          const info = EXAM_MODES[m];
+          const s = stats(m);
+          const active = mode === m;
+          return (
+            <button
+              key={m}
+              type="button"
+              onClick={() => onMode(m)}
+              aria-pressed={active}
+              className={cn(
+                "rounded-2xl border p-5 text-left transition-all duration-300",
+                active
+                  ? "border-mint bg-mint/10 shadow-[var(--glow-mint)]"
+                  : "border-border bg-card/80 hover:-translate-y-0.5 hover:border-mint/50",
+              )}
+            >
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-primary" />
+                <span className="font-heading text-base font-bold">{info.label}</span>
+              </div>
+              <div className="mt-1 text-sm font-medium text-primary">{info.duration}</div>
+              <p className="mt-2 text-xs text-muted-foreground">{info.description}</p>
+              <div className="mt-3 text-xs font-semibold">
+                {s.listening.length} audios · {s.total} preguntas
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        {blocks(mode).map((b) => (
           <div
             key={b.title}
             className="rounded-xl border border-mint/25 bg-card/80 p-4 text-left shadow-[var(--shadow-soft)] backdrop-blur"
@@ -355,6 +413,7 @@ function StartScreen({
           </div>
         ))}
       </div>
+
 
       <div className="mt-8 space-y-3 rounded-2xl border border-mint/30 bg-card/80 p-6 text-left shadow-[var(--shadow-soft)] backdrop-blur">
         <label className="text-sm font-medium">¿Cuál es tu nombre?</label>
