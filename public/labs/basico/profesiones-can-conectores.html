@@ -135,6 +135,16 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
+    <style>
+      /* Teacher Netza — armonización de fondo con la marca */
+      body { background-color: var(--tn-bg) !important; }
+      .bg-shapes, .bg-pattern {
+        background: linear-gradient(160deg, var(--tn-bg) 0%, color-mix(in srgb, var(--tn-mint) 10%, var(--tn-bg)) 100%) !important;
+        opacity: 1;
+      }
+      .bg-shapes::before, .bg-shapes::after { opacity: .22 !important; }
+      .glass-panel { border-color: var(--tn-line) !important; box-shadow: var(--tn-shadow) !important; }
+    </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col selection:bg-teal-100 selection:text-teal-900">
     <div class="bg-shapes"></div>
