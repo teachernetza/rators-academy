@@ -98,6 +98,15 @@ export const LABS: Lab[] = [
     file: "/labs/intermedio/preposiciones-lugar-movimiento.html",
   },
   {
+    level: "a2",
+    slug: "profesiones-can-conectores",
+    title: "Profesiones, Can/Can't y Conectores",
+    description: "Habilidades y profesiones, y cómo unir ideas con so y but.",
+    icon: "Briefcase",
+    color: "#14b8a6",
+    file: "/labs/basico/profesiones-can-conectores.html",
+  },
+  {
     level: "b1",
     slug: "verbos-modales",
     title: "Verbos Modales",
@@ -116,6 +125,24 @@ export const LABS: Lab[] = [
     file: "/labs/intermedio/storytelling-pasado-futuro.html",
   },
   {
+    level: "b1",
+    slug: "present-progressive",
+    title: "Present Progressive en Acción",
+    description: "Acciones en curso, conversaciones reales y práctica guiada paso a paso.",
+    icon: "Activity",
+    color: "#0284c7",
+    file: "/labs/intermedio/present-progressive.html",
+  },
+  {
+    level: "b1",
+    slug: "fonetica-verbos-regulares",
+    title: "Fonética de los Verbos Regulares (-ed)",
+    description: "Los tres sonidos del pasado regular: /t/, /d/ y /ɪd/, con escucha y práctica.",
+    icon: "AudioLines",
+    color: "#ec4899",
+    file: "/labs/intermedio/fonetica-verbos-regulares.html",
+  },
+  {
     level: "b2",
     slug: "los-4-condicionales",
     title: "Los 4 Condicionales",
@@ -124,7 +151,26 @@ export const LABS: Lab[] = [
     color: "#7a6bea",
     file: "/labs/avanzado/los-4-condicionales.html",
   },
+  {
+    level: "b2",
+    slug: "pasados-conectores-narrativos",
+    title: "Pasados y Conectores Narrativos",
+    description: "Pasado simple, continuo y perfecto con conectores para narrar con fluidez.",
+    icon: "Clapperboard",
+    color: "#4f46e5",
+    file: "/labs/avanzado/pasados-conectores-narrativos.html",
+  },
+  {
+    level: "b2",
+    slug: "voz-pasiva-presente-pasado",
+    title: "Voz Pasiva: Presente y Pasado",
+    description: "Transforma activa a pasiva con flashcards, retos y ejemplos en contexto.",
+    icon: "Repeat",
+    color: "#e11d48",
+    file: "/labs/avanzado/voz-pasiva-presente-pasado.html",
+  },
 ];
+
 
 export function isLabLevel(v: string): v is LabLevel {
   return LAB_LEVELS.some((l) => l.slug === v);

@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Laboratorio B1/B2: El Misterio del -ED</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/labs/_brand.css">
+    <script src="/labs/_brand.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+        
+        :root {
+            --primary: #312e81; /* Indigo 900 */
+            --secondary: #4f46e5; /* Indigo 600 */
+            --accent: #06b6d4; /* Cyan 500 */
+            --sound-id: #ec4899; /* Pink 500 */
+            --sound-t: #f59e0b; /* Amber 500 */
+            --sound-d: #10b981; /* Emerald 500 */
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: #e0e7ff; /* Indigo 50 */
+            color: #1e293b; 
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .title-font { font-family: 'Space Grotesk', sans-serif; }
+
+        /* Abstract Audio Waves Background */
+        .bg-shapes {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+        }
+        .bg-shapes::before, .bg-shapes::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            animation: pulseWave 15s infinite alternate ease-in-out;
+        }
+        .bg-shapes::before {
+            width: 70vw; height: 70vw;
+            background: #818cf8;
+            top: -20vw; left: -10vw;
+        }
+        .bg-shapes::after {
+            width: 60vw; height: 60vw;
+            background: #2dd4bf;
+            bottom: -10vw; right: -10vw;
+            animation-delay: -5s;
+        }
+
+        @keyframes pulseWave {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.2) translate(5vw, -5vw); }
+        }
+
+        /* Slide Animations */
+        .slide-enter { animation: slideUpFade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hidden-slide { display: none !important; }
+
+        /* Glass UI */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 30px -5px rgba(49, 46, 129, 0.1);
+            border-radius: 1rem;
+        }
+
+        .btn-modern { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); font-weight: 600; }
+        .btn-modern:active:not(:disabled) { transform: scale(0.95); }
+        
+        .mic-listening {
+            animation: micPulse 1.5s infinite;
+            background-color: #ef4444 !important; 
+            color: white !important;
+        }
+        @keyframes micPulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        
+        /* Interactive Verb Grid */
+        .verb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.5); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #818cf8; border-radius: 4px; }
+    </style>
+    <style>
+      /* Teacher Netza — armonización de fondo con la marca */
+      body { background-color: var(--tn-bg) !important; }
+      .bg-shapes, .bg-pattern {
+        background: linear-gradient(160deg, var(--tn-bg) 0%, color-mix(in srgb, var(--tn-mint) 10%, var(--tn-bg)) 100%) !important;
+        opacity: 1;
+      }
+      .bg-shapes::before, .bg-shapes::after { opacity: .22 !important; }
+      .glass-panel { border-color: var(--tn-line) !important; box-shadow: var(--tn-shadow) !important; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+    <div class="bg-shapes"></div>
+
+    <!-- Navigation -->
+    <nav class="w-full bg-white/90 backdrop-blur-md border-b border-indigo-100 z-40 sticky top-0 shadow-sm" id="main-nav">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-lg shadow-md">
+                    <i class="fas fa-headphones-alt"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-indigo-900 leading-none title-font">Phonetics Lab</h1>
+                    <p class="text-[10px] font-bold text-cyan-600 uppercase tracking-widest mt-0.5" id="nav-title">Introducción</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div id="tts-status" class="text-indigo-600 text-xl"><i class="fas fa-spinner fa-spin"></i></div>
+                <div class="bg-indigo-50 text-indigo-800 px-4 py-1.5 rounded-lg text-sm font-bold border border-indigo-200" id="slide-counter">1 / 9</div>
+            </div>
+        </div>
+        <div class="w-full bg-indigo-50 h-1">
+            <div id="main-progress" class="bg-cyan-500 h-full transition-all duration-300 shadow-[0_0_10px_rgba(6,182,212,0.5)]" style="width: 0%"></div>
+        </div>
+    </nav>
+
+    <main class="flex-grow w-full max-w-6xl mx-auto px-4 py-8 flex flex-col relative pb-32">
+        
+        <!-- SLIDE 0: Intro -->
+        <section id="slide-0" class="slide-enter flex flex-col items-center justify-center min-h-[65vh] text-center">
+            <div class="mb-6 flex gap-4 text-7xl drop-shadow-lg text-indigo-600">
+                <i class="fas fa-wave-square"></i>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-black text-indigo-900 mb-4 tracking-tight title-font uppercase">
+                El Misterio del -ED
+            </h2>
+            <p class="text-slate-700 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+                El pasado simple en inglés se divide en dos mundos: los <b>verbos irregulares</b> (rebeldes y sin reglas) y los <b>verbos regulares</b>. Hoy dominaremos los regulares y el secreto mejor guardado del inglés: <span class="text-cyan-600 font-bold">cómo pronunciar su terminación.</span>
+            </p>
+            <button onclick="Nav.next()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-xl transition shadow-lg text-lg uppercase tracking-wide btn-modern">
+                Entrar al Laboratorio <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </section>
+
+        <!-- SLIDE 1: Irregulares vs Regulares -->
+        <section id="slide-1" class="hidden-slide">
+            <h2 class="text-3xl font-bold text-indigo-900 mb-2 title-font border-b-2 border-indigo-200 pb-2">1. Irregulares vs Regulares</h2>
+            <p class="text-slate-600 mb-6">Antes de enfocarnos en los regulares, aclaremos la diferencia fundamental.</p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Irregulares -->
+                <div class="glass-panel p-6 border-t-4 border-red-500">
+                    <h3 class="font-bold text-red-700 text-xl mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>Verbos Irregulares</h3>
+                    <p class="text-sm text-slate-700 mb-4">No siguen ninguna regla para formar el pasado. Cambian completamente o se quedan igual. <b>Hay que memorizarlos.</b></p>
+                    <div class="space-y-2">
+                        <button onclick="TTS.speak('Go becomes went')" class="w-full text-left bg-red-50 p-3 rounded hover:bg-red-100 transition font-mono text-sm border border-red-100">
+                            <i class="fas fa-volume-up text-red-400 mr-2"></i> go &rarr; went
+                        </button>
+                        <button onclick="TTS.speak('Buy becomes bought')" class="w-full text-left bg-red-50 p-3 rounded hover:bg-red-100 transition font-mono text-sm border border-red-100">
+                            <i class="fas fa-volume-up text-red-400 mr-2"></i> buy &rarr; bought
+                        </button>
+                        <button onclick="TTS.speak('Cut remains cut')" class="w-full text-left bg-red-50 p-3 rounded hover:bg-red-100 transition font-mono text-sm border border-red-100">
+                            <i class="fas fa-volume-up text-red-400 mr-2"></i> cut &rarr; cut
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Regulares -->
+                <div class="glass-panel p-6 border-t-4 border-cyan-500">
+                    <h3 class="font-bold text-cyan-700 text-xl mb-2"><i class="fas fa-check-circle mr-2"></i>Verbos Regulares</h3>
+                    <p class="text-sm text-slate-700 mb-4">Siguen una regla estricta en su escritura: siempre terminan en <b>-ED</b>. Pero el reto está en <b>cómo suenan</b>.</p>
+                    <div class="space-y-2">
+                        <button onclick="TTS.speak('Work becomes worked')" class="w-full text-left bg-cyan-50 p-3 rounded hover:bg-cyan-100 transition font-mono text-sm border border-cyan-100">
+                            <i class="fas fa-volume-up text-cyan-500 mr-2"></i> work &rarr; worked
+                        </button>
+                        <button onclick="TTS.speak('Play becomes played')" class="w-full text-left bg-cyan-50 p-3 rounded hover:bg-cyan-100 transition font-mono text-sm border border-cyan-100">
+                            <i class="fas fa-volume-up text-cyan-500 mr-2"></i> play &rarr; played
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: Categoría 1 /Id/ -->
+        <section id="slide-2" class="hidden-slide">
+            <h2 class="text-3xl font-bold text-indigo-900 mb-2 title-font border-b-2 border-indigo-200 pb-2">2. Sonido 1: /ɪd/</h2>
+            <p class="text-slate-600 mb-6">La regla más fácil y la ÚNICA vez que pronuncias una sílaba extra al final.</p>
+
+            <div class="glass-panel p-8 relative border-l-8" style="border-color: var(--sound-id);">
+                <div class="absolute top-4 right-4 text-6xl opacity-10">🗣️</div>
+                <h3 class="text-3xl font-black mb-2" style="color: var(--sound-id);">/ɪd/ (Sí, suena como "id")</h3>
+                <p class="text-lg font-medium text-slate-700 mb-6">
+                    <b>Regla:</b> Si el verbo original termina con el sonido de <b>"T"</b> o <b>"D"</b>.<br>
+                    <span class="text-sm">¿Por qué? Porque es imposible decir "want-t" o "need-d". Necesitamos una vocal en medio.</span>
+                </p>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button onclick="TTS.speak('want, wanted')" class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition border border-pink-100 flex flex-col items-center btn-modern">
+                        <span class="text-slate-500 text-sm mb-1">want</span>
+                        <span class="font-bold text-pink-600 text-lg">wanted</span>
+                        <i class="fas fa-volume-up text-pink-300 mt-2"></i>
+                    </button>
+                    <button onclick="TTS.speak('need, needed')" class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition border border-pink-100 flex flex-col items-center btn-modern">
+                        <span class="text-slate-500 text-sm mb-1">need</span>
+                        <span class="font-bold text-pink-600 text-lg">needed</span>
+                        <i class="fas fa-volume-up text-pink-300 mt-2"></i>
+                    </button>
+                    <button onclick="TTS.speak('decide, decided')" class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition border border-pink-100 flex flex-col items-center btn-modern">
+                        <span class="text-slate-500 text-sm mb-1">decide</span>
+                        <span class="font-bold text-pink-600 text-lg">decided</span>
+                        <i class="fas fa-volume-up text-pink-300 mt-2"></i>
+                    </button>
+                    <button onclick="TTS.speak('start, started')" class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition border border-pink-100 flex flex-col items-center btn-modern">
+                        <span class="text-slate-500 text-sm mb-1">start</span>
+                        <span class="font-bold text-pink-600 text-lg">started</span>
+                        <i class="fas fa-volume-up text-pink-300 mt-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: Categoría 2 /t/ -->
+        <section id="slide-3" class="hidden-slide">
+            <h2 class="text-3xl font-bold text-indigo-900 mb-2 title-font border-b-2 border-indigo-200 pb-2">3. Sonido 2: /t/</h2>
+            <p class="text-slate-600 mb-6">Para verbos que terminan en sonidos secos y sordos.</p>
+
+            <div class="glass-panel p-8 relative border-l-8" style="border-color: var(--sound-t);">
+                <div class="absolute top-4 right-4 text-6xl opacity-10">🌬️</div>
+                <h3 class="text-3xl font-black mb-2" style="color: var(--sound-t);">/t/ (Sonido seco de T)</h3>
+                <p class="text-lg font-medium text-slate-700 mb-6">
+                    <b>Regla:</b> Si el verbo termina en los sonidos: <b>p, k, f, s, sh, ch</b>.<br>
+                    <span class="text-sm">Ojo: NO se pronuncia la 'E'. "Wash-ed" es incorrecto. Suena directamente como "Wash-t".</span>
+                </p>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button onclick="TTS.speak('wash, washed')" class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition border border-amber-100 flex flex-col items-center btn-modern">
+                        <span class="text-slate-500 text-sm mb-1">wash (sh)</span>
+                        <span class="font-bold text-amber-600 text-lg">washed</span>
+                        <i class="fas fa-volume-up text-amber-300 mt-2"></i>
+                    </button>
+                    <button onclick="TTS.speak('work, worked')" class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition border border-amber-100 flex flex-col items-center btn-modern">
+                        <span class="text-slate-500 text-sm mb-1">work (k)</span>
+                        <span class="font-bold text-amber-600 text-lg">worked</span>
+                        <i class="fas fa-volume-up text-amber-300 mt-2"></i>
+                    </button>
+                    <button onclick="TTS.speak('help, helped')" class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition border border-amber-100 flex flex-col items-center btn-modern">
+                        <span class="text-slate-500 text-sm mb-1">help (p)</span>
+                        <span class="font-bold text-amber-600 text-lg">helped</span>
+                        <i class="fas fa-volume-up text-amber-300 mt-2"></i>
+                    </button>
+                    <button onclick="TTS.speak('kiss, kissed')" class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition border border-amber-100 flex flex-col items-center btn-modern">
+                        <span class="text-slate-500 text-sm mb-1">kiss (s)</span>
+                        <span class="font-bold text-amber-600 text-lg">kissed</span>
+                        <i class="fas fa-volume-up text-amber-300 mt-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: Categoría 3 /d/ -->
+        <section id="slide-4" class="hidden-slide">
+            <h2 class="text-3xl font-bold text-indigo-900 mb-2 title-font border-b-2 border-indigo-200 pb-2">4. Sonido 3: /d/</h2>
+            <p class="text-slate-600 mb-6">Para verbos que terminan en sonidos suaves, vocales y consonantes sonoras.</p>
+
+            <div class="glass-panel p-8 relative border-l-8" style="border-color: var(--sound-d);">
+                <div class="absolute top-4 right-4 text-6xl opacity-10">🐝</div>
+                <h3 class="text-3xl font-black mb-2" style="color: var(--sound-d);">/d/ (Sonido suave de D)</h3>
+                <p class="text-lg font-medium text-slate-700 mb-6">
+                    <b>Regla:</b> Si el verbo termina en vocal o en los sonidos: <b>b, g, z, v, m, n, l, r</b>.<br>
+                    <span class="text-sm">Tampoco se pronuncia la 'E'. "Play-ed" es incorrecto. Suena como "Play-d".</span>
+                </p>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button onclick="TTS.speak('play, played')" class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition border border-emerald-100 flex flex-col items-center btn-modern">
+                        <span class="text-slate-500 text-sm mb-1">play (vocal)</span>
+                        <span class="font-bold text-emerald-600 text-lg">played</span>
+                        <i class="fas fa-volume-up text-emerald-300 mt-2"></i>
+                    </button>
+                    <button onclick="TTS.speak('clean, cleaned')" class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition border border-emerald-100 flex flex-col items-center btn-modern">
+                        <span class="text-slate-500 text-sm mb-1">clean (n)</span>
+                        <span class="font-bold text-emerald-600 text-lg">cleaned</span>
+                        <i class="fas fa-volume-up text-emerald-300 mt-2"></i>
+                    </button>
+                    <button onclick="TTS.speak('call, called')" class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition border border-emerald-100 flex flex-col items-center btn-modern">
+                        <span class="text-slate-500 text-sm mb-1">call (l)</span>
+                        <span class="font-bold text-emerald-600 text-lg">called</span>
+                        <i class="fas fa-volume-up text-emerald-300 mt-2"></i>
+                    </button>
+                    <button onclick="TTS.speak('love, loved')" class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition border border-emerald-100 flex flex-col items-center btn-modern">
+                        <span class="text-slate-500 text-sm mb-1">love (v)</span>
+                        <span class="font-bold text-emerald-600 text-lg">loved</span>
+                        <i class="fas fa-volume-up text-emerald-300 mt-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: El Gran Diccionario Enriquecido -->
+        <section id="slide-5" class="hidden-slide">
+            <h2 class="text-3xl font-bold text-indigo-900 mb-2 title-font border-b-2 border-indigo-200 pb-2">5. Diccionario Interactivo de Verbos</h2>
+            <p class="text-slate-600 mb-4">Explora las 3 formas (Present, Past, Participle) y su significado en español. ¡Toca cualquier tarjeta para escucharla!</p>
+
+            <div class="glass-panel p-6 bg-white">
+                <div class="flex flex-wrap gap-3 mb-6 justify-center">
+                    <button onclick="VerbDB.filter('all')" class="px-5 py-2 rounded-full font-bold bg-slate-200 text-slate-700 hover:bg-slate-300 transition shadow-sm" id="btn-filt-all">Todos</button>
+                    <button onclick="VerbDB.filter('id')" class="px-5 py-2 rounded-full font-bold bg-pink-100 text-pink-700 hover:bg-pink-200 border border-pink-200 transition shadow-sm" id="btn-filt-id">/ɪd/ (Extra sílaba)</button>
+                    <button onclick="VerbDB.filter('t')" class="px-5 py-2 rounded-full font-bold bg-amber-100 text-amber-700 hover:bg-amber-200 border border-amber-200 transition shadow-sm" id="btn-filt-t">/t/ (Sonido seco)</button>
+                    <button onclick="VerbDB.filter('d')" class="px-5 py-2 rounded-full font-bold bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border border-emerald-200 transition shadow-sm" id="btn-filt-d">/d/ (Sonido suave)</button>
+                </div>
+                
+                <div class="verb-grid" id="verb-container">
+                    <!-- Generado por JS: Tarjetas interactivas con Emojis -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: Quiz de Lógica de Pronunciación -->
+        <section id="slide-6" class="hidden-slide">
+            <h2 class="text-3xl font-bold text-indigo-900 mb-2 title-font border-b-2 border-indigo-200 pb-2">6. Prueba de Clasificación</h2>
+            <p class="text-slate-600 mb-6">Escucha el verbo en presente y analiza su sonido final. ¿Cómo se pronunciará en pasado?</p>
+
+            <div class="glass-panel p-8 text-center bg-white border-t-8 border-indigo-500 shadow-lg">
+                <div id="quiz-container">
+                    <button onclick="Quiz.playCurrent()" class="w-20 h-20 bg-indigo-100 text-indigo-600 rounded-full text-3xl mb-6 hover:bg-indigo-200 transition shadow-sm border-2 border-indigo-300">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                    <h3 class="text-4xl font-black font-mono text-slate-800 mb-2" id="quiz-word">...</h3>
+                    <p class="text-sm text-slate-500 mb-8 font-bold uppercase tracking-widest">Elige la pronunciación del -ED</p>
+
+                    <div class="grid md:grid-cols-3 gap-4" id="quiz-options">
+                        <button onclick="Quiz.check('id')" class="p-5 rounded-xl border-2 border-pink-300 bg-pink-50 text-pink-700 font-bold text-xl hover:bg-pink-100 transition btn-modern">/ɪd/</button>
+                        <button onclick="Quiz.check('t')" class="p-5 rounded-xl border-2 border-amber-300 bg-amber-50 text-amber-700 font-bold text-xl hover:bg-amber-100 transition btn-modern">/t/</button>
+                        <button onclick="Quiz.check('d')" class="p-5 rounded-xl border-2 border-emerald-300 bg-emerald-50 text-emerald-700 font-bold text-xl hover:bg-emerald-100 transition btn-modern">/d/</button>
+                    </div>
+                </div>
+                <div id="quiz-fb" class="hidden mt-6 p-4 rounded-xl font-bold border text-lg transition-all duration-300"></div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: Práctica de Voz -->
+        <section id="slide-7" class="hidden-slide">
+            <h2 class="text-3xl font-bold text-indigo-900 mb-2 title-font border-b-2 border-indigo-200 pb-2">7. Laboratorio de Voz</h2>
+            <p class="text-slate-600 mb-8">Usa tu micrófono. Pronuncia la oración poniendo atención en el verbo regular y su terminación.</p>
+
+            <div class="glass-panel p-10 text-center max-w-2xl mx-auto border-2 border-cyan-300 shadow-xl relative bg-white">
+                <div class="mb-8">
+                    <h3 class="text-3xl md:text-4xl font-bold text-slate-800 leading-snug font-serif italic" id="speak-target">I washed my car and rested.</h3>
+                    <div class="flex justify-center gap-2 mt-4">
+                        <span class="text-xs bg-amber-100 text-amber-800 px-3 py-1.5 rounded-lg font-bold shadow-sm">wash ➔ /t/</span>
+                        <span class="text-xs bg-pink-100 text-pink-800 px-3 py-1.5 rounded-lg font-bold shadow-sm">rest ➔ /ɪd/</span>
+                    </div>
+                    <button onclick="TTS.speak('I washed my car and rested.', 'f')" class="mt-6 text-cyan-600 bg-cyan-50 rounded-full w-12 h-12 flex items-center justify-center mx-auto hover:bg-cyan-100 transition border border-cyan-200 text-xl"><i class="fas fa-volume-up"></i></button>
+                </div>
+                
+                <button id="mic-btn" onclick="VoiceAI.start('I washed my car and rested.')" class="bg-indigo-100 border-4 border-indigo-200 text-indigo-600 w-24 h-24 rounded-full text-4xl shadow-md hover:bg-indigo-200 transition-all btn-modern flex items-center justify-center mx-auto">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <p class="text-xs text-slate-500 mt-4 font-bold uppercase tracking-widest" id="mic-status">Toca para grabar</p>
+                
+                <div id="voice-fb" class="hidden mt-6 p-4 rounded-xl text-sm font-bold border"></div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: Outro -->
+        <section id="slide-8" class="hidden-slide text-center flex flex-col items-center justify-center min-h-[60vh]">
+            <div class="w-32 h-32 bg-cyan-100 text-cyan-600 rounded-full flex items-center justify-center text-7xl mb-6 shadow-xl slide-enter mx-auto border-4 border-white">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-black text-indigo-900 mb-4 slide-enter title-font uppercase" style="animation-delay: 0.1s">¡Dominio Alcanzado!</h2>
+            <p class="text-slate-600 text-lg font-medium mb-10 max-w-xl mx-auto slide-enter" style="animation-delay: 0.2s">
+                Ahora dominas la pronunciación y conoces perfectamente los verbos regulares. Recuerda: si termina en <b>T o D</b>, pronuncia <b>/ɪd/</b>. Para los demás, distingue entre los sonidos fuertes <b>/t/</b> y los suaves <b>/d/</b>.
+            </p>
+            <button onclick="location.reload()" class="bg-indigo-600 text-white font-bold py-4 px-10 rounded-xl hover:bg-indigo-700 transition slide-enter btn-modern shadow-lg tracking-widest uppercase" style="animation-delay: 0.3s">
+                Reiniciar Laboratorio
+            </button>
+        </section>
+
+        <!-- Bottom Navigation -->
+        <div class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-md border-t border-indigo-100 p-4 z-30" id="bottom-nav">
+            <div class="max-w-6xl mx-auto flex justify-between items-center">
+                <button id="btn-prev" onclick="Nav.prev()" class="bg-white hover:bg-slate-50 text-slate-500 font-bold py-2.5 px-6 rounded-lg border border-slate-200 transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center btn-modern text-sm shadow-sm">
+                    <i class="fas fa-chevron-left mr-2"></i> Atrás
+                </button>
+                <button id="btn-next" onclick="Nav.next()" class="bg-cyan-500 hover:bg-cyan-600 text-white font-black py-2.5 px-8 rounded-lg transition flex items-center btn-modern shadow-md text-sm uppercase tracking-wide">
+                    Siguiente <i class="fas fa-chevron-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Funcionalidad JS -->
+    <script>
+        // --- DATA: Enriched Curated Verb List ---
+        // Includes Present(v), Past(past), Participle(part), Spanish(es), Pronunciation Category(p), Emoji(emoji)
+        const verbData = [
+            // Categoria /id/
+            { v: "accept", past: "accepted", part: "accepted", es: "aceptar", p: "id", emoji: "🤝" },
+            { v: "add", past: "added", part: "added", es: "añadir", p: "id", emoji: "➕" },
+            { v: "decide", past: "decided", part: "decided", es: "decidir", p: "id", emoji: "🤔" },
+            { v: "end", past: "ended", part: "ended", es: "terminar", p: "id", emoji: "🏁" },
+            { v: "invite", past: "invited", part: "invited", es: "invitar", p: "id", emoji: "✉️" },
+            { v: "need", past: "needed", part: "needed", es: "necesitar", p: "id", emoji: "🆘" },
+            { v: "paint", past: "painted", part: "painted", es: "pintar", p: "id", emoji: "🎨" },
+            { v: "start", past: "started", part: "started", es: "empezar", p: "id", emoji: "🎬" },
+            { v: "visit", past: "visited", part: "visited", es: "visitar", p: "id", emoji: "🗺️" },
+            { v: "wait", past: "waited", part: "waited", es: "esperar", p: "id", emoji: "⏳" },
+            { v: "want", past: "wanted", part: "wanted", es: "querer", p: "id", emoji: "🙏" },
+            { v: "rest", past: "rested", part: "rested", es: "descansar", p: "id", emoji: "🛌" },
+
+            // Categoria /t/
+            { v: "ask", past: "asked", part: "asked", es: "preguntar", p: "t", emoji: "❓" },
+            { v: "cook", past: "cooked", part: "cooked", es: "cocinar", p: "t", emoji: "🍳" },
+            { v: "dance", past: "danced", part: "danced", es: "bailar", p: "t", emoji: "💃" },
+            { v: "finish", past: "finished", part: "finished", es: "terminar", p: "t", emoji: "✅" },
+            { v: "help", past: "helped", part: "helped", es: "ayudar", p: "t", emoji: "🤝" },
+            { v: "kiss", past: "kissed", part: "kissed", es: "besar", p: "t", emoji: "💋" },
+            { v: "look", past: "looked", part: "looked", es: "mirar", p: "t", emoji: "👀" },
+            { v: "stop", past: "stopped", part: "stopped", es: "detener", p: "t", emoji: "🛑" },
+            { v: "talk", past: "talked", part: "talked", es: "hablar", p: "t", emoji: "🗣️" },
+            { v: "walk", past: "walked", part: "walked", es: "caminar", p: "t", emoji: "🚶" },
+            { v: "wash", past: "washed", part: "washed", es: "lavar", p: "t", emoji: "🧼" },
+            { v: "work", past: "worked", part: "worked", es: "trabajar", p: "t", emoji: "💼" },
+
+            // Categoria /d/
+            { v: "call", past: "called", part: "called", es: "llamar", p: "d", emoji: "📞" },
+            { v: "clean", past: "cleaned", part: "cleaned", es: "limpiar", p: "d", emoji: "🧹" },
+            { v: "cry", past: "cried", part: "cried", es: "llorar", p: "d", emoji: "😭" },
+            { v: "enjoy", past: "enjoyed", part: "enjoyed", es: "disfrutar", p: "d", emoji: "😊" },
+            { v: "listen", past: "listened", part: "listened", es: "escuchar", p: "d", emoji: "🎧" },
+            { v: "live", past: "lived", part: "lived", es: "vivir", p: "d", emoji: "🏠" },
+            { v: "love", past: "loved", part: "loved", es: "amar", p: "d", emoji: "❤️" },
+            { v: "play", past: "played", part: "played", es: "jugar", p: "d", emoji: "🎮" },
+            { v: "smile", past: "smiled", part: "smiled", es: "sonreír", p: "d", emoji: "😁" },
+            { v: "study", past: "studied", part: "studied", es: "estudiar", p: "d", emoji: "📚" },
+            { v: "travel", past: "traveled", part: "traveled", es: "viajar", p: "d", emoji: "✈️" },
+            { v: "use", past: "used", part: "used", es: "usar", p: "d", emoji: "🛠️" }
+        ].sort((a,b) => a.v.localeCompare(b.v)); // Sorted Alphabetically
+
+        // --- STREAMING_CHUNK:Initializing Text-To-Speech engine ---
+        // --- TTS ENGINE ---
+        const TTS = {
+            voiceEn: null, voiceEs: null,
+            init() {
+                const load = () => {
+                    const voices = window.speechSynthesis.getVoices();
+                    if(voices.length > 0) {
+                        this.voiceEn = voices.find(v => v.lang.startsWith('en-US') && (v.name.includes('Google') || v.name.includes('Microsoft'))) || voices.find(v => v.lang.startsWith('en'));
+                        document.getElementById('tts-status').innerHTML = `<i class="fas fa-volume-up"></i>`;
+                    } else { setTimeout(load, 100); }
+                };
+                window.speechSynthesis.onvoiceschanged = load; load();
+            },
+            speak(text, gender = 'm') {
+                window.speechSynthesis.cancel();
+                const u = new SpeechSynthesisUtterance(text);
+                u.voice = this.voiceEn;
+                u.rate = 0.85; // slightly slower for better learning
+                window.speechSynthesis.speak(u);
+            }
+        };
+
+        // --- STREAMING_CHUNK:Rendering the interactive verb cards ---
+        // --- VERB DATABASE UI (SLIDE 5) ---
+        const VerbDB = {
+            render(filterP = 'all') {
+                const c = document.getElementById('verb-container');
+                c.innerHTML = verbData.filter(v => filterP === 'all' || v.p === filterP).map(v => {
+                    
+                    // Determine styles based on pronunciation category
+                    let colorBorder = v.p === 'id' ? 'border-pink-200' : v.p === 't' ? 'border-amber-200' : 'border-emerald-200';
+                    let colorBg = v.p === 'id' ? 'bg-pink-50' : v.p === 't' ? 'bg-amber-50' : 'bg-emerald-50';
+                    let textColor = v.p === 'id' ? 'text-pink-600' : v.p === 't' ? 'text-amber-600' : 'text-emerald-600';
+                    
+                    // Complex Interactive Card Construction
+                    return `
+                        <div onclick="TTS.speak('${v.v}, ${v.past}')" class="group flex flex-col justify-between bg-white p-5 rounded-2xl border-2 ${colorBorder} hover:${colorBg} transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl cursor-pointer">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <span class="text-[10px] font-black uppercase tracking-widest ${textColor} mb-1 block">Present</span>
+                                    <h3 class="text-2xl font-bold text-slate-800 group-hover:${textColor} transition-colors capitalize">${v.v}</h3>
+                                </div>
+                                <span class="text-3xl filter drop-shadow-sm group-hover:scale-110 transition-transform">${v.emoji}</span>
+                            </div>
+                            <div class="space-y-1.5 mb-4">
+                                <div class="flex justify-between items-center text-sm bg-slate-50 p-2.5 rounded-lg border border-slate-100 shadow-sm group-hover:bg-white transition-colors">
+                                    <span class="text-slate-500 font-medium text-xs uppercase tracking-wider">Past:</span>
+                                    <span class="font-bold ${textColor} text-base">${v.past}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm bg-slate-50 p-2.5 rounded-lg border border-slate-100 shadow-sm group-hover:bg-white transition-colors">
+                                    <span class="text-slate-500 font-medium text-xs uppercase tracking-wider">Participle:</span>
+                                    <span class="font-bold ${textColor} text-base">${v.part}</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center pt-3 border-t-2 border-slate-100 border-dashed">
+                                <span class="font-bold text-slate-600 uppercase tracking-wide text-xs"><i class="fas fa-language mr-1 opacity-50"></i> ${v.es}</span>
+                                <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-volume-up ${textColor}"></i>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            },
+            filter(p) {
+                ['all','id','t','d'].forEach(f => {
+                    document.getElementById(`btn-filt-${f}`).classList.replace('ring-2', 'ring-0');
+                    document.getElementById(`btn-filt-${f}`).style.opacity = '0.5';
+                });
+                document.getElementById(`btn-filt-${p}`).style.opacity = '1';
+                this.render(p);
+            }
+        };
+
+        // --- STREAMING_CHUNK:Setting up Quiz Logic ---
+        // --- QUIZ (SLIDE 6) ---
+        const Quiz = {
+            questions: [
+                { v: "want", ed: "wanted", ans: "id" },
+                { v: "watch", ed: "watched", ans: "t" },
+                { v: "call", ed: "called", ans: "d" }
+            ],
+            currentIdx: 0,
+            load() {
+                if(this.currentIdx >= this.questions.length) {
+                    document.getElementById('quiz-container').innerHTML = `<h3 class="text-2xl font-bold text-emerald-600">¡Quiz Completado! Excelente trabajo.</h3>`;
+                    document.getElementById('quiz-fb').classList.add('hidden');
+                    document.getElementById('btn-next').classList.remove('hidden');
+                    return;
+                }
+                document.getElementById('quiz-word').innerText = this.questions[this.currentIdx].v;
+                document.getElementById('quiz-fb').classList.add('hidden');
+                
+                // Reset buttons
+                document.querySelectorAll('#quiz-options button').forEach(b => {
+                    b.classList.remove('opacity-50', 'pointer-events-none');
+                });
+            },
+            playCurrent() { TTS.speak(this.questions[this.currentIdx].v); },
+            check(selected) {
+                const correct = this.questions[this.currentIdx].ans;
+                const fb = document.getElementById('quiz-fb');
+                fb.classList.remove('hidden');
+                
+                document.querySelectorAll('#quiz-options button').forEach(b => {
+                    b.classList.add('opacity-50', 'pointer-events-none');
+                });
+
+                if(selected === correct) {
+                    fb.className = "mt-6 p-4 rounded-xl font-bold border text-lg bg-emerald-50 text-emerald-700 border-emerald-300";
+                    fb.innerHTML = `<i class="fas fa-check-circle"></i> ¡Correcto! El pasado es "${this.questions[this.currentIdx].ed}".`;
+                    TTS.speak(this.questions[this.currentIdx].ed);
+                    setTimeout(() => { this.currentIdx++; this.load(); }, 2000);
+                } else {
+                    fb.className = "mt-6 p-4 rounded-xl font-bold border text-lg bg-red-50 text-red-700 border-red-300";
+                    fb.innerHTML = `<i class="fas fa-times-circle"></i> Incorrecto. Analiza el último sonido de ${this.questions[this.currentIdx].v}.`;
+                    setTimeout(() => { this.load(); }, 2500);
+                }
+            }
+        };
+
+        // --- STREAMING_CHUNK:Setting up Speech Recognition AI ---
+        // --- VOICE AI (SLIDE 7) ---
+        const VoiceAI = {
+            recognition: null, supported: false,
+            init() {
+                window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (window.SpeechRecognition) {
+                    this.supported = true;
+                    this.recognition = new window.SpeechRecognition();
+                    this.recognition.lang = 'en-US';
+                    this.recognition.interimResults = false;
+                }
+            },
+            start(target) {
+                const btn = document.getElementById(`mic-btn`);
+                const status = document.getElementById(`mic-status`);
+                const fb = document.getElementById(`voice-fb`);
+                
+                document.getElementById('btn-next').classList.remove('hidden');
+
+                if (!this.supported) {
+                    fb.classList.remove('hidden');
+                    fb.className = "mt-6 p-4 rounded-xl text-sm font-bold border bg-slate-100 text-slate-700 border-slate-300";
+                    fb.innerText = "Micrófono no soportado en este navegador. Haz clic en Siguiente.";
+                    return;
+                }
+
+                btn.classList.add('mic-listening');
+                status.innerText = "Escuchando...";
+                fb.classList.add('hidden');
+
+                this.recognition.start();
+
+                this.recognition.onresult = (e) => {
+                    const transcript = e.results[0][0].transcript.trim().toLowerCase();
+                    btn.classList.remove('mic-listening');
+                    status.innerText = `Escuchado: "${transcript}"`;
+                    fb.classList.remove('hidden');
+
+                    if(transcript.includes("washed") && transcript.includes("rested")) {
+                        fb.className = "mt-6 p-4 rounded-xl text-sm font-bold border bg-emerald-50 text-emerald-800 border-emerald-300";
+                        fb.innerHTML = `<i class="fas fa-check-circle mr-1"></i> ¡Excelente pronunciación de los sufijos!`;
+                    } else {
+                        fb.className = "mt-6 p-4 rounded-xl text-sm font-bold border bg-red-50 text-red-800 border-red-300";
+                        fb.innerHTML = `<i class="fas fa-times-circle mr-1"></i> Intenta de nuevo. Asegúrate de pronunciar bien 'wash-t' y 'rest-id'.`;
+                    }
+                };
+
+                this.recognition.onerror = () => {
+                    btn.classList.remove('mic-listening');
+                    status.innerText = "Error. Avanza al siguiente paso.";
+                };
+                this.recognition.onend = () => { btn.classList.remove('mic-listening'); };
+            }
+        };
+
+        // --- STREAMING_CHUNK:Configuring Slide Navigation Logic ---
+        // --- NAVIGATION ---
+        const Nav = {
+            current: 0, total: 9, // Total slides adjusted
+            slidesData: [
+                "Introducción", "Irregulares vs Regulares", "Sonido /id/", "Sonido /t/", "Sonido /d/",
+                "Diccionario Interactivo", "Quiz Lógico", "Laboratorio de Voz", "Completado"
+            ],
+            update() {
+                document.getElementById('nav-title').innerText = this.slidesData[this.current];
+                document.getElementById('main-progress').style.width = `${(this.current / (this.total-1)) * 100}%`;
+                document.getElementById('slide-counter').innerText = `${this.current + 1} / ${this.total}`;
+
+                // Hide all slides
+                for(let i=0; i<this.total; i++) {
+                    const s = document.getElementById(`slide-${i}`);
+                    if(s) { s.classList.add('hidden-slide'); s.classList.remove('slide-enter'); }
+                }
+                
+                // Show current slide
+                const act = document.getElementById(`slide-${this.current}`);
+                if(act) { act.classList.remove('hidden-slide'); void act.offsetWidth; act.classList.add('slide-enter'); }
+
+                // Manage bottom navigation buttons
+                document.getElementById('btn-prev').disabled = this.current === 0;
+                document.getElementById('bottom-nav').classList.toggle('hidden', this.current === this.total - 1);
+                
+                // Block 'Next' button on interactive assessment slides (Quiz & Voice)
+                const lockedSlides = [5, 6]; 
+                document.getElementById('btn-next').classList.toggle('hidden', lockedSlides.includes(this.current));
+
+                // Lazy initializations
+                if(this.current === 4) { VerbDB.filter('all'); }
+                if(this.current === 5) { Quiz.load(); }
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            },
+            next() { if(this.current < this.total - 1) { this.current++; this.update(); } },
+            prev() { if(this.current > 0) { this.current--; this.update(); } }
+        };
+
+        // --- STREAMING_CHUNK:Finalizing execution on DOMContentLoaded ---
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            TTS.init();
+            VoiceAI.init();
+            Nav.update();
+        });
+    </script>
+</body>
+</html>

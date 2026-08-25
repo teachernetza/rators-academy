@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Passive Voice Mastery PRO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/labs/_brand.css">
+    <script src="/labs/_brand.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            touch-action: manipulation; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* 3D Styles for Flashcards */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        
+        /* Animations */
+        .slide-enter { animation: slideUpFade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .pulse-soft { animation: pulseSoft 2.5s infinite ease-in-out; }
+        @keyframes pulseSoft {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .chat-bubble-enter { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform-origin: bottom left; }
+        .chat-bubble-enter-right { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform-origin: bottom right; }
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.8) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typing Dots */
+        .typing-dot {
+            animation: typingBounce 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f8fafc; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .text-gradient-blue { background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-image: linear-gradient(to right, #2563eb, #06b6d4); }
+        
+        select.custom-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1em;
+        }
+    </style>
+    <style>
+      /* Teacher Netza — armonización de fondo con la marca */
+      body { background-color: var(--tn-bg) !important; }
+      .bg-shapes, .bg-pattern {
+        background: linear-gradient(160deg, var(--tn-bg) 0%, color-mix(in srgb, var(--tn-mint) 10%, var(--tn-bg)) 100%) !important;
+        opacity: 1;
+      }
+      .bg-shapes::before, .bg-shapes::after { opacity: .22 !important; }
+      .glass-panel { border-color: var(--tn-line) !important; box-shadow: var(--tn-shadow) !important; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 h-[100dvh] w-full overflow-hidden flex flex-col selection:bg-rose-200 selection:text-rose-900">
+
+    <header class="h-16 md:h-20 bg-white border-b border-slate-200 flex items-center justify-between px-4 md:px-8 shrink-0 z-30 shadow-sm relative">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-rose-500 to-orange-500 flex items-center justify-center shadow-lg shadow-rose-500/20">
+                <i class="fas fa-exchange-alt text-white text-lg md:text-xl"></i>
+            </div>
+            <div class="hidden sm:block">
+                <h1 class="text-lg md:text-xl font-black text-slate-800 tracking-tight leading-none">Passive<span class="text-rose-500">VOICE</span></h1>
+                <p class="text-xs text-slate-500 font-bold mt-0.5">Interactive Masterclass</p>
+            </div>
+        </div>
+        
+        <div class="flex flex-col items-center w-1/2 md:w-1/3">
+            <span class="text-[10px] md:text-xs text-slate-500 font-bold uppercase tracking-wider mb-1.5" id="progress-text">Loading...</span>
+            <div class="w-full h-2 md:h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200 shadow-inner">
+                <div id="progress-bar" class="h-full bg-gradient-to-r from-rose-500 via-orange-500 to-amber-500 transition-all duration-500 w-0 relative rounded-full"></div>
+            </div>
+        </div>
+
+        <button onclick="toggleDictionary()" class="flex items-center gap-2 bg-slate-100 text-slate-700 hover:bg-slate-200 px-3 py-2 md:px-5 md:py-2.5 rounded-xl font-bold transition-colors text-xs md:text-sm border border-slate-200 shadow-sm">
+            <i class="fas fa-book-open"></i> <span class="hidden sm:inline">Verbs Dict</span>
+        </button>
+    </header>
+
+    <main class="flex-1 overflow-y-auto relative p-3 md:p-8 flex flex-col items-center bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed" id="main-scroll-area">
+        
+        <div id="slides-container" class="w-full max-w-5xl mx-auto pb-16 md:pb-24">
+            
+            <!-- INTRO -->
+            <div class="slide slide-enter text-center mt-6 md:mt-12">
+                <div class="inline-block p-6 rounded-full bg-white mb-6 border border-slate-100 shadow-xl pulse-soft">
+                    <span class="text-7xl md:text-8xl">🔄</span>
+                </div>
+                <h2 class="text-4xl md:text-7xl font-black mb-6 tracking-tight text-slate-800 leading-tight">
+                    Master the <br class="md:hidden" />
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-orange-500">Passive Voice</span>
+                </h2>
+                <p class="text-lg md:text-2xl text-slate-600 mb-10 max-w-3xl mx-auto font-medium px-4 leading-relaxed">
+                    Stop focusing on <strong>who</strong> did the action, and start focusing on <strong>what</strong> happened! Learn to describe processes, history, and facts like a native speaker.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto mb-10">
+                    <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100 font-bold text-blue-800 shadow-sm"><i class="fas fa-eye text-blue-500 mb-2 text-2xl block"></i> 1. The Focus Shift</div>
+                    <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-100 font-bold text-emerald-800 shadow-sm"><i class="fas fa-industry text-emerald-500 mb-2 text-2xl block"></i> 2. Present Simple</div>
+                    <div class="bg-purple-50 p-4 rounded-2xl border border-purple-100 font-bold text-purple-800 shadow-sm"><i class="fas fa-landmark text-purple-500 mb-2 text-2xl block"></i> 3. Past Simple</div>
+                </div>
+                <button onclick="nextSlide()" class="w-full sm:w-auto px-12 py-5 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white rounded-2xl font-black text-xl transition-all shadow-lg shadow-rose-500/30 hover:-translate-y-1">
+                    Start Learning <i class="fas fa-rocket ml-2"></i>
+                </button>
+            </div>
+
+            <!-- MODULE 1: THE FOCUS SHIFT -->
+            <div class="slide hidden slide-enter">
+                <div class="mb-6 md:mb-8 text-center">
+                    <span class="bg-blue-100 text-blue-700 text-xs md:text-sm font-black px-4 py-1.5 rounded-full uppercase tracking-wider">Module 1</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 mt-4 leading-tight">The Focus Shift 👀</h2>
+                    <p class="text-slate-600 text-lg md:text-xl mt-4 max-w-2xl mx-auto">Why do we use the Passive Voice? Because sometimes, the <strong>action</strong> or the <strong>object</strong> is more important than the person who did it.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-md text-center">
+                        <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">🏃‍♂️</div>
+                        <h3 class="font-black text-xl text-slate-800 mb-2">Active Voice</h3>
+                        <p class="text-slate-500 font-medium mb-4">Focus on the DOER (The person)</p>
+                        <div class="bg-slate-50 p-4 rounded-xl text-sm font-bold text-slate-700 border border-slate-200">
+                            "<span class="text-rose-500">Somebody</span> stole my car!"
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl border-2 border-blue-400 shadow-lg text-center relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">TARGET</div>
+                        <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">🚗</div>
+                        <h3 class="font-black text-xl text-blue-800 mb-2">Passive Voice</h3>
+                        <p class="text-slate-500 font-medium mb-4">Focus on the RECEIVER (The object)</p>
+                        <div class="bg-blue-50 p-4 rounded-xl text-sm font-bold text-blue-900 border border-blue-200">
+                            "<span class="text-blue-600">My car</span> was stolen!"
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 bg-amber-50 border border-amber-200 p-5 rounded-2xl flex items-start gap-4">
+                    <i class="fas fa-lightbulb text-2xl text-amber-500 mt-1"></i>
+                    <div>
+                        <h4 class="font-bold text-amber-800 text-lg">The Golden Rule</h4>
+                        <p class="text-amber-700 font-medium">To make a passive sentence, you ALWAYS need the verb <strong>To Be</strong> and the <strong>Past Participle</strong> (V3) of the main verb.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VOCABULARY -->
+            <div class="slide hidden slide-enter">
+                <div class="mb-6 flex justify-between items-end">
+                    <div>
+                        <span class="bg-indigo-100 text-indigo-700 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">Vocabulary</span>
+                        <h2 class="text-2xl md:text-4xl font-black text-slate-800 mt-2">Past Participles (V3)</h2>
+                    </div>
+                    <p class="text-xs md:text-sm text-slate-500 font-bold hidden sm:block bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm"><i class="fas fa-hand-pointer text-indigo-500 mr-1"></i> Tap to flip</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="vocab-participles">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- MODULE 2: PRESENT SIMPLE PASSIVE -->
+            <div class="slide hidden slide-enter">
+                <div class="mb-6 md:mb-8 text-center">
+                    <span class="bg-emerald-100 text-emerald-700 text-xs md:text-sm font-black px-4 py-1.5 rounded-full uppercase tracking-wider">Module 2</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 mt-4 leading-tight">Present Simple Passive</h2>
+                    <p class="text-slate-600 text-lg md:text-xl mt-4 max-w-2xl mx-auto">Used for facts, routines, manufacturing, and materials. <br><strong>Formula:</strong> am / is / are + Past Participle</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-lg">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-xl"><i class="fas fa-box-open"></i></div>
+                            <h3 class="text-2xl font-black text-slate-800">Materials & Origins</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <p class="text-lg font-medium text-slate-800">Coffee <strong class="text-emerald-600">is grown</strong> in Colombia.</p>
+                                <p class="text-sm text-slate-500 mt-1">El café se cultiva en Colombia.</p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <p class="text-lg font-medium text-slate-800">These shoes <strong class="text-emerald-600">are made</strong> of leather.</p>
+                                <p class="text-sm text-slate-500 mt-1">Estos zapatos están hechos de cuero.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-lg">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-12 h-12 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center text-xl"><i class="fas fa-globe"></i></div>
+                            <h3 class="text-2xl font-black text-slate-800">General Facts</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <p class="text-lg font-medium text-slate-800">English <strong class="text-teal-600">is spoken</strong> all over the world.</p>
+                                <p class="text-sm text-slate-500 mt-1">El inglés se habla en todo el mundo.</p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <p class="text-lg font-medium text-slate-800">The rooms <strong class="text-teal-600">are cleaned</strong> every day.</p>
+                                <p class="text-sm text-slate-500 mt-1">Las habitaciones son limpiadas todos los días.</p>
+                            </div>
+                            <div class="bg-rose-50 p-4 rounded-xl border border-rose-200 shadow-sm mt-2">
+                                <p class="text-lg font-medium text-slate-800">Pasta <strong class="text-rose-600">is originally made</strong> in Italy. 🍝</p>
+                                <p class="text-sm text-slate-500 mt-1">La pasta es hecha originalmente en Italia.</p>
+                            </div>
+                            <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 shadow-sm mt-2">
+                                <p class="text-lg font-medium text-slate-800">The house <strong class="text-amber-600">was destroyed</strong> in tornados season. 🌪️</p>
+                                <p class="text-sm text-slate-500 mt-1">La casa fué destruida en temporada de tornados.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUIZ 1 -->
+            <div class="slide hidden slide-enter">
+                <div class="mb-8 text-center">
+                    <span class="bg-emerald-100 text-emerald-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider">Practice 1</span>
+                    <h2 class="text-3xl md:text-5xl font-black mt-3 text-slate-800">Present Passive</h2>
+                    <p class="text-slate-500 mt-2 font-medium">Choose the correct verb to complete the passive sentence.</p>
+                </div>
+                <div class="bg-white p-6 md:p-10 rounded-3xl border border-slate-200 max-w-3xl mx-auto shadow-xl" id="quiz-present">
+                    <!-- Dynamic JS content -->
+                </div>
+            </div>
+
+            <!-- CHAT SIMULATOR 1 -->
+            <div class="slide hidden slide-enter">
+                <div class="mb-6 flex flex-col items-center">
+                    <span class="bg-indigo-100 text-indigo-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider mb-2">Chat Simulator 1</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 text-center">Shopping for Clothes 👕</h2>
+                    <p class="text-slate-500 font-medium text-center mt-3 max-w-2xl">Notice how the passive voice is used to talk about where things are made and what materials are used.</p>
+                </div>
+                
+                <div class="bg-slate-100 p-4 md:p-6 rounded-3xl border border-slate-200 shadow-inner max-w-2xl mx-auto h-[60vh] flex flex-col relative overflow-hidden">
+                    <div class="flex-1 overflow-y-auto space-y-4 pr-2 pb-20" id="chatSim1-container">
+                        <!-- Chat messages injected by JS -->
+                    </div>
+                    <div class="absolute bottom-4 left-4 right-4">
+                        <button onclick="advanceChat('chatSim1')" id="btn-advance-chat-1" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-lg transition shadow-lg flex items-center justify-center gap-2">
+                            Next Message <i class="fas fa-comment-dots"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 3: PAST SIMPLE PASSIVE -->
+            <div class="slide hidden slide-enter">
+                <div class="mb-6 md:mb-8 text-center">
+                    <span class="bg-purple-100 text-purple-700 text-xs md:text-sm font-black px-4 py-1.5 rounded-full uppercase tracking-wider">Module 3</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 mt-4 leading-tight">Past Simple Passive</h2>
+                    <p class="text-slate-600 text-lg md:text-xl mt-4 max-w-2xl mx-auto">Used for history, discoveries, inventions, and art. <br><strong>Formula:</strong> was / were + Past Participle</p>
+                </div>
+                
+                <div class="bg-white p-6 md:p-10 rounded-3xl border border-slate-200 shadow-xl mb-6">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="flex-1 w-full">
+                            <h3 class="text-2xl font-black text-purple-600 mb-4 border-b-2 border-purple-100 pb-2">Singular (He, She, It, I)</h3>
+                            <p class="text-lg text-slate-700 font-medium mb-4">Use <strong class="text-purple-600">WAS</strong></p>
+                            <ul class="space-y-3">
+                                <li class="bg-purple-50 p-4 rounded-xl border border-purple-100 flex items-center gap-3">
+                                    <span class="text-2xl">📱</span>
+                                    <span>The telephone <strong class="text-purple-700">was invented</strong> by Bell.</span>
+                                </li>
+                                <li class="bg-purple-50 p-4 rounded-xl border border-purple-100 flex items-center gap-3">
+                                    <span class="text-2xl">🎨</span>
+                                    <span>The Mona Lisa <strong class="text-purple-700">was painted</strong> by Da Vinci.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="hidden md:flex flex-col items-center text-slate-300">
+                            <div class="w-0.5 h-16 bg-slate-200"></div>
+                            <span class="font-black text-sm my-2 uppercase">AND</span>
+                            <div class="w-0.5 h-16 bg-slate-200"></div>
+                        </div>
+
+                        <div class="flex-1 w-full">
+                            <h3 class="text-2xl font-black text-pink-500 mb-4 border-b-2 border-pink-100 pb-2">Plural (You, We, They)</h3>
+                            <p class="text-lg text-slate-700 font-medium mb-4">Use <strong class="text-pink-600">WERE</strong></p>
+                            <ul class="space-y-3">
+                                <li class="bg-pink-50 p-4 rounded-xl border border-pink-100 flex items-center gap-3">
+                                    <span class="text-2xl">🏛️</span>
+                                    <span>The pyramids <strong class="text-pink-600">were built</strong> in Egypt.</span>
+                                </li>
+                                <li class="bg-pink-50 p-4 rounded-xl border border-pink-100 flex items-center gap-3">
+                                    <span class="text-2xl">🔑</span>
+                                    <span>My keys <strong class="text-pink-600">were lost</strong> yesterday.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUIZ 2 -->
+            <div class="slide hidden slide-enter">
+                <div class="mb-8 text-center">
+                    <span class="bg-purple-100 text-purple-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider">Practice 2</span>
+                    <h2 class="text-3xl md:text-5xl font-black mt-3 text-slate-800">Past Passive</h2>
+                    <p class="text-slate-500 mt-2 font-medium">Was or Were? Choose the correct option.</p>
+                </div>
+                <div class="bg-white p-6 md:p-10 rounded-3xl border border-slate-200 max-w-3xl mx-auto shadow-xl" id="quiz-past">
+                    <!-- Dynamic JS content -->
+                </div>
+            </div>
+
+            <!-- CHAT SIMULATOR 2 -->
+            <div class="slide hidden slide-enter">
+                <div class="mb-6 flex flex-col items-center">
+                    <span class="bg-purple-100 text-purple-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider mb-2">Chat Simulator 2</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 text-center">A Trip to the Museum 🏛️</h2>
+                    <p class="text-slate-500 font-medium text-center mt-3 max-w-2xl">See how the Past Simple Passive is naturally used to discuss history and art.</p>
+                </div>
+                
+                <div class="bg-slate-100 p-4 md:p-6 rounded-3xl border border-slate-200 shadow-inner max-w-2xl mx-auto h-[60vh] flex flex-col relative overflow-hidden">
+                    <div class="flex-1 overflow-y-auto space-y-4 pr-2 pb-20" id="chatSim2-container">
+                        <!-- Chat messages injected by JS -->
+                    </div>
+                    <div class="absolute bottom-4 left-4 right-4">
+                        <button onclick="advanceChat('chatSim2')" id="btn-advance-chat-2" class="w-full py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-black text-lg transition shadow-lg flex items-center justify-center gap-2">
+                            Next Message <i class="fas fa-comment-dots"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HOMEWORK 1: WRITING CHALLENGE -->
+            <div class="slide hidden slide-enter">
+                <div class="mb-8 text-center">
+                    <span class="bg-blue-100 text-blue-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider">Challenge 1</span>
+                    <h2 class="text-3xl md:text-5xl font-black mt-3 text-slate-800">Typing Challenge ⌨️</h2>
+                    <p class="text-slate-500 mt-2 font-medium">Type the correct passive sentence. Ignore periods at the end.</p>
+                </div>
+                <div class="bg-white p-6 md:p-10 rounded-3xl border border-slate-200 max-w-3xl mx-auto shadow-xl">
+                    <div class="space-y-5" id="writing-practice-container">
+                        
+                        <div class="bg-slate-50 p-4 md:p-5 rounded-2xl border border-slate-100 relative group">
+                            <p class="text-sm text-slate-500 font-bold mb-2 uppercase tracking-wider">Sentence 1 (Present)</p>
+                            <p class="text-lg font-medium text-slate-800 mb-3">El café se cultiva en México.</p>
+                            <input type="text" id="wp-1" data-answer="Coffee is grown in Mexico" class="w-full bg-white border-2 border-slate-200 p-3 rounded-xl font-bold text-slate-700 focus:border-blue-500 focus:outline-none transition-colors" placeholder="Type in English here...">
+                            <div class="icon-status absolute right-6 top-1/2 mt-1 hidden text-2xl"></div>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 md:p-5 rounded-2xl border border-slate-100 relative group">
+                            <p class="text-sm text-slate-500 font-bold mb-2 uppercase tracking-wider">Sentence 2 (Past)</p>
+                            <p class="text-lg font-medium text-slate-800 mb-3">El libro fue escrito por ella.</p>
+                            <input type="text" id="wp-2" data-answer="The book was written by her" class="w-full bg-white border-2 border-slate-200 p-3 rounded-xl font-bold text-slate-700 focus:border-blue-500 focus:outline-none transition-colors" placeholder="Type in English here...">
+                            <div class="icon-status absolute right-6 top-1/2 mt-1 hidden text-2xl"></div>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 md:p-5 rounded-2xl border border-slate-100 relative group">
+                            <p class="text-sm text-slate-500 font-bold mb-2 uppercase tracking-wider">Sentence 3 (Past)</p>
+                            <p class="text-lg font-medium text-slate-800 mb-3">Las llaves fueron encontradas.</p>
+                            <input type="text" id="wp-3" data-answer="The keys were found" class="w-full bg-white border-2 border-slate-200 p-3 rounded-xl font-bold text-slate-700 focus:border-blue-500 focus:outline-none transition-colors" placeholder="Type in English here...">
+                            <div class="icon-status absolute right-6 top-1/2 mt-1 hidden text-2xl"></div>
+                        </div>
+
+                        <div class="bg-rose-50 p-4 md:p-5 rounded-2xl border border-rose-100 relative group">
+                            <p class="text-sm text-rose-500 font-bold mb-2 uppercase tracking-wider">Sentence 4 (Special Fact) 📱</p>
+                            <p class="text-lg font-medium text-slate-800 mb-3">Cellphones are made in China.</p>
+                            <input type="text" id="wp-4" data-answer="Los celulares se hacen en China" class="w-full bg-white border-2 border-rose-200 p-3 rounded-xl font-bold text-slate-700 focus:border-rose-500 focus:outline-none transition-colors" placeholder="Type in English here...">
+                            <div class="icon-status absolute right-6 top-1/2 mt-1 hidden text-2xl"></div>
+                        </div>
+                        
+                        <button onclick="checkWritingPractice()" class="w-full py-4 md:py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-lg transition shadow-lg mt-6">Check My Answers <i class="fas fa-check-double ml-2"></i></button>
+                        <div id="wp-feedback" class="mt-4 text-center font-bold text-lg hidden p-4 rounded-xl"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HOMEWORK 2: LISTENING -->
+            <div class="slide hidden slide-enter">
+                <div class="mb-6 md:mb-8 text-center">
+                    <span class="bg-rose-100 text-rose-700 text-xs md:text-sm font-black px-4 py-1.5 rounded-full uppercase tracking-wider">Challenge 2 (Listening)</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 mt-4 leading-tight">The Story of Chocolate 🍫</h2>
+                    <p class="text-slate-600 text-lg md:text-xl mt-4 max-w-2xl mx-auto">Listen to the story. Notice how many times the Passive Voice is used.</p>
+                </div>
+                
+                <div class="bg-white p-6 md:p-10 rounded-3xl border border-slate-200 shadow-xl max-w-4xl mx-auto flex flex-col md:flex-row gap-8 items-center relative overflow-hidden">
+                    <div class="absolute -right-20 -top-20 w-64 h-64 bg-amber-50 rounded-full blur-3xl opacity-60"></div>
+                    
+                    <div class="w-40 h-40 md:w-56 md:h-56 bg-amber-100 rounded-full flex items-center justify-center shrink-0 border-4 border-amber-200 shadow-inner text-7xl md:text-8xl relative z-10">
+                        ☕
+                    </div>
+                    
+                    <div class="flex-1 relative z-10 w-full">
+                        <button id="btn-play-story" onclick="playLongAudio(storyText)" class="absolute -top-6 -right-2 md:-right-6 w-14 h-14 bg-rose-500 hover:bg-rose-600 text-white rounded-full flex items-center justify-center shadow-lg transition hover:scale-105 z-20">
+                            <i class="fas fa-play text-xl" id="icon-play-story"></i>
+                        </button>
+                        
+                        <div class="bg-slate-50 p-6 md:p-8 rounded-2xl border border-slate-100 text-slate-700 text-lg md:text-xl leading-relaxed font-medium shadow-sm">
+                            <p>
+                                Chocolate <strong class="text-rose-600">is loved</strong> all over the world today. It <strong class="text-rose-600">is made</strong> from cacao beans. The beans <strong class="text-emerald-600">are grown</strong> in tropical countries, like Mexico and Ecuador. 
+                                <br><br>
+                                Many years ago, chocolate <strong class="text-purple-600">was consumed</strong> as a bitter drink by the Mayans and Aztecs. It <strong class="text-purple-600">was considered</strong> a gift from the gods. Later, sugar <strong class="text-purple-600">was added</strong> by Europeans, and the first solid chocolate bar <strong class="text-purple-600">was created</strong> in the 19th century.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HOMEWORK 3: DROPDOWN CLOZE TEST -->
+            <div class="slide hidden slide-enter">
+                <div class="mb-8 text-center">
+                    <span class="bg-rose-100 text-rose-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider">Challenge 3 (Reading)</span>
+                    <h2 class="text-3xl md:text-5xl font-black mt-3 text-slate-800">Fill in the Blanks 🧩</h2>
+                    <p class="text-slate-500 mt-2 font-medium text-lg">Select the correct verb to complete the facts.</p>
+                </div>
+                
+                <div class="bg-white p-6 md:p-10 rounded-3xl border border-slate-200 max-w-4xl mx-auto shadow-xl text-lg md:text-xl leading-loose font-medium text-slate-700">
+                    <p class="mb-6">
+                        Today, chocolate 
+                        <select id="dd-1" class="custom-select inline-block mx-1 bg-slate-100 border-2 border-slate-300 text-slate-700 font-bold rounded-lg px-3 py-1 focus:outline-none focus:border-rose-500 transition-colors w-28 text-center appearance-none cursor-pointer">
+                            <option value="">---</option>
+                            <option value="am">am</option>
+                            <option value="is">is</option>
+                            <option value="are">are</option>
+                        </select> 
+                        loved by many people. The beans 
+                        <select id="dd-2" class="custom-select inline-block mx-1 bg-slate-100 border-2 border-slate-300 text-slate-700 font-bold rounded-lg px-3 py-1 focus:outline-none focus:border-rose-500 transition-colors w-32 text-center appearance-none cursor-pointer">
+                            <option value="">---</option>
+                            <option value="is grown">is grown</option>
+                            <option value="are grown">are grown</option>
+                            <option value="was grown">was grown</option>
+                        </select> 
+                        in Mexico. 
+                    </p>
+                    <p class="mb-6">
+                        In the past, a bitter drink 
+                        <select id="dd-3" class="custom-select inline-block mx-1 bg-slate-100 border-2 border-slate-300 text-slate-700 font-bold rounded-lg px-3 py-1 focus:outline-none focus:border-rose-500 transition-colors w-36 text-center appearance-none cursor-pointer">
+                            <option value="">---</option>
+                            <option value="was consumed">was consumed</option>
+                            <option value="were consumed">were consumed</option>
+                        </select> 
+                        by the Aztecs. It 
+                        <select id="dd-4" class="custom-select inline-block mx-1 bg-slate-100 border-2 border-slate-300 text-slate-700 font-bold rounded-lg px-3 py-1 focus:outline-none focus:border-rose-500 transition-colors w-36 text-center appearance-none cursor-pointer">
+                            <option value="">---</option>
+                            <option value="is considered">is considered</option>
+                            <option value="was considered">was considered</option>
+                        </select> 
+                        a gift from the gods. Later, sugar 
+                        <select id="dd-5" class="custom-select inline-block mx-1 bg-slate-100 border-2 border-slate-300 text-slate-700 font-bold rounded-lg px-3 py-1 focus:outline-none focus:border-rose-500 transition-colors w-36 text-center appearance-none cursor-pointer">
+                            <option value="">---</option>
+                            <option value="was added">was added</option>
+                            <option value="were added">were added</option>
+                        </select> 
+                        by Europeans to make it sweet.
+                    </p>
+
+                    <button onclick="checkDropdownPractice()" class="w-full py-4 md:py-5 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl font-black text-lg transition shadow-lg mt-6">
+                        Verify Selections <i class="fas fa-tasks ml-2"></i>
+                    </button>
+                    <div id="dd-feedback" class="mt-4 text-center font-bold text-lg hidden p-4 rounded-xl"></div>
+                </div>
+            </div>
+
+            <!-- MEGA QUIZ INTRO -->
+            <div class="slide hidden slide-enter text-center mt-10 md:mt-20">
+                <div class="inline-block p-6 rounded-full bg-slate-800 mb-6 border-4 border-slate-700 shadow-2xl pulse-soft text-white">
+                    <span class="text-7xl md:text-8xl"><i class="fas fa-trophy text-yellow-400"></i></span>
+                </div>
+                <h2 class="text-4xl md:text-7xl font-black mb-6 tracking-tight text-slate-800 leading-tight">
+                    The Final <br class="md:hidden" />
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-orange-500">Challenge</span>
+                </h2>
+                <p class="text-lg md:text-2xl text-slate-600 mb-10 max-w-3xl mx-auto font-medium px-4 leading-relaxed">
+                    10 questions to test everything you've learned. We will mix Present and Past Passive. Are you ready?
+                </p>
+                <button onclick="startMegaQuiz(true)" class="w-full sm:w-auto px-12 py-5 bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-white rounded-2xl font-black text-xl transition-all shadow-xl hover:-translate-y-1">
+                    Start Test <i class="fas fa-check-double ml-2"></i>
+                </button>
+            </div>
+
+            <!-- MEGA QUIZ ACTUAL SLIDE -->
+            <div class="slide hidden slide-enter">
+                <div class="mb-8 text-center">
+                    <span class="bg-slate-800 text-white text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider" id="mega-quiz-counter">Question 1 of 10</span>
+                    <h2 class="text-3xl md:text-5xl font-black mt-4 text-slate-800">Mega Quiz</h2>
+                </div>
+                <!-- Min-height prevents it from looking like just a line before JS injects content -->
+                <div class="bg-white p-6 md:p-10 rounded-3xl border border-slate-200 max-w-3xl mx-auto shadow-2xl relative overflow-hidden min-h-[350px]" id="mega-quiz-container">
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-slate-100">
+                        <div id="mega-quiz-progress" class="h-full bg-yellow-400 transition-all duration-300 w-0"></div>
+                    </div>
+                    <div id="mega-quiz-content" class="mt-4 h-full flex flex-col justify-center"></div>
+                </div>
+            </div>
+
+            <!-- SUCCESS -->
+            <div class="slide hidden slide-enter text-center mt-10 md:mt-20">
+                <div class="relative w-40 h-40 md:w-56 md:h-56 mx-auto mb-10">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-rose-500 to-orange-500 rounded-full blur-2xl opacity-40 pulse-soft"></div>
+                    <div class="relative w-full h-full bg-white rounded-full flex items-center justify-center shadow-2xl border-8 border-slate-50 text-7xl md:text-8xl">
+                        🎓
+                    </div>
+                </div>
+                <h2 class="text-4xl md:text-6xl font-black mb-6 text-slate-800 tracking-tight">
+                    Congratulations!
+                </h2>
+                <p class="text-xl md:text-2xl text-slate-600 mb-12 max-w-2xl mx-auto font-medium leading-relaxed px-4">
+                    You have mastered the Passive Voice! Now you can describe processes, facts, and historical events perfectly like a native speaker.
+                </p>
+                <button onclick="location.reload()" class="w-full sm:w-auto px-10 py-5 bg-slate-800 hover:bg-slate-900 text-white rounded-2xl font-black text-xl transition-all shadow-xl hover:-translate-y-1">
+                    <i class="fas fa-redo mr-2"></i> Review Again
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="h-20 md:h-24 bg-white border-t border-slate-200 flex items-center justify-between px-4 md:px-10 shrink-0 z-20 shadow-[0_-4px_20px_rgba(0,0,0,0.02)] relative">
+        <button id="btn-prev" onclick="prevSlide()" class="px-5 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 transition opacity-50 cursor-not-allowed disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm md:text-lg border border-slate-200 shadow-sm">
+            <i class="fas fa-chevron-left"></i> Back
+        </button>
+        <button id="btn-next" onclick="nextSlide()" class="px-6 py-3 md:px-10 md:py-4 rounded-xl md:rounded-2xl font-black bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white shadow-lg transition hover:-translate-y-1 flex items-center gap-2 text-sm md:text-lg">
+            Continue <i class="fas fa-chevron-right"></i>
+        </button>
+    </footer>
+
+    <!-- Dictionary Modal -->
+    <div id="dictionary-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex justify-center items-center opacity-0 transition-opacity duration-300 p-4">
+        <div class="bg-white w-full max-w-5xl h-[90dvh] rounded-3xl shadow-2xl flex flex-col overflow-hidden transform scale-95 transition-transform duration-300 border border-slate-200" id="dictionary-box">
+            
+            <div class="bg-slate-50 p-5 md:p-6 border-b border-slate-200 flex justify-between items-center shrink-0">
+                <div>
+                    <h2 class="text-xl md:text-3xl font-black text-slate-800 flex items-center gap-3"><i class="fas fa-book-open text-rose-500"></i> Verbs Dictionary</h2>
+                    <p class="text-slate-500 text-xs md:text-sm font-bold mt-1">Common verbs used in Passive Voice (Tap icon to listen)</p>
+                </div>
+                <button onclick="toggleDictionary()" class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-200 text-slate-600 hover:bg-rose-100 hover:text-rose-600 flex items-center justify-center transition-colors shadow-inner">
+                    <i class="fas fa-times text-lg md:text-xl"></i>
+                </button>
+            </div>
+
+            <div class="flex border-b border-slate-200 shrink-0 overflow-x-auto no-scrollbar">
+                <button class="dict-tab active px-6 py-4 font-black text-rose-600 border-b-4 border-rose-600 whitespace-nowrap">Past Participles (V3)</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-slate-50/50">
+                <div id="dict-participles" class="dict-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURES ---
+        const vocabFlashcards = {
+            participles: [
+                { en: "Made", es: "Hecho (Make)", emoji: "🛠️" },
+                { en: "Built", es: "Construido (Build)", emoji: "🏗️" },
+                { en: "Written", es: "Escrito (Write)", emoji: "✍️" },
+                { en: "Invented", es: "Inventado (Invent)", emoji: "💡" },
+                { en: "Discovered", es: "Descubierto (Discover)", emoji: "🔭" },
+                { en: "Grown", es: "Cultivado (Grow)", emoji: "🌱" },
+                { en: "Spoken", es: "Hablado (Speak)", emoji: "🗣️" },
+                { en: "Stolen", es: "Robado (Steal)", emoji: "🥷" }
+            ]
+        };
+
+        const dictData = {
+            participles: [
+                { en: "Make -> Made", es: "Hacer -> Hecho", emoji: "🛠️" },
+                { en: "Build -> Built", es: "Construir -> Construido", emoji: "🏗️" },
+                { en: "Write -> Written", es: "Escribir -> Escrito", emoji: "✍️" },
+                { en: "Invent -> Invented", es: "Inventar -> Inventado", emoji: "💡" },
+                { en: "Discover -> Discovered", es: "Descubrir -> Descubierto", emoji: "🔭" },
+                { en: "Grow -> Grown", es: "Cultivar -> Cultivado", emoji: "🌱" },
+                { en: "Speak -> Spoken", es: "Hablar -> Hablado", emoji: "🗣️" },
+                { en: "Steal -> Stolen", es: "Robar -> Robado", emoji: "🥷" },
+                { en: "Paint -> Painted", es: "Pintar -> Pintado", emoji: "🎨" },
+                { en: "Find -> Found", es: "Encontrar -> Encontrado", emoji: "🔍" },
+                { en: "Sell -> Sold", es: "Vender -> Vendido", emoji: "🏷️" },
+                { en: "Buy -> Bought", es: "Comprar -> Comprado", emoji: "🛍️" }
+            ]
+        };
+
+        const quizData = {
+            'quiz-present': {
+                color: "emerald", current: 0,
+                questions: [
+                    { q: "Many cars ___ in Japan.", options: ["is made", "are made", "are make"], answer: 1 },
+                    { q: "English ___ in Australia.", options: ["is spoken", "are spoken", "is speak"], answer: 0 },
+                    { q: "This house ___ every Friday.", options: ["are cleaned", "is clean", "is cleaned"], answer: 2 },
+                    { q: "Paper ___ from wood.", options: ["is made", "are made", "is make"], answer: 0 },
+                    { q: "The exams ___ by the teacher.", options: ["is corrected", "are corrected", "are correct"], answer: 1 }
+                ]
+            },
+            'quiz-past': {
+                color: "purple", current: 0,
+                questions: [
+                    { q: "The telephone ___ by Bell.", options: ["were invented", "was invented", "is invented"], answer: 1 },
+                    { q: "The Pyramids ___ in Egypt.", options: ["was built", "were built", "were build"], answer: 1 },
+                    { q: "My wallet ___ yesterday!", options: ["was stolen", "were stolen", "was steal"], answer: 0 },
+                    { q: "Harry Potter ___ by J.K. Rowling.", options: ["were written", "was written", "was wrote"], answer: 1 },
+                    { q: "Two new planets ___ in 2015.", options: ["was discovered", "were discovered", "are discovered"], answer: 1 }
+                ]
+            }
+        };
+
+        const megaQuizData = [
+            { q: "The Mona Lisa ___ by Da Vinci.", options: ["is painted", "was painted"], answer: 1 },
+            { q: "Coffee ___ in Colombia.", options: ["is grown", "was grown"], answer: 0 }, // Fact = Present
+            { q: "My phone ___ last night.", options: ["is stolen", "was stolen"], answer: 1 },
+            { q: "Spanish ___ in Mexico.", options: ["is spoken", "are spoken"], answer: 0 },
+            { q: "These shoes ___ in Italy.", options: ["are made", "is made"], answer: 0 },
+            { q: "The lightbulb ___ by Edison.", options: ["was invented", "were invented"], answer: 0 },
+            { q: "Many messages ___ every day.", options: ["are sent", "were sent"], answer: 0 }, // Routine
+            { q: "America ___ by Columbus in 1492.", options: ["is discovered", "was discovered"], answer: 1 },
+            { q: "The letters ___ delivered yesterday.", options: ["was", "were"], answer: 1 },
+            { q: "This song ___ written by Paul McCartney.", options: ["were", "was"], answer: 1 },
+            { q: "Pasta ___ in Italy. ", options: ["is made", "was make"], answer: 0 },
+            { q: "The house ___ cleaned yesterday.", options: ["was cleaned", "were cleaned"], answer: 0 }
+        ];
+
+        // --- STREAMING_CHUNK: Setting up Text assets & Chat logic ---
+        const storyText = "Chocolate is loved all over the world today. It is made from cacao beans. The beans are grown in tropical countries, like Mexico and Ecuador. Many years ago, chocolate was consumed as a bitter drink by the Mayans and Aztecs. It was considered a gift from the gods. Later, sugar was added by Europeans, and the first solid chocolate bar was created in the 19th century.";
+
+        const chatSimData = {
+            chatSim1: {
+                currentMsg: 0,
+                messages: [
+                    { role: 'A', text: "I like your jacket! Is it new?" },
+                    { role: 'B', text: "Thanks! Yes, it was bought yesterday." },
+                    { role: 'A', text: "Where is it made?" },
+                    { role: 'B', text: "It is made in Italy. The material is great." },
+                    { role: 'A', text: "What is it made of?" },
+                    { role: 'B', text: "It is made of pure leather." },
+                    { role: 'A', text: "Nice. Are they sold in the mall?" },
+                    { role: 'B', text: "No, they are only sold online." }
+                ]
+            },
+            chatSim2: {
+                currentMsg: 0,
+                messages: [
+                    { role: 'A', text: "Did you like the history museum?" },
+                    { role: 'B', text: "Yes! The dinosaur bones were amazing." },
+                    { role: 'A', text: "Where were they found?" },
+                    { role: 'B', text: "They were discovered in Argentina." },
+                    { role: 'A', text: "Wow. Was the museum built a long time ago?" },
+                    { role: 'B', text: "Yes, it was built in 1905." },
+                    { role: 'A', text: "That's old! Were photos allowed inside?" },
+                    { role: 'B', text: "No, cameras were not permitted." }
+                ]
+            }
+        };
+
+        // --- CORE LOGIC ---
+        let currentSlide = 0;
+        let megaQuizCurrent = 0;
+        let megaQuizScore = 0;
+        
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const mainContainer = document.getElementById('main-scroll-area');
+
+        function updateUI() {
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('hidden', index !== currentSlide);
+            });
+            const progressPercentage = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+            progressText.innerText = `Page ${currentSlide + 1} of ${slides.length}`;
+            mainContainer.scrollTop = 0;
+
+            if (currentSlide === 0) {
+                btnPrev.setAttribute('disabled', 'true');
+                btnPrev.classList.add('opacity-50', 'cursor-not-allowed', 'hover:bg-slate-50');
+                btnPrev.classList.remove('hover:bg-slate-100');
+            } else {
+                btnPrev.removeAttribute('disabled');
+                btnPrev.classList.remove('opacity-50', 'cursor-not-allowed', 'hover:bg-slate-50');
+                btnPrev.classList.add('hover:bg-slate-100');
+            }
+
+            if (currentSlide === slides.length - 1) btnNext.classList.add('hidden');
+            else btnNext.classList.remove('hidden');
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+
+        // --- STREAMING_CHUNK: Setting up Audio functions ---
+        function playAudio(event, text) {
+            if(event) event.stopPropagation();
+            if ('speechSynthesis' in window) {
+                try {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    utterance.rate = 0.85; 
+                    window.speechSynthesis.speak(utterance);
+                } catch(e) {}
+            }
+        }
+
+        let isPlayingLongAudio = false;
+        function playLongAudio(text) {
+            const icon = document.getElementById('icon-play-story');
+            if ('speechSynthesis' in window) {
+                if(isPlayingLongAudio) {
+                    window.speechSynthesis.cancel();
+                    isPlayingLongAudio = false;
+                    icon.classList.replace('fa-stop', 'fa-play');
+                    return;
+                }
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-GB';
+                utterance.rate = 0.8; 
+                utterance.onend = () => {
+                    isPlayingLongAudio = false;
+                    icon.classList.replace('fa-stop', 'fa-play');
+                };
+                isPlayingLongAudio = true;
+                icon.classList.replace('fa-play', 'fa-stop');
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // --- STREAMING_CHUNK: Setting up Validation functionality ---
+        // --- VALIDATION LOGIC ---
+        function checkWritingPractice() {
+            let correctCount = 0;
+            const total = 4;
+            for(let i=1; i<=total; i++) {
+                const inputEl = document.getElementById(`wp-${i}`);
+                const statusIcon = inputEl.nextElementSibling;
+                const userVal = inputEl.value.trim().toLowerCase().replace(/[.?¿!¡]/g, '');
+                const expected1 = inputEl.dataset.answer.trim().toLowerCase().replace(/[.?¿!¡]/g, '');
+                
+                statusIcon.classList.remove('hidden', 'text-emerald-500', 'text-red-500');
+                
+                if(userVal === expected1) {
+                    correctCount++;
+                    inputEl.classList.replace('border-slate-200', 'border-emerald-400');
+                    inputEl.classList.add('bg-emerald-50');
+                    inputEl.classList.remove('bg-white', 'border-red-400', 'bg-red-50');
+                    statusIcon.classList.add('text-emerald-500');
+                    statusIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                } else {
+                    inputEl.classList.replace('border-slate-200', 'border-red-400');
+                    inputEl.classList.add('bg-red-50');
+                    inputEl.classList.remove('bg-white', 'bg-emerald-50');
+                    statusIcon.classList.add('text-red-500');
+                    statusIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
+                }
+            }
+            const feedback = document.getElementById('wp-feedback');
+            feedback.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-700', 'bg-red-100', 'text-red-700');
+            if(correctCount === total) {
+                feedback.classList.add('bg-emerald-100', 'text-emerald-700', 'fade-in');
+                feedback.innerHTML = `Perfect! ${correctCount}/${total} correct. 🎉`;
+            } else {
+                feedback.classList.add('bg-red-100', 'text-red-700', 'fade-in');
+                feedback.innerHTML = `Try again. ${correctCount}/${total} correct.`;
+            }
+        }
+
+        function checkDropdownPractice() {
+            const answers = { 'dd-1': 'is', 'dd-2': 'are grown', 'dd-3': 'was consumed', 'dd-4': 'was considered', 'dd-5': 'was added' };
+            let correctCount = 0; const total = 5;
+            for(const [id, correctVal] of Object.entries(answers)) {
+                const select = document.getElementById(id);
+                select.classList.remove('border-slate-300', 'border-emerald-500', 'border-red-500', 'bg-emerald-50', 'bg-red-50', 'text-emerald-700', 'text-red-700');
+                if(select.value === correctVal) {
+                    correctCount++;
+                    select.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
+                } else {
+                    select.classList.add('border-red-500', 'bg-red-50', 'text-red-700');
+                }
+            }
+            const feedback = document.getElementById('dd-feedback');
+            feedback.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-700', 'bg-red-100', 'text-red-700');
+            if(correctCount === total) {
+                feedback.classList.add('bg-emerald-100', 'text-emerald-700', 'fade-in');
+                feedback.innerHTML = `Great reading! ${correctCount}/${total} correct. 🌟`;
+            } else {
+                feedback.classList.add('bg-red-100', 'text-red-700', 'fade-in');
+                feedback.innerHTML = `Check the text again. ${correctCount}/${total} correct.`;
+            }
+        }
+
+        // --- STREAMING_CHUNK: Setting up Flashcard interactivity ---
+        // --- FLASHCARDS & DICTIONARY ---
+        function generateFlashcards(containerId, dataArray) {
+            const container = document.getElementById(containerId);
+            if(!container) return;
+            let html = '';
+            dataArray.forEach(item => {
+                html += `
+                <div class="h-40 md:h-48 perspective-1000 cursor-pointer group w-full" onclick="this.querySelector('.card-inner').classList.toggle('rotate-y-180')">
+                    <div class="card-inner relative w-full h-full transition-transform duration-700 transform-style-3d shadow-sm group-hover:shadow-xl group-hover:-translate-y-1 rounded-3xl">
+                        <div class="absolute w-full h-full backface-hidden bg-white text-slate-800 rounded-3xl flex flex-col items-center justify-center p-3 md:p-4 border border-slate-200">
+                            <span class="text-4xl md:text-5xl mb-3 bg-slate-50 w-16 h-16 flex items-center justify-center rounded-2xl shadow-sm border border-slate-100">${item.emoji}</span>
+                            <h4 class="text-sm md:text-lg font-bold text-center leading-tight">${item.en}</h4>
+                            <button onclick="playAudio(event, '${item.en.replace(/'/g, "\\'")}')" class="absolute top-3 right-3 w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-100 hover:text-indigo-600 transition flex items-center justify-center shadow-sm"><i class="fas fa-volume-up text-xs md:text-sm"></i></button>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-3xl flex flex-col items-center justify-center p-3 md:p-5 border border-indigo-400 shadow-inner">
+                            <span class="text-3xl md:text-4xl mb-2 opacity-40">${item.emoji}</span>
+                            <h4 class="text-base md:text-xl font-bold text-center">${item.es}</h4>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderDictionaryList(dataArray, containerId) {
+            const container = document.getElementById(containerId);
+            if(!container) return;
+            let html = '';
+            dataArray.forEach(item => {
+                html += `
+                <div class="bg-white border border-slate-200 p-3 md:p-4 rounded-2xl flex items-center gap-3 hover:shadow-md hover:border-rose-300 transition-all cursor-pointer" onclick="playAudio(event, '${item.en.split('->')[1]?.trim() || item.en}')">
+                    <div class="text-2xl md:text-3xl bg-slate-50 w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center shrink-0 border border-slate-100 shadow-sm">${item.emoji}</div>
+                    <div class="flex-1">
+                        <p class="font-bold text-slate-800 text-sm md:text-base">${item.en}</p>
+                        <p class="text-xs md:text-sm text-slate-500 font-medium">${item.es}</p>
+                    </div>
+                    <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0"><i class="fas fa-volume-up text-xs md:text-sm"></i></div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function toggleDictionary() {
+            const modal = document.getElementById('dictionary-modal');
+            const box = document.getElementById('dictionary-box');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => { modal.classList.remove('opacity-0'); box.classList.remove('scale-95'); }, 10);
+            } else {
+                modal.classList.add('opacity-0');
+                box.classList.add('scale-95');
+                setTimeout(() => { modal.classList.add('hidden'); }, 300);
+            }
+        }
+
+        // --- STREAMING_CHUNK: Setting up Quizzes functionality ---
+        // --- GENERIC QUIZ SYSTEM ---
+        function renderQuiz(exId) {
+            const ex = quizData[exId];
+            const container = document.getElementById(exId);
+            if(!container) return;
+            if (ex.current >= ex.questions.length) {
+                container.innerHTML = `
+                <div class="text-center p-8 bg-${ex.color}-50 rounded-3xl border border-${ex.color}-200 fade-in">
+                    <div class="w-20 h-20 bg-${ex.color}-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-${ex.color}-500/30"><i class="fas fa-check text-4xl text-white"></i></div>
+                    <h3 class="text-2xl md:text-3xl font-black text-${ex.color}-700 mb-2">Completed!</h3>
+                    <p class="text-${ex.color}-600 font-bold text-lg">Great job.</p>
+                </div>`;
+                return;
+            }
+            const q = ex.questions[ex.current];
+            const progressPercent = Math.round((ex.current / ex.questions.length) * 100);
+            let qTextHtml = q.q.replace('___', `<span id="blank-${exId}" class="inline-block px-1 border-b-4 border-dashed border-slate-300 text-${ex.color}-600 font-bold mx-1 pb-1 min-w-[3rem] text-center transition-colors">___</span>`);
+            let optionsHtml = q.options.map((opt, i) =>
+                `<button onclick="submitQuizAnswer('${exId}', ${i})" class="w-full py-4 md:py-5 bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 hover:border-slate-300 rounded-2xl text-lg md:text-xl font-bold text-slate-700 transition shadow-sm">${opt}</button>`
+            ).join('');
+
+            container.innerHTML = `
+                <div class="fade-in">
+                    <div class="mb-6 flex justify-between items-center text-xs md:text-sm font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 pb-4">
+                        <span>Question ${ex.current + 1} of ${ex.questions.length}</span>
+                        <div class="w-24 md:w-32 h-2 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-${ex.color}-500 transition-all duration-500" style="width: ${progressPercent}%"></div>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl md:text-4xl font-medium text-slate-800 mb-8 md:mb-10 leading-relaxed text-center">${qTextHtml}</h3>
+                    <div class="flex flex-col sm:flex-row justify-center gap-3 md:gap-4" id="options-${exId}">${optionsHtml}</div>
+                    <div id="feedback-${exId}" class="mt-6 md:mt-8 text-center text-lg md:text-xl font-bold hidden p-4 md:p-5 rounded-2xl"></div>
+                    <button id="next-btn-${exId}" onclick="nextQuizQuestion('${exId}')" class="mt-6 md:mt-8 w-full py-4 bg-${ex.color}-600 hover:bg-${ex.color}-700 text-white rounded-2xl font-black text-lg md:text-xl hidden transition shadow-lg shadow-${ex.color}-600/30">Next Question <i class="fas fa-arrow-right ml-2"></i></button>
+                </div>
+            `;
+        }
+
+        function submitQuizAnswer(exId, selectedIndex) {
+            const ex = quizData[exId];
+            const q = ex.questions[ex.current];
+            const optionsContainer = document.getElementById(`options-${exId}`);
+            const buttons = optionsContainer.querySelectorAll('button');
+            const feedback = document.getElementById(`feedback-${exId}`);
+            const nextBtn = document.getElementById(`next-btn-${exId}`);
+            const blank = document.getElementById(`blank-${exId}`);
+
+            buttons.forEach(btn => { btn.disabled = true; btn.classList.remove('hover:bg-slate-100', 'hover:border-slate-300'); });
+            feedback.classList.remove('hidden', 'bg-red-50', 'text-red-700', 'border-red-200', 'bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+
+            if (selectedIndex === q.answer) {
+                buttons[selectedIndex].classList.replace('bg-slate-50', 'bg-emerald-500');
+                buttons[selectedIndex].classList.replace('text-slate-700', 'text-white');
+                if (blank) {
+                    blank.innerText = q.options[selectedIndex];
+                    blank.classList.add('text-emerald-600', 'border-emerald-400');
+                }
+                feedback.classList.add('bg-emerald-50', 'text-emerald-700', 'border', 'border-emerald-200');
+                feedback.innerHTML = '<i class="fas fa-check-circle mr-2 text-2xl"></i> Correct!';
+                nextBtn.classList.remove('hidden');
+                nextBtn.classList.add('fade-in');
+            } else {
+                buttons[selectedIndex].classList.replace('bg-slate-50', 'bg-red-500');
+                buttons[selectedIndex].classList.replace('text-slate-700', 'text-white');
+                feedback.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200', 'fade-in');
+                feedback.innerHTML = '<i class="fas fa-times-circle mr-2 text-2xl"></i> Incorrect. Try again.';
+                setTimeout(() => {
+                    buttons.forEach((btn) => { btn.disabled = false; btn.className = "w-full py-4 md:py-5 bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 hover:border-slate-300 rounded-2xl text-lg md:text-xl font-bold text-slate-700 transition shadow-sm"; });
+                    feedback.classList.add('hidden');
+                }, 1500);
+            }
+        }
+
+        function nextQuizQuestion(exId) { quizData[exId].current++; renderQuiz(exId); }
+
+        // --- STREAMING_CHUNK: Setting up Chat Simulator logic ---
+        // --- CHAT SIMULATOR SYSTEM ---
+        function renderChatMessage(chatId, msgObj) {
+            const container = document.getElementById(`${chatId}-container`);
+            const div = document.createElement('div');
+            div.className = `flex gap-3 w-full ${msgObj.role === 'B' ? 'justify-end' : ''}`;
+            
+            if(msgObj.role === 'A') {
+                div.innerHTML = `
+                    <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center shrink-0 text-white font-bold border-2 border-blue-400 shadow-md">A</div>
+                    <div class="bg-white p-4 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm w-fit max-w-[80%] relative group chat-bubble-enter">
+                        <p class="text-slate-800 text-sm md:text-base font-medium">${msgObj.text}</p>
+                        <button onclick="playAudio(event, '${msgObj.text.replace(/'/g, "\\'")}')" class="absolute -right-2 -bottom-2 bg-slate-100 text-slate-500 hover:bg-blue-500 hover:text-white w-8 h-8 rounded-full flex items-center justify-center transition opacity-100 md:opacity-0 group-hover:opacity-100 shadow border border-slate-200"><i class="fas fa-volume-up text-xs"></i></button>
+                    </div>`;
+            } else {
+                div.innerHTML = `
+                    <div class="bg-indigo-600 p-4 rounded-2xl rounded-tr-none shadow-md w-fit max-w-[80%] relative group chat-bubble-enter-right">
+                        <p class="text-white text-sm md:text-base font-medium">${msgObj.text}</p>
+                        <button onclick="playAudio(event, '${msgObj.text.replace(/'/g, "\\'")}')" class="absolute -left-2 -bottom-2 bg-slate-100 text-slate-500 hover:bg-indigo-500 hover:text-white w-8 h-8 rounded-full flex items-center justify-center transition opacity-100 md:opacity-0 group-hover:opacity-100 shadow border border-slate-200"><i class="fas fa-volume-up text-xs"></i></button>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center shrink-0 text-white font-bold border-2 border-indigo-300 shadow-md">B</div>`;
+            }
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+            playAudio(null, msgObj.text);
+        }
+
+        function showTypingIndicator(chatId, role) {
+            const container = document.getElementById(`${chatId}-container`);
+            const div = document.createElement('div');
+            div.id = `${chatId}-typing`;
+            div.className = `flex gap-3 w-full ${role === 'B' ? 'justify-end' : ''} fade-in`;
+            div.innerHTML = role === 'A' ? 
+                `<div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center shrink-0 text-white font-bold border-2 border-blue-400 shadow-md">A</div><div class="bg-white p-4 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm w-fit flex items-center gap-1.5 h-[56px] min-w-[70px] justify-center"><div class="w-2 h-2 bg-slate-400 rounded-full typing-dot"></div><div class="w-2 h-2 bg-slate-400 rounded-full typing-dot"></div><div class="w-2 h-2 bg-slate-400 rounded-full typing-dot"></div></div>` : 
+                `<div class="bg-indigo-600 p-4 rounded-2xl rounded-tr-none shadow-md w-fit flex items-center gap-1.5 h-[56px] min-w-[70px] justify-center"><div class="w-2 h-2 bg-indigo-300 rounded-full typing-dot"></div><div class="w-2 h-2 bg-indigo-300 rounded-full typing-dot"></div><div class="w-2 h-2 bg-indigo-300 rounded-full typing-dot"></div></div><div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center shrink-0 text-white font-bold border-2 border-indigo-300 shadow-md">B</div>`;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function removeTypingIndicator(chatId) {
+            const el = document.getElementById(`${chatId}-typing`);
+            if(el) el.remove();
+        }
+
+        function advanceChat(chatId) {
+            const chat = chatSimData[chatId];
+            if(chat.currentMsg < chat.messages.length) {
+                const btn = document.getElementById(`btn-advance-chat-${chatId.replace('chatSim', '')}`);
+                btn.disabled = true; btn.innerHTML = 'Typing... <i class="fas fa-keyboard"></i>'; btn.classList.add('opacity-75');
+                const msg = chat.messages[chat.currentMsg];
+                showTypingIndicator(chatId, msg.role);
+                setTimeout(() => {
+                    removeTypingIndicator(chatId);
+                    renderChatMessage(chatId, msg);
+                    chat.currentMsg++;
+                    btn.classList.remove('opacity-75');
+                    if(chat.currentMsg >= chat.messages.length) {
+                        btn.innerHTML = 'Conversation Ended <i class="fas fa-check-circle"></i>';
+                        btn.className = "w-full py-4 bg-emerald-600 text-white rounded-2xl font-black text-lg transition shadow-lg flex items-center justify-center gap-2 cursor-not-allowed opacity-80";
+                        btn.disabled = true;
+                    } else {
+                        btn.innerHTML = `Next Message <i class="fas fa-comment-dots"></i>`;
+                        btn.disabled = false;
+                    }
+                }, 1200); 
+            }
+        }
+
+        // --- STREAMING_CHUNK: Setting up Mega Quiz validation ---
+        // --- MEGA QUIZ SYSTEM ---
+        function startMegaQuiz(navigate = false) {
+            megaQuizCurrent = 0; 
+            megaQuizScore = 0;
+            renderMegaQuizQuestion(); 
+            if (navigate) {
+                nextSlide();
+            }
+        }
+
+        function renderMegaQuizQuestion() {
+            const container = document.getElementById('mega-quiz-content');
+            const progress = document.getElementById('mega-quiz-progress');
+            const counter = document.getElementById('mega-quiz-counter');
+            
+            // Safety check in case the container isn't ready
+            if(!container) return;
+
+            if(megaQuizCurrent >= megaQuizData.length) {
+                const scorePercent = Math.round((megaQuizScore / megaQuizData.length) * 100);
+                container.innerHTML = `
+                    <div class="text-center p-8 fade-in">
+                        <div class="text-7xl mb-4">${scorePercent >= 80 ? '🎉' : '😅'}</div>
+                        <h3 class="text-3xl font-black text-slate-800 mb-2">Score: ${scorePercent}%</h3>
+                        <p class="text-slate-600 text-lg mb-8">You got ${megaQuizScore} out of ${megaQuizData.length} correct.</p>
+                        ${scorePercent >= 80 ? 
+                            '<button onclick="nextSlide()" class="px-8 py-4 bg-yellow-500 text-white rounded-2xl font-bold text-xl shadow-lg">Claim Trophy <i class="fas fa-arrow-right ml-2"></i></button>' : 
+                            '<button onclick="startMegaQuiz(false)" class="px-8 py-4 bg-slate-800 text-white rounded-2xl font-bold text-xl shadow-lg">Try Again <i class="fas fa-redo ml-2"></i></button>'}
+                    </div>`;
+                progress.style.width = '100%'; counter.innerText = 'Results';
+                return;
+            }
+
+            const q = megaQuizData[megaQuizCurrent];
+            progress.style.width = `${(megaQuizCurrent / megaQuizData.length) * 100}%`;
+            counter.innerText = `Question ${megaQuizCurrent + 1} of ${megaQuizData.length}`;
+            let qTextHtml = q.q.replace('___', `<span id="mega-blank" class="inline-block px-1 border-b-4 border-dashed border-slate-300 text-yellow-500 font-bold mx-1 pb-1 min-w-[3rem] text-center transition-colors">___</span>`);
+            let optionsHtml = q.options.map((opt, i) =>
+                `<button onclick="submitMegaQuiz(${i})" class="mega-opt w-full py-5 bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 hover:border-yellow-400 rounded-2xl text-xl font-bold text-slate-700 transition shadow-sm">${opt}</button>`
+            ).join('');
+
+            container.innerHTML = `
+                <div class="fade-in w-full">
+                    <h3 class="text-2xl md:text-4xl font-medium text-slate-800 mb-10 leading-relaxed text-center">${qTextHtml}</h3>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4" id="mega-options">${optionsHtml}</div>
+                    <div id="mega-feedback" class="mt-8 text-center text-xl font-bold hidden p-5 rounded-2xl"></div>
+                </div>
+            `;
+        }
+
+        function submitMegaQuiz(selectedIndex) {
+            const q = megaQuizData[megaQuizCurrent];
+            const buttons = document.querySelectorAll('.mega-opt');
+            const feedback = document.getElementById('mega-feedback');
+            const blank = document.getElementById('mega-blank');
+
+            buttons.forEach(btn => btn.disabled = true);
+
+            if(selectedIndex === q.answer) {
+                megaQuizScore++;
+                buttons[selectedIndex].classList.replace('bg-slate-50', 'bg-green-500');
+                buttons[selectedIndex].classList.replace('text-slate-700', 'text-white');
+                if(blank) blank.innerText = q.options[q.answer];
+                feedback.classList.remove('hidden');
+                feedback.classList.add('bg-green-50', 'text-green-700', 'border', 'border-green-200', 'fade-in');
+                feedback.innerHTML = '<i class="fas fa-check-circle"></i> Correct!';
+            } else {
+                buttons[selectedIndex].classList.replace('bg-slate-50', 'bg-red-500');
+                buttons[selectedIndex].classList.replace('text-slate-700', 'text-white');
+                buttons[q.answer].classList.replace('bg-slate-50', 'bg-green-100');
+                feedback.classList.remove('hidden');
+                feedback.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200', 'fade-in');
+                feedback.innerHTML = '<i class="fas fa-times-circle"></i> Incorrect.';
+            }
+            setTimeout(() => { megaQuizCurrent++; renderMegaQuizQuestion(); }, 1500);
+        }
+
+        // --- STREAMING_CHUNK: DOM Content Loaded Event ---
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Render basic UI
+            generateFlashcards('vocab-participles', vocabFlashcards.participles);
+            renderDictionaryList(dictData.participles, 'dict-participles');
+            
+            // Render normal quizzes
+            ['quiz-present', 'quiz-past'].forEach(id => renderQuiz(id));
+            
+            // Pre-render Mega Quiz to avoid blank screen if navigated via footer arrows
+            renderMegaQuizQuestion();
+
+            // Set slide bounds
+            updateUI();
+        });
+
+        // Key bindings for slider
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('dictionary-modal').classList.contains('hidden')) {
+                if (e.key === 'ArrowRight') nextSlide();
+                if (e.key === 'ArrowLeft') prevSlide();
+            }
+        });
+    </script>
+</body>
+</html>

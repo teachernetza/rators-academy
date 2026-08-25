@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>B1/B2 Lab: City Conversations & Past Tenses</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/labs/_brand.css">
+    <script src="/labs/_brand.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+        
+        :root {
+            --primary: #312e81; 
+            --primary-light: #4f46e5;
+            --secondary: #e11d48;
+            --bg-color: #f8fafc;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-color); 
+            color: #1e293b; 
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .serif-font { font-family: 'Merriweather', serif; }
+
+        /* Subtle Background */
+        .bg-pattern {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background-color: #f1f5f9;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Smooth Slide Animations */
+        .slide-enter { animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hidden-slide { display: none !important; }
+
+        /* Modern UI Panels */
+        .glass-panel {
+            background: #ffffff;
+            border: 1px solid #e2e8f0; 
+            box-shadow: 0 10px 30px -5px rgba(49, 46, 129, 0.08);
+            border-radius: 1.25rem;
+        }
+
+        /* Chat Bubbles */
+        .chat-bubble-left {
+            background: #f8fafc;
+            border-radius: 1.25rem 1.25rem 1.25rem 0;
+            padding: 1rem 1.25rem;
+            max-width: 85%;
+            margin-bottom: 1.25rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        
+        .chat-bubble-right {
+            background: #eef2ff; 
+            border-radius: 1.25rem 1.25rem 0 1.25rem;
+            padding: 1rem 1.25rem;
+            max-width: 85%;
+            margin-bottom: 1.25rem;
+            margin-left: auto;
+            border: 1px solid #c7d2fe;
+            color: #312e81;
+            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.05);
+        }
+
+        /* Buttons */
+        .btn-modern {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+        }
+        .btn-modern:active:not(:disabled) { transform: scale(0.96); }
+
+        /* Flip Cards */
+        .flip-card {
+            perspective: 1000px;
+            height: 100%;
+            min-height: 220px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .flip-card-front { background-color: white; border: 2px solid #e2e8f0; }
+        .flip-card-back { background-color: #4f46e5; color: white; transform: rotateY(180deg); border: 2px solid #4f46e5; }
+        
+        .role-card-back { background-color: #1e293b; color: white; border: 2px solid #1e293b; }
+
+        /* Form Selects */
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1em;
+            padding-right: 2rem !important;
+        }
+
+        /* Dictionary Modal Animation */
+        #dictionary-modal.active { display: flex; animation: fadeIn 0.3s ease-out forwards; }
+        #dictionary-modal { display: none; }
+    </style>
+    <style>
+      /* Teacher Netza — armonización de fondo con la marca */
+      body { background-color: var(--tn-bg) !important; }
+      .bg-shapes, .bg-pattern {
+        background: linear-gradient(160deg, var(--tn-bg) 0%, color-mix(in srgb, var(--tn-mint) 10%, var(--tn-bg)) 100%) !important;
+        opacity: 1;
+      }
+      .bg-shapes::before, .bg-shapes::after { opacity: .22 !important; }
+      .glass-panel { border-color: var(--tn-line) !important; box-shadow: var(--tn-shadow) !important; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:bg-indigo-200 selection:text-indigo-900">
+    <div class="bg-pattern"></div>
+
+    <!-- Navigation -->
+    <nav class="w-full bg-white/95 backdrop-blur-md border-b border-slate-200 z-40 sticky top-0 shadow-sm" id="main-nav">
+        <div class="max-w-4xl mx-auto px-4 h-16 md:h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-xl flex items-center justify-center text-white text-lg md:text-xl shadow-lg">
+                    <i class="fas fa-city"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg md:text-xl text-slate-800 leading-none">City Conversations</h1>
+                    <p class="text-[10px] md:text-xs font-bold text-indigo-600 uppercase tracking-widest mt-1" id="nav-title">Welcome</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <button onclick="toggleDictionary()" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 px-3 py-2 rounded-lg text-xs md:text-sm font-bold border border-indigo-200 transition btn-modern flex items-center gap-2">
+                    <i class="fas fa-book-open"></i> <span class="hidden md:inline">Dictionary</span>
+                </button>
+                <div class="bg-slate-100 text-slate-600 px-3 py-2 rounded-lg text-xs md:text-sm font-bold border border-slate-200" id="slide-counter">
+                    1 / 17
+                </div>
+            </div>
+        </div>
+        <div class="w-full bg-slate-100 h-1.5">
+            <div id="main-progress" class="bg-gradient-to-r from-indigo-500 to-purple-500 h-full transition-all duration-500 ease-out" style="width: 0%"></div>
+        </div>
+    </nav>
+
+    <!-- Dictionary Modal Overlay -->
+    <div id="dictionary-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 justify-center items-center p-4">
+        <div class="bg-white w-full max-w-3xl max-h-[85vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden transform transition-all">
+            <div class="p-4 md:p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h2 class="text-xl md:text-2xl font-black text-slate-800 serif-font"><i class="fas fa-book-open text-indigo-600 mr-2"></i> Comprehensive Dictionary</h2>
+                <button onclick="toggleDictionary()" class="w-8 h-8 flex justify-center items-center bg-slate-200 hover:bg-slate-300 rounded-full text-slate-600 transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4 md:p-6 overflow-y-auto flex-grow bg-slate-100/50">
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <!-- Key Verbs -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-emerald-700 mb-3 border-b border-emerald-100 pb-2"><i class="fas fa-bolt mr-2 text-emerald-500"></i> Essential Verbs</h3>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex justify-between"><b class="text-slate-700">Was / Were</b> <span class="text-slate-500">Estaba / Eran</span></li>
+                            <li class="flex justify-between"><b class="text-slate-700">Had + (verb)</b> <span class="text-slate-500">Había + ado/ido</span></li>
+                            <li class="flex justify-between"><b class="text-slate-700">Realized</b> <span class="text-slate-500">Me di cuenta</span></li>
+                            <li class="flex justify-between"><b class="text-slate-700">Forgot</b> <span class="text-slate-500">Olvidó</span></li>
+                            <li class="flex justify-between"><b class="text-slate-700">Missed</b> <span class="text-slate-500">Perdió (el tren)</span></li>
+                            <li class="flex justify-between"><b class="text-slate-700">Left</b> <span class="text-slate-500">Salió / Dejó</span></li>
+                            <li class="flex justify-between"><b class="text-slate-700">Arrived</b> <span class="text-slate-500">Llegó</span></li>
+                            <li class="flex justify-between"><b class="text-slate-700">Waited</b> <span class="text-slate-500">Esperó</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- City Life -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-indigo-700 mb-3 border-b border-indigo-100 pb-2"><i class="fas fa-city mr-2 text-indigo-500"></i> City & Hobbies</h3>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex justify-between"><span class="font-medium text-slate-800">Commute 🚶‍♂️</span> <span class="text-slate-500">Viaje al trabajo</span></li>
+                            <li class="flex justify-between"><span class="font-medium text-slate-800">Crowded 👨‍👩‍👧‍👦</span> <span class="text-slate-500">Atestado</span></li>
+                            <li class="flex justify-between"><span class="font-medium text-slate-800">Exhibition 🎨</span> <span class="text-slate-500">Exposición</span></li>
+                            <li class="flex justify-between"><span class="font-medium text-slate-800">Subway 🚇</span> <span class="text-slate-500">Metro</span></li>
+                            <li class="flex justify-between"><span class="font-medium text-slate-800">Traffic jam 🚗</span> <span class="text-slate-500">Embotellamiento</span></li>
+                            <li class="flex justify-between"><span class="font-medium text-slate-800">Wallet 👛</span> <span class="text-slate-500">Billetera / Cartera</span></li>
+                            <li class="flex justify-between"><span class="font-medium text-slate-800">Stranger 👤</span> <span class="text-slate-500">Desconocido/a</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4 mt-4">
+                    <!-- Connectors -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-rose-600 mb-3 border-b border-rose-100 pb-2"><i class="fas fa-link mr-2 text-rose-500"></i> Connectors & Time</h3>
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div><b class="text-slate-800">Suddenly 😲</b> <br><span class="text-slate-500 text-xs">De repente</span></div>
+                            <div><b class="text-slate-800">By the time ⏳</b> <br><span class="text-slate-500 text-xs">Para cuando</span></div>
+                            <div><b class="text-slate-800">Unfortunately 📉</b> <br><span class="text-slate-500 text-xs">Desafortunadamente</span></div>
+                            <div><b class="text-slate-800">Already ✔️</b> <br><span class="text-slate-500 text-xs">Ya</span></div>
+                            <div><b class="text-slate-800">While 🔄</b> <br><span class="text-slate-500 text-xs">Mientras</span></div>
+                        </div>
+                    </div>
+
+                    <!-- City Adjectives -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-amber-600 mb-3 border-b border-amber-100 pb-2"><i class="fas fa-star mr-2 text-amber-500"></i> Adjectives</h3>
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div><b class="text-slate-800">Bustling 🏙️</b> <br><span class="text-slate-500 text-xs">Bullicioso</span></div>
+                            <div><b class="text-slate-800">Vibrant 🌟</b> <br><span class="text-slate-500 text-xs">Vibrante</span></div>
+                            <div><b class="text-slate-800">Noisy 📢</b> <br><span class="text-slate-500 text-xs">Ruidoso</span></div>
+                            <div><b class="text-slate-800">Polluted 🏭</b> <br><span class="text-slate-500 text-xs">Contaminado</span></div>
+                            <div><b class="text-slate-800">Picturesque 📸</b> <br><span class="text-slate-500 text-xs">Pintoresco</span></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="p-4 border-t border-slate-100 bg-white">
+                <button onclick="toggleDictionary()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition btn-modern">Close Dictionary</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="flex-grow w-full max-w-4xl mx-auto px-4 py-6 md:py-10 flex flex-col relative pb-28 md:pb-32">
+        
+        <!-- SLIDE 0: Intro -->
+        <section id="slide-0" class="slide-enter flex flex-col items-center justify-center min-h-[65vh] text-center mt-8">
+            <div class="mb-8 flex gap-6 text-5xl md:text-7xl text-indigo-900 drop-shadow-md">
+                <i class="fas fa-mug-hot animate-bounce" style="animation-duration: 2s;"></i>
+                <i class="fas fa-subway animate-pulse" style="animation-duration: 3s;"></i>
+                <i class="fas fa-comments animate-bounce" style="animation-duration: 2.5s;"></i>
+            </div>
+            <h2 class="text-4xl md:text-6xl font-black text-slate-800 mb-6 tracking-tight serif-font">
+                Urban Stories
+            </h2>
+            <p class="text-slate-600 text-base md:text-xl font-medium max-w-2xl mx-auto mb-10 leading-relaxed bg-white/50 p-6 rounded-2xl shadow-sm border border-slate-100">
+                Aprenderemos a contar historias sobre nuestra rutina diaria, nuestros hobbies y nuestras aventuras en la ciudad usando los <b>Tiempos del Pasado</b>, <b>Conectores</b> y <b>Hábitos en el pasado</b>.
+            </p>
+            <div class="flex flex-wrap justify-center gap-3">
+                <span class="bg-indigo-50 text-indigo-700 px-5 py-2.5 rounded-full text-sm font-bold shadow-sm border border-indigo-200"><i class="fas fa-clone mr-2"></i> Flashcards</span>
+                <span class="bg-rose-50 text-rose-700 px-5 py-2.5 rounded-full text-sm font-bold shadow-sm border border-rose-200"><i class="fas fa-edit mr-2"></i> Grammar</span>
+                <span class="bg-amber-50 text-amber-700 px-5 py-2.5 rounded-full text-sm font-bold shadow-sm border border-amber-200"><i class="fas fa-volume-up mr-2"></i> Pronunciation</span>
+                <span class="bg-emerald-50 text-emerald-700 px-5 py-2.5 rounded-full text-sm font-bold shadow-sm border border-emerald-200"><i class="fas fa-user-friends mr-2"></i> Role Play</span>
+            </div>
+        </section>
+
+        <!-- SLIDE 1: Vocabulary Practice -->
+        <section id="slide-1" class="hidden-slide">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 serif-font">1. Vocabulary Warm-up</h2>
+                    <p class="text-slate-600 text-sm md:text-base">Haz clic en las tarjetas para descubrir su significado antes de empezar.</p>
+                </div>
+                <div class="hidden md:block">
+                    <span class="bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1 rounded-full"><i class="fas fa-hand-pointer"></i> Tap to flip</span>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front items-center text-center">
+                            <span class="text-4xl mb-3">🚗🚙🚗</span>
+                            <h3 class="text-lg font-bold text-slate-800">Traffic Jam</h3>
+                        </div>
+                        <div class="flip-card-back items-center text-center">
+                            <h3 class="text-xl font-bold mb-2">Embotellamiento</h3>
+                            <p class="text-sm text-indigo-100">"There was a huge traffic jam."</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front items-center text-center">
+                            <span class="text-4xl mb-3">🚇🚶‍♂️</span>
+                            <h3 class="text-lg font-bold text-slate-800">Commute</h3>
+                        </div>
+                        <div class="flip-card-back items-center text-center">
+                            <h3 class="text-xl font-bold mb-2">Viaje al trabajo</h3>
+                            <p class="text-sm text-indigo-100">"My morning commute takes 40 mins."</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front items-center text-center">
+                            <span class="text-4xl mb-3">👨‍👩‍👧‍👦👨‍👩‍👦‍👦</span>
+                            <h3 class="text-lg font-bold text-slate-800">Crowded</h3>
+                        </div>
+                        <div class="flip-card-back items-center text-center">
+                            <h3 class="text-xl font-bold mb-2">Atestado / Lleno</h3>
+                            <p class="text-sm text-indigo-100">"The train was too crowded."</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front items-center text-center">
+                            <span class="text-4xl mb-3">😲💡</span>
+                            <h3 class="text-lg font-bold text-slate-800">Realize</h3>
+                        </div>
+                        <div class="flip-card-back items-center text-center bg-emerald-600 border-emerald-600">
+                            <h3 class="text-xl font-bold mb-2">Darse cuenta</h3>
+                            <p class="text-sm text-emerald-100">"I realized I forgot my keys."</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front items-center text-center">
+                            <span class="text-4xl mb-3">⏳🏃‍♂️</span>
+                            <h3 class="text-lg font-bold text-slate-800">Miss (transport)</h3>
+                        </div>
+                        <div class="flip-card-back items-center text-center bg-emerald-600 border-emerald-600">
+                            <h3 class="text-xl font-bold mb-2">Perder (el bus/tren)</h3>
+                            <p class="text-sm text-emerald-100">"He ran, but he missed the bus."</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front items-center text-center">
+                            <span class="text-4xl mb-3">🎨🖼️</span>
+                            <h3 class="text-lg font-bold text-slate-800">Exhibition</h3>
+                        </div>
+                        <div class="flip-card-back items-center text-center bg-rose-500 border-rose-500">
+                            <h3 class="text-xl font-bold mb-2">Exposición</h3>
+                            <p class="text-sm text-rose-100">"The new art exhibition is amazing."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: City Adjectives (NEW) -->
+        <section id="slide-2" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 serif-font">2. Describing the City</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base">Usa estos adjetivos para hacer tus historias más interesantes y detalladas.</p>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="glass-panel p-5 flex items-start gap-4 hover:bg-slate-50 transition border-l-4 border-amber-400">
+                    <div class="text-4xl">🏙️</div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">Bustling</h3>
+                        <p class="text-sm text-slate-500 mb-2">Bullicioso, lleno de actividad.</p>
+                        <p class="text-sm font-medium italic text-slate-700">"New York is a bustling city that never sleeps."</p>
+                    </div>
+                </div>
+                <div class="glass-panel p-5 flex items-start gap-4 hover:bg-slate-50 transition border-l-4 border-purple-400">
+                    <div class="text-4xl">🌟</div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">Vibrant</h3>
+                        <p class="text-sm text-slate-500 mb-2">Vibrante, lleno de vida y color.</p>
+                        <p class="text-sm font-medium italic text-slate-700">"The nightlife in Tokyo is very vibrant."</p>
+                    </div>
+                </div>
+                <div class="glass-panel p-5 flex items-start gap-4 hover:bg-slate-50 transition border-l-4 border-rose-400">
+                    <div class="text-4xl">📢</div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">Noisy</h3>
+                        <p class="text-sm text-slate-500 mb-2">Ruidoso.</p>
+                        <p class="text-sm font-medium italic text-slate-700">"My apartment is on a noisy street."</p>
+                    </div>
+                </div>
+                <div class="glass-panel p-5 flex items-start gap-4 hover:bg-slate-50 transition border-l-4 border-emerald-400">
+                    <div class="text-4xl">📸</div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">Picturesque</h3>
+                        <p class="text-sm text-slate-500 mb-2">Pintoresco, digno de una foto.</p>
+                        <p class="text-sm font-medium italic text-slate-700">"We visited a picturesque village near the city."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: Grammar & Connectors -->
+        <section id="slide-3" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 serif-font">3. The Three Past Tenses</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base">Para contar una buena historia, combinamos estos tres tiempos verbales.</p>
+
+            <div class="space-y-4 mb-8">
+                <div class="glass-panel p-5 border-l-4 border-indigo-500 hover:shadow-lg transition">
+                    <h3 class="font-bold text-indigo-800 text-lg mb-1 flex items-center gap-2"><i class="fas fa-check-circle text-indigo-400"></i> Simple Past</h3>
+                    <p class="text-sm text-slate-600 mb-3 font-medium">(Acciones terminadas. La acción principal)</p>
+                    <p class="text-sm md:text-base font-medium bg-indigo-50 p-3 rounded-lg text-indigo-900 border border-indigo-100">
+                        "I <b>woke up</b> late and <b>ran</b> to the station."
+                    </p>
+                </div>
+                <div class="glass-panel p-5 border-l-4 border-rose-500 hover:shadow-lg transition">
+                    <h3 class="font-bold text-rose-800 text-lg mb-1 flex items-center gap-2"><i class="fas fa-spinner text-rose-400"></i> Past Continuous</h3>
+                    <p class="text-sm text-slate-600 mb-3 font-medium">(was/were + verb-ing. Describe el fondo o acciones interrumpidas)</p>
+                    <p class="text-sm md:text-base font-medium bg-rose-50 p-3 rounded-lg text-rose-900 border border-rose-100">
+                        "I <b>was listening</b> to music when my phone died."
+                    </p>
+                </div>
+                <div class="glass-panel p-5 border-l-4 border-emerald-500 hover:shadow-lg transition">
+                    <h3 class="font-bold text-emerald-800 text-lg mb-1 flex items-center gap-2"><i class="fas fa-history text-emerald-400"></i> Past Perfect</h3>
+                    <p class="text-sm text-slate-600 mb-3 font-medium">(had + past participle. El pasado del pasado. Algo que ya había sucedido)</p>
+                    <p class="text-sm md:text-base font-medium bg-emerald-50 p-3 rounded-lg text-emerald-900 border border-emerald-100">
+                        "When I arrived, the train <b>had</b> already <b>left</b>."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: Past Habits (Used to / Would) (NEW) -->
+        <section id="slide-4" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 serif-font">4. Advanced: Past Habits</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base">Cuando hablamos de la ciudad en el pasado, a menudo mencionamos rutinas que ya no hacemos.</p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="glass-panel p-6 bg-white border-t-4 border-indigo-500">
+                    <h3 class="font-bold text-indigo-800 text-xl mb-2">Used to + verb</h3>
+                    <p class="text-sm text-slate-600 mb-4">Para hábitos o estados que eran ciertos en el pasado, pero ya no lo son.</p>
+                    
+                    <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 text-sm mb-3">
+                        <span class="text-green-600 font-bold"><i class="fas fa-plus-circle"></i> Aff:</span> I <b>used to live</b> in the bustling city center.
+                    </div>
+                    <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 text-sm mb-3">
+                        <span class="text-red-500 font-bold"><i class="fas fa-minus-circle"></i> Neg:</span> I <b>didn't use to like</b> crowded places.
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 bg-white border-t-4 border-rose-500">
+                    <h3 class="font-bold text-rose-800 text-xl mb-2">Would + verb</h3>
+                    <p class="text-sm text-slate-600 mb-4">Solo para <b>acciones/rutinas repetitivas</b> en el pasado. ¡No se usa para estados (como live, love, be)!</p>
+                    
+                    <div class="bg-rose-50 p-4 rounded-xl border border-rose-100 text-sm mb-3">
+                        <span class="text-green-600 font-bold"><i class="fas fa-check"></i> Correct:</span> Every morning, I <b>would buy</b> coffee at the station.
+                    </div>
+                    <div class="bg-rose-50 p-4 rounded-xl border border-rose-100 text-sm mb-3 opacity-75">
+                        <span class="text-red-500 font-bold"><i class="fas fa-times"></i> Incorrect:</span> <del>I would live in Paris.</del> <br><i>(Must use "used to live")</i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: Pronunciation -ed (NEW) -->
+        <section id="slide-5" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 serif-font">5. Pronunciation: Regular Verbs (-ed)</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base">El sufijo "-ed" de los verbos regulares tiene tres sonidos distintos. ¡No siempre se pronuncia como se escribe!</p>
+
+            <div class="grid md:grid-cols-3 gap-4">
+                <!-- /t/ Sound -->
+                <div class="glass-panel p-5 bg-white border border-slate-200">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center text-xl font-bold mb-4">/t/</div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3">Después de sonidos sin voz (p, k, f, s, ch, sh)</p>
+                    <ul class="space-y-2 text-slate-700 font-medium">
+                        <li><i class="fas fa-volume-up text-amber-400 text-xs mr-2"></i> Missed (mis-t)</li>
+                        <li><i class="fas fa-volume-up text-amber-400 text-xs mr-2"></i> Walked (wok-t)</li>
+                        <li><i class="fas fa-volume-up text-amber-400 text-xs mr-2"></i> Watched (wach-t)</li>
+                    </ul>
+                </div>
+
+                <!-- /d/ Sound -->
+                <div class="glass-panel p-5 bg-white border border-slate-200">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-xl font-bold mb-4">/d/</div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3">Después de sonidos con voz (b, g, v, z, m, n, l, r, vocales)</p>
+                    <ul class="space-y-2 text-slate-700 font-medium">
+                        <li><i class="fas fa-volume-up text-blue-400 text-xs mr-2"></i> Arrived (ar-riv-d)</li>
+                        <li><i class="fas fa-volume-up text-blue-400 text-xs mr-2"></i> Realized (ri-al-iz-d)</li>
+                        <li><i class="fas fa-volume-up text-blue-400 text-xs mr-2"></i> Played (play-d)</li>
+                    </ul>
+                </div>
+
+                <!-- /id/ Sound -->
+                <div class="glass-panel p-5 bg-white border border-slate-200 shadow-md transform scale-105 z-10">
+                    <div class="w-12 h-12 bg-rose-100 text-rose-700 rounded-full flex items-center justify-center text-xl font-bold mb-4">/id/</div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3">Solo después de los sonidos T o D. <br><b class="text-rose-500">¡Añade una sílaba extra!</b></p>
+                    <ul class="space-y-2 text-slate-700 font-medium">
+                        <li><i class="fas fa-volume-up text-rose-400 text-xs mr-2"></i> Wait<span class="text-rose-500 underline">ed</span> (way-tid)</li>
+                        <li><i class="fas fa-volume-up text-rose-400 text-xs mr-2"></i> Want<span class="text-rose-500 underline">ed</span> (won-tid)</li>
+                        <li><i class="fas fa-volume-up text-rose-400 text-xs mr-2"></i> Need<span class="text-rose-500 underline">ed</span> (nee-did)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: Conversation 1 -->
+        <section id="slide-6" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 serif-font">6. Conversation: The Museum</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base">Lee la conversación. Presta atención a los verbos en negrita y los conectores resaltados.</p>
+
+            <div class="glass-panel p-4 md:p-8 bg-white border-t-4 border-t-indigo-500">
+                <div class="chat-bubble-left">
+                    <p class="text-xs font-bold text-slate-400 uppercase mb-1">Alex 🧑‍🦱</p>
+                    <p class="text-slate-700 text-sm md:text-base">Hey Sam! How <b>was</b> your weekend in the city?</p>
+                </div>
+                
+                <div class="chat-bubble-right">
+                    <p class="text-xs font-bold text-indigo-400 uppercase mb-1 text-right">👨🏻‍🦰 Sam</p>
+                    <p class="text-sm md:text-base">It <b>was</b> crazy. I <b>wanted</b> to visit the new art exhibition downtown.</p>
+                </div>
+
+                <div class="chat-bubble-left">
+                    <p class="text-xs font-bold text-slate-400 uppercase mb-1">Alex 🧑‍🦱</p>
+                    <p class="text-slate-700 text-sm md:text-base">Oh, nice! Did you get in?</p>
+                </div>
+
+                <div class="chat-bubble-right">
+                    <p class="text-xs font-bold text-indigo-400 uppercase mb-1 text-right">👨🏻‍🦰 Sam</p>
+                    <p class="text-sm md:text-base"><span class="bg-yellow-100 px-1 rounded">Unfortunately</span>, no! <span class="bg-blue-100 px-1 rounded">While</span> I <b>was taking</b> the subway, there <b>was</b> a huge delay. <span class="bg-purple-100 px-1 rounded">By the time</span> I <b>arrived</b>, the museum <b>had</b> already <b>closed</b>. 📉</p>
+                </div>
+                
+                <div class="chat-bubble-left">
+                    <p class="text-xs font-bold text-slate-400 uppercase mb-1">Alex 🧑‍🦱</p>
+                    <p class="text-slate-700 text-sm md:text-base">That's terrible! So, what did you do?</p>
+                </div>
+
+                <div class="chat-bubble-right">
+                    <p class="text-xs font-bold text-indigo-400 uppercase mb-1 text-right">👨🏻‍🦰 Sam</p>
+                    <p class="text-sm md:text-base">I <span class="underline decoration-indigo-400">realized</span> that I <b>hadn't eaten</b> anything all day, so I just <b>bought</b> a pizza and <b>went</b> home. 🍕</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: Quiz 1 -->
+        <section id="slide-7" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-6 serif-font">7. Reading Comprehension 1</h2>
+            <div id="quiz-1-container" class="space-y-4"></div>
+        </section>
+
+        <!-- SLIDE 8: Fill in the Blanks -->
+        <section id="slide-8" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 serif-font">8. Complete the Story</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base">Selecciona el tiempo verbal correcto para completar la historia sobre la rutina de Mark.</p>
+
+            <div class="glass-panel p-6 md:p-8 bg-white shadow-md leading-loose text-slate-700 font-medium md:text-lg border-t-4 border-t-rose-500">
+                Yesterday morning, Mark 
+                <select id="blank-1" class="bg-indigo-50 border border-indigo-200 text-indigo-800 font-bold px-3 py-1 rounded-md text-base mx-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer transition shadow-sm" onchange="checkBlanks('story1')">
+                    <option value="" disabled selected> [ Select ] </option>
+                    <option value="was waking">was waking</option>
+                    <option value="woke">woke</option>
+                    <option value="had woken">had woken</option>
+                </select>
+                up very late. While he 
+                <select id="blank-2" class="bg-indigo-50 border border-indigo-200 text-indigo-800 font-bold px-3 py-1 rounded-md text-base mx-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer transition shadow-sm" onchange="checkBlanks('story1')">
+                    <option value="" disabled selected> [ Select ] </option>
+                    <option value="drank">drank</option>
+                    <option value="was drinking">was drinking</option>
+                    <option value="had drunk">had drunk</option>
+                </select>
+                his coffee, he looked at his watch. He panicked! He ran to the bus stop, but it was empty. The bus 
+                <select id="blank-3" class="bg-indigo-50 border border-indigo-200 text-indigo-800 font-bold px-3 py-1 rounded-md text-base mx-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer transition shadow-sm" onchange="checkBlanks('story1')">
+                    <option value="" disabled selected> [ Select ] </option>
+                    <option value="left">left</option>
+                    <option value="was leaving">was leaving</option>
+                    <option value="had already left">had already left</option>
+                </select>
+                five minutes before. He 
+                <select id="blank-4" class="bg-indigo-50 border border-indigo-200 text-indigo-800 font-bold px-3 py-1 rounded-md text-base mx-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer transition shadow-sm" onchange="checkBlanks('story1')">
+                    <option value="" disabled selected> [ Select ] </option>
+                    <option value="realized">realized</option>
+                    <option value="was realizing">was realizing</option>
+                    <option value="had realized">had realized</option>
+                </select>
+                that it was going to be a terrible day.
+            </div>
+            <div id="blanks-feedback-1" class="hidden mt-6 p-4 rounded-xl text-center font-bold text-sm md:text-base border transition-all"></div>
+        </section>
+
+        <!-- SLIDE 9: Linking Words Practice -->
+        <section id="slide-9" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 serif-font">9. Practice: Connectors</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base">Usa los conectores lógicos (Suddenly, While, By the time, Unfortunately) para completar estas oraciones.</p>
+
+            <div class="glass-panel p-6 md:p-8 bg-white shadow-md leading-loose text-slate-700 font-medium md:text-lg border-t-4 border-t-amber-400">
+                1. 
+                <select id="conn-1" class="bg-amber-50 border border-amber-200 text-amber-900 font-bold px-3 py-1 rounded-md text-base mx-1 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer transition shadow-sm" onchange="checkConnectors()">
+                    <option value="" disabled selected> [ Select ] </option>
+                    <option value="Suddenly">Suddenly</option>
+                    <option value="While">While</option>
+                    <option value="By the time">By the time</option>
+                </select>
+                we arrived at the cinema, the movie had already started. 🎬
+                <br><br>
+                2. 
+                <select id="conn-2" class="bg-amber-50 border border-amber-200 text-amber-900 font-bold px-3 py-1 rounded-md text-base mx-1 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer transition shadow-sm" onchange="checkConnectors()">
+                    <option value="" disabled selected> [ Select ] </option>
+                    <option value="Unfortunately">Unfortunately</option>
+                    <option value="While">While</option>
+                    <option value="Suddenly">Suddenly</option>
+                </select>
+                Sarah was walking home, it started to rain heavily. 🌧️
+                <br><br>
+                3. We were enjoying our picnic when, 
+                <select id="conn-3" class="bg-amber-50 border border-amber-200 text-amber-900 font-bold px-3 py-1 rounded-md text-base mx-1 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer transition shadow-sm" onchange="checkConnectors()">
+                    <option value="" disabled selected> [ Select ] </option>
+                    <option value="By the time">By the time</option>
+                    <option value="Unfortunately">Unfortunately</option>
+                    <option value="Suddenly">Suddenly</option>
+                </select>
+                , a dog stole our sandwiches! 🐕🥪
+                <br><br>
+                4. I wanted to buy tickets for the concert. 
+                <select id="conn-4" class="bg-amber-50 border border-amber-200 text-amber-900 font-bold px-3 py-1 rounded-md text-base mx-1 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer transition shadow-sm" onchange="checkConnectors()">
+                    <option value="" disabled selected> [ Select ] </option>
+                    <option value="Unfortunately">Unfortunately</option>
+                    <option value="While">While</option>
+                    <option value="Suddenly">Suddenly</option>
+                </select>
+                , they were sold out. 🎫🚫
+            </div>
+            <div id="connectors-feedback" class="hidden mt-6 p-4 rounded-xl text-center font-bold text-sm md:text-base border transition-all"></div>
+        </section>
+
+        <!-- SLIDE 10: Conversation 2 -->
+        <section id="slide-10" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 serif-font">10. Conversation: The Concert</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base">Mia y Leo hablan sobre un hobby (ir a conciertos). Observa el uso de los tiempos.</p>
+
+            <div class="glass-panel p-4 md:p-8 bg-white border-t-4 border-t-emerald-500">
+                <div class="chat-bubble-left">
+                    <p class="text-xs font-bold text-slate-400 uppercase mb-1">Leo 👦🏽</p>
+                    <p class="text-slate-700 text-sm md:text-base">Did you enjoy the rock concert last night? 🎸</p>
+                </div>
+                <div class="chat-bubble-right">
+                    <p class="text-xs font-bold text-emerald-500 uppercase mb-1 text-right">👩🏻 Mia</p>
+                    <p class="text-sm md:text-base">Yes, but I <b>had</b> a lot of trouble getting there! There <b>was</b> a massive <span class="underline decoration-emerald-400">traffic jam</span>. 🚗🚕🚙</p>
+                </div>
+                <div class="chat-bubble-left">
+                    <p class="text-xs font-bold text-slate-400 uppercase mb-1">Leo 👦🏽</p>
+                    <p class="text-slate-700 text-sm md:text-base">Oh no. What happened?</p>
+                </div>
+                <div class="chat-bubble-right">
+                    <p class="text-xs font-bold text-emerald-500 uppercase mb-1 text-right">👩🏻 Mia</p>
+                    <p class="text-sm md:text-base">I <b>was waiting</b> for the bus for 40 minutes! When I finally <b>got</b> to the stadium, the band <b>had</b> already <b>started</b> playing. 🎵</p>
+                </div>
+                <div class="chat-bubble-left">
+                    <p class="text-xs font-bold text-slate-400 uppercase mb-1">Leo 👦🏽</p>
+                    <p class="text-slate-700 text-sm md:text-base">Did you miss your favorite song?</p>
+                </div>
+                <div class="chat-bubble-right">
+                    <p class="text-xs font-bold text-emerald-500 uppercase mb-1 text-right">👩🏻 Mia</p>
+                    <p class="text-sm md:text-base">Fortunately, no. They <b>played</b> it at the very end.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 11: Quiz 2 -->
+        <section id="slide-11" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-6 serif-font">11. Reading Comprehension 2</h2>
+            <div id="quiz-2-container" class="space-y-4"></div>
+        </section>
+
+        <!-- SLIDE 12: Story 3 (NEW) -->
+        <section id="slide-12" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 serif-font">12. Story: The Lost Wallet</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base">Lee esta historia de la ciudad y fíjate cómo se mezclan todos los elementos.</p>
+
+            <div class="glass-panel p-6 md:p-8 bg-amber-50 border-t-4 border-t-amber-500 shadow-inner relative overflow-hidden">
+                <i class="fas fa-quote-right absolute top-4 right-6 text-6xl text-amber-200 opacity-50"></i>
+                <p class="text-slate-700 leading-relaxed font-medium md:text-lg relative z-10">
+                    "I <span class="bg-indigo-100 px-1 rounded">used to live</span> in a very <b>bustling</b> part of London. One day, while I <b>was walking</b> through the park, I wanted to buy a coffee. <span class="bg-yellow-200 px-1 rounded">Suddenly</span>, I <b>realized</b> my pocket was empty! I <b>had lost</b> my wallet. 
+                    <br><br>
+                    <span class="bg-yellow-200 px-1 rounded">While</span> I <b>was panicking</b> and looking everywhere, a stranger <b>ran</b> up to me. He <b>had found</b> my wallet on a bench. <span class="bg-yellow-200 px-1 rounded">Fortunately</span>, all my money and cards were still inside. It was my lucky day!"
+                </p>
+            </div>
+        </section>
+
+        <!-- SLIDE 13: Quiz 3 (NEW) -->
+        <section id="slide-13" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-6 serif-font">13. Comprehension: The Lost Wallet</h2>
+            <div id="quiz-3-container" class="space-y-4"></div>
+        </section>
+
+        <!-- SLIDE 14: Sentence Builder (NEW) -->
+        <section id="slide-14" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 serif-font">14. Sentence Builder</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base">Combina la primera parte de la oración con su final lógico prestando atención a los tiempos verbales.</p>
+
+            <div class="glass-panel p-6 bg-white shadow-md leading-loose text-slate-700 font-medium md:text-lg border-t-4 border-t-purple-500">
+                1. I was cooking dinner... 
+                <select id="match-1" class="w-full mt-2 mb-4 bg-purple-50 border border-purple-200 text-purple-900 font-bold px-3 py-2 rounded-md text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer shadow-sm block" onchange="checkMatches()">
+                    <option value="" disabled selected> [ Choose the correct ending ] </option>
+                    <option value="A">...the train had already left.</option>
+                    <option value="B">...when the lights suddenly went out.</option>
+                    <option value="C">...that I had forgotten my keys inside.</option>
+                </select>
+                
+                2. By the time we got to the station... 
+                <select id="match-2" class="w-full mt-2 mb-4 bg-purple-50 border border-purple-200 text-purple-900 font-bold px-3 py-2 rounded-md text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer shadow-sm block" onchange="checkMatches()">
+                    <option value="" disabled selected> [ Choose the correct ending ] </option>
+                    <option value="A">...the train had already left.</option>
+                    <option value="B">...when the lights suddenly went out.</option>
+                    <option value="C">...that I had forgotten my keys inside.</option>
+                </select>
+
+                3. I closed the door and realized... 
+                <select id="match-3" class="w-full mt-2 mb-2 bg-purple-50 border border-purple-200 text-purple-900 font-bold px-3 py-2 rounded-md text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer shadow-sm block" onchange="checkMatches()">
+                    <option value="" disabled selected> [ Choose the correct ending ] </option>
+                    <option value="A">...the train had already left.</option>
+                    <option value="B">...when the lights suddenly went out.</option>
+                    <option value="C">...that I had forgotten my keys inside.</option>
+                </select>
+            </div>
+            <div id="matches-feedback" class="hidden mt-6 p-4 rounded-xl text-center font-bold text-sm md:text-base border transition-all"></div>
+        </section>
+
+        <!-- SLIDE 15: Role Play -->
+        <section id="slide-15" class="hidden-slide">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 serif-font">15. Role Play: The Storyteller</h2>
+                    <p class="text-slate-600 text-sm md:text-base">Es tu turno. Toca una tarjeta para ver tu misión. <b>Usa el vocabulario y las preguntas guía para contar la historia en voz alta o escribirla.</b></p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front items-center text-center bg-rose-50 border-rose-200">
+                            <div class="text-5xl mb-4 text-rose-500"><i class="fas fa-bus-alt"></i></div>
+                            <h3 class="font-black text-slate-800 text-xl mb-2">A Disastrous Commute</h3>
+                            <p class="text-sm text-slate-500 font-medium">Llegaste tarde al trabajo/escuela.</p>
+                            <p class="text-xs text-rose-400 mt-4 font-bold uppercase tracking-widest"><i class="fas fa-hand-pointer"></i> Tap to flip</p>
+                        </div>
+                        <div class="flip-card-back role-card-back p-5 text-left border-rose-500">
+                            <h3 class="font-black text-rose-400 text-lg mb-2">Your Mission</h3>
+                            <div class="mb-3">
+                                <p class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-1">Vocabulario</p>
+                                <div class="flex flex-wrap gap-1">
+                                    <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded">traffic</span>
+                                    <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded">missed</span>
+                                    <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded">had left</span>
+                                </div>
+                            </div>
+                            <p class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-1">Guía para hablar:</p>
+                            <ul class="text-xs text-white/90 list-disc list-inside space-y-1">
+                                <li>What <b>were you doing</b>?</li>
+                                <li>What happened?</li>
+                                <li>By the time you arrived, what <b>had</b> happened?</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front items-center text-center bg-indigo-50 border-indigo-200">
+                            <div class="text-5xl mb-4 text-indigo-500"><i class="fas fa-palette"></i></div>
+                            <h3 class="font-black text-slate-800 text-xl mb-2">An Amazing Hobby</h3>
+                            <p class="text-sm text-slate-500 font-medium">Fuiste a un evento de tu pasatiempo.</p>
+                            <p class="text-xs text-indigo-400 mt-4 font-bold uppercase tracking-widest"><i class="fas fa-hand-pointer"></i> Tap to flip</p>
+                        </div>
+                        <div class="flip-card-back role-card-back p-5 text-left border-indigo-500">
+                            <h3 class="font-black text-indigo-400 text-lg mb-2">Your Mission</h3>
+                            <div class="mb-3">
+                                <p class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-1">Vocabulario</p>
+                                <div class="flex flex-wrap gap-1">
+                                    <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded">exhibition</span>
+                                    <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded">crowded</span>
+                                    <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded">enjoyed</span>
+                                </div>
+                            </div>
+                            <p class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-1">Guía para hablar:</p>
+                            <ul class="text-xs text-white/90 list-disc list-inside space-y-1">
+                                <li>Where did you go?</li>
+                                <li>Who <b>were you walking</b> with?</li>
+                                <li><b>Had</b> you done this before?</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front items-center text-center bg-emerald-50 border-emerald-200">
+                            <div class="text-5xl mb-4 text-emerald-500"><i class="fas fa-ticket-alt"></i></div>
+                            <h3 class="font-black text-slate-800 text-xl mb-2">The Forgotten Plan</h3>
+                            <p class="text-sm text-slate-500 font-medium">Olvidaste algo crucial.</p>
+                            <p class="text-xs text-emerald-400 mt-4 font-bold uppercase tracking-widest"><i class="fas fa-hand-pointer"></i> Tap to flip</p>
+                        </div>
+                        <div class="flip-card-back role-card-back p-5 text-left border-emerald-500">
+                            <h3 class="font-black text-emerald-400 text-lg mb-2">Your Mission</h3>
+                            <div class="mb-3">
+                                <p class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-1">Vocabulario</p>
+                                <div class="flex flex-wrap gap-1">
+                                    <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded">realize</span>
+                                    <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded">forget</span>
+                                    <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded">had left</span>
+                                </div>
+                            </div>
+                            <p class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-1">Guía para hablar:</p>
+                            <ul class="text-xs text-white/90 list-disc list-inside space-y-1">
+                                <li>What <b>were you looking</b> for?</li>
+                                <li>What did you suddenly realize?</li>
+                                <li>Where <b>had</b> you left it?</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8">
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2"><i class="fas fa-pen mr-1"></i> Bloc de notas (Opcional)</p>
+                <textarea class="w-full h-32 p-4 border-2 border-slate-200 rounded-xl focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 focus:outline-none resize-none text-sm md:text-base transition shadow-inner" placeholder="Escribe tu historia aquí para practicar antes de hablar..."></textarea>
+            </div>
+        </section>
+
+        <!-- SLIDE 16: Outro -->
+        <section id="slide-16" class="hidden-slide text-center flex flex-col items-center justify-center min-h-[60vh]">
+            <div class="w-24 h-24 bg-gradient-to-tr from-emerald-400 to-emerald-600 text-white rounded-full flex items-center justify-center text-5xl mb-6 shadow-xl slide-enter mx-auto">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2 class="text-3xl md:text-5xl font-black text-slate-800 mb-4 slide-enter serif-font" style="animation-delay: 0.1s">¡Excelente Trabajo!</h2>
+            <p class="text-slate-600 text-base md:text-lg font-medium mb-10 max-w-xl mx-auto slide-enter bg-white p-6 rounded-2xl shadow-sm border border-slate-100" style="animation-delay: 0.2s">
+                Has completado las 16 secciones. Ahora dominas cómo construir narrativas ricas sobre la vida en la ciudad combinando el <b>Simple Past</b>, <b>Past Continuous</b> y <b>Past Perfect</b> con conectores lógicos.
+            </p>
+            <button onclick="location.reload()" class="bg-slate-800 text-white font-bold py-3.5 px-8 rounded-xl hover:bg-slate-900 transition slide-enter btn-modern shadow-lg text-sm mx-auto flex items-center gap-2" style="animation-delay: 0.3s">
+                <i class="fas fa-redo-alt"></i> Volver a empezar
+            </button>
+        </section>
+
+        <!-- Bottom Navigation -->
+        <div class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-slate-200 p-3 md:p-4 z-30" id="bottom-nav">
+            <div class="max-w-4xl mx-auto flex justify-between items-center gap-3">
+                <button id="btn-prev" onclick="Nav.prev()" class="bg-white hover:bg-slate-50 text-slate-600 font-bold py-2.5 md:py-3 px-5 md:px-6 rounded-xl border border-slate-300 transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center btn-modern text-sm shadow-sm">
+                    <i class="fas fa-arrow-left md:mr-2"></i> <span class="hidden md:inline">Atrás</span>
+                </button>
+                <button id="btn-next" onclick="Nav.next()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 md:py-3 px-6 md:px-8 rounded-xl transition flex items-center btn-modern shadow-md text-sm md:text-base tracking-wide">
+                    Siguiente <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- QUIZ DATA ---
+        const quiz1Data = [
+            { q: "What was Sam doing when there was a delay?", opts: ["He was taking the subway.", "He was eating pizza.", "He was looking at art."], a: 0 },
+            { q: "Why didn't Sam see the exhibition?", opts: ["It was too crowded.", "The museum had already closed.", "He forgot his tickets."], a: 1 },
+            { q: "What did Sam realize at the end?", opts: ["He had left his wallet.", "He hadn't eaten all day.", "He missed his friends."], a: 1 }
+        ];
+
+        const quiz2Data = [
+            { q: "What problem did Mia have?", opts: ["She forgot her tickets.", "There was a massive traffic jam.", "The band didn't play."], a: 1 },
+            { q: "What background action was Mia doing for 40 minutes?", opts: ["She was driving.", "She was listening to music.", "She was waiting for the bus."], a: 2 },
+            { q: "Did Mia arrive before the concert started?", opts: ["No, the band had already started playing.", "Yes, she arrived early."], a: 0 }
+        ];
+
+        const quiz3Data = [
+            { q: "Where did the storyteller use to live?", opts: ["In a quiet village.", "In a bustling part of London.", "Near Central Park."], a: 1 },
+            { q: "What background action was happening when they lost their wallet?", opts: ["They were buying a coffee.", "They were running.", "They were walking through the park."], a: 2 },
+            { q: "What had the stranger done before approaching the storyteller?", opts: ["He had found the wallet.", "He had bought a coffee.", "He had called the police."], a: 0 }
+        ];
+
+        // --- GLOBAL DICTIONARY TOGGLE ---
+        function toggleDictionary() {
+            const modal = document.getElementById('dictionary-modal');
+            if (modal.classList.contains('active')) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto'; // restore scroll
+            } else {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // prevent background scroll
+            }
+        }
+
+        // --- ROBUST QUIZ RENDERER ---
+        function buildQuiz(containerId, data) {
+            const container = document.getElementById(containerId);
+            if (!container) return; 
+            if (container.innerHTML.trim() !== '') return; 
+            
+            container.innerHTML = data.map((q, qIdx) => `
+                <div class="glass-panel p-5 md:p-6 bg-white question-row shadow-sm">
+                    <p class="font-bold text-slate-800 mb-4 md:text-lg"> ${qIdx+1}. ${q.q}</p>
+                    <div class="space-y-3">
+                        ${q.opts.map((opt, oIdx) => `
+                            <button onclick="checkQuiz(this, ${qIdx}, ${oIdx}, ${q.a}, '${containerId}', ${data.length})" class="w-full text-left font-medium p-3 md:p-4 rounded-xl bg-slate-50 border-2 border-slate-100 hover:border-indigo-400 hover:bg-indigo-50 transition btn-modern text-slate-700 text-sm md:text-base shadow-sm">${opt}</button>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function checkQuiz(btn, qIdx, selected, correct, containerId, totalQs) {
+            const parent = btn.parentElement;
+            const mainRow = btn.closest('.question-row'); 
+            
+            if(parent.querySelector('.opacity-60')) return; 
+            
+            Array.from(parent.children).forEach(b => { 
+                b.disabled = true; 
+                b.classList.add('opacity-60', 'cursor-not-allowed'); 
+            });
+            
+            if(selected === correct) {
+                btn.classList.remove('opacity-60', 'bg-slate-50', 'border-slate-100');
+                btn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-800', 'opacity-100');
+            } else {
+                btn.classList.remove('opacity-60', 'bg-slate-50', 'border-slate-100');
+                btn.classList.add('bg-rose-50', 'border-rose-500', 'text-rose-800', 'opacity-100');
+                parent.children[correct].classList.remove('opacity-60', 'bg-slate-50', 'border-slate-100');
+                parent.children[correct].classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800', 'opacity-100');
+            }
+
+            mainRow.classList.add('answered');
+            
+            const totalDone = document.getElementById(containerId).querySelectorAll('.question-row.answered').length;
+            if(totalDone === totalQs) {
+                setTimeout(() => {
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                }, 400);
+            }
+        }
+
+        // --- EXERCISE LOGIC (Fill blanks) ---
+        function checkBlanks() {
+            const b1 = document.getElementById('blank-1').value;
+            const b2 = document.getElementById('blank-2').value;
+            const b3 = document.getElementById('blank-3').value;
+            const b4 = document.getElementById('blank-4').value;
+            const fb = document.getElementById('blanks-feedback-1');
+
+            if(b1 && b2 && b3 && b4) {
+                fb.classList.remove('hidden');
+                if(b1 === 'woke' && b2 === 'was drinking' && b3 === 'had already left' && b4 === 'realized') {
+                    fb.className = "mt-6 p-4 rounded-xl text-center font-bold text-sm md:text-base border transition-all bg-emerald-50 text-emerald-800 border-emerald-300";
+                    fb.innerHTML = `<i class="fas fa-check-circle mr-2 text-xl align-middle"></i> ¡Perfecto! Entendiste la cronología de la historia.`;
+                } else {
+                    fb.className = "mt-6 p-4 rounded-xl text-center font-bold text-sm md:text-base border transition-all bg-rose-50 text-rose-800 border-rose-300";
+                    fb.innerHTML = `<i class="fas fa-times-circle mr-2 text-xl align-middle"></i> Hay errores. Recuerda: "woke up" (Simple), "was drinking" (Continuous), "had left" (Perfect), "realized" (Simple).`;
+                }
+            } else {
+                fb.classList.add('hidden');
+            }
+        }
+
+        // --- EXERCISE LOGIC (Connectors) ---
+        function checkConnectors() {
+            const c1 = document.getElementById('conn-1').value;
+            const c2 = document.getElementById('conn-2').value;
+            const c3 = document.getElementById('conn-3').value;
+            const c4 = document.getElementById('conn-4').value;
+            const fb = document.getElementById('connectors-feedback');
+
+            if(c1 && c2 && c3 && c4) {
+                fb.classList.remove('hidden');
+                if(c1 === 'By the time' && c2 === 'While' && c3 === 'Suddenly' && c4 === 'Unfortunately') {
+                    fb.className = "mt-6 p-4 rounded-xl text-center font-bold text-sm md:text-base border transition-all bg-emerald-50 text-emerald-800 border-emerald-300";
+                    fb.innerHTML = `<i class="fas fa-star mr-2 text-xl align-middle text-amber-500"></i> ¡Excelente uso de los conectores!`;
+                } else {
+                    fb.className = "mt-6 p-4 rounded-xl text-center font-bold text-sm md:text-base border transition-all bg-amber-50 text-amber-800 border-amber-300";
+                    fb.innerHTML = `<i class="fas fa-exclamation-triangle mr-2 text-xl align-middle"></i> Revisa de nuevo. Pista: 1 (Límite de tiempo), 2 (Acción continua), 3 (Sorpresa), 4 (Mala noticia).`;
+                }
+            } else {
+                fb.classList.add('hidden');
+            }
+        }
+
+        // --- EXERCISE LOGIC (Sentence Matching) ---
+        function checkMatches() {
+            const m1 = document.getElementById('match-1').value;
+            const m2 = document.getElementById('match-2').value;
+            const m3 = document.getElementById('match-3').value;
+            const fb = document.getElementById('matches-feedback');
+
+            if(m1 && m2 && m3) {
+                fb.classList.remove('hidden');
+                if(m1 === 'B' && m2 === 'A' && m3 === 'C') {
+                    fb.className = "mt-6 p-4 rounded-xl text-center font-bold text-sm md:text-base border transition-all bg-emerald-50 text-emerald-800 border-emerald-300";
+                    fb.innerHTML = `<i class="fas fa-check-circle mr-2 text-xl align-middle"></i> ¡Excelente comprensión de tiempos!`;
+                } else {
+                    fb.className = "mt-6 p-4 rounded-xl text-center font-bold text-sm md:text-base border transition-all bg-rose-50 text-rose-800 border-rose-300";
+                    fb.innerHTML = `<i class="fas fa-times-circle mr-2 text-xl align-middle"></i> Hay un error. Recuerda la lógica de qué acción interrumpe (Continuous) o cuál pasó antes (Perfect).`;
+                }
+            } else {
+                fb.classList.add('hidden');
+            }
+        }
+
+        // --- NAVIGATION ARCHITECTURE ---
+        const Nav = {
+            current: 0,
+            total: 17, // 17 sections (0 to 16)
+            slidesData: [
+                { title: "Intro" }, 
+                { title: "Vocab Warm-up" }, 
+                { title: "City Adjectives" }, 
+                { title: "Grammar Rules" }, 
+                { title: "Past Habits" }, 
+                { title: "Pronunciation" }, 
+                { title: "Conversation 1" }, 
+                { title: "Comprehension 1" }, 
+                { title: "Story Practice" }, 
+                { title: "Connectors" }, 
+                { title: "Conversation 2" }, 
+                { title: "Comprehension 2" }, 
+                { title: "The Lost Wallet" }, 
+                { title: "Comprehension 3" }, 
+                { title: "Sentence Builder" }, 
+                { title: "Role Play" }, 
+                { title: "Finish" }
+            ],
+            update() {
+                document.getElementById('nav-title').innerText = this.slidesData[this.current].title;
+                document.getElementById('main-progress').style.width = `${(this.current / (this.total-1)) * 100}%`;
+                document.getElementById('slide-counter').innerText = `${this.current + 1} / ${this.total}`;
+
+                for(let i = 0; i < this.total; i++) {
+                    const s = document.getElementById(`slide-${i}`);
+                    if(s) { 
+                        s.classList.add('hidden-slide'); 
+                        s.classList.remove('slide-enter'); 
+                    }
+                }
+                
+                const act = document.getElementById(`slide-${this.current}`);
+                if(act) { 
+                    act.classList.remove('hidden-slide'); 
+                    void act.offsetWidth; 
+                    act.classList.add('slide-enter'); 
+                }
+
+                document.getElementById('btn-prev').disabled = this.current === 0;
+                document.getElementById('bottom-nav').classList.toggle('hidden', this.current === this.total - 1);
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            },
+            next() { if(this.current < this.total - 1) { this.current++; this.update(); } },
+            prev() { if(this.current > 0) { this.current--; this.update(); } }
+        };
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            buildQuiz('quiz-1-container', quiz1Data);
+            buildQuiz('quiz-2-container', quiz2Data);
+            buildQuiz('quiz-3-container', quiz3Data);
+            Nav.update();
+        });
+
+    </script>
+</body>
+</html>

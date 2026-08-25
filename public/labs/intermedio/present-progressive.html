@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>B1/B2 Lab: Present Progressive in Action</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/labs/_brand.css">
+    <script src="/labs/_brand.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+        
+        :root {
+            --primary: #0284c7; /* Sky 600 */
+            --primary-light: #38bdf8; /* Sky 400 */
+            --secondary: #f59e0b; /* Amber 500 */
+            --bg-color: #f0f9ff; /* Sky 50 */
+        }
+
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            background-color: var(--bg-color); 
+            color: #0f172a; 
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .heading-font { font-family: 'Poppins', sans-serif; }
+
+        /* Dynamic Background */
+        .bg-pattern {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background-color: #f0f9ff;
+            background-image: radial-gradient(#bae6fd 2px, transparent 2px);
+            background-size: 30px 30px;
+        }
+
+        /* Smooth Slide Animations */
+        .slide-enter { animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: translateY(30px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .hidden-slide { display: none !important; }
+
+        /* Modern UI Panels */
+        .glass-panel {
+            background: #ffffff;
+            border: 2px solid #e0f2fe; 
+            box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.1);
+            border-radius: 1.5rem;
+        }
+
+        /* Chat Bubbles */
+        .chat-bubble-left {
+            background: #ffffff;
+            border-radius: 1.25rem 1.25rem 1.25rem 0;
+            padding: 1rem 1.25rem;
+            max-width: 85%;
+            margin-bottom: 1.25rem;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+        
+        .chat-bubble-right {
+            background: #e0f2fe; 
+            border-radius: 1.25rem 1.25rem 0 1.25rem;
+            padding: 1rem 1.25rem;
+            max-width: 85%;
+            margin-bottom: 1.25rem;
+            margin-left: auto;
+            border: 2px solid #bae6fd;
+            color: #0369a1;
+            box-shadow: 0 4px 6px rgba(2, 132, 199, 0.05);
+        }
+
+        .btn-modern {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 700;
+        }
+        .btn-modern:active:not(:disabled) { transform: scale(0.95); }
+
+        /* Flip Cards */
+        .flip-card {
+            perspective: 1000px;
+            height: 100%;
+            min-height: 200px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.05);
+        }
+        .flip-card-front { background-color: white; border: 3px solid #e0f2fe; }
+        .flip-card-back { background-color: #0284c7; color: white; transform: rotateY(180deg); border: 3px solid #0284c7; }
+        
+        .verb-card-front { background-color: #fffbeb; border-color: #fde68a; }
+        .verb-card-back { background-color: #f59e0b; border-color: #f59e0b; }
+
+        /* Form Selects */
+        select {
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1.2em;
+            padding-right: 2.5rem !important;
+        }
+
+        /* Dictionary Modal Animation */
+        #dictionary-modal.active { display: flex; animation: fadeIn 0.3s ease-out forwards; }
+        #dictionary-modal { display: none; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+    <style>
+      /* Teacher Netza — armonización de fondo con la marca */
+      body { background-color: var(--tn-bg) !important; }
+      .bg-shapes, .bg-pattern {
+        background: linear-gradient(160deg, var(--tn-bg) 0%, color-mix(in srgb, var(--tn-mint) 10%, var(--tn-bg)) 100%) !important;
+        opacity: 1;
+      }
+      .bg-shapes::before, .bg-shapes::after { opacity: .22 !important; }
+      .glass-panel { border-color: var(--tn-line) !important; box-shadow: var(--tn-shadow) !important; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:bg-sky-200 selection:text-sky-900">
+    <div class="bg-pattern"></div>
+
+    <nav class="w-full bg-white/90 backdrop-blur-md border-b-2 border-sky-100 z-40 sticky top-0 shadow-sm" id="main-nav">
+        <div class="max-w-4xl mx-auto px-4 h-16 md:h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-sky-400 to-sky-600 rounded-2xl flex items-center justify-center text-white text-xl shadow-lg transform rotate-3">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg md:text-xl text-slate-800 heading-font leading-none">Right Now!</h1>
+                    <p class="text-[10px] md:text-xs font-bold text-sky-600 uppercase tracking-widest mt-1" id="nav-title">Welcome</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2 md:gap-3">
+                <button onclick="toggleDictionary()" class="bg-sky-50 text-sky-700 hover:bg-sky-100 px-3 py-2 rounded-xl text-xs md:text-sm font-bold border-2 border-sky-200 transition btn-modern flex items-center gap-2">
+                    <i class="fas fa-book"></i> <span class="hidden md:inline">Dictionary</span>
+                </button>
+                <div class="bg-slate-100 text-slate-600 px-3 py-2 rounded-xl text-xs md:text-sm font-bold border-2 border-slate-200" id="slide-counter">
+                    1 / 11
+                </div>
+            </div>
+        </div>
+        <div class="w-full bg-slate-100 h-2">
+            <div id="main-progress" class="bg-gradient-to-r from-sky-400 to-amber-400 h-full transition-all duration-500 ease-out rounded-r-full" style="width: 0%"></div>
+        </div>
+    </nav>
+
+    <div id="dictionary-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 justify-center items-center p-4">
+        <div class="bg-white w-full max-w-3xl max-h-[85vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+            <div class="p-4 md:p-6 border-b-2 border-slate-100 flex justify-between items-center bg-slate-50">
+                <h2 class="text-xl md:text-2xl font-black text-slate-800 heading-font"><i class="fas fa-book text-sky-500 mr-2"></i> Action Dictionary</h2>
+                <button onclick="toggleDictionary()" class="w-10 h-10 flex justify-center items-center bg-slate-200 hover:bg-rose-100 hover:text-rose-600 rounded-full text-slate-600 transition">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            <div class="p-4 md:p-6 overflow-y-auto flex-grow bg-slate-50">
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <!-- Base Verbs -->
+                    <div class="bg-white p-5 rounded-2xl border-2 border-slate-100 shadow-sm">
+                        <h3 class="font-bold text-amber-600 mb-3 heading-font text-lg"><i class="fas fa-bolt mr-2"></i> Action Verbs (ING)</h3>
+                        <ul class="space-y-2 text-sm font-medium">
+                            <li class="flex justify-between items-center"><span class="text-slate-800">Cook ➡️ Cooking</span> <span class="text-xl">🍳</span></li>
+                            <li class="flex justify-between items-center"><span class="text-slate-800">Watch ➡️ Watching</span> <span class="text-xl">📺</span></li>
+                            <li class="flex justify-between items-center"><span class="text-slate-800">Play ➡️ Playing</span> <span class="text-xl">🎮</span></li>
+                            <li class="flex justify-between items-center"><span class="text-slate-800">Read ➡️ Reading</span> <span class="text-xl">📖</span></li>
+                            <li class="flex justify-between items-center"><span class="text-slate-800">Work ➡️ Working</span> <span class="text-xl">💻</span></li>
+                            <li class="flex justify-between items-center"><span class="text-slate-800">Listen ➡️ Listening</span> <span class="text-xl">🎧</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Spelling Rules -->
+                    <div class="bg-white p-5 rounded-2xl border-2 border-slate-100 shadow-sm">
+                        <h3 class="font-bold text-rose-500 mb-3 heading-font text-lg"><i class="fas fa-magic mr-2"></i> Spelling Magic</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="bg-rose-50 p-2 rounded-lg">
+                                <b class="text-rose-700 block mb-1">Ends in 'e' ➡️ Drop 'e' + ing</b>
+                                Dance ➡️ Dancing <br> Make ➡️ Making
+                            </div>
+                            <div class="bg-sky-50 p-2 rounded-lg">
+                                <b class="text-sky-700 block mb-1">CVC (Consonant-Vowel-Consonant) ➡️ Double last letter</b>
+                                Run ➡️ Running <br> Swim ➡️ Swimming
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4 mt-4">
+                    <!-- Time Words -->
+                    <div class="bg-white p-5 rounded-2xl border-2 border-slate-100 shadow-sm">
+                        <h3 class="font-bold text-sky-600 mb-3 heading-font text-lg"><i class="fas fa-clock mr-2"></i> Time Expressions</h3>
+                        <ul class="space-y-2 text-sm font-medium">
+                            <li class="flex justify-between"><b class="text-slate-800">Now</b> <span class="text-slate-500">Ahora</span></li>
+                            <li class="flex justify-between"><b class="text-slate-800">Right now</b> <span class="text-slate-500">Justo ahora</span></li>
+                            <li class="flex justify-between"><b class="text-slate-800">At the moment</b> <span class="text-slate-500">En este momento</span></li>
+                            <li class="flex justify-between"><b class="text-slate-800">Currently</b> <span class="text-slate-500">Actualmente</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Context Vocab -->
+                    <div class="bg-white p-5 rounded-2xl border-2 border-slate-100 shadow-sm">
+                        <h3 class="font-bold text-emerald-600 mb-3 heading-font text-lg"><i class="fas fa-map-marker-alt mr-2"></i> Places</h3>
+                        <ul class="space-y-2 text-sm font-medium">
+                            <li class="flex justify-between"><span class="text-slate-800">At home</span> <span class="text-slate-500">En casa</span></li>
+                            <li class="flex justify-between"><span class="text-slate-800">At the office</span> <span class="text-slate-500">En la oficina</span></li>
+                            <li class="flex justify-between"><span class="text-slate-800">In the kitchen</span> <span class="text-slate-500">En la cocina</span></li>
+                            <li class="flex justify-between"><span class="text-slate-800">At the park</span> <span class="text-slate-500">En el parque</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <div class="p-4 border-t-2 border-slate-100 bg-white">
+                <button onclick="toggleDictionary()" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-3.5 rounded-xl transition btn-modern text-lg">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="flex-grow w-full max-w-4xl mx-auto px-4 py-6 md:py-10 flex flex-col relative pb-28 md:pb-32">
+        
+        <!-- SLIDE 0: Intro -->
+        <section id="slide-0" class="slide-enter flex flex-col items-center justify-center min-h-[65vh] text-center mt-4">
+            <div class="relative mb-8">
+                <div class="absolute inset-0 bg-amber-300 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+                <div class="flex gap-4 text-6xl md:text-8xl relative z-10">
+                    <span class="animate-bounce" style="animation-delay: 0s;">🏃‍♂️</span>
+                    <span class="animate-bounce" style="animation-delay: 0.2s;">👀</span>
+                    <span class="animate-bounce" style="animation-delay: 0.4s;">📱</span>
+                </div>
+            </div>
+            <h2 class="text-4xl md:text-6xl font-black text-slate-800 mb-6 tracking-tight heading-font">
+                What is happening <span class="text-sky-500">Now?</span>
+            </h2>
+            <p class="text-slate-600 text-lg md:text-xl font-medium max-w-2xl mx-auto mb-10 leading-relaxed bg-white/60 backdrop-blur p-6 rounded-3xl shadow-sm border border-white">
+                Welcome to the <b>Present Progressive</b> lab! Learn how to talk about actions that are happening <b>right at this moment</b> using <i>am, is, are</i> and verbs ending in <i>-ing</i>.
+            </p>
+            <div class="flex flex-wrap justify-center gap-3">
+                <span class="bg-amber-100 text-amber-700 px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm border border-amber-200"><i class="fas fa-bolt mr-2"></i> Actions</span>
+                <span class="bg-sky-100 text-sky-700 px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm border border-sky-200"><i class="fas fa-puzzle-piece mr-2"></i> Grammar</span>
+                <span class="bg-emerald-100 text-emerald-700 px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm border border-emerald-200"><i class="fas fa-comments mr-2"></i> Speaking</span>
+            </div>
+        </section>
+
+        <!-- SLIDE 1: Time & Context Vocabulary -->
+        <section id="slide-1" class="hidden-slide">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 heading-font text-sky-600">1. Setting the Scene</h2>
+                    <p class="text-slate-600 text-sm md:text-base font-medium">To talk about the present, we use time words and places. Tap the cards!</p>
+                </div>
+                <div class="hidden md:block">
+                    <span class="bg-sky-100 text-sky-700 text-xs font-bold px-3 py-1.5 rounded-lg"><i class="fas fa-hand-pointer mr-1"></i> Tap to flip</span>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- Card 1 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <span class="text-5xl mb-4">⏱️</span>
+                            <h3 class="text-lg font-bold text-slate-800">Right Now</h3>
+                        </div>
+                        <div class="flip-card-back bg-sky-600 border-sky-600">
+                            <h3 class="text-xl font-bold mb-2 text-white">Justo ahora</h3>
+                            <p class="text-sm text-sky-100 text-center font-medium">"I am studying right now."</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <span class="text-5xl mb-4">📅</span>
+                            <h3 class="text-lg font-bold text-slate-800">Currently</h3>
+                        </div>
+                        <div class="flip-card-back bg-sky-600 border-sky-600">
+                            <h3 class="text-xl font-bold mb-2 text-white">Actualmente</h3>
+                            <p class="text-sm text-sky-100 text-center font-medium">"We are currently working."</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <span class="text-5xl mb-4">🏢</span>
+                            <h3 class="text-lg font-bold text-slate-800">At the office</h3>
+                        </div>
+                        <div class="flip-card-back bg-emerald-500 border-emerald-500">
+                            <h3 class="text-xl font-bold mb-2 text-white">En la oficina</h3>
+                            <p class="text-sm text-emerald-100 text-center font-medium">"She is working at the office."</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <span class="text-5xl mb-4">🌳</span>
+                            <h3 class="text-lg font-bold text-slate-800">At the park</h3>
+                        </div>
+                        <div class="flip-card-back bg-emerald-500 border-emerald-500">
+                            <h3 class="text-xl font-bold mb-2 text-white">En el parque</h3>
+                            <p class="text-sm text-emerald-100 text-center font-medium">"They are running at the park."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: Action Verbs -->
+        <section id="slide-2" class="hidden-slide">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 heading-font text-amber-500">2. Action Verbs</h2>
+                    <p class="text-slate-600 text-sm md:text-base font-medium">Estos son los verbos en su forma "-ing". ¡Presta atención a la ortografía!</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front verb-card-front">
+                            <span class="text-6xl mb-3 drop-shadow-md">🏃</span>
+                            <h3 class="text-xl font-black text-amber-700">Run</h3>
+                        </div>
+                        <div class="flip-card-back verb-card-back">
+                            <h3 class="text-3xl font-black mb-1 text-white">Run<span class="text-amber-200 underline">ning</span></h3>
+                            <p class="text-sm text-amber-100 font-bold">(Double the 'n')</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front verb-card-front">
+                            <span class="text-6xl mb-3 drop-shadow-md">🍳</span>
+                            <h3 class="text-xl font-black text-amber-700">Cook</h3>
+                        </div>
+                        <div class="flip-card-back verb-card-back">
+                            <h3 class="text-3xl font-black mb-1 text-white">Cook<span class="text-amber-200 underline">ing</span></h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front verb-card-front">
+                            <span class="text-6xl mb-3 drop-shadow-md">📖</span>
+                            <h3 class="text-xl font-black text-amber-700">Read</h3>
+                        </div>
+                        <div class="flip-card-back verb-card-back">
+                            <h3 class="text-3xl font-black mb-1 text-white">Read<span class="text-amber-200 underline">ing</span></h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front verb-card-front">
+                            <span class="text-6xl mb-3 drop-shadow-md">🎧</span>
+                            <h3 class="text-xl font-black text-amber-700">Listen</h3>
+                        </div>
+                        <div class="flip-card-back verb-card-back">
+                            <h3 class="text-3xl font-black mb-1 text-white">Listen<span class="text-amber-200 underline">ing</span></h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front verb-card-front">
+                            <span class="text-6xl mb-3 drop-shadow-md">💃</span>
+                            <h3 class="text-xl font-black text-amber-700">Dance</h3>
+                        </div>
+                        <div class="flip-card-back verb-card-back">
+                            <h3 class="text-3xl font-black mb-1 text-white">Danc<span class="text-amber-200 underline">ing</span></h3>
+                            <p class="text-sm text-amber-100 font-bold">(Drop the 'e')</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front verb-card-front">
+                            <span class="text-6xl mb-3 drop-shadow-md">✍️</span>
+                            <h3 class="text-xl font-black text-amber-700">Write</h3>
+                        </div>
+                        <div class="flip-card-back verb-card-back">
+                            <h3 class="text-3xl font-black mb-1 text-white">Writ<span class="text-amber-200 underline">ing</span></h3>
+                            <p class="text-sm text-amber-100 font-bold">(Drop the 'e')</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: Grammar Structure -->
+        <section id="slide-3" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 heading-font text-sky-600">3. The Formula</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base font-medium">To build sentences, we need three pieces: Subject + To Be + Verb-ing.</p>
+
+            <div class="glass-panel p-6 overflow-hidden relative border-t-8 border-t-sky-500">
+                
+                <div class="flex flex-col md:flex-row gap-4 mb-6">
+                    <!-- I -->
+                    <div class="flex-1 bg-slate-50 p-4 rounded-xl border border-slate-200 text-center shadow-sm">
+                        <div class="text-2xl font-black text-slate-800 mb-2">I</div>
+                        <div class="bg-amber-400 text-amber-900 font-black py-2 rounded-lg text-xl shadow-sm mb-2 transform hover:scale-105 transition">am</div>
+                        <div class="text-sm font-bold text-slate-500">(I'm)</div>
+                    </div>
+                    
+                    <!-- He She It -->
+                    <div class="flex-1 bg-slate-50 p-4 rounded-xl border border-slate-200 text-center shadow-sm">
+                        <div class="text-2xl font-black text-slate-800 mb-2">He / She / It</div>
+                        <div class="bg-emerald-400 text-emerald-900 font-black py-2 rounded-lg text-xl shadow-sm mb-2 transform hover:scale-105 transition">is</div>
+                        <div class="text-sm font-bold text-slate-500">(He's / She's / It's)</div>
+                    </div>
+
+                    <!-- You We They -->
+                    <div class="flex-1 bg-slate-50 p-4 rounded-xl border border-slate-200 text-center shadow-sm">
+                        <div class="text-2xl font-black text-slate-800 mb-2">You / We / They</div>
+                        <div class="bg-rose-400 text-rose-900 font-black py-2 rounded-lg text-xl shadow-sm mb-2 transform hover:scale-105 transition">are</div>
+                        <div class="text-sm font-bold text-slate-500">(You're / We're / They're)</div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center items-center">
+                    <div class="text-4xl text-slate-300 font-black mr-4">+</div>
+                    <div class="bg-sky-500 text-white font-black py-3 px-8 rounded-2xl text-2xl shadow-lg border-2 border-sky-400">
+                        verb-ing
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-4">
+                <div class="text-3xl">💡</div>
+                <p class="text-slate-700 font-medium leading-relaxed">
+                    <b>Example:</b> She <b>is</b> work<b>ing</b> at the office right now. <br>
+                    <span class="text-sm text-slate-500">(Ella está trabajando en la oficina justo ahora.)</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: Grammar Practice (Am/Is/Are) -->
+        <section id="slide-4" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 heading-font text-emerald-500">4. Choose the Helper</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base font-medium">Select the correct verb <i>to be</i> (am, is, are) to complete the sentences.</p>
+
+            <div class="glass-panel p-6 md:p-8 space-y-6">
+                <!-- Q1 -->
+                <div class="flex flex-wrap items-center gap-2 text-lg font-bold text-slate-700">
+                    <span class="w-8 text-center text-xl">👩🏼</span> Sarah 
+                    <select id="tobe-1" class="bg-slate-100 border-2 border-slate-300 text-sky-700 font-black px-4 py-2 rounded-xl focus:ring-4 focus:ring-sky-200 transition outline-none cursor-pointer" onchange="checkToBe()">
+                        <option value="" disabled selected>---</option>
+                        <option value="am">am</option>
+                        <option value="is">is</option>
+                        <option value="are">are</option>
+                    </select>
+                    cooking dinner in the kitchen.
+                </div>
+                
+                <hr class="border-slate-100">
+
+                <!-- Q2 -->
+                <div class="flex flex-wrap items-center gap-2 text-lg font-bold text-slate-700">
+                    <span class="w-8 text-center text-xl">👨‍👩‍👦</span> My friends and I 
+                    <select id="tobe-2" class="bg-slate-100 border-2 border-slate-300 text-sky-700 font-black px-4 py-2 rounded-xl focus:ring-4 focus:ring-sky-200 transition outline-none cursor-pointer" onchange="checkToBe()">
+                        <option value="" disabled selected>---</option>
+                        <option value="am">am</option>
+                        <option value="is">is</option>
+                        <option value="are">are</option>
+                    </select>
+                    playing video games.
+                </div>
+
+                <hr class="border-slate-100">
+
+                <!-- Q3 -->
+                <div class="flex flex-wrap items-center gap-2 text-lg font-bold text-slate-700">
+                    <span class="w-8 text-center text-xl">🙋‍♂️</span> I 
+                    <select id="tobe-3" class="bg-slate-100 border-2 border-slate-300 text-sky-700 font-black px-4 py-2 rounded-xl focus:ring-4 focus:ring-sky-200 transition outline-none cursor-pointer" onchange="checkToBe()">
+                        <option value="" disabled selected>---</option>
+                        <option value="am">am</option>
+                        <option value="is">is</option>
+                        <option value="are">are</option>
+                    </select>
+                    reading a very good book right now.
+                </div>
+                
+                <hr class="border-slate-100">
+
+                <!-- Q4 -->
+                <div class="flex flex-wrap items-center gap-2 text-lg font-bold text-slate-700">
+                    <span class="w-8 text-center text-xl">🐕</span> The dog 
+                    <select id="tobe-4" class="bg-slate-100 border-2 border-slate-300 text-sky-700 font-black px-4 py-2 rounded-xl focus:ring-4 focus:ring-sky-200 transition outline-none cursor-pointer" onchange="checkToBe()">
+                        <option value="" disabled selected>---</option>
+                        <option value="am">am</option>
+                        <option value="is">is</option>
+                        <option value="are">are</option>
+                    </select>
+                    sleeping on the sofa.
+                </div>
+            </div>
+            
+            <div id="tobe-feedback" class="hidden mt-6 p-4 rounded-2xl text-center font-black text-sm md:text-base border-2 transition-all"></div>
+        </section>
+
+        <!-- SLIDE 5: Conversation -->
+        <section id="slide-5" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 heading-font text-rose-500">5. A Busy Afternoon</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base font-medium">Read the text messages between Emma and Lucas. Notice the -ing verbs!</p>
+
+            <div class="glass-panel p-4 md:p-8 bg-slate-50 border-t-8 border-t-rose-400 max-w-2xl mx-auto">
+                <div class="chat-bubble-left">
+                    <p class="text-xs font-bold text-slate-400 uppercase mb-1">Emma 👩🏻</p>
+                    <p class="text-slate-700 font-medium text-base">Hey Lucas! Are you busy right now?</p>
+                </div>
+                
+                <div class="chat-bubble-right">
+                    <p class="text-xs font-bold text-sky-500 uppercase mb-1 text-right">👦🏽 Lucas</p>
+                    <p class="font-medium text-base">Hi Emma! Yes, I <b>am helping</b> my dad. We <b>are painting</b> the living room. 🎨 What about you?</p>
+                </div>
+
+                <div class="chat-bubble-left">
+                    <p class="text-xs font-bold text-slate-400 uppercase mb-1">Emma 👩🏻</p>
+                    <p class="text-slate-700 font-medium text-base">I <b>am sitting</b> at a cafe. My sister <b>is buying</b> us some coffee. ☕</p>
+                </div>
+
+                <div class="chat-bubble-right">
+                    <p class="text-xs font-bold text-sky-500 uppercase mb-1 text-right">👦🏽 Lucas</p>
+                    <p class="font-medium text-base">That sounds relaxing! I'm tired. The dog <b>is running</b> around with paint on his paws! 🐕🐾</p>
+                </div>
+                
+                <div class="chat-bubble-left">
+                    <p class="text-xs font-bold text-slate-400 uppercase mb-1">Emma 👩🏻</p>
+                    <p class="text-slate-700 font-medium text-base">Haha! Good luck with that!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: Reading Comprehension 1 -->
+        <section id="slide-6" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-6 heading-font text-sky-600">6. Comprehension Check</h2>
+            <div id="quiz-1-container" class="space-y-4">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- SLIDE 7: Visual Matching -->
+        <section id="slide-7" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 heading-font text-amber-500">7. What are they doing?</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base font-medium">Look at the emojis. Select the correct action to match the picture.</p>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <!-- Box 1 -->
+                <div class="glass-panel p-5 text-center bg-white hover:border-amber-200 transition">
+                    <div class="text-6xl mb-4">🎵🎧</div>
+                    <p class="text-slate-700 font-bold mb-3">Mark is...</p>
+                    <select id="act-1" class="w-full bg-slate-50 border-2 border-slate-200 text-sky-700 font-black px-4 py-2 rounded-xl outline-none" onchange="checkActions()">
+                        <option value="" disabled selected>Choose an action...</option>
+                        <option value="listening">listening to music.</option>
+                        <option value="reading">reading a book.</option>
+                        <option value="cooking">cooking lunch.</option>
+                    </select>
+                </div>
+                
+                <!-- Box 2 -->
+                <div class="glass-panel p-5 text-center bg-white hover:border-amber-200 transition">
+                    <div class="text-6xl mb-4">📺🛋️</div>
+                    <p class="text-slate-700 font-bold mb-3">They are...</p>
+                    <select id="act-2" class="w-full bg-slate-50 border-2 border-slate-200 text-sky-700 font-black px-4 py-2 rounded-xl outline-none" onchange="checkActions()">
+                        <option value="" disabled selected>Choose an action...</option>
+                        <option value="running">running in the park.</option>
+                        <option value="watching">watching TV.</option>
+                        <option value="playing">playing soccer.</option>
+                    </select>
+                </div>
+
+                <!-- Box 3 -->
+                <div class="glass-panel p-5 text-center bg-white hover:border-amber-200 transition">
+                    <div class="text-6xl mb-4">✍️📝</div>
+                    <p class="text-slate-700 font-bold mb-3">I am...</p>
+                    <select id="act-3" class="w-full bg-slate-50 border-2 border-slate-200 text-sky-700 font-black px-4 py-2 rounded-xl outline-none" onchange="checkActions()">
+                        <option value="" disabled selected>Choose an action...</option>
+                        <option value="sleeping">sleeping.</option>
+                        <option value="cooking">cooking dinner.</option>
+                        <option value="writing">writing an email.</option>
+                    </select>
+                </div>
+
+                <!-- Box 4 -->
+                <div class="glass-panel p-5 text-center bg-white hover:border-amber-200 transition">
+                    <div class="text-6xl mb-4">💃🕺</div>
+                    <p class="text-slate-700 font-bold mb-3">We are...</p>
+                    <select id="act-4" class="w-full bg-slate-50 border-2 border-slate-200 text-sky-700 font-black px-4 py-2 rounded-xl outline-none" onchange="checkActions()">
+                        <option value="" disabled selected>Choose an action...</option>
+                        <option value="dancing">dancing at a party.</option>
+                        <option value="running">running to the bus.</option>
+                        <option value="reading">reading a magazine.</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="actions-feedback" class="hidden mt-6 p-4 rounded-2xl text-center font-black text-sm md:text-base border-2 transition-all"></div>
+        </section>
+
+        <!-- SLIDE 8: Negatives and Questions -->
+        <section id="slide-8" class="hidden-slide">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 heading-font text-emerald-600">8. Negatives & Questions</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base font-medium">How to say "No" and how to ask what is happening.</p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Negatives -->
+                <div class="glass-panel p-6 border-t-8 border-t-rose-500">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-xl font-black"><i class="fas fa-minus"></i></div>
+                        <h3 class="font-black text-slate-800 text-xl">Negative (-)</h3>
+                    </div>
+                    <p class="text-slate-600 font-medium mb-4 text-sm">Add <b>NOT</b> after am/is/are.</p>
+                    
+                    <ul class="space-y-3 font-bold text-slate-700">
+                        <li class="bg-rose-50 p-3 rounded-xl border border-rose-100">I <b>am not</b> ('m not) working.</li>
+                        <li class="bg-rose-50 p-3 rounded-xl border border-rose-100">He <b>is not</b> (isn't) sleeping.</li>
+                        <li class="bg-rose-50 p-3 rounded-xl border border-rose-100">They <b>are not</b> (aren't) reading.</li>
+                    </ul>
+                </div>
+
+                <!-- Questions -->
+                <div class="glass-panel p-6 border-t-8 border-t-sky-500">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-sky-100 text-sky-600 rounded-full flex items-center justify-center text-xl font-black"><i class="fas fa-question"></i></div>
+                        <h3 class="font-black text-slate-800 text-xl">Question (?)</h3>
+                    </div>
+                    <p class="text-slate-600 font-medium mb-4 text-sm">Move am/is/are to the <b>FRONT</b>.</p>
+                    
+                    <ul class="space-y-3 font-bold text-slate-700">
+                        <li class="bg-sky-50 p-3 rounded-xl border border-sky-100"><b>Am</b> I working?</li>
+                        <li class="bg-sky-50 p-3 rounded-xl border border-sky-100"><b>Is</b> he sleeping?</li>
+                        <li class="bg-sky-50 p-3 rounded-xl border border-sky-100"><b>Are</b> they reading?</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 9: Role Play -->
+        <section id="slide-9" class="hidden-slide">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 heading-font text-purple-600">9. Speaking: Role Play</h2>
+                    <p class="text-slate-600 text-sm md:text-base font-medium">Tap a card to get a character and a scenario. Speak out loud describing what you are doing!</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Role 1 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-purple-50 border-purple-200">
+                            <div class="text-6xl mb-4">🧑‍🍳</div>
+                            <h3 class="font-black text-slate-800 text-xl mb-1">The Chef</h3>
+                            <p class="text-xs text-purple-500 font-bold uppercase tracking-widest"><i class="fas fa-hand-pointer mr-1"></i> Tap to flip</p>
+                        </div>
+                        <div class="flip-card-back bg-slate-800 border-slate-800 text-left p-6">
+                            <h3 class="font-black text-purple-400 text-lg mb-2">You are a chef!</h3>
+                            <p class="text-sm text-slate-300 font-medium mb-3">Someone calls you. Tell them what you are doing right now.</p>
+                            <p class="text-xs font-bold text-white uppercase tracking-widest mb-1">Use these words:</p>
+                            <ul class="text-sm text-white/90 list-disc list-inside">
+                                <li>Cook (dinner)</li>
+                                <li>Make (a cake)</li>
+                                <li>Listen (to music)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Role 2 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-pink-50 border-pink-200">
+                            <div class="text-6xl mb-4">🕵️</div>
+                            <h3 class="font-black text-slate-800 text-xl mb-1">The Spy</h3>
+                            <p class="text-xs text-pink-500 font-bold uppercase tracking-widest"><i class="fas fa-hand-pointer mr-1"></i> Tap to flip</p>
+                        </div>
+                        <div class="flip-card-back bg-slate-800 border-slate-800 text-left p-6">
+                            <h3 class="font-black text-pink-400 text-lg mb-2">You are a spy!</h3>
+                            <p class="text-sm text-slate-300 font-medium mb-3">Report to your boss. Describe what the "bad guys" are doing.</p>
+                            <p class="text-xs font-bold text-white uppercase tracking-widest mb-1">Use these words:</p>
+                            <ul class="text-sm text-white/90 list-disc list-inside">
+                                <li>They / eat (pizza)</li>
+                                <li>He / sleep (on the sofa)</li>
+                                <li>They / watch (TV)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Role 3 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-teal-50 border-teal-200">
+                            <div class="text-6xl mb-4">🏃‍♀️</div>
+                            <h3 class="font-black text-slate-800 text-xl mb-1">The Athlete</h3>
+                            <p class="text-xs text-teal-500 font-bold uppercase tracking-widest"><i class="fas fa-hand-pointer mr-1"></i> Tap to flip</p>
+                        </div>
+                        <div class="flip-card-back bg-slate-800 border-slate-800 text-left p-6">
+                            <h3 class="font-black text-teal-400 text-lg mb-2">You are an athlete!</h3>
+                            <p class="text-sm text-slate-300 font-medium mb-3">A reporter asks about your team's training at the moment.</p>
+                            <p class="text-xs font-bold text-white uppercase tracking-widest mb-1">Use these words:</p>
+                            <ul class="text-sm text-white/90 list-disc list-inside">
+                                <li>We / train (hard)</li>
+                                <li>I / drink (water)</li>
+                                <li>She / run (fast)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8">
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2"><i class="fas fa-pen mr-1"></i> Scratchpad (Optional)</p>
+                <textarea class="w-full h-24 p-4 border-2 border-slate-200 rounded-2xl focus:border-sky-400 focus:ring-4 focus:ring-sky-50 focus:outline-none resize-none font-medium text-slate-700 transition" placeholder="Write your speech here..."></textarea>
+            </div>
+        </section>
+
+        <!-- SLIDE 10: Outro -->
+        <section id="slide-10" class="hidden-slide text-center flex flex-col items-center justify-center min-h-[60vh]">
+            <div class="w-24 h-24 bg-gradient-to-tr from-green-400 to-emerald-600 text-white rounded-full flex items-center justify-center text-5xl mb-6 shadow-xl slide-enter mx-auto">
+                <i class="fas fa-star"></i>
+            </div>
+            <h2 class="text-3xl md:text-5xl font-black text-slate-800 mb-4 slide-enter heading-font" style="animation-delay: 0.1s">Amazing Job!</h2>
+            <p class="text-slate-600 text-base md:text-lg font-medium mb-10 max-w-xl mx-auto slide-enter bg-white p-6 rounded-3xl shadow-sm border-2 border-slate-100" style="animation-delay: 0.2s">
+                You have completed all 11 sections. You are now <b>mastering</b> the Present Progressive! You know how to describe exactly what is happening right now using <b>am/is/are + verb-ing</b>.
+            </p>
+            <button onclick="location.reload()" class="bg-sky-600 text-white font-black py-4 px-10 rounded-2xl hover:bg-sky-700 transition slide-enter btn-modern shadow-lg text-lg mx-auto flex items-center gap-3" style="animation-delay: 0.3s">
+                <i class="fas fa-redo-alt"></i> Start Over
+            </button>
+        </section>
+
+        <!-- Bottom Navigation -->
+        <div class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-md border-t-2 border-slate-200 p-3 md:p-4 z-30" id="bottom-nav">
+            <div class="max-w-4xl mx-auto flex justify-between items-center gap-3">
+                <button id="btn-prev" onclick="Nav.prev()" class="bg-white hover:bg-slate-100 text-slate-700 font-black py-3 px-6 rounded-xl border-2 border-slate-200 transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center btn-modern shadow-sm">
+                    <i class="fas fa-arrow-left md:mr-2"></i> <span class="hidden md:inline">Back</span>
+                </button>
+                <button id="btn-next" onclick="Nav.next()" class="bg-sky-600 hover:bg-sky-700 text-white font-black py-3 px-8 rounded-xl transition flex items-center btn-modern shadow-md tracking-wide">
+                    Next <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- QUIZ DATA ---
+        const quiz1Data = [
+            { q: "What is Lucas doing right now?", opts: ["He is sitting at a cafe.", "He is painting the living room.", "He is running."], a: 1 },
+            { q: "Who is Emma with?", opts: ["Her dad.", "Her dog.", "Her sister."], a: 2 },
+            { q: "What is the dog doing?", opts: ["Sleeping on the sofa.", "Running around with paint.", "Eating dinner."], a: 1 }
+        ];
+
+        // --- GLOBAL DICTIONARY TOGGLE ---
+        function toggleDictionary() {
+            const modal = document.getElementById('dictionary-modal');
+            if (modal.classList.contains('active')) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto'; // restore scroll
+            } else {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // prevent background scroll
+            }
+        }
+
+        // --- ROBUST QUIZ RENDERER ---
+        function buildQuiz(containerId, data) {
+            const container = document.getElementById(containerId);
+            if (!container) return; 
+            if (container.innerHTML.trim() !== '') return; 
+            
+            container.innerHTML = data.map((q, qIdx) => `
+                <div class="glass-panel p-5 md:p-6 bg-white question-row shadow-sm">
+                    <p class="font-bold text-slate-800 mb-4 md:text-lg"> ${qIdx+1}. ${q.q}</p>
+                    <div class="space-y-3">
+                        ${q.opts.map((opt, oIdx) => `
+                            <button onclick="checkQuiz(this, ${qIdx}, ${oIdx}, ${q.a}, '${containerId}', ${data.length})" class="w-full text-left font-bold p-3 md:p-4 rounded-xl bg-slate-50 border-2 border-slate-200 hover:border-sky-400 hover:bg-sky-50 transition btn-modern text-slate-700 text-sm md:text-base shadow-sm">${opt}</button>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function checkQuiz(btn, qIdx, selected, correct, containerId, totalQs) {
+            const parent = btn.parentElement;
+            const mainRow = btn.closest('.question-row'); 
+            
+            if(parent.querySelector('.opacity-60')) return; 
+            
+            Array.from(parent.children).forEach(b => { 
+                b.disabled = true; 
+                b.classList.add('opacity-60', 'cursor-not-allowed'); 
+            });
+            
+            if(selected === correct) {
+                btn.classList.remove('opacity-60', 'bg-slate-50', 'border-slate-200');
+                btn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-800', 'opacity-100');
+            } else {
+                btn.classList.remove('opacity-60', 'bg-slate-50', 'border-slate-200');
+                btn.classList.add('bg-rose-50', 'border-rose-500', 'text-rose-800', 'opacity-100');
+                parent.children[correct].classList.remove('opacity-60', 'bg-slate-50', 'border-slate-200');
+                parent.children[correct].classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800', 'opacity-100');
+            }
+
+            mainRow.classList.add('answered');
+            
+            const totalDone = document.getElementById(containerId).querySelectorAll('.question-row.answered').length;
+            if(totalDone === totalQs) {
+                setTimeout(() => {
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                }, 400);
+            }
+        }
+
+        // --- EXERCISE LOGIC (To Be Selection) ---
+        function checkToBe() {
+            const a1 = document.getElementById('tobe-1').value;
+            const a2 = document.getElementById('tobe-2').value;
+            const a3 = document.getElementById('tobe-3').value;
+            const a4 = document.getElementById('tobe-4').value;
+            const fb = document.getElementById('tobe-feedback');
+
+            if(a1 && a2 && a3 && a4) {
+                fb.classList.remove('hidden');
+                // Answers: 1: is, 2: are, 3: am, 4: is
+                if(a1 === 'is' && a2 === 'are' && a3 === 'am' && a4 === 'is') {
+                    fb.className = "mt-6 p-4 rounded-2xl text-center font-black text-sm md:text-base border-2 transition-all bg-emerald-50 text-emerald-700 border-emerald-400 shadow-sm";
+                    fb.innerHTML = `<i class="fas fa-check-circle mr-2 text-xl align-middle"></i> Excellent! You mastered am, is, and are!`;
+                } else {
+                    fb.className = "mt-6 p-4 rounded-2xl text-center font-black text-sm md:text-base border-2 transition-all bg-rose-50 text-rose-700 border-rose-400 shadow-sm";
+                    fb.innerHTML = `<i class="fas fa-times-circle mr-2 text-xl align-middle"></i> Check again. Remember: I (am), He/She/It (is), We/You/They (are).`;
+                }
+            } else {
+                fb.classList.add('hidden');
+            }
+        }
+
+        // --- EXERCISE LOGIC (Visual Actions) ---
+        function checkActions() {
+            const a1 = document.getElementById('act-1').value;
+            const a2 = document.getElementById('act-2').value;
+            const a3 = document.getElementById('act-3').value;
+            const a4 = document.getElementById('act-4').value;
+            const fb = document.getElementById('actions-feedback');
+
+            if(a1 && a2 && a3 && a4) {
+                fb.classList.remove('hidden');
+                // Answers: 1: listening, 2: watching, 3: writing, 4: dancing
+                if(a1 === 'listening' && a2 === 'watching' && a3 === 'writing' && a4 === 'dancing') {
+                    fb.className = "mt-6 p-4 rounded-2xl text-center font-black text-sm md:text-base border-2 transition-all bg-emerald-50 text-emerald-700 border-emerald-400 shadow-sm";
+                    fb.innerHTML = `<i class="fas fa-star mr-2 text-xl align-middle text-amber-500"></i> Perfect matching!`;
+                } else {
+                    fb.className = "mt-6 p-4 rounded-2xl text-center font-black text-sm md:text-base border-2 transition-all bg-amber-50 text-amber-700 border-amber-400 shadow-sm";
+                    fb.innerHTML = `<i class="fas fa-exclamation-triangle mr-2 text-xl align-middle"></i> Try again. Look closely at the emojis!`;
+                }
+            } else {
+                fb.classList.add('hidden');
+            }
+        }
+
+        // --- NAVIGATION ARCHITECTURE ---
+        const Nav = {
+            current: 0,
+            total: 11, // Exactly 11 sections (0 to 10)
+            slidesData: [
+                { title: "Intro" }, 
+                { title: "Context & Time" }, 
+                { title: "Action Verbs" }, 
+                { title: "The Formula" }, 
+                { title: "To Be Practice" }, 
+                { title: "Conversation" }, 
+                { title: "Comprehension Check" }, 
+                { title: "Visual Matching" }, 
+                { title: "Negatives & Questions" }, 
+                { title: "Role Play" }, 
+                { title: "Finish" }
+            ],
+            update() {
+                document.getElementById('nav-title').innerText = this.slidesData[this.current].title;
+                document.getElementById('main-progress').style.width = `${(this.current / (this.total-1)) * 100}%`;
+                document.getElementById('slide-counter').innerText = `${this.current + 1} / ${this.total}`;
+
+                for(let i = 0; i < this.total; i++) {
+                    const s = document.getElementById(`slide-${i}`);
+                    if(s) { 
+                        s.classList.add('hidden-slide'); 
+                        s.classList.remove('slide-enter'); 
+                    }
+                }
+                
+                const act = document.getElementById(`slide-${this.current}`);
+                if(act) { 
+                    act.classList.remove('hidden-slide'); 
+                    void act.offsetWidth; 
+                    act.classList.add('slide-enter'); 
+                }
+
+                document.getElementById('btn-prev').disabled = this.current === 0;
+                document.getElementById('bottom-nav').classList.toggle('hidden', this.current === this.total - 1);
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            },
+            next() { if(this.current < this.total - 1) { this.current++; this.update(); } },
+            prev() { if(this.current > 0) { this.current--; this.update(); } }
+        };
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            buildQuiz('quiz-1-container', quiz1Data);
+            Nav.update();
+        });
+
+    </script>
+</body>
+</html>
