@@ -197,22 +197,56 @@ function Landing() {
         {/* HERO */}
         <section className="relative overflow-hidden">
           <div
-            className="tn-shimmer-bg absolute inset-0 -z-20"
+            className="absolute inset-0 -z-30"
             style={{
               background:
-                "linear-gradient(160deg, var(--background) 0%, color-mix(in oklab, var(--mint) 12%, var(--background)) 45%, color-mix(in oklab, var(--primary) 10%, var(--background)) 100%)",
+                "linear-gradient(165deg, var(--background) 0%, color-mix(in oklab, var(--primary) 6%, var(--background)) 55%, color-mix(in oklab, var(--mint) 8%, var(--background)) 100%)",
+            }}
+          />
+          {/* Retícula y diagonales */}
+          <div aria-hidden className="tn-grid tn-fade-mask absolute inset-0 -z-20 opacity-70" />
+          <div
+            aria-hidden
+            className="tn-diag absolute -right-10 top-10 -z-20 h-[280px] w-[420px] rotate-6 opacity-60"
+          />
+          <div
+            aria-hidden
+            className="tn-dots absolute bottom-10 left-[-40px] -z-20 h-[220px] w-[280px] opacity-50"
+          />
+          {/* Figuras geométricas */}
+          <div
+            aria-hidden
+            className="tn-outline-shape tn-float absolute -top-16 right-[12%] -z-20 hidden h-56 w-56 rotate-12 rounded-[2.5rem] lg:block"
+          />
+          <div
+            aria-hidden
+            className="tn-float absolute bottom-16 right-[6%] -z-20 hidden h-20 w-20 rotate-45 rounded-xl lg:block"
+            style={{ background: "var(--gradient-gold)", opacity: 0.5, animationDelay: "-2s" }}
+          />
+          <div
+            aria-hidden
+            className="absolute left-[8%] top-24 -z-20 hidden h-3 w-3 rounded-full lg:block"
+            style={{ background: "var(--mint)" }}
+          />
+          <div
+            aria-hidden
+            className="absolute inset-x-0 top-[42%] -z-20 h-px"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, color-mix(in oklab, var(--primary) 25%, transparent), transparent)",
             }}
           />
           <div
             aria-hidden
-            className="tn-float absolute -top-40 left-[15%] -z-10 h-[420px] w-[420px] rounded-full opacity-30 blur-3xl"
+            className="tn-float absolute -top-40 left-[10%] -z-10 h-[420px] w-[420px] rounded-full opacity-20 blur-3xl"
             style={{ background: "var(--gradient-primary)" }}
           />
           <div
             aria-hidden
-            className="tn-float absolute -bottom-24 right-[8%] -z-10 h-[360px] w-[360px] rounded-full opacity-25 blur-3xl"
+            className="tn-float absolute -bottom-24 right-[8%] -z-10 h-[360px] w-[360px] rounded-full opacity-20 blur-3xl"
             style={{ background: "var(--gradient-mint)", animationDelay: "-4s" }}
           />
+
 
           <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
             <div className="mx-auto max-w-3xl text-center">
