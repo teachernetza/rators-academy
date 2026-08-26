@@ -18,6 +18,8 @@ import {
   Sparkles,
   Star,
   ArrowRight,
+  Gauge,
+  Rocket,
 } from "lucide-react";
 import { useState } from "react";
 import { useReveal } from "@/hooks/use-reveal";
@@ -66,6 +68,14 @@ const WA_URL = waUrl(
   "Hola Teacher Netza, me gustaría recibir más información sobre los planes de clases de inglés.",
 );
 const EMAIL = "teacher.netza.varo@gmail.com";
+
+const RIBBON_ITEMS: string[] = [
+  "Examen diagnóstico gratis",
+  "Labs interactivos A1–C1",
+  "Constancia de nivel en PDF",
+  "Clases 1 a 1 en línea",
+  "Hasta 20% en paquetes",
+];
 
 const SECTION_IDS = ["examen", "metodologia", "planes", "contacto"];
 

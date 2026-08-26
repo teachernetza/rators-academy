@@ -417,3 +417,21 @@
   background-color: var(--c);
   color: #f7f9fc;
 }
+
+/* ===== Cinta diagonal (marquee) ===== */
+@keyframes tn-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@utility tn-ribbon {
+  width: 108%;
+  margin-left: -4%;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+@utility tn-marquee {
+  animation: tn-marquee 32s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tn-marquee { animation: none !important; }
+}
