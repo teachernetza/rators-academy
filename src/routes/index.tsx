@@ -195,7 +195,7 @@ function Landing() {
 
       <main id="top" className="pt-16">
         {/* HERO */}
-        <section className="relative overflow-hidden">
+        <section className="relative isolate overflow-hidden">
           <div
             className="absolute inset-0 -z-30"
             style={{
