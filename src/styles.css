@@ -190,26 +190,31 @@
   }
 }
 
-/* ===== Brand: mint glow accent (landing + diagnostic exam) ===== */
+/* ===== Brand: coral accent + mostaza (landing + examen + app) =====
+   Los tokens siguen llamándose "mint" por compatibilidad, pero ahora son coral. */
 :root {
-  --mint: oklch(0.78 0.16 168);
-  --mint-strong: oklch(0.70 0.17 170);
-  --mint-soft: oklch(0.88 0.11 168);
-  /* Termina en un teal medio: el texto blanco encima siempre contrasta */
-  --gradient-hero: linear-gradient(135deg, oklch(0.28 0.04 225), oklch(0.40 0.07 210) 45%, oklch(0.52 0.12 178));
-  --gradient-heading: linear-gradient(135deg, oklch(0.42 0.07 215), oklch(0.60 0.14 172));
-  --gradient-mint: linear-gradient(135deg, oklch(0.70 0.17 170), oklch(0.84 0.14 165));
-  --glow-mint: 0 0 40px oklch(0.78 0.16 168 / 0.45);
-  --glow-primary: 0 0 40px oklch(0.45 0.08 215 / 0.35);
+  --mint: oklch(0.707 0.187 34);
+  --mint-strong: oklch(0.625 0.190 33);
+  --mint-soft: oklch(0.845 0.105 42);
+  --gold: oklch(0.828 0.160 78);
+  --gold-strong: oklch(0.745 0.155 72);
+  --gradient-hero: linear-gradient(135deg, oklch(0.27 0.05 226), oklch(0.331 0.054 226) 45%, oklch(0.45 0.085 240));
+  --gradient-heading: linear-gradient(135deg, oklch(0.36 0.06 226), oklch(0.625 0.190 33));
+  --gradient-mint: linear-gradient(135deg, oklch(0.625 0.190 33), oklch(0.828 0.160 78));
+  --gradient-gold: linear-gradient(135deg, oklch(0.828 0.160 78), oklch(0.745 0.19 55));
+  --glow-mint: 0 0 40px oklch(0.707 0.187 34 / 0.38);
+  --glow-primary: 0 0 40px oklch(0.331 0.054 226 / 0.35);
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .dark {
-  --mint: oklch(0.84 0.14 168);
-  --mint-strong: oklch(0.78 0.15 170);
-  --mint-soft: oklch(0.66 0.12 170);
-  --gradient-hero: linear-gradient(135deg, oklch(0.22 0.04 230), oklch(0.32 0.07 210) 45%, oklch(0.44 0.11 180));
-  --gradient-heading: linear-gradient(135deg, oklch(0.88 0.08 200), oklch(0.86 0.14 168));
+  --mint: oklch(0.74 0.17 36);
+  --mint-strong: oklch(0.78 0.16 38);
+  --mint-soft: oklch(0.62 0.16 34);
+  --gold: oklch(0.85 0.155 80);
+  --gold-strong: oklch(0.88 0.14 82);
+  --gradient-hero: linear-gradient(135deg, oklch(0.20 0.04 230), oklch(0.28 0.055 226) 45%, oklch(0.38 0.08 240));
+  --gradient-heading: linear-gradient(135deg, oklch(0.90 0.03 230), oklch(0.78 0.16 38));
   --shadow-elegant: 0 10px 30px -12px oklch(0 0 0 / 0.7);
   --shadow-soft: 0 2px 8px -2px oklch(0 0 0 / 0.5);
 }
@@ -219,7 +224,10 @@
   --color-mint: var(--mint);
   --color-mint-strong: var(--mint-strong);
   --color-mint-soft: var(--mint-soft);
+  --color-gold: var(--gold);
+  --color-gold-strong: var(--gold-strong);
 }
+
 
 @keyframes tn-float {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
