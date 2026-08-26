@@ -248,39 +248,28 @@ function Landing() {
           />
 
 
-          <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+          <div className="mx-auto max-w-7xl px-4 pb-16 pt-20 sm:px-6 lg:px-8 lg:pb-20 lg:pt-24">
             <div className="mx-auto max-w-3xl text-center">
               <Reveal>
-                <div className="glow-logo mx-auto mb-8 w-fit">
-                  <img
-                    src="/logo_teacher_netza.png"
-                    alt="Teacher Netza — Clases de Inglés"
-                    className="mx-auto h-40 w-auto object-contain sm:h-48"
-                  />
-                </div>
-              </Reveal>
-
-              <Reveal delay={80}>
                 <span className="inline-flex items-center gap-2 rounded-full border border-mint/40 bg-mint/10 px-3 py-1 text-xs font-medium text-primary shadow-[0_0_18px_-6px_var(--mint)]">
                   <Sparkles className="h-3.5 w-3.5 text-mint-strong" />
                   +6 años formando estudiantes bilingües
                 </span>
                 <h1 className="mt-6 font-heading text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-                  Domina el inglés con un sistema{" "}
+                  Aprende inglés de verdad,{" "}
                   <span className="bg-[image:var(--gradient-heading)] bg-clip-text text-transparent">
-                    moderno, interactivo y a tu medida
+                    a tu ritmo y a tu medida
                   </span>
                   .
                 </h1>
-                <p className="mt-6 text-lg text-muted-foreground sm:text-xl">
-                  Una plataforma de aprendizaje con acompañamiento experto, herramientas
-                  tecnológicas y práctica real para que avances con confianza desde la
-                  primera clase.
+                <p className="mt-5 text-lg text-muted-foreground sm:text-xl">
+                  Descubre tu nivel en minutos, practica con Labs interactivos gratis y avanza
+                  con clases 1 a 1 desde {mxn(HOURLY_RATE)} por hora.
                 </p>
               </Reveal>
 
-              <Reveal delay={160}>
-                <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Reveal delay={120}>
+                <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
                   <Link to="/diagnostic-exam">
                     <Button
                       size="lg"
@@ -307,49 +296,67 @@ function Landing() {
                     </Button>
                   </a>
                 </div>
-
-                <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
-                  <span className="flex items-center gap-1.5">
-                    <Check className="h-4 w-4 text-mint-strong" />
-                    Clases desde {mxn(HOURLY_RATE)} / hora
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Check className="h-4 w-4 text-mint-strong" />
-                    Hasta 20% en paquetes mensuales
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Check className="h-4 w-4 text-mint-strong" />
-                    Examen diagnóstico gratis
-                  </span>
-                </div>
               </Reveal>
             </div>
+          </div>
 
-            {/* 3 TARJETAS DEL HERO */}
-            <div className="mx-auto mt-14 grid max-w-5xl gap-5 sm:grid-cols-3">
+          {/* CINTA DIAGONAL */}
+          <div aria-hidden className="relative -mb-2 mt-2 select-none">
+            <div
+              className="tn-ribbon -rotate-2 border-y border-[color-mix(in_oklab,var(--primary)_25%,transparent)] py-3"
+              style={{ background: "var(--gradient-hero)" }}
+            >
+              <div className="tn-marquee flex w-max gap-10 whitespace-nowrap">
+                {Array.from({ length: 4 }).map((_, k) => (
+                  <span key={k} className="flex items-center gap-10">
+                    {RIBBON_ITEMS.map((t) => (
+                      <span
+                        key={t + k}
+                        className="flex items-center gap-3 font-heading text-sm font-semibold uppercase tracking-[0.18em] text-primary-foreground/90"
+                      >
+                        <Star className="h-3.5 w-3.5 text-gold" />
+                        {t}
+                      </span>
+                    ))}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div
+              className="tn-ribbon absolute inset-x-0 top-0 rotate-2 py-3 opacity-25"
+              style={{ background: "var(--gradient-mint)" }}
+            />
+          </div>
+
+          {/* 3 TARJETAS DEL HERO */}
+          <div className="mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 lg:px-8">
+            <div className="mx-auto grid max-w-5xl gap-6 sm:grid-cols-3">
               {[
                 {
-                  icon: ClipboardCheck,
+                  icon: Gauge,
                   title: "Examen Diagnóstico",
                   text: "Descubre tu nivel real (A1–C1) y recibe tu constancia en PDF.",
+                  tag: "Gratis · 7 min",
                   cta: "Hacer examen",
                   to: "/diagnostic-exam" as const,
                   color: "#FFB830",
                   invert: false,
                 },
                 {
-                  icon: Beaker,
+                  icon: FlaskConical,
                   title: "Labs Interactivos",
                   text: "Practica gratis con labs por nivel MCER (A1–C1), sin registro.",
+                  tag: "Sin registro",
                   cta: "Entrar a los Labs",
                   to: "/labs" as const,
                   color: "#FF6B4A",
                   invert: false,
                 },
                 {
-                  icon: Sparkles,
+                  icon: Rocket,
                   title: "Planes de Clases",
-                  text: `Clases desde ${mxn(HOURLY_RATE)} por hora y paquetes con hasta 20% menos.`,
+                  text: `Clases 1 a 1 desde ${mxn(HOURLY_RATE)} por hora y paquetes con hasta 20% menos.`,
+                  tag: "Hasta -20%",
                   cta: "Ver planes",
                   href: "#planes",
                   color: "#0F3B4B",
@@ -358,24 +365,48 @@ function Landing() {
               ].map((c, i) => {
                 const Inner = (
                   <div
-                    className="card-hover group flex h-full flex-col justify-between rounded-2xl border border-border bg-card/85 p-6 text-left shadow-[var(--shadow-soft)] backdrop-blur"
-                    style={{ borderTop: `4px solid ${c.color}`, "--c": c.color } as CSSProperties}
+                    className="card-hover group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-border bg-card p-6 text-left shadow-[var(--shadow-soft)]"
+                    style={{ "--c": c.color } as CSSProperties}
                   >
-                    <div>
-                      <div
-                        className={`${c.invert ? "tn-accent-icon-invert" : "tn-accent-icon"} mb-4 flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3`}
-                      >
-                        <c.icon className="h-5 w-5" />
-                      </div>
-                      <h2 className="font-heading text-lg font-semibold">{c.title}</h2>
-                      <p className="mt-2 text-sm text-muted-foreground">{c.text}</p>
-                    </div>
                     <span
-                      className="tn-accent-text mt-5 inline-flex items-center text-sm font-semibold"
+                      aria-hidden
+                      className="absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-[0.14] blur-2xl transition-opacity duration-500 group-hover:opacity-30"
+                      style={{ background: c.color }}
+                    />
+                    <span
+                      aria-hidden
+                      className="absolute right-5 top-5 font-heading text-4xl font-bold leading-none opacity-10"
+                      style={{ color: c.color }}
                     >
+                      0{i + 1}
+                    </span>
+                    <div className="relative">
+                      <div
+                        className={`${c.invert ? "tn-accent-icon-invert" : "tn-accent-icon"} mb-5 flex h-14 w-14 rotate-3 items-center justify-center rounded-2xl shadow-[0_10px_24px_-12px_var(--c)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105`}
+                      >
+                        <c.icon className="h-6 w-6" />
+                      </div>
+                      <span
+                        className="inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider"
+                        style={{
+                          background: `color-mix(in oklab, ${c.color} 16%, transparent)`,
+                          color: c.invert ? c.color : `color-mix(in oklab, ${c.color} 72%, black)`,
+                        }}
+                      >
+                        {c.tag}
+                      </span>
+                      <h2 className="mt-3 font-heading text-xl font-semibold">{c.title}</h2>
+                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{c.text}</p>
+                    </div>
+                    <span className="tn-accent-text mt-6 inline-flex items-center text-sm font-semibold">
                       {c.cta}
                       <ArrowRight className="ml-1.5 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
+                    <span
+                      aria-hidden
+                      className="absolute inset-x-0 bottom-0 h-1 origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
+                      style={{ background: c.color }}
+                    />
                   </div>
                 );
                 return (
@@ -394,6 +425,7 @@ function Landing() {
               })}
             </div>
           </div>
+
         </section>
 
 
