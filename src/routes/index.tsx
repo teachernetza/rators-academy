@@ -204,7 +204,7 @@ function Landing() {
             }}
           />
           {/* Retícula y diagonales */}
-          <div aria-hidden className="tn-grid tn-fade-mask absolute inset-0 -z-20 opacity-70" />
+          <div aria-hidden className="tn-grid tn-fade-mask absolute inset-0 -z-20" />
           <div
             aria-hidden
             className="tn-diag absolute -right-10 top-10 -z-20 h-[280px] w-[420px] rotate-6 opacity-60"
