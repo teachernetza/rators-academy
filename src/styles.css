@@ -379,3 +379,36 @@
 .tn-on-accent {
   color: #0b1f26;
 }
+
+/* ===== Fondos geométricos de marca ===== */
+@utility tn-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--primary) 9%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--primary) 9%, transparent) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+@utility tn-diag {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in oklab, var(--mint) 22%, transparent) 0 1px,
+    transparent 1px 14px
+  );
+}
+
+@utility tn-dots {
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--primary) 22%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+@utility tn-fade-mask {
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 35%, transparent 78%);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 35%, transparent 78%);
+}
+
+@utility tn-outline-shape {
+  border: 2px solid color-mix(in oklab, var(--primary) 18%, transparent);
+}
