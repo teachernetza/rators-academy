@@ -220,7 +220,7 @@ function Landing() {
           />
           <div
             aria-hidden
-            className="tn-float absolute bottom-16 right-[6%] -z-20 hidden h-20 w-20 rotate-45 rounded-xl lg:block"
+            className="tn-float absolute bottom-4 right-[2%] -z-20 hidden h-16 w-16 rotate-45 rounded-xl lg:block"
             style={{ background: "var(--gradient-gold)", opacity: 0.5, animationDelay: "-2s" }}
           />
           <div
