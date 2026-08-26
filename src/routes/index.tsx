@@ -334,7 +334,7 @@ function Landing() {
                   text: "Descubre tu nivel real (A1–C1) y recibe tu constancia en PDF.",
                   cta: "Hacer examen",
                   to: "/diagnostic-exam" as const,
-                  color: "#f0a83c",
+                  color: "#FFB830",
                 },
                 {
                   icon: Beaker,
@@ -342,7 +342,7 @@ function Landing() {
                   text: "Practica gratis con labs por nivel MCER (A1–C1), sin registro.",
                   cta: "Entrar a los Labs",
                   to: "/labs" as const,
-                  color: "#35d1a8",
+                  color: "#FF6B4A",
                 },
                 {
                   icon: Sparkles,
@@ -350,7 +350,7 @@ function Landing() {
                   text: `Clases desde ${mxn(HOURLY_RATE)} por hora y paquetes con hasta 20% menos.`,
                   cta: "Ver planes",
                   href: "#planes",
-                  color: "#2bb3c9",
+                  color: "#0F3B4B", invert: true,
                 },
               ].map((c, i) => {
                 const Inner = (
