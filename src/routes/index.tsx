@@ -335,6 +335,7 @@ function Landing() {
                   cta: "Hacer examen",
                   to: "/diagnostic-exam" as const,
                   color: "#FFB830",
+                  invert: false,
                 },
                 {
                   icon: Beaker,
@@ -343,6 +344,7 @@ function Landing() {
                   cta: "Entrar a los Labs",
                   to: "/labs" as const,
                   color: "#FF6B4A",
+                  invert: false,
                 },
                 {
                   icon: Sparkles,
@@ -350,7 +352,8 @@ function Landing() {
                   text: `Clases desde ${mxn(HOURLY_RATE)} por hora y paquetes con hasta 20% menos.`,
                   cta: "Ver planes",
                   href: "#planes",
-                  color: "#0F3B4B", invert: true,
+                  color: "#0F3B4B",
+                  invert: true,
                 },
               ].map((c, i) => {
                 const Inner = (
@@ -360,7 +363,7 @@ function Landing() {
                   >
                     <div>
                       <div
-                        className="tn-accent-icon mb-4 flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
+                        className={`${c.invert ? "tn-accent-icon-invert" : "tn-accent-icon"} mb-4 flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3`}
                       >
                         <c.icon className="h-5 w-5" />
                       </div>
