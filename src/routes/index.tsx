@@ -238,14 +238,8 @@ function Landing() {
             className="absolute left-[8%] top-24 -z-20 hidden h-3 w-3 rounded-full lg:block"
             style={{ background: "var(--mint)" }}
           />
-          <div
-            aria-hidden
-            className="absolute inset-x-0 top-[42%] -z-20 h-px"
-            style={{
-              background:
-                "linear-gradient(90deg, transparent, color-mix(in oklab, var(--primary) 25%, transparent), transparent)",
-            }}
           {/* Más figuras */}
+
           <div
             aria-hidden
             className="tn-float absolute left-[6%] top-[36%] -z-20 hidden h-24 w-24 rotate-12 rounded-full border-2 border-[color-mix(in_oklab,var(--mint)_45%,transparent)] lg:block"
