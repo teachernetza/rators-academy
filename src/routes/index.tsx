@@ -245,7 +245,47 @@ function Landing() {
               background:
                 "linear-gradient(90deg, transparent, color-mix(in oklab, var(--primary) 25%, transparent), transparent)",
             }}
+          {/* Más figuras */}
+          <div
+            aria-hidden
+            className="tn-float absolute left-[6%] top-[36%] -z-20 hidden h-24 w-24 rotate-12 rounded-full border-2 border-[color-mix(in_oklab,var(--mint)_45%,transparent)] lg:block"
+            style={{ animationDelay: "-6s" }}
           />
+          <div
+            aria-hidden
+            className="absolute right-[20%] top-[58%] -z-20 hidden h-14 w-14 rounded-full lg:block"
+            style={{ background: "color-mix(in oklab, var(--mint) 22%, transparent)" }}
+          />
+          <div
+            aria-hidden
+            className="tn-diag absolute -left-8 top-[8%] -z-20 hidden h-[180px] w-[220px] -rotate-6 opacity-40 lg:block"
+          />
+          <div
+            aria-hidden
+            className="tn-dots absolute right-[4%] top-[30%] -z-20 hidden h-[160px] w-[180px] opacity-40 lg:block"
+          />
+          <div
+            aria-hidden
+            className="absolute left-[24%] top-[14%] -z-20 hidden h-0 w-0 lg:block"
+            style={{
+              borderLeft: "18px solid transparent",
+              borderRight: "18px solid transparent",
+              borderBottom: "30px solid color-mix(in oklab, var(--gold) 55%, transparent)",
+            }}
+          />
+          <div
+            aria-hidden
+            className="tn-outline-shape absolute bottom-[12%] left-[42%] -z-20 hidden h-24 w-24 rotate-45 lg:block"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-x-0 top-[42%] -z-20 h-px"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, color-mix(in oklab, var(--primary) 25%, transparent), transparent)",
+            }}
+          />
+
           <div
             aria-hidden
             className="tn-float absolute -top-40 left-[10%] -z-10 h-[420px] w-[420px] rounded-full opacity-20 blur-3xl"
