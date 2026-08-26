@@ -33,20 +33,29 @@ export default defineConfig({
       workbox: {
         navigateFallback: null,
         navigateFallbackDenylist: [/^\/api\//, /^\/~oauth/, /^\/_serverFn/],
-        globPatterns: ["**/*.{js,css,html,svg,png,ico,woff2}"],
+        globPatterns: ["**/*.{svg,png,ico,woff2}"],
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true,
         runtimeCaching: [
           {
+            // Never serve HTML from cache first: stale HTML points at hashed
+            // JS chunks that no longer exist after a deploy.
             urlPattern: ({ request }) => request.mode === "navigate",
+            handler: "NetworkOnly",
+          },
+          {
+            urlPattern: ({ url, sameOrigin }) =>
+              sameOrigin && /\.(?:js|css)$/.test(url.pathname),
             handler: "NetworkFirst",
             options: {
-              cacheName: "html-pages",
-              networkTimeoutSeconds: 4,
-              expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 7 },
+              cacheName: "app-code",
+              expiration: { maxEntries: 120, maxAgeSeconds: 60 * 60 * 24 * 7 },
             },
           },
           {
             urlPattern: ({ url, sameOrigin }) =>
-              sameOrigin && /\.(?:js|css|woff2|png|jpg|svg|ico)$/.test(url.pathname),
+              sameOrigin && /\.(?:woff2|png|jpg|jpeg|svg|ico|mp3)$/.test(url.pathname),
             handler: "CacheFirst",
             options: {
               cacheName: "static-assets",
