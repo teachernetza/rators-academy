@@ -412,3 +412,8 @@
 @utility tn-outline-shape {
   border: 2px solid color-mix(in oklab, var(--primary) 18%, transparent);
 }
+
+.tn-accent-icon-invert {
+  background-color: var(--c);
+  color: #f7f9fc;
+}
