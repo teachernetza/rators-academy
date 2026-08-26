@@ -28,17 +28,17 @@ import { COMPUTED_PLANS, HOURLY_RATE, mxn } from "@/lib/pricing";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Teacher Netza Varo — Domina el inglés con un sistema moderno" },
+      { title: "Teacher Netza | ESL Platform" },
       {
         name: "description",
         content:
           "Plataforma de inglés con Labs interactivos gratuitos, examen diagnóstico y Masterclasses. Clases desde $149 MXN por hora y paquetes mensuales con hasta 20% de descuento.",
       },
-      { property: "og:title", content: "Teacher Netza Varo — Inglés moderno e interactivo" },
+      { property: "og:title", content: "Teacher Netza | ESL Platform" },
       {
         property: "og:description",
         content:
-          "Aprende inglés con un sistema moderno e interactivo. Clases desde $149 MXN/hora y paquetes mensuales con hasta 20% de descuento.",
+          "Aprende inglés online con un sistema moderno e interactivo. Clases y paquetes mensuales con hasta 20% de descuento.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -129,7 +129,7 @@ function Landing() {
             />
             <img
               src="/banner_teacher_netza.png"
-              alt="Teacher Netza — Clases de Inglés"
+              alt="Teacher Netza | ESL System"
               className="hidden h-10 w-auto object-contain sm:block"
             />
           </a>
