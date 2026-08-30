@@ -383,86 +383,135 @@ function StartScreen({
   };
   const modes: ExamMode[] = ["quick", "full"];
   return (
-    <div className="mx-auto max-w-xl text-center">
-      <span className="inline-flex items-center gap-2 rounded-full border border-mint/40 bg-mint/10 px-3 py-1 text-xs font-medium text-primary shadow-[0_0_18px_-6px_var(--mint)]">
-        <Sparkles className="h-3.5 w-3.5" /> Gratis · elige tu versión
-      </span>
-      <h1 className="mt-6 font-heading text-3xl font-bold sm:text-4xl">
-        Descubre tu nivel real de inglés
-      </h1>
-      <p className="mt-4 text-muted-foreground">
-        Cada pregunta tiene dos respuestas correctas de distinto nivel: elige la que realmente
-        usarías. Al terminar recibes tu <strong>Constancia de Nivel</strong> en PDF.
-      </p>
-
-      <div className="mt-8 grid gap-3 sm:grid-cols-2">
-        {modes.map((m) => {
-          const info = EXAM_MODES[m];
-          const s = stats(m);
-          const active = mode === m;
-          return (
-            <button
-              key={m}
-              type="button"
-              onClick={() => onMode(m)}
-              aria-pressed={active}
-              className={cn(
-                "rounded-2xl border p-5 text-left transition-all duration-300",
-                active
-                  ? "border-mint bg-mint/10 shadow-[var(--glow-mint)]"
-                  : "border-border bg-card/80 hover:-translate-y-0.5 hover:border-mint/50",
-              )}
-            >
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-primary" />
-                <span className="font-heading text-base font-bold">{info.label}</span>
-              </div>
-              <div className="mt-1 text-sm font-medium text-primary">{info.duration}</div>
-              <p className="mt-2 text-xs text-muted-foreground">{info.description}</p>
-              <div className="mt-3 text-xs font-semibold">
-                {s.listening.length} audios · {s.total} preguntas
-              </div>
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
-        {blocks(mode).map((b) => (
-          <div
-            key={b.title}
-            className="rounded-xl border border-mint/25 bg-card/80 p-4 text-left shadow-[var(--shadow-soft)] backdrop-blur"
-          >
-            <b.icon className="h-5 w-5 text-primary" />
-            <div className="mt-2 font-heading text-sm font-bold">{b.title}</div>
-            <div className="text-xs text-muted-foreground">{b.desc}</div>
-          </div>
-        ))}
-      </div>
-
-
-      <div className="mt-8 space-y-3 rounded-2xl border border-mint/30 bg-card/80 p-6 text-left shadow-[var(--shadow-soft)] backdrop-blur">
-        <label className="text-sm font-medium">¿Cuál es tu nombre?</label>
-        <Input
-          value={name}
-          onChange={(e) => onName(e.target.value)}
-          placeholder="Ej. María López"
-          onKeyDown={(e) => e.key === "Enter" && onStart()}
+    <div className="mx-auto max-w-3xl">
+      {/* Encabezado */}
+      <div className="relative overflow-hidden rounded-3xl border border-border p-8 text-center shadow-[var(--shadow-elegant)] sm:p-10">
+        <span
+          aria-hidden
+          className="absolute inset-0 -z-10"
+          style={{ background: "var(--gradient-hero)" }}
         />
-        <div className="flex flex-col gap-2 pt-2 sm:flex-row">
-          <Button onClick={onStart} size="lg" className="w-full shadow-[var(--shadow-elegant)]">
-            Comenzar examen
-          </Button>
-          {hasProgress && (
-            <Button variant="ghost" onClick={onReset} size="lg" className="w-full sm:w-auto">
-              <RotateCcw className="mr-2 h-4 w-4" /> Reiniciar
-            </Button>
-          )}
-        </div>
-        <p className="pt-2 text-xs text-muted-foreground">
-          Tu nombre aparecerá en la constancia final.
+        <span aria-hidden className="tn-dots absolute inset-0 -z-10 opacity-25" />
+        <span
+          aria-hidden
+          className="absolute -right-10 -top-10 -z-10 h-40 w-40 rounded-full opacity-30 blur-2xl"
+          style={{ background: "var(--gradient-mint)" }}
+        />
+        <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium text-primary-foreground">
+          <Sparkles className="h-3.5 w-3.5 text-gold" /> Gratis · sin registro
+        </span>
+        <h1 className="mt-5 font-heading text-3xl font-bold text-primary-foreground sm:text-4xl">
+          Descubre tu nivel real de inglés
+        </h1>
+        <p className="mx-auto mt-3 max-w-xl text-sm text-primary-foreground/85 sm:text-base">
+          Cada pregunta tiene dos respuestas correctas de distinto nivel: elige la que realmente
+          usarías. Al terminar recibes tu <strong>Constancia de Nivel</strong> en PDF.
         </p>
       </div>
+
+      {/* Paso 1: versión */}
+      <div className="mt-10">
+        <StepTitle n={1} title="Elige la versión del examen" />
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {modes.map((m) => {
+            const info = EXAM_MODES[m];
+            const s = stats(m);
+            const active = mode === m;
+            return (
+              <button
+                key={m}
+                type="button"
+                onClick={() => onMode(m)}
+                aria-pressed={active}
+                className={cn(
+                  "group relative overflow-hidden rounded-2xl border-2 p-5 text-left transition-all duration-300",
+                  active
+                    ? "border-mint bg-mint/10 shadow-[var(--glow-mint)]"
+                    : "border-border bg-card/85 hover:-translate-y-1 hover:border-mint/50 hover:shadow-[var(--shadow-soft)]",
+                )}
+              >
+                <span
+                  aria-hidden
+                  className={cn(
+                    "absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors",
+                    active ? "border-mint bg-mint text-white" : "border-border",
+                  )}
+                >
+                  {active && <Check className="h-3.5 w-3.5" />}
+                </span>
+                <div
+                  className={cn(
+                    "flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-500 group-hover:scale-105",
+                    active ? "bg-mint text-white" : "bg-muted text-primary",
+                  )}
+                >
+                  {m === "quick" ? <Zap className="h-5 w-5" /> : <Clock className="h-5 w-5" />}
+                </div>
+                <div className="mt-4 font-heading text-lg font-bold">{info.label}</div>
+                <div className="text-sm font-semibold text-primary">{info.duration}</div>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                  {info.description}
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2 text-[11px] font-semibold">
+                  <span className="rounded-full bg-muted px-2.5 py-1">
+                    {s.listening.length} audios
+                  </span>
+                  <span className="rounded-full bg-muted px-2.5 py-1">{s.total} preguntas</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          {blocks(mode).map((b, i) => {
+            const c = ["#0F3B4B", "#FF6B4A", "#FFB830"][i];
+            return (
+              <div
+                key={b.title}
+                className="rounded-2xl border border-border bg-card/85 p-4 text-left shadow-[var(--shadow-soft)] backdrop-blur"
+              >
+                <div
+                  className="flex h-9 w-9 items-center justify-center rounded-full"
+                  style={{ background: `color-mix(in oklab, ${c} 16%, transparent)`, color: c }}
+                >
+                  <b.icon className="h-4.5 w-4.5" />
+                </div>
+                <div className="mt-3 font-heading text-sm font-bold">{b.title}</div>
+                <div className="mt-0.5 text-xs text-muted-foreground">{b.desc}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Paso 2: nombre */}
+      <div className="mt-10">
+        <StepTitle n={2} title="Escribe tu nombre y comienza" />
+        <div className="mt-4 space-y-3 rounded-2xl border border-border bg-card/85 p-6 text-left shadow-[var(--shadow-soft)] backdrop-blur">
+          <label className="text-sm font-medium">¿Cuál es tu nombre?</label>
+          <Input
+            value={name}
+            onChange={(e) => onName(e.target.value)}
+            placeholder="Ej. María López"
+            onKeyDown={(e) => e.key === "Enter" && onStart()}
+          />
+          <div className="flex flex-col gap-2 pt-2 sm:flex-row">
+            <Button onClick={onStart} size="lg" className="w-full shadow-[var(--shadow-elegant)]">
+              Comenzar examen
+            </Button>
+            {hasProgress && (
+              <Button variant="ghost" onClick={onReset} size="lg" className="w-full sm:w-auto">
+                <RotateCcw className="mr-2 h-4 w-4" /> Reiniciar
+              </Button>
+            )}
+          </div>
+          <p className="pt-2 text-xs text-muted-foreground">
+            Tu nombre aparecerá en la constancia final.
+          </p>
+        </div>
+      </div>
+
     </div>
   );
 }
