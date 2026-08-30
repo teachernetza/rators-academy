@@ -435,3 +435,22 @@
 @media (prefers-reduced-motion: reduce) {
   .tn-marquee { animation: none !important; }
 }
+
+
+/* ===== Recortes diagonales para imágenes ===== */
+@utility tn-clip-diagonal {
+  border-radius: 1.5rem;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+@media (min-width: 1024px) {
+  .tn-clip-diagonal {
+    border-radius: 0;
+    clip-path: polygon(18% 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+@utility tn-clip-diagonal-soft {
+  border-radius: 1.25rem;
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+}
+

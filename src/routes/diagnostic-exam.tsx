@@ -14,6 +14,8 @@ import {
   BookOpen,
   Type,
   Clock,
+  Check,
+  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -189,14 +191,24 @@ function DiagnosticExam() {
         style={{ background: "var(--gradient-mint)" }}
       />
 
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 shadow-[var(--shadow-soft)] backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 shadow-[var(--shadow-soft)] backdrop-blur-xl">
+        <div aria-hidden className="tn-diag h-1 w-full opacity-70" />
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
-          <Link to="/" className="group flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[image:var(--gradient-hero)] text-white shadow-[var(--glow-mint)] transition-transform duration-500 group-hover:scale-110">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <span className="font-heading text-base font-bold sm:text-lg">
-              Examen Diagnóstico
+          <Link to="/" className="group flex items-center gap-3">
+            <span className="glow-logo-sm">
+              <img
+                src="/icono_teacher_netza.png"
+                alt="Teacher Netza"
+                className="h-9 w-9 rounded-lg object-contain transition-transform duration-500 group-hover:scale-110"
+              />
+            </span>
+            <span className="leading-tight">
+              <span className="block font-heading text-base font-bold sm:text-lg">
+                Examen Diagnóstico
+              </span>
+              <span className="hidden text-xs text-muted-foreground sm:block">
+                Teacher Netza Varo
+              </span>
             </span>
           </Link>
           <div className="flex items-center gap-1">
@@ -211,15 +223,29 @@ function DiagnosticExam() {
         </div>
         {sectionKey && (
           <div className="mx-auto max-w-5xl px-4 pb-3 sm:px-6">
-            <div className="mb-1 flex items-center justify-between text-xs text-muted-foreground">
-              <span>
-                Paso {step} de 3 · {SECTION_NAMES[sectionKey]}
-              </span>
-              <span className="font-semibold text-primary">
+            <div className="mb-1.5 flex items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-1.5">
+                {[1, 2, 3].map((s) => (
+                  <span
+                    key={s}
+                    className={cn(
+                      "rounded-full px-2.5 py-1 font-semibold transition-colors",
+                      s === step
+                        ? "bg-primary text-primary-foreground"
+                        : s < step
+                          ? "bg-mint/15 text-primary"
+                          : "bg-muted text-muted-foreground",
+                    )}
+                  >
+                    {s === 1 ? "Listening" : s === 2 ? "Reading" : "Vocabulary"}
+                  </span>
+                ))}
+              </div>
+              <span className="shrink-0 font-semibold text-primary">
                 {answeredCount}/{total} · {progress}%
               </span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+            <div className="h-2.5 w-full overflow-hidden rounded-full bg-muted">
               <div
                 className="h-full rounded-full transition-[width] duration-500 ease-out"
                 style={{
@@ -232,6 +258,7 @@ function DiagnosticExam() {
           </div>
         )}
       </header>
+
 
       <main key={step} className="animate-fade-in mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:py-14">
         {step === 0 && (
@@ -358,100 +385,167 @@ function StartScreen({
   };
   const modes: ExamMode[] = ["quick", "full"];
   return (
-    <div className="mx-auto max-w-xl text-center">
-      <span className="inline-flex items-center gap-2 rounded-full border border-mint/40 bg-mint/10 px-3 py-1 text-xs font-medium text-primary shadow-[0_0_18px_-6px_var(--mint)]">
-        <Sparkles className="h-3.5 w-3.5" /> Gratis · elige tu versión
-      </span>
-      <h1 className="mt-6 font-heading text-3xl font-bold sm:text-4xl">
-        Descubre tu nivel real de inglés
-      </h1>
-      <p className="mt-4 text-muted-foreground">
-        Cada pregunta tiene dos respuestas correctas de distinto nivel: elige la que realmente
-        usarías. Al terminar recibes tu <strong>Constancia de Nivel</strong> en PDF.
-      </p>
-
-      <div className="mt-8 grid gap-3 sm:grid-cols-2">
-        {modes.map((m) => {
-          const info = EXAM_MODES[m];
-          const s = stats(m);
-          const active = mode === m;
-          return (
-            <button
-              key={m}
-              type="button"
-              onClick={() => onMode(m)}
-              aria-pressed={active}
-              className={cn(
-                "rounded-2xl border p-5 text-left transition-all duration-300",
-                active
-                  ? "border-mint bg-mint/10 shadow-[var(--glow-mint)]"
-                  : "border-border bg-card/80 hover:-translate-y-0.5 hover:border-mint/50",
-              )}
-            >
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-primary" />
-                <span className="font-heading text-base font-bold">{info.label}</span>
-              </div>
-              <div className="mt-1 text-sm font-medium text-primary">{info.duration}</div>
-              <p className="mt-2 text-xs text-muted-foreground">{info.description}</p>
-              <div className="mt-3 text-xs font-semibold">
-                {s.listening.length} audios · {s.total} preguntas
-              </div>
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
-        {blocks(mode).map((b) => (
-          <div
-            key={b.title}
-            className="rounded-xl border border-mint/25 bg-card/80 p-4 text-left shadow-[var(--shadow-soft)] backdrop-blur"
-          >
-            <b.icon className="h-5 w-5 text-primary" />
-            <div className="mt-2 font-heading text-sm font-bold">{b.title}</div>
-            <div className="text-xs text-muted-foreground">{b.desc}</div>
-          </div>
-        ))}
-      </div>
-
-
-      <div className="mt-8 space-y-3 rounded-2xl border border-mint/30 bg-card/80 p-6 text-left shadow-[var(--shadow-soft)] backdrop-blur">
-        <label className="text-sm font-medium">¿Cuál es tu nombre?</label>
-        <Input
-          value={name}
-          onChange={(e) => onName(e.target.value)}
-          placeholder="Ej. María López"
-          onKeyDown={(e) => e.key === "Enter" && onStart()}
+    <div className="mx-auto max-w-3xl">
+      {/* Encabezado */}
+      <div
+        className="relative isolate overflow-hidden rounded-3xl border border-border p-8 text-center shadow-[var(--shadow-elegant)] sm:p-10"
+        style={{ background: "var(--gradient-hero)" }}
+      >
+        <span aria-hidden className="tn-dots absolute inset-0 -z-10 opacity-25" />
+        <span
+          aria-hidden
+          className="absolute -right-10 -top-10 -z-10 h-40 w-40 rounded-full opacity-30 blur-2xl"
+          style={{ background: "var(--gradient-mint)" }}
         />
-        <div className="flex flex-col gap-2 pt-2 sm:flex-row">
-          <Button onClick={onStart} size="lg" className="w-full shadow-[var(--shadow-elegant)]">
-            Comenzar examen
-          </Button>
-          {hasProgress && (
-            <Button variant="ghost" onClick={onReset} size="lg" className="w-full sm:w-auto">
-              <RotateCcw className="mr-2 h-4 w-4" /> Reiniciar
-            </Button>
-          )}
-        </div>
-        <p className="pt-2 text-xs text-muted-foreground">
-          Tu nombre aparecerá en la constancia final.
+        <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium text-primary-foreground">
+          <Sparkles className="h-3.5 w-3.5 text-gold" /> Gratis · sin registro
+        </span>
+        <h1 className="mt-5 font-heading text-3xl font-bold text-primary-foreground sm:text-4xl">
+          Descubre tu nivel real de inglés
+        </h1>
+        <p className="mx-auto mt-3 max-w-xl text-sm text-primary-foreground/85 sm:text-base">
+          Cada pregunta tiene dos respuestas correctas de distinto nivel: elige la que realmente
+          usarías. Al terminar recibes tu <strong>Constancia de Nivel</strong> en PDF.
         </p>
       </div>
+
+      {/* Paso 1: versión */}
+      <div className="mt-10">
+        <StepTitle n={1} title="Elige la versión del examen" />
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {modes.map((m) => {
+            const info = EXAM_MODES[m];
+            const s = stats(m);
+            const active = mode === m;
+            return (
+              <button
+                key={m}
+                type="button"
+                onClick={() => onMode(m)}
+                aria-pressed={active}
+                className={cn(
+                  "group relative overflow-hidden rounded-2xl border-2 p-5 text-left transition-all duration-300",
+                  active
+                    ? "border-mint bg-mint/10 shadow-[var(--glow-mint)]"
+                    : "border-border bg-card/85 hover:-translate-y-1 hover:border-mint/50 hover:shadow-[var(--shadow-soft)]",
+                )}
+              >
+                <span
+                  aria-hidden
+                  className={cn(
+                    "absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors",
+                    active ? "border-mint bg-mint text-white" : "border-border",
+                  )}
+                >
+                  {active && <Check className="h-3.5 w-3.5" />}
+                </span>
+                <div
+                  className={cn(
+                    "flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-500 group-hover:scale-105",
+                    active ? "bg-mint text-white" : "bg-muted text-primary",
+                  )}
+                >
+                  {m === "quick" ? <Zap className="h-5 w-5" /> : <Clock className="h-5 w-5" />}
+                </div>
+                <div className="mt-4 font-heading text-lg font-bold">{info.label}</div>
+                <div className="text-sm font-semibold text-primary">{info.duration}</div>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                  {info.description}
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2 text-[11px] font-semibold">
+                  <span className="rounded-full bg-muted px-2.5 py-1">
+                    {s.listening.length} audios
+                  </span>
+                  <span className="rounded-full bg-muted px-2.5 py-1">{s.total} preguntas</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          {blocks(mode).map((b, i) => {
+            const c = ["#0F3B4B", "#FF6B4A", "#FFB830"][i];
+            return (
+              <div
+                key={b.title}
+                className="rounded-2xl border border-border bg-card/85 p-4 text-left shadow-[var(--shadow-soft)] backdrop-blur"
+              >
+                <div
+                  className="flex h-9 w-9 items-center justify-center rounded-full"
+                  style={{ background: `color-mix(in oklab, ${c} 16%, transparent)`, color: c }}
+                >
+                  <b.icon className="h-4.5 w-4.5" />
+                </div>
+                <div className="mt-3 font-heading text-sm font-bold">{b.title}</div>
+                <div className="mt-0.5 text-xs text-muted-foreground">{b.desc}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Paso 2: nombre */}
+      <div className="mt-10">
+        <StepTitle n={2} title="Escribe tu nombre y comienza" />
+        <div className="mt-4 space-y-3 rounded-2xl border border-border bg-card/85 p-6 text-left shadow-[var(--shadow-soft)] backdrop-blur">
+          <label className="text-sm font-medium">¿Cuál es tu nombre?</label>
+          <Input
+            value={name}
+            onChange={(e) => onName(e.target.value)}
+            placeholder="Ej. María López"
+            onKeyDown={(e) => e.key === "Enter" && onStart()}
+          />
+          <div className="flex flex-col gap-2 pt-2 sm:flex-row">
+            <Button onClick={onStart} size="lg" className="w-full shadow-[var(--shadow-elegant)]">
+              Comenzar examen
+            </Button>
+            {hasProgress && (
+              <Button variant="ghost" onClick={onReset} size="lg" className="w-full sm:w-auto">
+                <RotateCcw className="mr-2 h-4 w-4" /> Reiniciar
+              </Button>
+            )}
+          </div>
+          <p className="pt-2 text-xs text-muted-foreground">
+            Tu nombre aparecerá en la constancia final.
+          </p>
+        </div>
+      </div>
+
     </div>
   );
 }
 
 /* --------------------------- REUSABLE PIECES --------------------------- */
 
-function SectionHeading({ title, description }: { title: string; description: string }) {
+function StepTitle({ n, title }: { n: number; title: string }) {
   return (
-    <div className="mb-6">
-      <h2 className="font-heading text-2xl font-bold sm:text-3xl">{title}</h2>
-      <p className="mt-1 text-muted-foreground">{description}</p>
+    <div className="flex items-center gap-3">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary font-heading text-sm font-bold text-primary-foreground">
+        {n}
+      </span>
+      <h2 className="font-heading text-lg font-bold sm:text-xl">{title}</h2>
+      <span aria-hidden className="h-px flex-1 bg-border" />
     </div>
   );
 }
+
+function SectionHeading({ title, description }: { title: string; description: string }) {
+  return (
+    <div className="mb-6 rounded-2xl border border-border bg-card/85 p-5 shadow-[var(--shadow-soft)] backdrop-blur">
+      <div className="flex items-center gap-3">
+        <span
+          aria-hidden
+          className="h-8 w-1.5 rounded-full"
+          style={{ background: "var(--gradient-mint)" }}
+        />
+        <h2 className="font-heading text-2xl font-bold sm:text-3xl">{title}</h2>
+      </div>
+      <p className="mt-2 text-sm text-muted-foreground sm:text-base">{description}</p>
+    </div>
+  );
+}
+
 
 function QuestionBlock({
   q,
@@ -466,36 +560,63 @@ function QuestionBlock({
 }) {
   const selected = answers[q.id];
   return (
-    <div className="rounded-2xl border border-border bg-card/80 p-5 shadow-[var(--shadow-soft)] backdrop-blur transition-all duration-500 hover:border-mint/50 hover:shadow-[var(--glow-mint)]">
-      <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-        Pregunta {index}
+    <div
+      className={cn(
+        "rounded-2xl border bg-card/85 p-5 shadow-[var(--shadow-soft)] backdrop-blur transition-all duration-500 sm:p-6",
+        selected !== undefined ? "border-mint/45" : "border-border hover:border-mint/40",
+      )}
+    >
+      <div className="flex items-start gap-3">
+        <span
+          className={cn(
+            "flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-heading text-xs font-bold",
+            selected !== undefined
+              ? "bg-mint text-white"
+              : "bg-muted text-muted-foreground",
+          )}
+        >
+          {index}
+        </span>
+        <div className="text-base font-medium leading-snug">{q.q}</div>
       </div>
-      <div className="mt-1 text-base font-medium leading-snug">{q.q}</div>
-      <div className="mt-4 space-y-2">
-        {q.opts.map((opt, oi) => (
-          <label
-            key={oi}
-            className={cn(
-              "flex cursor-pointer items-center gap-3 rounded-lg border p-3 text-sm transition-all duration-300",
-              selected === oi
-                ? "border-mint bg-mint/10 shadow-[0_0_18px_-8px_var(--mint)]"
-                : "border-border bg-background hover:-translate-y-0.5 hover:border-mint/50 hover:bg-mint/5",
-            )}
-          >
-            <input
-              type="radio"
-              name={`q-${q.id}`}
-              value={oi}
-              checked={selected === oi}
-              onChange={() => onAnswer(q.id, oi)}
-              className="h-4 w-4 accent-[hsl(var(--primary))]"
-            />
-            <span>{opt.text}</span>
-          </label>
-        ))}
+      <div className="mt-4 space-y-2 sm:pl-10">
+        {q.opts.map((opt, oi) => {
+          const active = selected === oi;
+          return (
+            <label
+              key={oi}
+              className={cn(
+                "flex cursor-pointer items-center gap-3 rounded-xl border p-3.5 text-sm transition-all duration-300",
+                active
+                  ? "border-mint bg-mint/12 font-medium shadow-[0_0_18px_-8px_var(--mint)]"
+                  : "border-border bg-background hover:border-mint/50 hover:bg-mint/5",
+              )}
+            >
+              <input
+                type="radio"
+                name={`q-${q.id}`}
+                value={oi}
+                checked={active}
+                onChange={() => onAnswer(q.id, oi)}
+                className="sr-only"
+              />
+              <span
+                aria-hidden
+                className={cn(
+                  "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 text-[10px] font-bold transition-colors",
+                  active ? "border-mint bg-mint text-white" : "border-border text-muted-foreground",
+                )}
+              >
+                {String.fromCharCode(65 + oi)}
+              </span>
+              <span className="leading-snug">{opt.text}</span>
+            </label>
+          );
+        })}
       </div>
     </div>
   );
+
 }
 
 /* ------------------------------ SECTIONS ------------------------------ */

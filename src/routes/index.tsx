@@ -26,6 +26,8 @@ import { useReveal } from "@/hooks/use-reveal";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useScrollProgress } from "@/hooks/use-scroll-progress";
 import { COMPUTED_PLANS, HOURLY_RATE, mxn } from "@/lib/pricing";
+import heroStudent from "@/assets/hero-student.jpg";
+import methodStudy from "@/assets/method-study.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -292,57 +294,124 @@ function Landing() {
           />
 
 
-          <div className="mx-auto max-w-7xl px-4 pb-16 pt-20 sm:px-6 lg:px-8 lg:pb-20 lg:pt-24">
-            <div className="mx-auto max-w-3xl text-center">
-              <Reveal>
-                <span className="inline-flex items-center gap-2 rounded-full border border-mint/40 bg-mint/10 px-3 py-1 text-xs font-medium text-primary shadow-[0_0_18px_-6px_var(--mint)]">
-                  <Sparkles className="h-3.5 w-3.5 text-mint-strong" />
-                  +6 años formando estudiantes bilingües
-                </span>
-                <h1 className="mt-6 font-heading text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-                  Aprende inglés de verdad,{" "}
-                  <span className="bg-[image:var(--gradient-heading)] bg-clip-text text-transparent">
-                    a tu ritmo y a tu medida
+          <div className="mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 lg:px-8 lg:pb-20 lg:pt-24">
+            <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+              {/* Columna de texto */}
+              <div className="text-center lg:text-left">
+                <Reveal>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-mint/40 bg-mint/10 px-3 py-1 text-xs font-medium text-primary shadow-[0_0_18px_-6px_var(--mint)]">
+                    <Sparkles className="h-3.5 w-3.5 text-mint-strong" />
+                    +6 años formando estudiantes bilingües
                   </span>
-                  .
-                </h1>
-                <p className="mt-5 text-lg text-muted-foreground sm:text-xl">
-                  Descubre tu nivel en minutos, practica con Labs interactivos gratis y avanza
-                  con clases 1 a 1 desde {mxn(HOURLY_RATE)} por hora.
-                </p>
-              </Reveal>
+                  <h1 className="mt-6 font-heading text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+                    Aprende inglés de verdad,{" "}
+                    <span className="bg-[image:var(--gradient-heading)] bg-clip-text text-transparent">
+                      a tu ritmo y a tu medida
+                    </span>
+                    .
+                  </h1>
+                  <p className="mt-5 text-lg text-muted-foreground sm:text-xl">
+                    Descubre tu nivel en minutos, practica con Labs interactivos gratis y avanza
+                    con clases 1 a 1 desde {mxn(HOURLY_RATE)} por hora.
+                  </p>
+                </Reveal>
 
-              <Reveal delay={120}>
-                <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                  <Link to="/diagnostic-exam">
-                    <Button
-                      size="lg"
-                      className="group shadow-[var(--shadow-elegant)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--glow-mint)]"
-                    >
-                      <ClipboardCheck className="mr-2 h-4 w-4" />
-                      Iniciar Examen Diagnóstico
-                      <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                    </Button>
-                  </Link>
-                  <a href="#planes">
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="transition-all duration-300 hover:-translate-y-0.5 hover:border-mint hover:text-primary"
-                    >
-                      Ver Planes
-                    </Button>
-                  </a>
-                  <a href={WA_URL} target="_blank" rel="noopener noreferrer">
-                    <Button size="lg" variant="ghost" className="transition-all duration-300">
-                      <MessageCircle className="mr-2 h-4 w-4" />
-                      WhatsApp
-                    </Button>
-                  </a>
+                <Reveal delay={120}>
+                  <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row lg:justify-start">
+                    <Link to="/diagnostic-exam">
+                      <Button
+                        size="lg"
+                        className="group shadow-[var(--shadow-elegant)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--glow-mint)]"
+                      >
+                        <ClipboardCheck className="mr-2 h-4 w-4" />
+                        Iniciar Examen Diagnóstico
+                        <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      </Button>
+                    </Link>
+                    <a href="#planes">
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className="transition-all duration-300 hover:-translate-y-0.5 hover:border-mint hover:text-primary"
+                      >
+                        Ver Planes
+                      </Button>
+                    </a>
+                    <a href={WA_URL} target="_blank" rel="noopener noreferrer">
+                      <Button size="lg" variant="ghost" className="transition-all duration-300">
+                        <MessageCircle className="mr-2 h-4 w-4" />
+                        WhatsApp
+                      </Button>
+                    </a>
+                  </div>
+                </Reveal>
+
+                {/* Firma de marca */}
+                <Reveal delay={220}>
+                  <div className="mt-10 flex items-center justify-center gap-4 lg:justify-start">
+                    <div className="glow-logo shrink-0">
+                      <img
+                        src="/logo_teacher_netza.png"
+                        alt="Teacher Netza Varo"
+                        className="h-20 w-20 object-contain sm:h-24 sm:w-24"
+                        width={96}
+                        height={96}
+                      />
+                    </div>
+                    <div className="text-left">
+                      <div className="font-heading text-base font-bold text-foreground">
+                        Teacher Netza Varo
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Clases 1 a 1, Labs y constancia de nivel
+                      </p>
+                    </div>
+                  </div>
+                </Reveal>
+              </div>
+
+              {/* Imagen recortada en diagonal */}
+              <Reveal delay={180} className="relative">
+                <div className="relative">
+                  <div
+                    aria-hidden
+                    className="tn-clip-diagonal absolute -inset-3 -z-10 hidden lg:block"
+                    style={{ background: "var(--gradient-mint)", opacity: 0.35 }}
+                  />
+                  <div className="tn-clip-diagonal relative overflow-hidden shadow-[var(--shadow-elegant)]">
+                    <img
+                      src={heroStudent}
+                      alt="Estudiante tomando una clase de inglés en línea con Teacher Netza"
+                      className="h-[340px] w-full object-cover sm:h-[420px] lg:h-[540px]"
+                      width={1280}
+                      height={1600}
+                    />
+                    <span
+                      aria-hidden
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(200deg, color-mix(in oklab, var(--primary) 45%, transparent) 0%, transparent 45%, color-mix(in oklab, var(--primary) 30%, transparent) 100%)",
+                      }}
+                    />
+                  </div>
+
+                  {/* Tarjeta flotante sobre la imagen */}
+                  <div className="absolute -bottom-5 left-2 flex items-center gap-3 rounded-2xl border border-border bg-card/95 px-4 py-3 shadow-[var(--shadow-elegant)] backdrop-blur sm:left-6">
+                    <div className="tn-accent-icon flex h-10 w-10 items-center justify-center rounded-xl" style={{ "--c": "#FFB830" } as CSSProperties}>
+                      <GraduationCap className="h-5 w-5" />
+                    </div>
+                    <div className="text-left">
+                      <div className="font-heading text-sm font-bold leading-tight">A1 → C1</div>
+                      <div className="text-xs text-muted-foreground">Ruta completa por nivel</div>
+                    </div>
+                  </div>
                 </div>
               </Reveal>
             </div>
           </div>
+
+
 
           {/* CINTA DIAGONAL */}
           <div aria-hidden className="relative -mb-2 mt-2 select-none">
@@ -612,8 +681,57 @@ function Landing() {
                 </Reveal>
               ))}
             </div>
+
+            {/* Banda con imagen en diagonal */}
+            <Reveal delay={120}>
+              <div className="mt-14 grid items-center gap-8 rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-soft)] lg:grid-cols-2 lg:p-8">
+                <div className="tn-clip-diagonal-soft relative overflow-hidden">
+                  <img
+                    src={methodStudy}
+                    alt="Estudiante practicando inglés con Labs interactivos"
+                    loading="lazy"
+                    width={1280}
+                    height={960}
+                    className="h-64 w-full object-cover sm:h-80"
+                  />
+                  <span
+                    aria-hidden
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(160deg, transparent 40%, color-mix(in oklab, var(--primary) 40%, transparent) 100%)",
+                    }}
+                  />
+                </div>
+                <div>
+                  <span className="inline-flex rounded-full bg-mint/12 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
+                    Práctica real
+                  </span>
+                  <h3 className="mt-4 font-heading text-2xl font-bold sm:text-3xl">
+                    Cada clase se apoya en práctica guiada
+                  </h3>
+                  <p className="mt-3 text-muted-foreground">
+                    Los Labs y el examen diagnóstico te dan retroalimentación inmediata, y en clase
+                    trabajamos justo lo que necesitas reforzar.
+                  </p>
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <Link to="/labs">
+                      <Button variant="outline" className="hover:border-mint hover:text-primary">
+                        <FlaskConical className="mr-2 h-4 w-4" /> Explorar Labs
+                      </Button>
+                    </Link>
+                    <Link to="/diagnostic-exam">
+                      <Button className="shadow-[var(--shadow-elegant)]">
+                        <ClipboardCheck className="mr-2 h-4 w-4" /> Hacer examen
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
           </div>
         </section>
+
 
         {/* PLANES */}
         <section
