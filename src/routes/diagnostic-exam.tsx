@@ -520,14 +520,34 @@ function StartScreen({
 
 /* --------------------------- REUSABLE PIECES --------------------------- */
 
-function SectionHeading({ title, description }: { title: string; description: string }) {
+function StepTitle({ n, title }: { n: number; title: string }) {
   return (
-    <div className="mb-6">
-      <h2 className="font-heading text-2xl font-bold sm:text-3xl">{title}</h2>
-      <p className="mt-1 text-muted-foreground">{description}</p>
+    <div className="flex items-center gap-3">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary font-heading text-sm font-bold text-primary-foreground">
+        {n}
+      </span>
+      <h2 className="font-heading text-lg font-bold sm:text-xl">{title}</h2>
+      <span aria-hidden className="h-px flex-1 bg-border" />
     </div>
   );
 }
+
+function SectionHeading({ title, description }: { title: string; description: string }) {
+  return (
+    <div className="mb-6 rounded-2xl border border-border bg-card/85 p-5 shadow-[var(--shadow-soft)] backdrop-blur">
+      <div className="flex items-center gap-3">
+        <span
+          aria-hidden
+          className="h-8 w-1.5 rounded-full"
+          style={{ background: "var(--gradient-mint)" }}
+        />
+        <h2 className="font-heading text-2xl font-bold sm:text-3xl">{title}</h2>
+      </div>
+      <p className="mt-2 text-sm text-muted-foreground sm:text-base">{description}</p>
+    </div>
+  );
+}
+
 
 function QuestionBlock({
   q,
