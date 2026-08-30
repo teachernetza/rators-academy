@@ -387,12 +387,10 @@ function StartScreen({
   return (
     <div className="mx-auto max-w-3xl">
       {/* Encabezado */}
-      <div className="relative isolate overflow-hidden rounded-3xl border border-border p-8 text-center shadow-[var(--shadow-elegant)] sm:p-10">
-        <span
-          aria-hidden
-          className="absolute inset-0 -z-10"
-          style={{ background: "var(--gradient-hero)" }}
-        />
+      <div
+        className="relative isolate overflow-hidden rounded-3xl border border-border p-8 text-center shadow-[var(--shadow-elegant)] sm:p-10"
+        style={{ background: "var(--gradient-hero)" }}
+      >
         <span aria-hidden className="tn-dots absolute inset-0 -z-10 opacity-25" />
         <span
           aria-hidden
