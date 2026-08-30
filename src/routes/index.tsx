@@ -26,6 +26,8 @@ import { useReveal } from "@/hooks/use-reveal";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useScrollProgress } from "@/hooks/use-scroll-progress";
 import { COMPUTED_PLANS, HOURLY_RATE, mxn } from "@/lib/pricing";
+import heroStudent from "@/assets/hero-student.jpg";
+import methodStudy from "@/assets/method-study.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
