@@ -235,7 +235,7 @@ function DiagnosticExam() {
                           : "bg-muted text-muted-foreground",
                     )}
                   >
-                    {SECTION_NAMES[(s === 1 ? "listening" : s === 2 ? "reading" : "vocab") as keyof typeof SECTION_NAMES] ?? s}
+                    {s === 1 ? "Listening" : s === 2 ? "Reading" : "Vocabulary"}
                   </span>
                 ))}
               </div>
