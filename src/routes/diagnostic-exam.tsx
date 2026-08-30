@@ -562,36 +562,63 @@ function QuestionBlock({
 }) {
   const selected = answers[q.id];
   return (
-    <div className="rounded-2xl border border-border bg-card/80 p-5 shadow-[var(--shadow-soft)] backdrop-blur transition-all duration-500 hover:border-mint/50 hover:shadow-[var(--glow-mint)]">
-      <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-        Pregunta {index}
+    <div
+      className={cn(
+        "rounded-2xl border bg-card/85 p-5 shadow-[var(--shadow-soft)] backdrop-blur transition-all duration-500 sm:p-6",
+        selected !== undefined ? "border-mint/45" : "border-border hover:border-mint/40",
+      )}
+    >
+      <div className="flex items-start gap-3">
+        <span
+          className={cn(
+            "flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-heading text-xs font-bold",
+            selected !== undefined
+              ? "bg-mint text-white"
+              : "bg-muted text-muted-foreground",
+          )}
+        >
+          {index}
+        </span>
+        <div className="text-base font-medium leading-snug">{q.q}</div>
       </div>
-      <div className="mt-1 text-base font-medium leading-snug">{q.q}</div>
-      <div className="mt-4 space-y-2">
-        {q.opts.map((opt, oi) => (
-          <label
-            key={oi}
-            className={cn(
-              "flex cursor-pointer items-center gap-3 rounded-lg border p-3 text-sm transition-all duration-300",
-              selected === oi
-                ? "border-mint bg-mint/10 shadow-[0_0_18px_-8px_var(--mint)]"
-                : "border-border bg-background hover:-translate-y-0.5 hover:border-mint/50 hover:bg-mint/5",
-            )}
-          >
-            <input
-              type="radio"
-              name={`q-${q.id}`}
-              value={oi}
-              checked={selected === oi}
-              onChange={() => onAnswer(q.id, oi)}
-              className="h-4 w-4 accent-[hsl(var(--primary))]"
-            />
-            <span>{opt.text}</span>
-          </label>
-        ))}
+      <div className="mt-4 space-y-2 sm:pl-10">
+        {q.opts.map((opt, oi) => {
+          const active = selected === oi;
+          return (
+            <label
+              key={oi}
+              className={cn(
+                "flex cursor-pointer items-center gap-3 rounded-xl border p-3.5 text-sm transition-all duration-300",
+                active
+                  ? "border-mint bg-mint/12 font-medium shadow-[0_0_18px_-8px_var(--mint)]"
+                  : "border-border bg-background hover:border-mint/50 hover:bg-mint/5",
+              )}
+            >
+              <input
+                type="radio"
+                name={`q-${q.id}`}
+                value={oi}
+                checked={active}
+                onChange={() => onAnswer(q.id, oi)}
+                className="sr-only"
+              />
+              <span
+                aria-hidden
+                className={cn(
+                  "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 text-[10px] font-bold transition-colors",
+                  active ? "border-mint bg-mint text-white" : "border-border text-transparent",
+                )}
+              >
+                {String.fromCharCode(65 + oi)}
+              </span>
+              <span className="leading-snug">{opt.text}</span>
+            </label>
+          );
+        })}
       </div>
     </div>
   );
+
 }
 
 /* ------------------------------ SECTIONS ------------------------------ */
