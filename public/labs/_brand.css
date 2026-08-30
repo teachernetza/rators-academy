@@ -675,3 +675,95 @@ html.tn-dark .text-slate-700,
 html.tn-dark .text-gray-700 {
   color: #d6e6ec !important;
 }
+
+/* ================= NAVEGACIÓN CONTINUA POR SCROLL =================
+   Los labs se diseñaron como "diapositivas": una sección visible a la vez y
+   una barra fija inferior con Atrás/Siguiente. Aquí se convierten en un
+   documento continuo que se recorre solo con scroll. */
+
+/* 1. Todas las diapositivas visibles */
+section.hidden-slide,
+div.hidden-slide,
+div.slide.hidden,
+section.slide.hidden {
+  display: block !important;
+}
+
+/* 2. Sin animaciones de entrada que dejen contenido invisible */
+.slide-enter {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* 3. Fuera la barra inferior de Atrás / Siguiente */
+div.fixed.bottom-0 {
+  display: none !important;
+}
+
+/* 4. Nada de contenedores encapsulados con scroll propio */
+html,
+body {
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-y: visible !important;
+}
+body > main,
+main#main-scroll-area,
+main.overflow-y-auto,
+main.overflow-hidden,
+#slides-container {
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  flex: none !important;
+}
+
+/* 5. Ritmo vertical entre secciones, sin alturas mínimas de pantalla */
+main > section,
+main [id^="slide-"],
+#slides-container > .slide {
+  min-height: 0 !important;
+  height: auto !important;
+  margin-top: 0 !important;
+  padding-top: 2.25rem;
+  padding-bottom: 2.25rem;
+  scroll-margin-top: 5.5rem;
+}
+main > section + section,
+#slides-container > .slide + .slide {
+  border-top: 1px solid var(--tn-line);
+}
+main {
+  padding-bottom: 4rem !important;
+}
+
+/* 6. Indicadores de diapositiva que ya no aplican */
+#slide-counter,
+#slide-counter-nav,
+#progress-text {
+  display: none !important;
+}
+
+@media (max-width: 640px) {
+  main {
+    padding-bottom: 3rem !important;
+  }
+  main > section,
+  main [id^="slide-"],
+  #slides-container > .slide {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    scroll-margin-top: 4.5rem;
+  }
+}
+
+/* Excepción: los chats simulados sí conservan su propio scroll interno */
+[id$="-container"].overflow-y-auto {
+  overflow-y: auto !important;
+}
+
+html.tn-dark main > section + section,
+html.tn-dark #slides-container > .slide + .slide {
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
