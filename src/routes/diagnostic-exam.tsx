@@ -189,14 +189,24 @@ function DiagnosticExam() {
         style={{ background: "var(--gradient-mint)" }}
       />
 
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 shadow-[var(--shadow-soft)] backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 shadow-[var(--shadow-soft)] backdrop-blur-xl">
+        <div aria-hidden className="tn-diag h-1 w-full opacity-70" />
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
-          <Link to="/" className="group flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[image:var(--gradient-hero)] text-white shadow-[var(--glow-mint)] transition-transform duration-500 group-hover:scale-110">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <span className="font-heading text-base font-bold sm:text-lg">
-              Examen Diagnóstico
+          <Link to="/" className="group flex items-center gap-3">
+            <span className="glow-logo-sm">
+              <img
+                src="/icono_teacher_netza.png"
+                alt="Teacher Netza"
+                className="h-9 w-9 rounded-lg object-contain transition-transform duration-500 group-hover:scale-110"
+              />
+            </span>
+            <span className="leading-tight">
+              <span className="block font-heading text-base font-bold sm:text-lg">
+                Examen Diagnóstico
+              </span>
+              <span className="hidden text-xs text-muted-foreground sm:block">
+                Teacher Netza Varo
+              </span>
             </span>
           </Link>
           <div className="flex items-center gap-1">
@@ -211,15 +221,29 @@ function DiagnosticExam() {
         </div>
         {sectionKey && (
           <div className="mx-auto max-w-5xl px-4 pb-3 sm:px-6">
-            <div className="mb-1 flex items-center justify-between text-xs text-muted-foreground">
-              <span>
-                Paso {step} de 3 · {SECTION_NAMES[sectionKey]}
-              </span>
-              <span className="font-semibold text-primary">
+            <div className="mb-1.5 flex items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-1.5">
+                {[1, 2, 3].map((s) => (
+                  <span
+                    key={s}
+                    className={cn(
+                      "rounded-full px-2.5 py-1 font-semibold transition-colors",
+                      s === step
+                        ? "bg-primary text-primary-foreground"
+                        : s < step
+                          ? "bg-mint/15 text-primary"
+                          : "bg-muted text-muted-foreground",
+                    )}
+                  >
+                    {SECTION_NAMES[(s === 1 ? "listening" : s === 2 ? "reading" : "vocab") as keyof typeof SECTION_NAMES] ?? s}
+                  </span>
+                ))}
+              </div>
+              <span className="shrink-0 font-semibold text-primary">
                 {answeredCount}/{total} · {progress}%
               </span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+            <div className="h-2.5 w-full overflow-hidden rounded-full bg-muted">
               <div
                 className="h-full rounded-full transition-[width] duration-500 ease-out"
                 style={{
@@ -232,6 +256,7 @@ function DiagnosticExam() {
           </div>
         )}
       </header>
+
 
       <main key={step} className="animate-fade-in mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:py-14">
         {step === 0 && (
