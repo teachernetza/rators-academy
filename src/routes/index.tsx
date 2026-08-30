@@ -681,8 +681,57 @@ function Landing() {
                 </Reveal>
               ))}
             </div>
+
+            {/* Banda con imagen en diagonal */}
+            <Reveal delay={120}>
+              <div className="mt-14 grid items-center gap-8 rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-soft)] lg:grid-cols-2 lg:p-8">
+                <div className="tn-clip-diagonal-soft relative overflow-hidden">
+                  <img
+                    src={methodStudy}
+                    alt="Estudiante practicando inglés con Labs interactivos"
+                    loading="lazy"
+                    width={1280}
+                    height={960}
+                    className="h-64 w-full object-cover sm:h-80"
+                  />
+                  <span
+                    aria-hidden
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(160deg, transparent 40%, color-mix(in oklab, var(--primary) 40%, transparent) 100%)",
+                    }}
+                  />
+                </div>
+                <div>
+                  <span className="inline-flex rounded-full bg-mint/12 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
+                    Práctica real
+                  </span>
+                  <h3 className="mt-4 font-heading text-2xl font-bold sm:text-3xl">
+                    Cada clase se apoya en práctica guiada
+                  </h3>
+                  <p className="mt-3 text-muted-foreground">
+                    Los Labs y el examen diagnóstico te dan retroalimentación inmediata, y en clase
+                    trabajamos justo lo que necesitas reforzar.
+                  </p>
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <Link to="/labs">
+                      <Button variant="outline" className="hover:border-mint hover:text-primary">
+                        <FlaskConical className="mr-2 h-4 w-4" /> Explorar Labs
+                      </Button>
+                    </Link>
+                    <Link to="/diagnostic-exam">
+                      <Button className="shadow-[var(--shadow-elegant)]">
+                        <ClipboardCheck className="mr-2 h-4 w-4" /> Hacer examen
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
           </div>
         </section>
+
 
         {/* PLANES */}
         <section
