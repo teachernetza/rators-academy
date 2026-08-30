@@ -393,11 +393,6 @@ function StartScreen({
           className="absolute inset-0 -z-10"
           style={{ background: "var(--gradient-hero)" }}
         />
-        <span
-          aria-hidden
-          className="absolute inset-0 -z-10"
-          style={{ background: "var(--gradient-hero)" }}
-        />
         <span aria-hidden className="tn-dots absolute inset-0 -z-10 opacity-25" />
         <span
           aria-hidden
