@@ -434,9 +434,8 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .tn-marquee { animation: none !important; }
-@media (prefers-reduced-motion: reduce) {
-  .tn-marquee { animation: none !important; }
 }
+
 
 /* ===== Recortes diagonales para imágenes ===== */
 @utility tn-clip-diagonal {
