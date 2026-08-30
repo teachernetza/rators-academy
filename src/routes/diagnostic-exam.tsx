@@ -14,6 +14,8 @@ import {
   BookOpen,
   Type,
   Clock,
+  Check,
+  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
