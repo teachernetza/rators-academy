@@ -606,7 +606,7 @@ function QuestionBlock({
                 aria-hidden
                 className={cn(
                   "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 text-[10px] font-bold transition-colors",
-                  active ? "border-mint bg-mint text-white" : "border-border text-transparent",
+                  active ? "border-mint bg-mint text-white" : "border-border text-muted-foreground",
                 )}
               >
                 {String.fromCharCode(65 + oi)}
