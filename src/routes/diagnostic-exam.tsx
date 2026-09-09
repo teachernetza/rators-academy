@@ -465,7 +465,7 @@ function StartScreen({
 
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           {blocks(mode).map((b, i) => {
-            const c = ["#0F3B4B", "#FF6B4A", "#FFB830"][i];
+            const c = ["var(--primary)", "var(--teal)", "var(--gold)"][i];
             return (
               <div
                 key={b.title}
@@ -899,9 +899,9 @@ function drawRadar(cv: HTMLCanvasElement | null, result: ExamResult) {
     else ctx.lineTo(x, y);
   }
   ctx.closePath();
-  ctx.fillStyle = "rgba(86, 214, 178, 0.28)";
+  ctx.fillStyle = "rgba(22, 73, 255, 0.2)";
   ctx.fill();
-  ctx.strokeStyle = "#0f3b4b";
+  ctx.strokeStyle = "#1649ff";
   ctx.lineWidth = 2;
   ctx.stroke();
 

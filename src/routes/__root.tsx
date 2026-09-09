@@ -17,7 +17,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "theme-color", content: "#0f3b4b" },
+      { name: "theme-color", content: "#1649FF" },
       { title: "Teacher Netza Varo" },
       { name: "description", content: "Plataforma de inglés con Labs interactivos y Masterclasses. Acompañamiento experto con más de 6 años de experiencia." },
       { property: "og:title", content: "Teacher Netza Varo" },
@@ -40,7 +40,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap",
       },
     ],
   }),

@@ -3,18 +3,18 @@
    con la marca, conservando los colores semánticos de cada actividad. */
 
 :root {
-  --tn-navy: #0f3b4b;
-  --tn-navy-600: #14536a;
-  --tn-navy-050: #eef5f7;
-  --tn-mint: #35d1a8;
-  --tn-mint-soft: #d8f7ee;
-  --tn-ink: #17303a;
-  --tn-muted: #5c7480;
-  --tn-line: #dfe9ed;
+  --tn-navy: #1649ff;
+  --tn-navy-600: #0b2b6b;
+  --tn-navy-050: #edf2ff;
+  --tn-mint: #f6d743;
+  --tn-mint-soft: #fff8c7;
+  --tn-ink: #0b2b6b;
+  --tn-muted: #52627e;
+  --tn-line: #dbe3f5;
   --tn-surface: #ffffff;
-  --tn-bg: #f5faf9;
-  --tn-shadow: 0 18px 45px -22px rgba(15, 59, 75, 0.35);
-  --tn-shadow-lg: 0 28px 65px -30px rgba(15, 59, 75, 0.45);
+  --tn-bg: #f4f7fb;
+  --tn-shadow: 0 18px 45px -22px rgba(22, 73, 255, 0.28);
+  --tn-shadow-lg: 0 28px 65px -30px rgba(11, 43, 107, 0.42);
 }
 
 /* ---------- Tipografía ---------- */
@@ -23,7 +23,7 @@ button,
 input,
 select,
 textarea {
-  font-family: "DM Sans", "Plus Jakarta Sans", system-ui, sans-serif !important;
+  font-family: "Manrope", system-ui, sans-serif !important;
   color: var(--tn-ink);
 }
 
@@ -36,16 +36,16 @@ h5,
 .font-extrabold,
 nav span,
 .formula-box {
-  font-family: "Plus Jakarta Sans", system-ui, sans-serif !important;
-  letter-spacing: -0.01em;
+  font-family: "Sora", system-ui, sans-serif !important;
+  letter-spacing: 0;
 }
 
 /* ---------- Fondo ---------- */
 body {
   background-color: var(--tn-bg) !important;
   background-image:
-    radial-gradient(900px 420px at 12% -8%, rgba(53, 209, 168, 0.14), transparent 62%),
-    radial-gradient(760px 380px at 100% 0%, rgba(15, 59, 75, 0.1), transparent 60%) !important;
+    radial-gradient(900px 420px at 12% -8%, rgba(246, 215, 67, 0.18), transparent 62%),
+    radial-gradient(760px 380px at 100% 0%, rgba(22, 73, 255, 0.12), transparent 60%) !important;
   background-attachment: fixed;
 }
 
@@ -63,7 +63,7 @@ nav.sticky {
   background: rgba(255, 255, 255, 0.88) !important;
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--tn-line) !important;
-  box-shadow: 0 8px 30px -24px rgba(15, 59, 75, 0.6);
+  box-shadow: 0 8px 30px -24px rgba(11, 43, 107, 0.6);
 }
 
 .visual-box {
@@ -84,7 +84,7 @@ nav.sticky {
 }
 
 /* ---------- Acentos de marca ---------- */
-/* Índigo/azul genérico de los labs -> teal de marca */
+/* Índigo/azul genérico de los labs -> cobalto de marca */
 .bg-indigo-600,
 .bg-indigo-500,
 .bg-blue-600,
@@ -123,7 +123,7 @@ nav.sticky {
   --tw-gradient-to: var(--tn-navy-600) !important;
 }
 
-/* Botones primarios con brillo menta al hover */
+/* Botones primarios con brillo cobalto al hover */
 button {
   transition:
     transform 0.18s ease,
@@ -131,13 +131,13 @@ button {
     background-color 0.25s ease;
 }
 button:not(:disabled):hover {
-  box-shadow: 0 12px 28px -16px rgba(15, 59, 75, 0.55);
+  box-shadow: 0 12px 28px -16px rgba(22, 73, 255, 0.5);
 }
 button:not(:disabled):active {
   transform: scale(0.97);
 }
 
-/* Foco accesible en menta */
+/* Foco accesible en amarillo limón */
 :focus-visible {
   outline: 2px solid var(--tn-mint);
   outline-offset: 2px;
