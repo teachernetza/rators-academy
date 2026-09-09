@@ -398,7 +398,7 @@ function Landing() {
 
                   {/* Tarjeta flotante sobre la imagen */}
                   <div className="absolute -bottom-5 left-2 flex items-center gap-3 rounded-2xl border border-border bg-card/95 px-4 py-3 shadow-[var(--shadow-elegant)] backdrop-blur sm:left-6">
-                    <div className="tn-accent-icon flex h-10 w-10 items-center justify-center rounded-xl" style={{ "--c": "#FFB830" } as CSSProperties}>
+                    <div className="tn-accent-icon flex h-10 w-10 items-center justify-center rounded-xl" style={{ "--c": "var(--gold)" } as CSSProperties}>
                       <GraduationCap className="h-5 w-5" />
                     </div>
                     <div className="text-left">
@@ -452,7 +452,7 @@ function Landing() {
                   tag: "Gratis · 7 min",
                   cta: "Hacer examen",
                   to: "/diagnostic-exam" as const,
-                  color: "#FFB830",
+                  color: "var(--gold)",
                   invert: false,
                 },
                 {
@@ -462,7 +462,7 @@ function Landing() {
                   tag: "Sin registro",
                   cta: "Entrar a los Labs",
                   to: "/labs" as const,
-                  color: "#FF6B4A",
+                  color: "var(--primary)",
                   invert: false,
                 },
                 {
@@ -472,7 +472,7 @@ function Landing() {
                   tag: "Hasta -20%",
                   cta: "Ver planes",
                   href: "#planes",
-                  color: "#0F3B4B",
+                  color: "var(--teal)",
                   invert: true,
                 },
               ].map((c, i) => {
