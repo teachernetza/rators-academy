@@ -14,7 +14,8 @@ import {
   X,
   ClipboardCheck,
   FileDown,
-  Zap,
+  Headphones,
+  Clock,
   Sparkles,
   Star,
   ArrowRight,
@@ -547,51 +548,64 @@ function Landing() {
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <Reveal>
               <div
-                className="tn-shimmer-bg relative overflow-hidden rounded-3xl p-8 shadow-[var(--shadow-elegant)] sm:p-12"
+                className="tn-shimmer-bg relative overflow-hidden rounded-[2.5rem] shadow-[var(--shadow-elegant)]"
                 style={{ background: "var(--gradient-hero)" }}
               >
                 <div
                   aria-hidden
-                  className="tn-float absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/15 blur-3xl"
+                  className="tn-float absolute -right-24 -top-24 h-80 w-80 rounded-full bg-background/10 blur-[100px]"
                 />
                 <div
                   aria-hidden
-                  className="tn-float absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-white/10 blur-3xl"
+                  className="tn-float absolute -bottom-28 -left-20 h-80 w-80 rounded-full bg-background/5 blur-[100px]"
                   style={{ animationDelay: "-3s" }}
                 />
-                <div className="relative grid gap-10 md:grid-cols-[1.2fr,1fr] md:items-center">
-                  <div className="text-white">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide backdrop-blur">
-                      <Sparkles className="h-3.5 w-3.5" />
-                      Gratis · Sin registro
+
+                <div className="relative flex flex-col items-stretch lg:flex-row">
+                  {/* Invitación */}
+                  <div className="flex flex-col justify-center p-8 sm:p-12 md:p-14 lg:w-3/5">
+                    <span className="mb-6 inline-flex w-fit items-center gap-2.5 rounded-full border border-background/15 bg-background/5 px-4 py-1.5 backdrop-blur-md">
+                      <span className="relative flex h-2 w-2">
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-70" />
+                        <span className="relative inline-flex h-2 w-2 rounded-full bg-mint" />
+                      </span>
+                      <span className="text-xs font-semibold uppercase tracking-wide text-mint">
+                        Gratis · Sin registro
+                      </span>
                     </span>
-                    <h2 className="mt-5 font-heading text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
-                      Descubre tu nivel real de inglés en 7 o 20 minutos
+
+                    <h2 className="mb-5 font-heading text-4xl font-extrabold leading-[1.08] tracking-tight text-background sm:text-5xl lg:text-6xl">
+                      Descubre tu{" "}
+                      <span
+                        className="bg-clip-text text-transparent"
+                        style={{ backgroundImage: "var(--gradient-gold)" }}
+                      >
+                        nivel real de inglés
+                      </span>{" "}
+                      en 7 o 20 minutos
                     </h2>
 
-                    <p className="mt-4 text-base text-white/90 sm:text-lg">
-                      Un examen diagnóstico creado por Teacher Netza que evalúa Listening,
-                      Reading y Vocabulary & Use of Language. Elige la versión rápida (~7 min) o
-                      la completa (15–20 min) y recibe tu nivel por habilidad y una Constancia de
-                      Nivel en PDF.
+                    <p className="mb-9 max-w-xl text-base leading-relaxed text-background/75 sm:text-lg">
+                      Audios reales, lecturas y vocabulario. Terminas y ves tu nivel A1–C1 por
+                      habilidad, con tu Constancia en PDF.
                     </p>
 
-                    <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <div className="flex flex-col gap-4 sm:flex-row">
                       <Link to="/diagnostic-exam">
                         <Button
                           size="lg"
-                          className="group tn-on-accent bg-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/90"
+                          className="group tn-on-accent h-auto w-full rounded-2xl bg-background px-8 py-4 text-base font-bold shadow-lg shadow-background/5 transition-all duration-300 hover:-translate-y-0.5 hover:bg-background/90 hover:shadow-[var(--glow-mint)] active:scale-95 sm:w-auto"
                         >
                           <ClipboardCheck className="mr-2 h-5 w-5" />
                           Iniciar Examen Diagnóstico
-                          <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                          <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                         </Button>
                       </Link>
                       <a href="#metodologia">
                         <Button
                           size="lg"
                           variant="outline"
-                          className="border-white/40 bg-transparent text-white transition-all duration-300 hover:bg-white/10 hover:text-white"
+                          className="h-auto w-full rounded-2xl border-background/20 bg-background/5 px-8 py-4 text-base font-bold text-background backdrop-blur-sm transition-all duration-300 hover:border-background/40 hover:bg-background/10 hover:text-background sm:w-auto"
                         >
                           Conocer más
                         </Button>
@@ -599,25 +613,52 @@ function Landing() {
                     </div>
                   </div>
 
-                  <ul className="grid gap-3 rounded-2xl border border-white/25 bg-white/10 p-5 text-white backdrop-blur">
-                    {[
-                      { icon: Zap, text: "3 rubros: Listening (audio real), Reading (3 lecturas) y Vocabulary & Use of Language." },
-                      { icon: ClipboardCheck, text: "Nivel por habilidad y nivel general (A1 – C1) al instante." },
-                      { icon: FileDown, text: "Constancia de Nivel en PDF, lista para descargar y compartir." },
-
-                      { icon: Sparkles, text: "Diseñado por Teacher Netza · +6 años de experiencia." },
-                    ].map((f) => (
-                      <li
-                        key={f.text}
-                        className="flex items-start gap-3 rounded-xl p-2 text-sm transition-colors duration-300 hover:bg-white/10"
-                      >
-                        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/20">
-                          <f.icon className="h-4 w-4" />
-                        </span>
-                        <span>{f.text}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Prueba rápida */}
+                  <div className="relative flex items-center justify-center bg-foreground/15 p-8 sm:p-12 lg:w-2/5 lg:p-10">
+                    <div className="grid w-full gap-4">
+                      {[
+                        {
+                          icon: Headphones,
+                          title: "Listening con audio real",
+                          desc: "Siete audios auténticos, no voz de robot.",
+                          tint: "bg-mint/15 text-mint",
+                        },
+                        {
+                          icon: Clock,
+                          title: "Dos duraciones",
+                          desc: "Rápido (~7 min) o completo (15–20 min).",
+                          tint: "bg-gold/15 text-gold",
+                        },
+                        {
+                          icon: FileDown,
+                          title: "Constancia en PDF",
+                          desc: "Descárgala y compártela al instante.",
+                          tint: "bg-background/10 text-background",
+                        },
+                      ].map((f) => {
+                        return (
+                          <div
+                            key={f.title}
+                            className="group rounded-2xl border border-background/10 bg-background/5 p-5 backdrop-blur-xl transition-all duration-300 hover:border-background/25 hover:bg-background/10"
+                          >
+                            <div className="flex items-start gap-4">
+                              <span
+                                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${f.tint}`}
+                              >
+                                <f.icon className="h-5 w-5" />
+                              </span>
+                              <div>
+                                <h3 className="font-heading text-base font-bold text-background">
+                                  {f.title}
+                                </h3>
+                                <p className="mt-0.5 text-sm text-background/65">{f.desc}</p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </div>
             </Reveal>
