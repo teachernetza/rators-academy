@@ -11,33 +11,12 @@ async function assertEnrolled(studentId: string, courseId: string) {
   if (!data) throw new Error("Not enrolled");
 }
 
-async function recomputeProgress(studentId: string, courseId: string) {
-  // Total lessons in course
-  const { data: sections } = await (await db()).from("sections").select("id").eq("course_id", courseId);
-  const sectionIds = (sections ?? []).map((s) => s.id);
-  if (!sectionIds.length) return;
-  const { data: lessons } = await (await db()).from("lessons").select("id").in("section_id", sectionIds);
-  const lessonIds = (lessons ?? []).map((l) => l.id);
-  if (!lessonIds.length) return;
-  const { count } = await (await db()).from("lesson_completions")
-    .select("*", { count: "exact", head: true })
-    .eq("student_id", studentId).in("lesson_id", lessonIds);
-  const pct = Math.round(((count ?? 0) / lessonIds.length) * 100);
-  await (await db()).from("enrollments").update({ progress: pct })
-    .eq("student_id", studentId).eq("course_id", courseId);
-
-  // Auto-issue certificate on completion
-  if (pct === 100) {
-    const { data: existing } = await (await db())
-      .from("certificates").select("id")
-      .eq("student_id", studentId).eq("course_id", courseId).maybeSingle();
-    if (!existing) {
-      const serial = `RA-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
-      await (await db()).from("certificates").insert({
-        student_id: studentId, course_id: courseId, serial,
-      });
-    }
-  }
+// Progress and certificate issuance are recomputed inside the database, which
+// recounts the lessons the student actually finished and refuses to touch a
+// course the student is not enrolled in.
+async function syncProgress(courseId: string) {
+  const { error } = await (await db()).rpc("sync_student_progress", { p_course_id: courseId });
+  if (error) throw new Error(error.message);
 }
 
 export const listMyCourses = createServerFn({ method: "GET" })
