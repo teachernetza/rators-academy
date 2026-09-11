@@ -459,6 +459,48 @@ export type Database = {
           },
         ]
       }
+      lab_assignments: {
+        Row: {
+          assigned_by: string
+          completed_at: string | null
+          created_at: string
+          due_date: string | null
+          id: string
+          lab_level: string
+          lab_slug: string
+          note: string | null
+          status: string
+          student_id: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_by: string
+          completed_at?: string | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          lab_level: string
+          lab_slug: string
+          note?: string | null
+          status?: string
+          student_id: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_by?: string
+          completed_at?: string | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          lab_level?: string
+          lab_slug?: string
+          note?: string | null
+          status?: string
+          student_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       lesson_comments: {
         Row: {
           body: string
@@ -638,6 +680,7 @@ export type Database = {
           avatar_url: string | null
           bio: string | null
           created_at: string
+          email: string | null
           full_name: string
           id: string
           is_active: boolean
@@ -648,6 +691,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
+          email?: string | null
           full_name?: string
           id: string
           is_active?: boolean
@@ -658,6 +702,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
+          email?: string | null
           full_name?: string
           id?: string
           is_active?: boolean
@@ -814,6 +859,17 @@ export type Database = {
         Args: { _course_id: string; _user_id: string }
         Returns: boolean
       }
+      staff_create_user: {
+        Args: {
+          p_email: string
+          p_full_name: string
+          p_role: Database["public"]["Enums"]["app_role"]
+        }
+        Returns: Json
+      }
+      staff_delete_user: { Args: { p_user_id: string }; Returns: Json }
+      staff_set_password: { Args: { p_user_id: string }; Returns: Json }
+      sync_student_progress: { Args: { p_course_id: string }; Returns: Json }
       teacher_has_student: {
         Args: { _student_id: string; _teacher_id: string }
         Returns: boolean
