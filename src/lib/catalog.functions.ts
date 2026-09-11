@@ -1,22 +1,20 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-type _AdminClient = typeof import("@/integrations/supabase/client.server")["supabaseAdmin"];
-let __supabaseAdmin: _AdminClient | undefined;
-async function admin(): Promise<_AdminClient> {
-  if (!__supabaseAdmin) __supabaseAdmin = (await import("@/integrations/supabase/client.server")).supabaseAdmin;
-  return __supabaseAdmin;
+async function db() {
+  const { userClient } = await import("@/lib/request-supabase.server");
+  return userClient();
 }
 export const listCatalog = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data: courses } = await (await admin())
+    const { data: courses } = await (await db())
       .from("courses")
       .select("id, title, description, cover_image_url, teacher_id")
       .eq("status", "published")
       .order("created_at", { ascending: false });
 
-    const { data: enrolled } = await (await admin())
+    const { data: enrolled } = await (await db())
       .from("enrollments")
       .select("course_id")
       .eq("student_id", context.userId);
@@ -24,7 +22,7 @@ export const listCatalog = createServerFn({ method: "GET" })
 
     const teacherIds = Array.from(new Set((courses ?? []).map((c) => c.teacher_id).filter(Boolean) as string[]));
     const { data: teachers } = teacherIds.length
-      ? await (await admin()).from("profiles").select("id, full_name").in("id", teacherIds)
+      ? await (await db()).from("profiles").select("id, full_name").in("id", teacherIds)
       : { data: [] as any[] };
     const tMap = new Map((teachers ?? []).map((t: any) => [t.id, t.full_name]));
 
@@ -39,10 +37,10 @@ export const enrollSelf = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ courseId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
-    const { data: course } = await (await admin())
+    const { data: course } = await (await db())
       .from("courses").select("id, status").eq("id", data.courseId).single();
     if (!course || course.status !== "published") throw new Error("Course is not available");
-    const { error } = await (await admin()).from("enrollments").insert({
+    const { error } = await (await db()).from("enrollments").insert({
       student_id: context.userId,
       course_id: data.courseId,
       progress: 0,

@@ -1,14 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-type _AdminClient = typeof import("@/integrations/supabase/client.server")["supabaseAdmin"];
-let __supabaseAdmin: _AdminClient | undefined;
-async function admin(): Promise<_AdminClient> {
-  if (!__supabaseAdmin) __supabaseAdmin = (await import("@/integrations/supabase/client.server")).supabaseAdmin;
-  return __supabaseAdmin;
+async function db() {
+  const { userClient } = await import("@/lib/request-supabase.server");
+  return userClient();
 }
 async function assertCanAccessLesson(userId: string, lessonId: string) {
-  const { data: lesson } = await (await admin())
+  const { data: lesson } = await (await db())
     .from("lessons")
     .select("section_id, sections!inner(course_id)")
     .eq("id", lessonId)
@@ -17,9 +15,9 @@ async function assertCanAccessLesson(userId: string, lessonId: string) {
   const courseId = (lesson as any).sections.course_id;
 
   const [{ data: enr }, { data: course }, { data: prof }] = await Promise.all([
-    (await admin()).from("enrollments").select("id").eq("student_id", userId).eq("course_id", courseId).maybeSingle(),
-    (await admin()).from("courses").select("teacher_id").eq("id", courseId).single(),
-    (await admin()).from("profiles").select("role").eq("id", userId).single(),
+    (await db()).from("enrollments").select("id").eq("student_id", userId).eq("course_id", courseId).maybeSingle(),
+    (await db()).from("courses").select("teacher_id").eq("id", courseId).single(),
+    (await db()).from("profiles").select("role").eq("id", userId).single(),
   ]);
   const isTeacher = course?.teacher_id === userId;
   const isAdmin = prof?.role === "admin";
@@ -32,14 +30,14 @@ export const listComments = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => z.object({ lessonId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     await assertCanAccessLesson(context.userId, data.lessonId);
-    const { data: rows } = await (await admin())
+    const { data: rows } = await (await db())
       .from("lesson_comments")
       .select("id, user_id, parent_id, body, created_at")
       .eq("lesson_id", data.lessonId)
       .order("created_at", { ascending: true });
     const userIds = Array.from(new Set((rows ?? []).map((r) => r.user_id)));
     const { data: profs } = userIds.length
-      ? await (await admin()).from("profiles").select("id, full_name, role").in("id", userIds)
+      ? await (await db()).from("profiles").select("id, full_name, role").in("id", userIds)
       : { data: [] as any[] };
     const profMap = new Map((profs ?? []).map((p: any) => [p.id, p]));
     return (rows ?? []).map((r) => ({
@@ -58,7 +56,7 @@ export const postComment = createServerFn({ method: "POST" })
   }).parse(d))
   .handler(async ({ data, context }) => {
     const { courseId, isTeacher } = await assertCanAccessLesson(context.userId, data.lessonId);
-    const { data: row, error } = await (await admin()).from("lesson_comments").insert({
+    const { data: row, error } = await (await db()).from("lesson_comments").insert({
       lesson_id: data.lessonId,
       user_id: context.userId,
       parent_id: data.parentId ?? null,
@@ -68,9 +66,9 @@ export const postComment = createServerFn({ method: "POST" })
 
     // Notify teacher if a student posted
     if (!isTeacher) {
-      const { data: course } = await (await admin()).from("courses").select("teacher_id, title").eq("id", courseId).single();
+      const { data: course } = await (await db()).from("courses").select("teacher_id, title").eq("id", courseId).single();
       if (course?.teacher_id) {
-        await (await admin()).from("pending_tasks").insert({
+        await (await db()).from("pending_tasks").insert({
           user_id: course.teacher_id,
           title: `New question in ${course.title}`,
           role_target: "teacher",
@@ -84,9 +82,9 @@ export const deleteComment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
-    const { data: row } = await (await admin()).from("lesson_comments").select("user_id").eq("id", data.id).single();
-    const { data: prof } = await (await admin()).from("profiles").select("role").eq("id", context.userId).single();
+    const { data: row } = await (await db()).from("lesson_comments").select("user_id").eq("id", data.id).single();
+    const { data: prof } = await (await db()).from("profiles").select("role").eq("id", context.userId).single();
     if (row?.user_id !== context.userId && prof?.role !== "admin") throw new Error("Not allowed");
-    await (await admin()).from("lesson_comments").delete().eq("id", data.id);
+    await (await db()).from("lesson_comments").delete().eq("id", data.id);
     return { ok: true };
   });

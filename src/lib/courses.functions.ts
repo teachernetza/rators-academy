@@ -1,14 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-type _AdminClient = typeof import("@/integrations/supabase/client.server")["supabaseAdmin"];
-let __supabaseAdmin: _AdminClient | undefined;
-async function admin(): Promise<_AdminClient> {
-  if (!__supabaseAdmin) __supabaseAdmin = (await import("@/integrations/supabase/client.server")).supabaseAdmin;
-  return __supabaseAdmin;
+async function db() {
+  const { userClient } = await import("@/lib/request-supabase.server");
+  return userClient();
 }
 async function getRole(userId: string) {
-  const { data } = await (await admin()).from("profiles").select("role").eq("id", userId).maybeSingle();
+  const { data } = await (await db()).from("profiles").select("role").eq("id", userId).maybeSingle();
   return data?.role as "admin" | "teacher" | "student" | undefined;
 }
 
@@ -16,7 +14,7 @@ async function assertCanEditCourse(userId: string, courseId: string) {
   const role = await getRole(userId);
   if (role === "admin") return;
   if (role === "teacher") {
-    const { data } = await (await admin()).from("courses").select("teacher_id").eq("id", courseId).maybeSingle();
+    const { data } = await (await db()).from("courses").select("teacher_id").eq("id", courseId).maybeSingle();
     if (data?.teacher_id === userId) return;
   }
   throw new Error("Forbidden");
@@ -27,7 +25,7 @@ export const listCourses = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const role = await getRole(context.userId);
-    let q = (await admin())
+    let q = (await db())
       .from("courses")
       .select("id, title, description, cover_image_url, status, teacher_id, created_at")
       .order("created_at", { ascending: false });
@@ -38,13 +36,13 @@ export const listCourses = createServerFn({ method: "GET" })
     // Attach teacher name + counts
     const teacherIds = Array.from(new Set((data ?? []).map((c) => c.teacher_id).filter(Boolean) as string[]));
     const { data: teachers } = teacherIds.length
-      ? await (await admin()).from("profiles").select("id, full_name").in("id", teacherIds)
+      ? await (await db()).from("profiles").select("id, full_name").in("id", teacherIds)
       : { data: [] as { id: string; full_name: string }[] };
     const tmap = new Map((teachers ?? []).map((t) => [t.id, t.full_name]));
 
     const ids = (data ?? []).map((c) => c.id);
     const { data: enrolls } = ids.length
-      ? await (await admin()).from("enrollments").select("course_id, progress").in("course_id", ids)
+      ? await (await db()).from("enrollments").select("course_id, progress").in("course_id", ids)
       : { data: [] as { course_id: string; progress: number }[] };
 
     return (data ?? []).map((c) => {
@@ -75,7 +73,7 @@ export const createCourse = createServerFn({ method: "POST" })
     let teacher_id = data.teacher_id ?? null;
     if (role === "teacher") teacher_id = context.userId;
     else if (role !== "admin") throw new Error("Forbidden");
-    const { data: row, error } = await (await admin())
+    const { data: row, error } = await (await db())
       .from("courses")
       .insert({
         title: data.title,
@@ -98,7 +96,7 @@ export const updateCourse = createServerFn({ method: "POST" })
     const { id, ...fields } = data;
     const role = await getRole(context.userId);
     if (role === "teacher") delete (fields as any).teacher_id; // teachers can't reassign
-    const { error } = await (await admin()).from("courses").update(fields).eq("id", id);
+    const { error } = await (await db()).from("courses").update(fields).eq("id", id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -108,7 +106,7 @@ export const deleteCourse = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     await assertCanEditCourse(context.userId, data.id);
-    const { error } = await (await admin()).from("courses").delete().eq("id", data.id);
+    const { error } = await (await db()).from("courses").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -119,12 +117,12 @@ export const getCourseTree = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => z.object({ courseId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     await assertCanEditCourse(context.userId, data.courseId);
-    const { data: course } = await (await admin()).from("courses").select("*").eq("id", data.courseId).single();
-    const { data: sections } = await (await admin())
+    const { data: course } = await (await db()).from("courses").select("*").eq("id", data.courseId).single();
+    const { data: sections } = await (await db())
       .from("sections").select("*").eq("course_id", data.courseId).order("order_index");
     const sectionIds = (sections ?? []).map((s) => s.id);
     const { data: lessons } = sectionIds.length
-      ? await (await admin()).from("lessons").select("*").in("section_id", sectionIds).order("order_index")
+      ? await (await db()).from("lessons").select("*").in("section_id", sectionIds).order("order_index")
       : { data: [] as any[] };
     return {
       course,
@@ -144,8 +142,8 @@ export const createSection = createServerFn({ method: "POST" })
   }).parse(d))
   .handler(async ({ data, context }) => {
     await assertCanEditCourse(context.userId, data.course_id);
-    const { count } = await (await admin()).from("sections").select("*", { count: "exact", head: true }).eq("course_id", data.course_id);
-    const { error, data: row } = await (await admin()).from("sections").insert({
+    const { count } = await (await db()).from("sections").select("*", { count: "exact", head: true }).eq("course_id", data.course_id);
+    const { error, data: row } = await (await db()).from("sections").insert({
       course_id: data.course_id, title: data.title, order_index: count ?? 0,
     }).select().single();
     if (error) throw new Error(error.message);
@@ -158,10 +156,10 @@ export const updateSection = createServerFn({ method: "POST" })
     id: z.string().uuid(), title: z.string().min(1).max(200).optional(), order_index: z.number().int().optional(),
   }).parse(d))
   .handler(async ({ data, context }) => {
-    const { data: s } = await (await admin()).from("sections").select("course_id").eq("id", data.id).single();
+    const { data: s } = await (await db()).from("sections").select("course_id").eq("id", data.id).single();
     await assertCanEditCourse(context.userId, s!.course_id);
     const { id, ...fields } = data;
-    const { error } = await (await admin()).from("sections").update(fields).eq("id", id);
+    const { error } = await (await db()).from("sections").update(fields).eq("id", id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -170,9 +168,9 @@ export const deleteSection = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
-    const { data: s } = await (await admin()).from("sections").select("course_id").eq("id", data.id).single();
+    const { data: s } = await (await db()).from("sections").select("course_id").eq("id", data.id).single();
     await assertCanEditCourse(context.userId, s!.course_id);
-    const { error } = await (await admin()).from("sections").delete().eq("id", data.id);
+    const { error } = await (await db()).from("sections").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -207,10 +205,10 @@ export const createLesson = createServerFn({ method: "POST" })
     due_date: z.string().datetime().nullable().optional(),
   }).parse(d))
   .handler(async ({ data, context }) => {
-    const { data: s } = await (await admin()).from("sections").select("course_id").eq("id", data.section_id).single();
+    const { data: s } = await (await db()).from("sections").select("course_id").eq("id", data.section_id).single();
     await assertCanEditCourse(context.userId, s!.course_id);
-    const { count } = await (await admin()).from("lessons").select("*", { count: "exact", head: true }).eq("section_id", data.section_id);
-    const { data: row, error } = await (await admin()).from("lessons").insert({
+    const { count } = await (await db()).from("lessons").select("*", { count: "exact", head: true }).eq("section_id", data.section_id);
+    const { data: row, error } = await (await db()).from("lessons").insert({
       section_id: data.section_id, title: data.title, type: data.type,
       content: data.content, order_index: count ?? 0,
       due_date: data.due_date ?? null,
@@ -229,11 +227,11 @@ export const updateLesson = createServerFn({ method: "POST" })
     due_date: z.string().datetime().nullable().optional(),
   }).parse(d))
   .handler(async ({ data, context }) => {
-    const { data: l } = await (await admin()).from("lessons").select("section_id").eq("id", data.id).single();
-    const { data: s } = await (await admin()).from("sections").select("course_id").eq("id", l!.section_id).single();
+    const { data: l } = await (await db()).from("lessons").select("section_id").eq("id", data.id).single();
+    const { data: s } = await (await db()).from("sections").select("course_id").eq("id", l!.section_id).single();
     await assertCanEditCourse(context.userId, s!.course_id);
     const { id, ...fields } = data;
-    const { error } = await (await admin()).from("lessons").update(fields).eq("id", id);
+    const { error } = await (await db()).from("lessons").update(fields).eq("id", id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -242,10 +240,10 @@ export const deleteLesson = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
-    const { data: l } = await (await admin()).from("lessons").select("section_id").eq("id", data.id).single();
-    const { data: s } = await (await admin()).from("sections").select("course_id").eq("id", l!.section_id).single();
+    const { data: l } = await (await db()).from("lessons").select("section_id").eq("id", data.id).single();
+    const { data: s } = await (await db()).from("sections").select("course_id").eq("id", l!.section_id).single();
     await assertCanEditCourse(context.userId, s!.course_id);
-    const { error } = await (await admin()).from("lessons").delete().eq("id", data.id);
+    const { error } = await (await db()).from("lessons").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -263,7 +261,7 @@ export const requestCourseFileUploadUrl = createServerFn({ method: "POST" })
     const safe = data.filename.replace(/[^a-zA-Z0-9._-]/g, "_");
     const lesson = data.lessonId ?? "general";
     const path = `${data.courseId}/${lesson}/${Date.now()}-${safe}`;
-    const { data: signed, error } = await (await admin()).storage.from("course-files")
+    const { data: signed, error } = await (await db()).storage.from("course-files")
       .createSignedUploadUrl(path);
     if (error) throw new Error(error.message);
     return { path, token: signed.token };
@@ -276,14 +274,14 @@ export const getCourseFileUrl = createServerFn({ method: "POST" })
     // Validate access: path is courseId/...
     const courseId = data.path.split("/")[0];
     const [{ data: enr }, { data: course }, { data: prof }] = await Promise.all([
-      (await admin()).from("enrollments").select("id").eq("student_id", context.userId).eq("course_id", courseId).maybeSingle(),
-      (await admin()).from("courses").select("teacher_id").eq("id", courseId).single(),
-      (await admin()).from("profiles").select("role").eq("id", context.userId).single(),
+      (await db()).from("enrollments").select("id").eq("student_id", context.userId).eq("course_id", courseId).maybeSingle(),
+      (await db()).from("courses").select("teacher_id").eq("id", courseId).single(),
+      (await db()).from("profiles").select("role").eq("id", context.userId).single(),
     ]);
     if (!enr && course?.teacher_id !== context.userId && prof?.role !== "admin") {
       throw new Error("Not allowed");
     }
-    const { data: signed, error } = await (await admin()).storage.from("course-files")
+    const { data: signed, error } = await (await db()).storage.from("course-files")
       .createSignedUrl(data.path, 3600);
     if (error) throw new Error(error.message);
     return { url: signed.signedUrl };
