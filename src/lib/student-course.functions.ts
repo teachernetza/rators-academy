@@ -100,7 +100,7 @@ export const markLessonComplete = createServerFn({ method: "POST" })
       { student_id: context.userId, lesson_id: data.lessonId },
       { onConflict: "student_id,lesson_id" },
     );
-    await recomputeProgress(context.userId, courseId);
+    await syncProgress(courseId);
     return { ok: true };
   });
 
@@ -138,7 +138,7 @@ export const submitActivity = createServerFn({ method: "POST" })
       { student_id: context.userId, lesson_id: data.lessonId },
       { onConflict: "student_id,lesson_id" },
     );
-    await recomputeProgress(context.userId, courseId);
+    await syncProgress(courseId);
     return { ok: true };
   });
 
@@ -166,7 +166,7 @@ export const submitQuiz = createServerFn({ method: "POST" })
       { student_id: context.userId, lesson_id: data.lessonId },
       { onConflict: "student_id,lesson_id" },
     );
-    await recomputeProgress(context.userId, courseId);
+    await syncProgress(courseId);
     return { score, total };
   });
 
