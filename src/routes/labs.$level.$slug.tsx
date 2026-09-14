@@ -35,6 +35,8 @@ function LabViewer() {
   const lab = findLab(level, slug);
   const lvl = levelMeta(level);
   const { resolved } = useTheme();
+  const { profile } = useAuth();
+  const isStaff = profile?.role === "admin" || profile?.role === "teacher";
   const frameRef = useRef<HTMLIFrameElement>(null);
 
   const syncTheme = () => {
