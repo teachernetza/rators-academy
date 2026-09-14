@@ -62,6 +62,16 @@ function LabViewer() {
             {lvl && <span className="ml-2 text-xs text-muted-foreground">· {lvl.label}</span>}
           </span>
           <div className="flex items-center gap-1">
+            {lab && isStaff && (
+              <AssignLabDialog
+                lab={lab}
+                trigger={
+                  <Button variant="outline" size="sm">
+                    <Send className="mr-1.5 h-4 w-4" />Asignar
+                  </Button>
+                }
+              />
+            )}
             <ThemeToggle />
             {lab ? (
               <a href={`${lab.file}?theme=${resolved}`} target="_blank" rel="noopener noreferrer">
