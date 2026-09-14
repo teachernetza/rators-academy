@@ -34,11 +34,13 @@ export const listCourses = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
 
     // Attach teacher name + counts
-    const teacherIds = Array.from(new Set((data ?? []).map((c) => c.teacher_id).filter(Boolean) as string[]));
-    const { data: teachers } = teacherIds.length
-      ? await (await db()).from("profiles").select("id, full_name").in("id", teacherIds)
+    const teacherIds = new Set((data ?? []).map((c) => c.teacher_id).filter(Boolean) as string[]);
+    const { data: teachers } = teacherIds.size
+      ? await (await db()).rpc("staff_directory")
       : { data: [] as { id: string; full_name: string }[] };
-    const tmap = new Map((teachers ?? []).map((t) => [t.id, t.full_name]));
+    const tmap = new Map(
+      (teachers ?? []).filter((t: any) => teacherIds.has(t.id)).map((t: any) => [t.id, t.full_name]),
+    );
 
     const ids = (data ?? []).map((c) => c.id);
     const { data: enrolls } = ids.length
