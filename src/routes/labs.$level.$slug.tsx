@@ -1,10 +1,12 @@
 import { useEffect, useRef } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useTheme } from "@/lib/theme";
 import { findLab, levelMeta } from "@/lib/labs";
+import { useAuth } from "@/lib/auth";
+import { AssignLabDialog } from "@/components/labs/assign-lab-dialog";
 
 export const Route = createFileRoute("/labs/$level/$slug")({
   head: ({ params }) => {
@@ -33,6 +35,8 @@ function LabViewer() {
   const lab = findLab(level, slug);
   const lvl = levelMeta(level);
   const { resolved } = useTheme();
+  const { profile } = useAuth();
+  const isStaff = profile?.role === "admin" || profile?.role === "teacher";
   const frameRef = useRef<HTMLIFrameElement>(null);
 
   const syncTheme = () => {
@@ -58,6 +62,16 @@ function LabViewer() {
             {lvl && <span className="ml-2 text-xs text-muted-foreground">· {lvl.label}</span>}
           </span>
           <div className="flex items-center gap-1">
+            {lab && isStaff && (
+              <AssignLabDialog
+                lab={lab}
+                trigger={
+                  <Button variant="outline" size="sm">
+                    <Send className="mr-1.5 h-4 w-4" />Asignar
+                  </Button>
+                }
+              />
+            )}
             <ThemeToggle />
             {lab ? (
               <a href={`${lab.file}?theme=${resolved}`} target="_blank" rel="noopener noreferrer">

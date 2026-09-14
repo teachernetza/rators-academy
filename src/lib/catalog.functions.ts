@@ -20,11 +20,13 @@ export const listCatalog = createServerFn({ method: "GET" })
       .eq("student_id", context.userId);
     const enrolledIds = new Set((enrolled ?? []).map((e) => e.course_id));
 
-    const teacherIds = Array.from(new Set((courses ?? []).map((c) => c.teacher_id).filter(Boolean) as string[]));
-    const { data: teachers } = teacherIds.length
-      ? await (await db()).from("profiles").select("id, full_name").in("id", teacherIds)
+    const teacherIds = new Set((courses ?? []).map((c) => c.teacher_id).filter(Boolean) as string[]);
+    const { data: teachers } = teacherIds.size
+      ? await (await db()).rpc("staff_directory")
       : { data: [] as any[] };
-    const tMap = new Map((teachers ?? []).map((t: any) => [t.id, t.full_name]));
+    const tMap = new Map(
+      (teachers ?? []).filter((t: any) => teacherIds.has(t.id)).map((t: any) => [t.id, t.full_name]),
+    );
 
     return (courses ?? []).map((c) => ({
       ...c,

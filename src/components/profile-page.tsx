@@ -73,6 +73,48 @@ export function ProfilePage() {
           </Button>
         </form>
       </Card>
+
+      <PasswordCard />
     </div>
+  );
+}
+
+function PasswordCard() {
+  const [pwd, setPwd] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (pwd.length < 8) return toast.error("La contraseña debe tener al menos 8 caracteres");
+    if (pwd !== confirm) return toast.error("Las contraseñas no coinciden");
+    setSaving(true);
+    const { error } = await supabase.auth.updateUser({ password: pwd });
+    setSaving(false);
+    if (error) return toast.error(error.message);
+    setPwd("");
+    setConfirm("");
+    toast.success("Contraseña actualizada");
+  };
+
+  return (
+    <Card className="p-6">
+      <h2 className="font-heading text-xl font-bold">Cambiar contraseña</h2>
+      <p className="mt-1 text-sm text-muted-foreground">Usa al menos 8 caracteres.</p>
+      <form onSubmit={submit} className="mt-4 space-y-4">
+        <div className="space-y-2">
+          <Label>Nueva contraseña</Label>
+          <Input type="password" value={pwd} onChange={(e) => setPwd(e.target.value)} required />
+        </div>
+        <div className="space-y-2">
+          <Label>Confirmar contraseña</Label>
+          <Input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} required />
+        </div>
+        <Button type="submit" disabled={saving}>
+          {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          Actualizar contraseña
+        </Button>
+      </form>
+    </Card>
   );
 }

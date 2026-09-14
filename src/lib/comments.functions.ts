@@ -29,17 +29,19 @@ export const listComments = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ lessonId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
-    await assertCanAccessLesson(context.userId, data.lessonId);
+    const { courseId } = await assertCanAccessLesson(context.userId, data.lessonId);
     const { data: rows } = await (await db())
       .from("lesson_comments")
       .select("id, user_id, parent_id, body, created_at")
       .eq("lesson_id", data.lessonId)
       .order("created_at", { ascending: true });
-    const userIds = Array.from(new Set((rows ?? []).map((r) => r.user_id)));
-    const { data: profs } = userIds.length
-      ? await (await db()).from("profiles").select("id, full_name, role").in("id", userIds)
+    const userIds = new Set((rows ?? []).map((r) => r.user_id));
+    const { data: profs } = userIds.size
+      ? await (await db()).rpc("course_roster", { p_course_id: courseId })
       : { data: [] as any[] };
-    const profMap = new Map((profs ?? []).map((p: any) => [p.id, p]));
+    const profMap = new Map(
+      (profs ?? []).filter((p: any) => userIds.has(p.id)).map((p: any) => [p.id, p]),
+    );
     return (rows ?? []).map((r) => ({
       ...r,
       author_name: profMap.get(r.user_id)?.full_name ?? "User",
