@@ -13,7 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnnouncementsRouteImport } from './routes/announcements'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as DiagnosticExamRouteImport } from './routes/diagnostic-exam'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
 import { Route as AdminCoursesRouteImport } from './routes/admin/courses'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
@@ -71,9 +73,19 @@ const DiagnosticExamRoute = DiagnosticExamRouteImport.update({
   path: '/diagnostic-exam',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminActivitiesRoute = AdminActivitiesRouteImport.update({
@@ -264,7 +276,9 @@ export interface FileRoutesByFullPath {
   '/announcements': typeof AnnouncementsRoute
   '/calendar': typeof CalendarRoute
   '/diagnostic-exam': typeof DiagnosticExamRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/admin/activities': typeof AdminActivitiesRouteWithChildren
   '/admin/courses': typeof AdminCoursesRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -307,7 +321,9 @@ export interface FileRoutesByTo {
   '/announcements': typeof AnnouncementsRoute
   '/calendar': typeof CalendarRoute
   '/diagnostic-exam': typeof DiagnosticExamRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/admin/activities': typeof AdminActivitiesRouteWithChildren
   '/admin/courses': typeof AdminCoursesRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -351,7 +367,9 @@ export interface FileRoutesById {
   '/announcements': typeof AnnouncementsRoute
   '/calendar': typeof CalendarRoute
   '/diagnostic-exam': typeof DiagnosticExamRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/admin/activities': typeof AdminActivitiesRouteWithChildren
   '/admin/courses': typeof AdminCoursesRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -396,7 +414,9 @@ export interface FileRouteTypes {
     | '/announcements'
     | '/calendar'
     | '/diagnostic-exam'
+    | '/forgot-password'
     | '/login'
+    | '/reset-password'
     | '/admin/activities'
     | '/admin/courses'
     | '/admin/dashboard'
@@ -439,7 +459,9 @@ export interface FileRouteTypes {
     | '/announcements'
     | '/calendar'
     | '/diagnostic-exam'
+    | '/forgot-password'
     | '/login'
+    | '/reset-password'
     | '/admin/activities'
     | '/admin/courses'
     | '/admin/dashboard'
@@ -482,7 +504,9 @@ export interface FileRouteTypes {
     | '/announcements'
     | '/calendar'
     | '/diagnostic-exam'
+    | '/forgot-password'
     | '/login'
+    | '/reset-password'
     | '/admin/activities'
     | '/admin/courses'
     | '/admin/dashboard'
@@ -526,7 +550,9 @@ export interface RootRouteChildren {
   AnnouncementsRoute: typeof AnnouncementsRoute
   CalendarRoute: typeof CalendarRoute
   DiagnosticExamRoute: typeof DiagnosticExamRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   AdminActivitiesRoute: typeof AdminActivitiesRouteWithChildren
   AdminCoursesRoute: typeof AdminCoursesRouteWithChildren
   AdminDashboardRoute: typeof AdminDashboardRoute
@@ -587,11 +613,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DiagnosticExamRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/activities': {
@@ -947,7 +987,9 @@ const rootRouteChildren: RootRouteChildren = {
   AnnouncementsRoute: AnnouncementsRoute,
   CalendarRoute: CalendarRoute,
   DiagnosticExamRoute: DiagnosticExamRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   AdminActivitiesRoute: AdminActivitiesRouteWithChildren,
   AdminCoursesRoute: AdminCoursesRouteWithChildren,
   AdminDashboardRoute: AdminDashboardRoute,

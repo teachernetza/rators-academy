@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth, dashboardPathFor } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -100,7 +100,13 @@ function LoginPage() {
             </Button>
           </form>
 
-          <p className="mt-4 text-center text-xs text-muted-foreground">
+          <p className="mt-4 text-center text-sm">
+            <Link to="/forgot-password" className="text-primary hover:underline">
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </p>
+
+          <p className="mt-2 text-center text-xs text-muted-foreground">
             Si no tienes acceso, solicítalo directamente a Teacher Netza.
           </p>
         </Card>
