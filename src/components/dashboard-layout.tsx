@@ -7,7 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   LayoutDashboard, Users, BookOpen, Settings, LogOut,
   ClipboardList, UserCircle, Menu, BarChart3, Compass, Award,
-  Megaphone, CalendarDays, FileText, Inbox,
+  Megaphone, CalendarDays, FileText, Inbox, FlaskConical,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -23,6 +23,7 @@ const NAV: Record<AppRole, NavItem[]> = {
     { to: "/admin/students", label: "Students", icon: Users },
     { to: "/admin/courses", label: "Courses", icon: BookOpen },
     { to: "/admin/activities", label: "Activities", icon: FileText },
+    { to: "/admin/labs", label: "Labs asignados", icon: FlaskConical },
     { to: "/announcements", label: "Announcements", icon: Megaphone },
     { to: "/admin/settings", label: "Settings", icon: Settings },
   ],
@@ -31,6 +32,7 @@ const NAV: Record<AppRole, NavItem[]> = {
     { to: "/teacher/courses", label: "My Courses", icon: BookOpen },
     { to: "/teacher/students", label: "Students", icon: Users },
     { to: "/teacher/activities", label: "Activities", icon: FileText },
+    { to: "/teacher/labs", label: "Labs asignados", icon: FlaskConical },
     { to: "/teacher/inbox", label: "Review Inbox", icon: Inbox },
     { to: "/teacher/grading", label: "Grading", icon: ClipboardList },
     { to: "/calendar", label: "Calendar", icon: CalendarDays },
@@ -42,6 +44,7 @@ const NAV: Record<AppRole, NavItem[]> = {
     { to: "/student/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { to: "/student/courses", label: "My Courses", icon: BookOpen },
     { to: "/student/activities", label: "Activities", icon: FileText },
+    { to: "/student/labs", label: "Mis Labs", icon: FlaskConical },
     { to: "/student/catalog", label: "Catalog", icon: Compass },
     { to: "/calendar", label: "Calendar", icon: CalendarDays },
     { to: "/announcements", label: "Announcements", icon: Megaphone },
