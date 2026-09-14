@@ -844,6 +844,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      course_roster: {
+        Args: { p_course_id: string }
+        Returns: {
+          full_name: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
