@@ -39,9 +39,11 @@ function LabViewer() {
   const lab = findLab(level, slug);
   const lvl = levelMeta(level);
   const { resolved } = useTheme();
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const isStaff = profile?.role === "admin" || profile?.role === "teacher";
   const frameRef = useRef<HTMLIFrameElement>(null);
+  const qc = useQueryClient();
+  const submitFn = useServerFn(submitLabResult);
 
   const syncTheme = () => {
     frameRef.current?.contentWindow?.postMessage(
@@ -50,6 +52,46 @@ function LabViewer() {
     );
   };
   useEffect(syncTheme, [resolved]);
+
+  // Recibe el puntaje que envía el lab al terminar y lo guarda en el LMS.
+  useEffect(() => {
+    const onMsg = async (e: MessageEvent) => {
+      const d: any = e.data;
+      if (!d || d.type !== "tn-lab-result") return;
+      if (!user) {
+        toast.info("Inicia sesión para que tu puntaje quede registrado.");
+        return;
+      }
+      try {
+        const res: any = await submitFn({
+          data: {
+            lab_level: d.level ?? level,
+            lab_slug: d.slug ?? slug,
+            score: Number(d.score) || 0,
+            max_score: Number(d.max) || 1,
+            sections: (d.sections ?? []).map((s: any) => ({
+              title: String(s.title ?? ""),
+              score: Number(s.score) || 0,
+              max: Number(s.max) || 0,
+            })),
+          },
+        });
+        qc.invalidateQueries({ queryKey: ["lab-assignments"] });
+        qc.invalidateQueries({ queryKey: ["lab-progress"] });
+        toast.success(
+          res?.saved
+            ? `Puntaje guardado: ${d.score}/${d.max}`
+            : `Puntaje registrado: ${d.score}/${d.max}`,
+        );
+      } catch (err: any) {
+        toast.error(err?.message ?? "No se pudo guardar tu puntaje");
+      }
+    };
+    window.addEventListener("message", onMsg);
+    return () => window.removeEventListener("message", onMsg);
+  }, [user, level, slug, submitFn, qc]);
+
+  const locked = lab?.scope === "lms" && !user;
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
