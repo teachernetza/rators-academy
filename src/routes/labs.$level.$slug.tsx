@@ -144,7 +144,25 @@ function LabViewer() {
             </Link>
           </div>
         )}
-        {lab && (
+        {lab && locked && (
+          <div className="flex flex-1 flex-col items-center justify-center gap-4 p-10 text-center">
+            <Lock className="h-8 w-8 text-primary" />
+            <h1 className="font-heading text-2xl font-bold">Lab para alumnos</h1>
+            <p className="max-w-md text-muted-foreground">
+              Este lab es parte del programa de Teacher Netza. Inicia sesión con tu cuenta de
+              alumno para hacerlo y que tu puntaje quede registrado.
+            </p>
+            <div className="flex gap-2">
+              <Link to="/login">
+                <Button>Iniciar sesión</Button>
+              </Link>
+              <Link to="/labs">
+                <Button variant="outline">Ver labs gratuitos</Button>
+              </Link>
+            </div>
+          </div>
+        )}
+        {lab && !locked && (
           <iframe
             ref={frameRef}
             onLoad={syncTheme}
