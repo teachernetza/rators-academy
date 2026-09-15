@@ -273,9 +273,15 @@ export function levelMeta(slug: string) {
 }
 
 export function findLab(level: string, slug: string): Lab | undefined {
-  return LABS.find((l) => l.level === level && l.slug === slug);
+  return ALL_LABS.find((l) => l.level === level && l.slug === slug);
 }
 
+/** Solo labs públicos (catálogo abierto). */
 export function labsByLevel(level: string): Lab[] {
   return LABS.filter((l) => l.level === level);
+}
+
+/** Todos los labs de un nivel, incluidos los del LMS. */
+export function allLabsByLevel(level: string): Lab[] {
+  return ALL_LABS.filter((l) => l.level === level);
 }
