@@ -198,7 +198,7 @@ export const LMS_LABS: Lab[] = [
       "La hora y at / in / on",
       "Present simple y adverbios de frecuencia",
     ],
-    exercises: 15,
+    exercises: 12,
   },
   {
     level: "a2",
@@ -211,7 +211,7 @@ export const LMS_LABS: Lab[] = [
     file: "/labs/lms/a2-travel-transport.html",
     scope: "lms",
     objectives: ["Vocabulario de viajes", "Past simple", "Preguntas con did"],
-    exercises: 15,
+    exercises: 12,
   },
   {
     level: "b1",
@@ -228,7 +228,7 @@ export const LMS_LABS: Lab[] = [
       "Present perfect vs past simple",
       "for, since, already, yet",
     ],
-    exercises: 15,
+    exercises: 12,
   },
   {
     level: "b2",
@@ -240,7 +240,7 @@ export const LMS_LABS: Lab[] = [
     file: "/labs/lms/b2-media-technology.html",
     scope: "lms",
     objectives: ["Vocabulario de medios", "Voz pasiva", "Reported speech"],
-    exercises: 15,
+    exercises: 12,
   },
   {
     level: "c1",
@@ -253,7 +253,7 @@ export const LMS_LABS: Lab[] = [
     file: "/labs/lms/c1-environment-society.html",
     scope: "lms",
     objectives: ["Léxico académico", "Condicionales mixtos y wish", "Inversión formal"],
-    exercises: 15,
+    exercises: 12,
   },
 ];
 
