@@ -1,4 +1,4 @@
-export type LabLevel = "a1" | "a2" | "b1" | "b2" | "c1";
+export type LabLevel = "a1" | "a2" | "b1" | "b2" | "c1" | "c2";
 
 export const LAB_LEVELS: {
   slug: LabLevel;
@@ -43,6 +43,13 @@ export const LAB_LEVELS: {
     tagline: "Inglés natural, preciso y con estilo.",
     description: "Próximamente: labs de expresión avanzada y registro formal.",
     color: "#f0a83c",
+  },
+  {
+    slug: "c2",
+    label: "C2 · Maestría",
+    tagline: "Dominio total del idioma.",
+    description: "Próximamente: labs de registro académico, matices y estilo experto.",
+    color: "#e0698a",
   },
 ];
 
