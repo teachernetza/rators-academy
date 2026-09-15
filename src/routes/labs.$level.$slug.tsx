@@ -1,12 +1,16 @@
 import { useEffect, useRef } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, ExternalLink, Send } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { ArrowLeft, ExternalLink, Send, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useTheme } from "@/lib/theme";
 import { findLab, levelMeta } from "@/lib/labs";
 import { useAuth } from "@/lib/auth";
 import { AssignLabDialog } from "@/components/labs/assign-lab-dialog";
+import { submitLabResult } from "@/lib/labs.functions";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/labs/$level/$slug")({
   head: ({ params }) => {
