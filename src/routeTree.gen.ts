@@ -19,6 +19,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
 import { Route as AdminCoursesRouteImport } from './routes/admin/courses'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
+import { Route as AdminLabProgressRouteImport } from './routes/admin/lab-progress'
 import { Route as AdminLabsRouteImport } from './routes/admin/labs'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminStudentsRouteImport } from './routes/admin/students'
@@ -38,6 +39,7 @@ import { Route as TeacherCoursesRouteImport } from './routes/teacher/courses'
 import { Route as TeacherDashboardRouteImport } from './routes/teacher/dashboard'
 import { Route as TeacherGradingRouteImport } from './routes/teacher/grading'
 import { Route as TeacherInboxRouteImport } from './routes/teacher/inbox'
+import { Route as TeacherLabProgressRouteImport } from './routes/teacher/lab-progress'
 import { Route as TeacherLabsRouteImport } from './routes/teacher/labs'
 import { Route as TeacherPendingRouteImport } from './routes/teacher/pending'
 import { Route as TeacherProfileRouteImport } from './routes/teacher/profile'
@@ -101,6 +103,11 @@ const AdminCoursesRoute = AdminCoursesRouteImport.update({
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/admin/dashboard',
   path: '/admin/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLabProgressRoute = AdminLabProgressRouteImport.update({
+  id: '/admin/lab-progress',
+  path: '/admin/lab-progress',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLabsRoute = AdminLabsRouteImport.update({
@@ -198,6 +205,11 @@ const TeacherInboxRoute = TeacherInboxRouteImport.update({
   path: '/teacher/inbox',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TeacherLabProgressRoute = TeacherLabProgressRouteImport.update({
+  id: '/teacher/lab-progress',
+  path: '/teacher/lab-progress',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TeacherLabsRoute = TeacherLabsRouteImport.update({
   id: '/teacher/labs',
   path: '/teacher/labs',
@@ -282,6 +294,7 @@ export interface FileRoutesByFullPath {
   '/admin/activities': typeof AdminActivitiesRouteWithChildren
   '/admin/courses': typeof AdminCoursesRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/lab-progress': typeof AdminLabProgressRoute
   '/admin/labs': typeof AdminLabsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/students': typeof AdminStudentsRoute
@@ -300,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/teacher/dashboard': typeof TeacherDashboardRoute
   '/teacher/grading': typeof TeacherGradingRoute
   '/teacher/inbox': typeof TeacherInboxRouteWithChildren
+  '/teacher/lab-progress': typeof TeacherLabProgressRoute
   '/teacher/labs': typeof TeacherLabsRoute
   '/teacher/pending': typeof TeacherPendingRoute
   '/teacher/profile': typeof TeacherProfileRoute
@@ -327,6 +341,7 @@ export interface FileRoutesByTo {
   '/admin/activities': typeof AdminActivitiesRouteWithChildren
   '/admin/courses': typeof AdminCoursesRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/lab-progress': typeof AdminLabProgressRoute
   '/admin/labs': typeof AdminLabsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/students': typeof AdminStudentsRoute
@@ -345,6 +360,7 @@ export interface FileRoutesByTo {
   '/teacher/dashboard': typeof TeacherDashboardRoute
   '/teacher/grading': typeof TeacherGradingRoute
   '/teacher/inbox': typeof TeacherInboxRouteWithChildren
+  '/teacher/lab-progress': typeof TeacherLabProgressRoute
   '/teacher/labs': typeof TeacherLabsRoute
   '/teacher/pending': typeof TeacherPendingRoute
   '/teacher/profile': typeof TeacherProfileRoute
@@ -373,6 +389,7 @@ export interface FileRoutesById {
   '/admin/activities': typeof AdminActivitiesRouteWithChildren
   '/admin/courses': typeof AdminCoursesRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/lab-progress': typeof AdminLabProgressRoute
   '/admin/labs': typeof AdminLabsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/students': typeof AdminStudentsRoute
@@ -391,6 +408,7 @@ export interface FileRoutesById {
   '/teacher/dashboard': typeof TeacherDashboardRoute
   '/teacher/grading': typeof TeacherGradingRoute
   '/teacher/inbox': typeof TeacherInboxRouteWithChildren
+  '/teacher/lab-progress': typeof TeacherLabProgressRoute
   '/teacher/labs': typeof TeacherLabsRoute
   '/teacher/pending': typeof TeacherPendingRoute
   '/teacher/profile': typeof TeacherProfileRoute
@@ -420,6 +438,7 @@ export interface FileRouteTypes {
     | '/admin/activities'
     | '/admin/courses'
     | '/admin/dashboard'
+    | '/admin/lab-progress'
     | '/admin/labs'
     | '/admin/settings'
     | '/admin/students'
@@ -438,6 +457,7 @@ export interface FileRouteTypes {
     | '/teacher/dashboard'
     | '/teacher/grading'
     | '/teacher/inbox'
+    | '/teacher/lab-progress'
     | '/teacher/labs'
     | '/teacher/pending'
     | '/teacher/profile'
@@ -465,6 +485,7 @@ export interface FileRouteTypes {
     | '/admin/activities'
     | '/admin/courses'
     | '/admin/dashboard'
+    | '/admin/lab-progress'
     | '/admin/labs'
     | '/admin/settings'
     | '/admin/students'
@@ -483,6 +504,7 @@ export interface FileRouteTypes {
     | '/teacher/dashboard'
     | '/teacher/grading'
     | '/teacher/inbox'
+    | '/teacher/lab-progress'
     | '/teacher/labs'
     | '/teacher/pending'
     | '/teacher/profile'
@@ -510,6 +532,7 @@ export interface FileRouteTypes {
     | '/admin/activities'
     | '/admin/courses'
     | '/admin/dashboard'
+    | '/admin/lab-progress'
     | '/admin/labs'
     | '/admin/settings'
     | '/admin/students'
@@ -528,6 +551,7 @@ export interface FileRouteTypes {
     | '/teacher/dashboard'
     | '/teacher/grading'
     | '/teacher/inbox'
+    | '/teacher/lab-progress'
     | '/teacher/labs'
     | '/teacher/pending'
     | '/teacher/profile'
@@ -556,6 +580,7 @@ export interface RootRouteChildren {
   AdminActivitiesRoute: typeof AdminActivitiesRouteWithChildren
   AdminCoursesRoute: typeof AdminCoursesRouteWithChildren
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminLabProgressRoute: typeof AdminLabProgressRoute
   AdminLabsRoute: typeof AdminLabsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminStudentsRoute: typeof AdminStudentsRoute
@@ -574,6 +599,7 @@ export interface RootRouteChildren {
   TeacherDashboardRoute: typeof TeacherDashboardRoute
   TeacherGradingRoute: typeof TeacherGradingRoute
   TeacherInboxRoute: typeof TeacherInboxRouteWithChildren
+  TeacherLabProgressRoute: typeof TeacherLabProgressRoute
   TeacherLabsRoute: typeof TeacherLabsRoute
   TeacherPendingRoute: typeof TeacherPendingRoute
   TeacherProfileRoute: typeof TeacherProfileRoute
@@ -653,6 +679,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/dashboard'
       fullPath: '/admin/dashboard'
       preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/lab-progress': {
+      id: '/admin/lab-progress'
+      path: '/admin/lab-progress'
+      fullPath: '/admin/lab-progress'
+      preLoaderRoute: typeof AdminLabProgressRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/labs': {
@@ -786,6 +819,13 @@ declare module '@tanstack/react-router' {
       path: '/teacher/inbox'
       fullPath: '/teacher/inbox'
       preLoaderRoute: typeof TeacherInboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/teacher/lab-progress': {
+      id: '/teacher/lab-progress'
+      path: '/teacher/lab-progress'
+      fullPath: '/teacher/lab-progress'
+      preLoaderRoute: typeof TeacherLabProgressRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/teacher/labs': {
@@ -993,6 +1033,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminActivitiesRoute: AdminActivitiesRouteWithChildren,
   AdminCoursesRoute: AdminCoursesRouteWithChildren,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminLabProgressRoute: AdminLabProgressRoute,
   AdminLabsRoute: AdminLabsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminStudentsRoute: AdminStudentsRoute,
@@ -1011,6 +1052,7 @@ const rootRouteChildren: RootRouteChildren = {
   TeacherDashboardRoute: TeacherDashboardRoute,
   TeacherGradingRoute: TeacherGradingRoute,
   TeacherInboxRoute: TeacherInboxRouteWithChildren,
+  TeacherLabProgressRoute: TeacherLabProgressRoute,
   TeacherLabsRoute: TeacherLabsRoute,
   TeacherPendingRoute: TeacherPendingRoute,
   TeacherProfileRoute: TeacherProfileRoute,

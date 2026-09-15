@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Trash2, FlaskConical, ExternalLink } from "lucide-react";
 import { listLabAssignmentsForStaff, deleteLabAssignment } from "@/lib/labs.functions";
 import { findLab } from "@/lib/labs";
+import { AssignLabDialog } from "@/components/labs/assign-lab-dialog";
 import { toast } from "sonner";
 
 export function LabTrackingPage() {
@@ -29,11 +30,14 @@ export function LabTrackingPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-heading text-3xl font-bold">Labs asignados</h1>
-        <p className="mt-1 text-muted-foreground">
-          Seguimiento de los laboratorios que asignaste a tus alumnos.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="font-heading text-3xl font-bold">Labs asignados</h1>
+          <p className="mt-1 text-muted-foreground">
+            Seguimiento de los laboratorios que asignaste a tus alumnos.
+          </p>
+        </div>
+        <AssignLabDialog trigger={<Button>Asignar Lab</Button>} />
       </div>
 
       {q.isLoading ? (
@@ -61,6 +65,12 @@ export function LabTrackingPage() {
                   {r.note && <p className="mt-1 text-xs text-muted-foreground">Nota: {r.note}</p>}
                 </div>
                 <div className="flex items-center gap-2">
+                  {r.max_score > 0 && r.best_score != null && (
+                    <span className="font-heading text-sm font-bold text-primary">
+                      {r.best_score}/{r.max_score} ·{" "}
+                      {Math.round((r.best_score / r.max_score) * 100)}%
+                    </span>
+                  )}
                   <Badge variant={r.status === "completed" ? "default" : "secondary"}>
                     {r.status === "completed" ? "Completado" : "Pendiente"}
                   </Badge>

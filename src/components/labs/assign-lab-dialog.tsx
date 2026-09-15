@@ -12,15 +12,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Send, Users } from "lucide-react";
 import { listStudents } from "@/lib/activities.functions";
 import { assignLab } from "@/lib/labs.functions";
-import type { Lab } from "@/lib/labs";
+import { ALL_LABS, LAB_LEVELS, type Lab } from "@/lib/labs";
 import { toast } from "sonner";
 
-export function AssignLabDialog({ lab, trigger }: { lab: Lab; trigger?: React.ReactNode }) {
+export function AssignLabDialog({ lab, trigger }: { lab?: Lab; trigger?: React.ReactNode }) {
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [picked, setPicked] = useState<string[]>([]);
   const [due, setDue] = useState("");
   const [note, setNote] = useState("");
+  const [labKey, setLabKey] = useState(lab ? `${lab.level}|${lab.slug}` : "");
+
+  const chosenLab = lab ?? ALL_LABS.find((l) => `${l.level}|${l.slug}` === labKey);
 
   const studentsFn = useServerFn(listStudents);
   const assignFn = useServerFn(assignLab);
@@ -38,8 +41,8 @@ export function AssignLabDialog({ lab, trigger }: { lab: Lab; trigger?: React.Re
     mutationFn: () =>
       assignFn({
         data: {
-          lab_level: lab.level,
-          lab_slug: lab.slug,
+          lab_level: chosenLab!.level,
+          lab_slug: chosenLab!.slug,
           student_ids: picked,
           due_date: due ? new Date(due).toISOString() : null,
           note: note || null,
@@ -48,6 +51,7 @@ export function AssignLabDialog({ lab, trigger }: { lab: Lab; trigger?: React.Re
     onSuccess: (res: any) => {
       toast.success(`Lab asignado a ${res.count} alumno(s)`);
       qc.invalidateQueries({ queryKey: ["lab-assignments"] });
+      qc.invalidateQueries({ queryKey: ["lab-progress"] });
       setOpen(false);
       setPicked([]);
       setDue("");
@@ -65,11 +69,40 @@ export function AssignLabDialog({ lab, trigger }: { lab: Lab; trigger?: React.Re
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-h-[88vh] max-w-lg overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Asignar “{lab.title}”</DialogTitle>
+          <DialogTitle>
+            {lab ? `Asignar “${lab.title}”` : "Asignar un Lab"}
+          </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
+          {!lab && (
+            <div className="space-y-2">
+              <Label>Lab</Label>
+              <select
+                value={labKey}
+                onChange={(e) => setLabKey(e.target.value)}
+                className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+              >
+                <option value="">Elige un lab…</option>
+                {LAB_LEVELS.map((lvl) => (
+                  <optgroup key={lvl.slug} label={lvl.label}>
+                    {ALL_LABS.filter((l) => l.level === lvl.slug).map((l) => (
+                      <option key={`${l.level}|${l.slug}`} value={`${l.level}|${l.slug}`}>
+                        {l.title}
+                        {l.scope === "lms" ? " · con puntaje" : ""}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+              {chosenLab?.objectives && (
+                <p className="text-xs text-muted-foreground">
+                  {chosenLab.objectives.join(" · ")}
+                </p>
+              )}
+            </div>
+          )}
           <div>
             <Label className="mb-2 block">Alumnos</Label>
             <div className="max-h-60 divide-y divide-border overflow-y-auto rounded-lg border border-border">
@@ -101,7 +134,10 @@ export function AssignLabDialog({ lab, trigger }: { lab: Lab; trigger?: React.Re
         </div>
         <DialogFooter>
           <Button variant="ghost" onClick={() => setOpen(false)}>Cancelar</Button>
-          <Button onClick={() => assignM.mutate()} disabled={picked.length === 0 || assignM.isPending}>
+          <Button
+            onClick={() => assignM.mutate()}
+            disabled={!chosenLab || picked.length === 0 || assignM.isPending}
+          >
             {assignM.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Asignar
           </Button>

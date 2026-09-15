@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>A2 · Travel &amp; Transport — Teacher Netza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/labs/lms/_engine.css" />
+<script src="/labs/_brand.js"></script>
+</head>
+<body>
+<div id="lab-root"></div>
+<script type="application/json" id="lab-data">
+{
+  "level": "a2",
+  "slug": "travel-transport",
+  "title": "Travel & Transport",
+  "topic": "Cuenta tu último viaje: transporte, hospedaje y experiencias en pasado.",
+  "objectives": [
+    "Usar vocabulario de viajes, transporte y aeropuerto.",
+    "Formar el past simple de verbos regulares e irregulares.",
+    "Hacer preguntas y negaciones con did / didn't.",
+    "Narrar un viaje corto de principio a fin."
+  ],
+  "sections": [
+    {
+      "kicker": "Vocabulario",
+      "title": "Viajes y transporte",
+      "intro": "Palabras que vas a escuchar en cualquier aeropuerto o estación.",
+      "vocab": [
+        { "en": "flight", "es": "vuelo" },
+        { "en": "boarding pass", "es": "pase de abordar" },
+        { "en": "luggage / baggage", "es": "equipaje" },
+        { "en": "delay", "es": "retraso" },
+        { "en": "round trip", "es": "viaje redondo" },
+        { "en": "to book", "es": "reservar" },
+        { "en": "check in", "es": "registrarse" },
+        { "en": "abroad", "es": "en el extranjero" },
+        { "en": "sightseeing", "es": "turistear" },
+        { "en": "on foot", "es": "a pie" }
+      ],
+      "content": "<div class=\"lab-box\">Decimos <code>by bus / by train / by car / by plane</code>, pero <code>on foot</code> (a pie).</div>"
+    },
+    {
+      "kicker": "Práctica",
+      "title": "Práctica de vocabulario",
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada palabra con su traducción.",
+          "pairs": [
+            ["delay", "retraso"],
+            ["luggage", "equipaje"],
+            ["to book", "reservar"],
+            ["abroad", "en el extranjero"]
+          ],
+          "explain": "Fíjate: 'book' como verbo es reservar, no solo libro."
+        },
+        {
+          "type": "mc",
+          "q": "We travelled to the museum ______ foot.",
+          "options": ["by", "on", "in", "with"],
+          "answer": 1,
+          "explain": "La única excepción: on foot."
+        },
+        {
+          "type": "fill",
+          "q": "Completa: Our flight had a two-hour ______. (retraso)",
+          "answers": ["delay"],
+          "solution": "delay",
+          "explain": "delay = retraso."
+        },
+        {
+          "type": "mc",
+          "q": "¿Qué necesitas para subir al avión?",
+          "options": ["a boarding pass", "a round trip", "sightseeing"],
+          "answer": 0,
+          "explain": "El boarding pass es el pase de abordar."
+        }
+      ]
+    },
+    {
+      "kicker": "Gramática",
+      "title": "Past simple",
+      "content": "<p>Usamos el <b>past simple</b> para acciones terminadas en un momento concreto del pasado.</p><div class=\"lab-box\">Regulares: verbo + <code>-ed</code> → work → worked · travel → travelled<br>Irregulares: hay que memorizarlos → go → <code>went</code> · take → <code>took</code> · buy → <code>bought</code> · fly → <code>flew</code> · have → <code>had</code></div><div class=\"lab-box\">Negativo: <code>I didn't go</code> (verbo en base, sin -ed)<br>Pregunta: <code>Did you go?</code> → Yes, I did. / No, I didn't.</div><p>Marcadores típicos: <em>yesterday, last week, in 2019, two days ago</em>.</p>"
+    },
+    {
+      "kicker": "Práctica",
+      "title": "Práctica de gramática",
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Last summer we ______ to Canada.",
+          "options": ["go", "goed", "went", "gone"],
+          "answer": 2,
+          "explain": "go → went (irregular)."
+        },
+        {
+          "type": "fill",
+          "q": "Negativo: They ______ (not / book) the hotel online.",
+          "answers": ["didn't book", "did not book"],
+          "solution": "didn't book",
+          "explain": "didn't + verbo base."
+        },
+        {
+          "type": "mc",
+          "q": "______ you check in at the airport?",
+          "options": ["Do", "Did", "Was", "Were"],
+          "answer": 1,
+          "explain": "Pregunta en pasado: Did + sujeto + verbo base."
+        },
+        {
+          "type": "order",
+          "q": "Ordena la oración.",
+          "words": ["We", "took", "a", "taxi", "to", "the", "station"],
+          "answer": "We took a taxi to the station",
+          "explain": "take → took."
+        },
+        {
+          "type": "fill",
+          "q": "Pasado de 'buy': She ______ two tickets.",
+          "answers": ["bought"],
+          "solution": "bought",
+          "explain": "buy → bought."
+        }
+      ]
+    },
+    {
+      "kicker": "Reto",
+      "title": "Reto final",
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Cuál oración es correcta?",
+          "options": [
+            "Did you went to the beach?",
+            "Did you go to the beach?",
+            "Did you gone to the beach?"
+          ],
+          "answer": 1,
+          "explain": "Después de 'did' el verbo va en forma base."
+        },
+        {
+          "type": "order",
+          "q": "Ordena la oración.",
+          "words": ["Our", "flight", "was", "delayed", "for", "two", "hours"],
+          "answer": "Our flight was delayed for two hours",
+          "explain": "Voz pasiva simple con was + participio."
+        },
+        {
+          "type": "fill",
+          "q": "Escribe en inglés: 'Viajamos en tren el año pasado.'",
+          "answers": ["We travelled by train last year", "We traveled by train last year"],
+          "solution": "We travelled by train last year",
+          "explain": "by train + marcador de tiempo al final."
+        }
+      ]
+    }
+  ]
+}
+</script>
+<script src="/labs/lms/_engine.js"></script>
+</body>
+</html>

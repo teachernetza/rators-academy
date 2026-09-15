@@ -462,12 +462,17 @@ export type Database = {
       lab_assignments: {
         Row: {
           assigned_by: string
+          attempts: number
+          best_score: number | null
           completed_at: string | null
           created_at: string
           due_date: string | null
           id: string
           lab_level: string
           lab_slug: string
+          last_attempt_at: string | null
+          last_score: number | null
+          max_score: number | null
           note: string | null
           status: string
           student_id: string
@@ -475,12 +480,17 @@ export type Database = {
         }
         Insert: {
           assigned_by: string
+          attempts?: number
+          best_score?: number | null
           completed_at?: string | null
           created_at?: string
           due_date?: string | null
           id?: string
           lab_level: string
           lab_slug: string
+          last_attempt_at?: string | null
+          last_score?: number | null
+          max_score?: number | null
           note?: string | null
           status?: string
           student_id: string
@@ -488,18 +498,70 @@ export type Database = {
         }
         Update: {
           assigned_by?: string
+          attempts?: number
+          best_score?: number | null
           completed_at?: string | null
           created_at?: string
           due_date?: string | null
           id?: string
           lab_level?: string
           lab_slug?: string
+          last_attempt_at?: string | null
+          last_score?: number | null
+          max_score?: number | null
           note?: string | null
           status?: string
           student_id?: string
           updated_at?: string
         }
         Relationships: []
+      }
+      lab_attempts: {
+        Row: {
+          assignment_id: string | null
+          completed_at: string
+          created_at: string
+          id: string
+          lab_level: string
+          lab_slug: string
+          max_score: number
+          score: number
+          section_breakdown: Json
+          student_id: string
+        }
+        Insert: {
+          assignment_id?: string | null
+          completed_at?: string
+          created_at?: string
+          id?: string
+          lab_level: string
+          lab_slug: string
+          max_score?: number
+          score?: number
+          section_breakdown?: Json
+          student_id: string
+        }
+        Update: {
+          assignment_id?: string | null
+          completed_at?: string
+          created_at?: string
+          id?: string
+          lab_level?: string
+          lab_slug?: string
+          max_score?: number
+          score?: number
+          section_breakdown?: Json
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lab_attempts_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "lab_assignments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       lesson_comments: {
         Row: {

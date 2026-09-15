@@ -1,12 +1,16 @@
 import { useEffect, useRef } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, ExternalLink, Send } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { ArrowLeft, ExternalLink, Send, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useTheme } from "@/lib/theme";
 import { findLab, levelMeta } from "@/lib/labs";
 import { useAuth } from "@/lib/auth";
 import { AssignLabDialog } from "@/components/labs/assign-lab-dialog";
+import { submitLabResult } from "@/lib/labs.functions";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/labs/$level/$slug")({
   head: ({ params }) => {
@@ -35,9 +39,11 @@ function LabViewer() {
   const lab = findLab(level, slug);
   const lvl = levelMeta(level);
   const { resolved } = useTheme();
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const isStaff = profile?.role === "admin" || profile?.role === "teacher";
   const frameRef = useRef<HTMLIFrameElement>(null);
+  const qc = useQueryClient();
+  const submitFn = useServerFn(submitLabResult);
 
   const syncTheme = () => {
     frameRef.current?.contentWindow?.postMessage(
@@ -46,6 +52,46 @@ function LabViewer() {
     );
   };
   useEffect(syncTheme, [resolved]);
+
+  // Recibe el puntaje que envía el lab al terminar y lo guarda en el LMS.
+  useEffect(() => {
+    const onMsg = async (e: MessageEvent) => {
+      const d: any = e.data;
+      if (!d || d.type !== "tn-lab-result") return;
+      if (!user) {
+        toast.info("Inicia sesión para que tu puntaje quede registrado.");
+        return;
+      }
+      try {
+        const res: any = await submitFn({
+          data: {
+            lab_level: d.level ?? level,
+            lab_slug: d.slug ?? slug,
+            score: Number(d.score) || 0,
+            max_score: Number(d.max) || 1,
+            sections: (d.sections ?? []).map((s: any) => ({
+              title: String(s.title ?? ""),
+              score: Number(s.score) || 0,
+              max: Number(s.max) || 0,
+            })),
+          },
+        });
+        qc.invalidateQueries({ queryKey: ["lab-assignments"] });
+        qc.invalidateQueries({ queryKey: ["lab-progress"] });
+        toast.success(
+          res?.saved
+            ? `Puntaje guardado: ${d.score}/${d.max}`
+            : `Puntaje registrado: ${d.score}/${d.max}`,
+        );
+      } catch (err: any) {
+        toast.error(err?.message ?? "No se pudo guardar tu puntaje");
+      }
+    };
+    window.addEventListener("message", onMsg);
+    return () => window.removeEventListener("message", onMsg);
+  }, [user, level, slug, submitFn, qc]);
+
+  const locked = lab?.scope === "lms" && !user;
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
@@ -98,7 +144,25 @@ function LabViewer() {
             </Link>
           </div>
         )}
-        {lab && (
+        {lab && locked && (
+          <div className="flex flex-1 flex-col items-center justify-center gap-4 p-10 text-center">
+            <Lock className="h-8 w-8 text-primary" />
+            <h1 className="font-heading text-2xl font-bold">Lab para alumnos</h1>
+            <p className="max-w-md text-muted-foreground">
+              Este lab es parte del programa de Teacher Netza. Inicia sesión con tu cuenta de
+              alumno para hacerlo y que tu puntaje quede registrado.
+            </p>
+            <div className="flex gap-2">
+              <Link to="/login">
+                <Button>Iniciar sesión</Button>
+              </Link>
+              <Link to="/labs">
+                <Button variant="outline">Ver labs gratuitos</Button>
+              </Link>
+            </div>
+          </div>
+        )}
+        {lab && !locked && (
           <iframe
             ref={frameRef}
             onLoad={syncTheme}
