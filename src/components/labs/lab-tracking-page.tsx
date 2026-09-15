@@ -29,11 +29,14 @@ export function LabTrackingPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-heading text-3xl font-bold">Labs asignados</h1>
-        <p className="mt-1 text-muted-foreground">
-          Seguimiento de los laboratorios que asignaste a tus alumnos.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="font-heading text-3xl font-bold">Labs asignados</h1>
+          <p className="mt-1 text-muted-foreground">
+            Seguimiento de los laboratorios que asignaste a tus alumnos.
+          </p>
+        </div>
+        <AssignLabDialog trigger={<Button>Asignar Lab</Button>} />
       </div>
 
       {q.isLoading ? (
