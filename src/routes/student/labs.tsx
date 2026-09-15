@@ -70,6 +70,17 @@ function Page() {
                   </p>
                 )}
                 {r.note && <p className="rounded-md bg-muted/50 p-2 text-xs">Nota: {r.note}</p>}
+                {r.max_score > 0 && r.best_score != null && (
+                  <div className="rounded-lg border border-border bg-muted/30 p-3 text-sm">
+                    <span className="font-heading text-lg font-bold text-primary">
+                      {Math.round((r.best_score / r.max_score) * 100)}%
+                    </span>{" "}
+                    <span className="text-muted-foreground">
+                      ({r.best_score} de {r.max_score} correctos · {r.attempts} intento
+                      {r.attempts === 1 ? "" : "s"})
+                    </span>
+                  </div>
+                )}
                 <div className="mt-auto flex flex-wrap gap-2 pt-2">
                   {lab && (
                     <Button asChild size="sm">
