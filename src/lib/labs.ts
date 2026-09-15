@@ -181,6 +181,89 @@ export const LABS: Lab[] = [
 ];
 
 
+/** Labs que viven dentro del LMS: se asignan y guardan puntaje. */
+export const LMS_LABS: Lab[] = [
+  {
+    level: "a1",
+    slug: "daily-routine-time",
+    title: "Daily Routine & Time",
+    description:
+      "Rutina diaria, la hora y present simple con adverbios de frecuencia. Con ejercicios y puntaje.",
+    icon: "Sunrise",
+    color: "#35d1a8",
+    file: "/labs/lms/a1-daily-routine.html",
+    scope: "lms",
+    objectives: [
+      "Vocabulario de rutina diaria",
+      "La hora y at / in / on",
+      "Present simple y adverbios de frecuencia",
+    ],
+    exercises: 15,
+  },
+  {
+    level: "a2",
+    slug: "travel-transport",
+    title: "Travel & Transport",
+    description:
+      "Viajes, transporte y past simple (regulares e irregulares). Con ejercicios y puntaje.",
+    icon: "Plane",
+    color: "#2bb3c9",
+    file: "/labs/lms/a2-travel-transport.html",
+    scope: "lms",
+    objectives: ["Vocabulario de viajes", "Past simple", "Preguntas con did"],
+    exercises: 15,
+  },
+  {
+    level: "b1",
+    slug: "work-career",
+    title: "Work & Career",
+    description:
+      "Trabajo, entrevistas y la diferencia entre present perfect y past simple. Con puntaje.",
+    icon: "Briefcase",
+    color: "#3f7fd6",
+    file: "/labs/lms/b1-work-career.html",
+    scope: "lms",
+    objectives: [
+      "Vocabulario de trabajo",
+      "Present perfect vs past simple",
+      "for, since, already, yet",
+    ],
+    exercises: 15,
+  },
+  {
+    level: "b2",
+    slug: "media-technology",
+    title: "Media & Technology",
+    description: "Medios, redes y tecnología con voz pasiva y estilo indirecto. Con puntaje.",
+    icon: "Radio",
+    color: "#7a6bea",
+    file: "/labs/lms/b2-media-technology.html",
+    scope: "lms",
+    objectives: ["Vocabulario de medios", "Voz pasiva", "Reported speech"],
+    exercises: 15,
+  },
+  {
+    level: "c1",
+    slug: "environment-society",
+    title: "Environment & Society",
+    description:
+      "Medio ambiente y sociedad con condicionales mixtos e inversión enfática. Con puntaje.",
+    icon: "Leaf",
+    color: "#f0a83c",
+    file: "/labs/lms/c1-environment-society.html",
+    scope: "lms",
+    objectives: ["Léxico académico", "Condicionales mixtos y wish", "Inversión formal"],
+    exercises: 15,
+  },
+];
+
+/** Catálogo completo: labs públicos + labs del LMS. */
+export const ALL_LABS: Lab[] = [...LABS, ...LMS_LABS];
+
+export function isLmsLab(lab: Lab) {
+  return lab.scope === "lms";
+}
+
 export function isLabLevel(v: string): v is LabLevel {
   return LAB_LEVELS.some((l) => l.slug === v);
 }
