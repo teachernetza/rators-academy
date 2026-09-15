@@ -187,7 +187,7 @@
       check.disabled = true;
       fb.className = "lab-fb show " + (ok ? "ok" : "bad");
       fb.innerHTML =
-        (ok ? "✅ ¡Correcto! " : "❌ Respuesta correcta: <b>" + (ex.solution || ex.answers?.[0] || ex.answer || (ex.options && ex.options[ex.answer]) || "") + "</b>. ") +
+        (ok ? "<b>¡Correcto!</b> " : "<b>Respuesta correcta</b>: <b>" + (ex.solution || ex.answers?.[0] || ex.answer || (ex.options && ex.options[ex.answer]) || "") + "</b>. ") +
         (ex.explain || "");
       refresh();
     });
