@@ -57,6 +57,15 @@ export type Lab = {
   color: string;
   /** Ruta pública del HTML embebido. */
   file: string;
+  /**
+   * "public" = visible en el catálogo abierto del sitio.
+   * "lms" = solo para alumnos con el lab asignado (y para staff).
+   */
+  scope?: "public" | "lms";
+  /** Objetivos de aprendizaje (labs del LMS). */
+  objectives?: string[];
+  /** Número de ejercicios calificables (labs del LMS). */
+  exercises?: number;
 };
 
 export const LABS: Lab[] = [
