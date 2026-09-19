@@ -187,7 +187,7 @@ function DiagnosticExam() {
   const sectionKey = step >= 1 && step <= 3 ? SECTION_ORDER[step - 1] : null;
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground">
+    <div className="relative min-h-screen overflow-x-clip bg-background text-foreground">
       <div
         aria-hidden
         className="tn-shimmer-bg pointer-events-none fixed inset-0 -z-20"
@@ -198,14 +198,14 @@ function DiagnosticExam() {
       />
       <div
         aria-hidden
-        className="tn-float pointer-events-none fixed -right-32 top-24 -z-10 h-[380px] w-[380px] rounded-full opacity-20 blur-3xl"
+        className="tn-float pointer-events-none fixed -right-32 top-24 -z-10 hidden h-[380px] w-[380px] rounded-full opacity-20 blur-3xl sm:block"
         style={{ background: "var(--gradient-mint)" }}
       />
 
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 shadow-[var(--shadow-soft)] backdrop-blur-xl">
         <div aria-hidden className="tn-diag h-1 w-full opacity-70" />
-        <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
-          <Link to="/" className="group flex items-center gap-3">
+        <div className="mx-auto grid h-16 max-w-5xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 sm:flex sm:justify-between sm:px-6">
+          <Link to="/" className="group flex min-w-0 items-center gap-3">
             <span className="glow-logo-sm">
               <img
                 src="/icono_teacher_netza.png"
@@ -213,8 +213,8 @@ function DiagnosticExam() {
                 className="h-9 w-9 rounded-lg object-contain transition-transform duration-500 group-hover:scale-110"
               />
             </span>
-            <span className="leading-tight">
-              <span className="block font-heading text-base font-bold sm:text-lg">
+            <span className="min-w-0 leading-tight">
+              <span className="block truncate font-heading text-sm font-bold sm:text-lg">
                 Examen Diagnóstico
               </span>
               <span className="hidden text-xs text-muted-foreground sm:block">
@@ -222,13 +222,14 @@ function DiagnosticExam() {
               </span>
             </span>
           </Link>
-          <div className="flex items-center gap-1">
+          <div className="flex shrink-0 items-center gap-1">
             <ThemeToggle />
             <Link
               to="/"
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="text-xs text-muted-foreground transition-colors hover:text-foreground sm:text-sm"
             >
-              ← Volver al inicio
+              <span className="sm:hidden">← Inicio</span>
+              <span className="hidden sm:inline">← Volver al inicio</span>
             </Link>
           </div>
         </div>
@@ -271,7 +272,13 @@ function DiagnosticExam() {
       </header>
 
 
-      <main key={step} className="animate-fade-in mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:py-14">
+      <main
+        key={step}
+        className={cn(
+          "animate-fade-in mx-auto w-full px-4 py-6 sm:px-6 lg:py-14",
+          step === 0 ? "max-w-5xl" : "max-w-3xl",
+        )}
+      >
         {step === 0 && (
           <StartScreen
             name={studentName}
@@ -396,7 +403,7 @@ function StartScreen({
   };
   const modes: ExamMode[] = ["quick", "full"];
   return (
-    <div className="exam-start mx-auto max-w-4xl overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-elegant)]">
+    <div className="exam-start mx-auto w-full min-w-0 max-w-4xl overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-elegant)]">
       <div className="grid bg-exam-primary text-primary-foreground lg:grid-cols-[1.35fr_.65fr]">
         <div className="p-7 sm:p-9">
           <span className="inline-flex items-center gap-2 rounded-full bg-exam-yellow px-3 py-1 text-xs font-bold text-exam-ink">
@@ -420,26 +427,16 @@ function StartScreen({
         </div>
       </div>
 
-      <div className="grid gap-8 p-5 sm:p-8 lg:grid-cols-[1fr_1.35fr]">
-        <div className="space-y-5">
-          <div>
+      <div className="grid min-w-0 gap-5 p-5 sm:p-8 lg:grid-cols-[minmax(0,.82fr)_minmax(0,1.4fr)] lg:gap-x-8 lg:gap-y-5">
+          <div className="min-w-0 lg:col-start-1 lg:row-start-1">
             <label htmlFor="student-name" className="text-sm font-semibold">Nombre completo</label>
             <Input id="student-name" value={name} onChange={(e) => onName(e.target.value)} placeholder="Ej. María López" onKeyDown={(e) => e.key === "Enter" && onStart()} className="mt-2 h-12 bg-background" />
             <p className="mt-2 text-xs text-muted-foreground">Aparecerá en tu informe personal.</p>
           </div>
-          <div className="rounded-xl bg-secondary p-4 text-sm">
-            <div className="font-heading font-bold">Antes de comenzar</div>
-            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">Elige una sola respuesta por reactivo. Usa audífonos y responde sin traductor para obtener una estimación más fiel.</p>
-          </div>
-          <Button onClick={onStart} size="lg" className="h-12 w-full bg-exam-primary text-primary-foreground shadow-[var(--shadow-elegant)] hover:bg-exam-primary/90">
-            Comenzar evaluación <ArrowUpRight className="h-4 w-4" />
-          </Button>
-          {hasProgress && <Button variant="ghost" onClick={onReset} className="w-full"><RotateCcw className="mr-2 h-4 w-4" /> Reiniciar progreso</Button>}
-        </div>
 
-        <div>
+        <div className="min-w-0 lg:col-start-2 lg:row-span-4 lg:row-start-1">
           <div className="mb-3 font-heading text-sm font-bold">Selecciona la modalidad</div>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid min-w-0 gap-3 sm:grid-cols-2">
           {modes.map((m) => {
             const info = EXAM_MODES[m];
             const s = stats(m);
@@ -452,7 +449,7 @@ function StartScreen({
                 onClick={() => onMode(m)}
                 aria-pressed={active}
                   className={cn(
-                    "group relative h-auto min-h-48 items-start justify-start whitespace-normal rounded-xl border-2 p-5 text-left transition-all duration-300",
+                    "group relative h-auto min-h-48 w-full min-w-0 max-w-full flex-col items-start justify-start overflow-hidden whitespace-normal rounded-xl border-2 p-5 text-left transition-all duration-300",
                   active
                     ? "border-exam-primary bg-exam-cyan/10 shadow-[var(--shadow-soft)]"
                     : "border-border bg-card hover:border-exam-cyan",
@@ -475,15 +472,15 @@ function StartScreen({
                 >
                   {m === "quick" ? <Zap className="h-5 w-5" /> : <Clock className="h-5 w-5" />}
                 </div>
-                <div className="mt-4 pr-2 font-heading text-lg font-bold">{info.label}</div>
-                <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                <div className="mt-4 w-full min-w-0 pr-8 font-heading text-lg font-bold">{info.label}</div>
+                <div className="mt-1 flex w-full min-w-0 flex-wrap items-center gap-1.5">
                   <span className="text-sm font-semibold text-primary">{info.duration}</span>
                   {m === "full" && <span className="inline-flex rounded-full bg-exam-yellow px-2 py-0.5 text-[9px] font-bold text-exam-ink">RECOMENDADO</span>}
                 </div>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                <p className="mt-2 w-full text-xs leading-relaxed text-muted-foreground">
                   {info.description}
                 </p>
-                <div className="mt-4 flex flex-wrap gap-2 text-[11px] font-semibold">
+                <div className="mt-4 flex w-full flex-wrap gap-2 text-[11px] font-semibold">
                   <span className="rounded-full bg-muted px-2.5 py-1">
                     {s.listening.length} audios
                   </span>
@@ -493,7 +490,7 @@ function StartScreen({
             );
           })}
           </div>
-          <div className="mt-3 grid gap-2 sm:grid-cols-3">
+          <div className="mt-3 grid min-w-0 gap-2 sm:grid-cols-3">
           {blocks(mode).map((b, i) => {
             return (
               <div
@@ -509,6 +506,17 @@ function StartScreen({
             );
           })}
           </div>
+        </div>
+
+        <div className="min-w-0 rounded-xl bg-secondary p-4 text-sm lg:col-start-1 lg:row-start-2">
+          <div className="font-heading font-bold">Antes de comenzar</div>
+          <p className="mt-1 text-xs leading-relaxed text-muted-foreground">Elige una sola respuesta por reactivo. Usa audífonos y responde sin traductor para obtener una estimación más fiel.</p>
+        </div>
+        <div className="min-w-0 lg:col-start-1 lg:row-start-3">
+          <Button onClick={onStart} size="lg" className="h-12 w-full bg-exam-primary text-primary-foreground shadow-[var(--shadow-elegant)] hover:bg-exam-primary/90">
+            Comenzar evaluación <ArrowUpRight className="h-4 w-4" />
+          </Button>
+          {hasProgress && <Button variant="ghost" onClick={onReset} className="mt-2 w-full"><RotateCcw className="mr-2 h-4 w-4" /> Reiniciar progreso</Button>}
         </div>
       </div>
       <div className="border-t border-border bg-secondary/50 px-5 py-3 text-center text-xs text-muted-foreground sm:px-8">
