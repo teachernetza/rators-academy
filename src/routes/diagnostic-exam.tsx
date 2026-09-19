@@ -451,8 +451,8 @@ function StartScreen({
                 variant="outline"
                 onClick={() => onMode(m)}
                 aria-pressed={active}
-                className={cn(
-                  "group relative h-auto min-h-44 items-start justify-start whitespace-normal rounded-xl border-2 p-5 text-left transition-all duration-300",
+                  className={cn(
+                    "group relative h-auto min-h-48 items-start justify-start whitespace-normal rounded-xl border-2 p-5 text-left transition-all duration-300",
                   active
                     ? "border-exam-primary bg-exam-cyan/10 shadow-[var(--shadow-soft)]"
                     : "border-border bg-card hover:border-exam-cyan",
@@ -475,9 +475,11 @@ function StartScreen({
                 >
                   {m === "quick" ? <Zap className="h-5 w-5" /> : <Clock className="h-5 w-5" />}
                 </div>
-                <div className="mt-4 font-heading text-lg font-bold">{info.label}</div>
-                {m === "full" && <span className="mt-1 inline-flex rounded-full bg-exam-yellow px-2 py-0.5 text-[10px] font-bold text-exam-ink">RECOMENDADO</span>}
-                <div className="text-sm font-semibold text-primary">{info.duration}</div>
+                <div className="mt-4 pr-2 font-heading text-lg font-bold">{info.label}</div>
+                <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                  <span className="text-sm font-semibold text-primary">{info.duration}</span>
+                  {m === "full" && <span className="inline-flex rounded-full bg-exam-yellow px-2 py-0.5 text-[9px] font-bold text-exam-ink">RECOMENDADO</span>}
+                </div>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
                   {info.description}
                 </p>
