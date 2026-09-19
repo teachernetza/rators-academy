@@ -40,6 +40,10 @@
   --color-rose-foreground: var(--rose-foreground);
   --color-teal: var(--teal);
   --color-teal-foreground: var(--teal-foreground);
+  --color-exam-primary: var(--exam-primary);
+  --color-exam-cyan: var(--exam-cyan);
+  --color-exam-yellow: var(--exam-yellow);
+  --color-exam-ink: var(--exam-ink);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -57,6 +61,10 @@
 
 :root {
   --radius: 0.75rem;
+  --exam-primary: oklch(0.52 0.22 255);
+  --exam-cyan: oklch(0.69 0.15 220);
+  --exam-yellow: oklch(0.88 0.17 91);
+  --exam-ink: oklch(0.25 0.075 260);
 
   /* Cobalto + limón */
   --background: oklch(0.975 0.008 250);
@@ -237,6 +245,15 @@
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exam-start *, .exam-start *::before, .exam-start *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
 @keyframes tn-rise {
   from { opacity: 0; transform: translate3d(0, 24px, 0); }
