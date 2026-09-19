@@ -1,8 +1,8 @@
-// Diagnostic exam question bank & level-based scoring logic (v3).
-// Each question has 4 options: 2 wrong (level = null) and 2 correct,
-// each correct option mapped to a different CEFR level.
-// Options are length-balanced on purpose: the higher-level correct option is
-// NOT systematically the longest one, so length cannot be used as a shortcut.
+// Diagnostic exam question bank & criterion-based scoring logic (v4).
+// Legacy option-level tags are normalized below into one keyed answer and an
+// item difficulty. Only the strongest authored answer is retained as correct.
+import readingCafe from "@/assets/reading-cafe.jpg";
+import readingLibrary from "@/assets/reading-library.jpg";
 
 export type Cefr = "A1" | "A2" | "B1" | "B2" | "C1";
 
@@ -24,12 +24,24 @@ export const CEFR_DESCRIPTION: Record<Cefr, string> = {
 };
 
 /** An answer option. `level` = null means incorrect (no value). */
-export type Option = { text: string; level: Cefr | null };
+export type Option = { text: string; level: Cefr | null; correct?: boolean };
+
+export type EvidenceType =
+  | "detail"
+  | "main-idea"
+  | "inference"
+  | "meaning-in-context"
+  | "grammar"
+  | "vocabulary"
+  | "register";
 
 export type Question = {
   id: string;
   q: string;
   opts: Option[];
+  /** Difficulty of the item, independent from the answer wording. */
+  level?: Cefr;
+  evidence?: EvidenceType;
   /** Included in the short (7 min) version of the exam. */
   quick?: boolean;
 };
@@ -50,6 +62,8 @@ export type ReadingPassage = {
   title: string;
   kind: "short" | "long";
   text: string;
+  image?: string;
+  imageAlt?: string;
   quick?: boolean;
   questions: Question[];
 };
@@ -524,6 +538,8 @@ const reading: ReadingPassage[] = [
     title: "The new cafe",
     quick: true,
     text: "The new cafe downtown is already very popular. It serves organic coffee and fresh pastries baked every morning. However, it is quite small, so finding a table during the morning rush can be difficult. Prices are reasonable considering the quality, and regulars say the staff remember their usual order after just a couple of visits.",
+    image: readingCafe,
+    imageAlt: "Interior de una cafetería luminosa con pocas mesas, café y pan recién horneado.",
     questions: [
       {
         id: "r1q1",
@@ -576,6 +592,8 @@ const reading: ReadingPassage[] = [
     title: "Library event",
     quick: true,
     text: "Next Thursday the city library will host a local author. Visitors can meet the writer, buy signed copies of her latest mystery novel and attend a free writing workshop. Places for the workshop are limited, so registration must be completed online before Friday. Those who miss the deadline may still attend the talk, but not the workshop.",
+    image: readingLibrary,
+    imageAlt: "Biblioteca durante una charla de autora y un taller de escritura.",
     questions: [
       {
         id: "r2q1",
@@ -917,29 +935,61 @@ function shuffleOptions(q: Question): void {
   ...listening.flatMap((a) => a.questions),
   ...reading.flatMap((p) => p.questions),
   ...vocab,
-].forEach(shuffleOptions);
+].forEach((q) => {
+  const keyed = q.opts
+    .map((option, index) => ({ option, index }))
+    .filter(({ option }) => option.level)
+    .sort(
+      (a, b) =>
+        CEFR_VALUE[b.option.level as Cefr] - CEFR_VALUE[a.option.level as Cefr],
+    );
+  const answer = keyed[0];
+  if (answer?.option.level) {
+    q.level = answer.option.level;
+    q.evidence ??= "detail";
+    // Remove the second acceptable paraphrase. Three strong options are more
+    // valid than four options containing two defensible answers.
+    q.opts = q.opts
+      .filter((_, index) => index === answer.index || !keyed.some((x) => x.index === index))
+      .map((option, index, options) => ({
+        ...option,
+        correct: option.text === answer.option.text && options.length > 0,
+      }));
+  }
+  shuffleOptions(q);
+});
 
 export const QuestionBank = { listening, reading, vocab };
 
 /** Audio items shown for a given exam mode. */
 export function modeListening(mode: ExamMode): AudioItem[] {
   if (mode === "full") return listening;
+  const quickIds = new Set([
+    "csq1", "csq4", "csq5",
+    "lcq1", "lcq2", "lcq5",
+    "rsq1", "rsq2", "rsq5",
+    "wrq1", "wrq3", "wrq5",
+    "aiq1", "aiq3", "aiq5",
+  ]);
   return listening
-    .filter((a) => a.quick)
-    .map((a) => ({ ...a, questions: a.questions.filter((q) => q.quick) }));
+    .map((a) => ({ ...a, questions: a.questions.filter((q) => quickIds.has(q.id)) }))
+    .filter((a) => a.questions.length > 0);
 }
 
 /** Reading passages shown for a given exam mode. */
 export function modeReading(mode: ExamMode): ReadingPassage[] {
   if (mode === "full") return reading;
+  const quickIds = new Set(["r1q1", "r1q2", "r1q4", "r3q1", "r3q2", "r3q3"]);
   return reading
-    .filter((p) => p.quick)
-    .map((p) => ({ ...p, questions: p.questions.filter((q) => q.quick) }));
+    .map((p) => ({ ...p, questions: p.questions.filter((q) => quickIds.has(q.id)) }))
+    .filter((p) => p.questions.length > 0);
 }
 
 /** Vocabulary questions for a given exam mode. */
 export function modeVocab(mode: ExamMode): Question[] {
-  return mode === "full" ? vocab : vocab.filter((q) => q.quick);
+  if (mode === "full") return vocab;
+  const quickIds = new Set(["v1", "v2", "v4", "v6", "v7", "v10", "v11", "v16"]);
+  return vocab.filter((q) => quickIds.has(q.id));
 }
 
 /** All questions of a section, flattened, for a given exam mode. */
@@ -969,7 +1019,11 @@ export type SectionResult = {
   /** 0..100, how well the learner performed relative to a C1 ceiling */
   score: number;
   level: Cefr;
+  earnedPoints: number;
+  availablePoints: number;
 };
+
+export type ResultConfidence = "Orientativa" | "Moderada" | "Alta";
 
 export type ExamResult = {
   sections: SectionResult[];
@@ -978,37 +1032,64 @@ export type ExamResult = {
   totalCorrect: number;
   totalQuestions: number;
   mode: ExamMode;
-  version: 3;
+  band: string;
+  confidence: ResultConfidence;
+  unanswered: number;
+  version: 4;
 };
+
+function levelFromScore(score: number): Cefr {
+  if (score >= 78) return "C1";
+  if (score >= 60) return "B2";
+  if (score >= 45) return "B1";
+  if (score >= 30) return "A2";
+  return "A1";
+}
+
+function resultBand(score: number, level: Cefr) {
+  const boundaries = [30, 45, 60, 78];
+  const nearest = boundaries.find((boundary) => Math.abs(score - boundary) <= 3);
+  if (!nearest) return level;
+  const upper = levelFromScore(nearest + 1);
+  const lower = levelFromScore(nearest - 1);
+  return score < nearest ? `${lower} alto · ${upper} en desarrollo` : `${upper} inicial · ${lower} consolidado`;
+}
 
 function scoreSection(key: SectionKey, mode: ExamMode): (answers: Answers) => SectionResult {
   return (answers) => {
     const qs = sectionQuestions(key, mode);
     let sum = 0;
+    let availablePoints = 0;
     let correct = 0;
     qs.forEach((q) => {
       const idx = answers[q.id];
       const opt = typeof idx === "number" ? q.opts[idx] : undefined;
-      if (opt?.level) {
+      const weight = CEFR_VALUE[q.level ?? "A1"];
+      availablePoints += weight;
+      if (opt?.correct) {
         correct++;
-        sum += CEFR_VALUE[opt.level];
+        sum += weight;
       }
     });
-    // Average level value across ALL questions of the section: wrong answers
-    // count as 0, so a learner who answers few items cannot reach C1.
-    const avg = qs.length ? sum / qs.length : 0;
-    const score = Math.round((avg / 5) * 100);
-    // Map the average back onto the scale with a soft floor at A1.
-    const level = levelFromValue(Math.max(1, avg));
-    return { key, label: SECTION_NAMES[key], correct, total: qs.length, score, level };
+    const score = availablePoints ? Math.round((sum / availablePoints) * 100) : 0;
+    const level = levelFromScore(score);
+    return { key, label: SECTION_NAMES[key], correct, total: qs.length, score, level, earnedPoints: sum, availablePoints };
   };
 }
 
 export function computeResult(answers: Answers, mode: ExamMode = "full"): ExamResult {
   const sections = SECTION_ORDER.map((k) => scoreSection(k, mode)(answers));
-  const overallScore = Math.round(sections.reduce((a, s) => a + s.score, 0) / sections.length);
-  const overall = levelFromValue(Math.max(1, (overallScore / 100) * 5));
+  const earnedPoints = sections.reduce((a, s) => a + s.earnedPoints, 0);
+  const availablePoints = sections.reduce((a, s) => a + s.availablePoints, 0);
+  const overallScore = availablePoints ? Math.round((earnedPoints / availablePoints) * 100) : 0;
+  const overall = levelFromScore(overallScore);
   const totalCorrect = sections.reduce((a, s) => a + s.correct, 0);
+  const answered = Object.keys(answers).filter((id) =>
+    SECTION_ORDER.some((key) => sectionQuestions(key, mode).some((q) => q.id === id)),
+  ).length;
+  const unanswered = totalQuestions(mode) - answered;
+  const confidence: ResultConfidence =
+    mode === "quick" ? "Orientativa" : unanswered === 0 ? "Alta" : "Moderada";
   return {
     sections,
     overall,
@@ -1016,6 +1097,9 @@ export function computeResult(answers: Answers, mode: ExamMode = "full"): ExamRe
     totalCorrect,
     totalQuestions: totalQuestions(mode),
     mode,
-    version: 3,
+    band: resultBand(overallScore, overall),
+    confidence,
+    unanswered,
+    version: 4,
   };
 }
