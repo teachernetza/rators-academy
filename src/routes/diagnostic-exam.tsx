@@ -16,6 +16,9 @@ import {
   Clock,
   Check,
   Zap,
+  ShieldCheck,
+  ClipboardCheck,
+  ArrowUpRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -40,6 +43,7 @@ import {
 } from "@/lib/diagnostic-bank";
 import { generateDiagnosticPdf } from "@/lib/diagnostic-pdf";
 import { AudioPlayer } from "@/components/AudioPlayer";
+import diagnosticStart from "@/assets/diagnostic-start.jpg";
 
 export const Route = createFileRoute("/diagnostic-exam")({
   head: () => ({
@@ -63,7 +67,7 @@ export const Route = createFileRoute("/diagnostic-exam")({
   component: DiagnosticExam,
 });
 
-const STORAGE_KEY = "netza.diagnostic.v3";
+const STORAGE_KEY = "netza.diagnostic.v4";
 const WA_NUMBER = "523231116425";
 
 type SavedState = {
@@ -71,7 +75,7 @@ type SavedState = {
   step: number;
   answers: Answers;
   mode: ExamMode;
-  version: 3;
+  version: 4;
 };
 
 function loadState(): SavedState | null {
@@ -80,7 +84,7 @@ function loadState(): SavedState | null {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as SavedState;
-    if (parsed?.version !== 3) return null;
+    if (parsed?.version !== 4) return null;
     return parsed;
   } catch {
     return null;
@@ -127,7 +131,7 @@ function DiagnosticExam() {
     if (step === 0 && !studentName) return;
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ studentName, step, answers, mode, version: 3 }),
+      JSON.stringify({ studentName, step, answers, mode, version: 4 }),
     );
   }, [studentName, step, answers, mode]);
 
@@ -153,6 +157,13 @@ function DiagnosticExam() {
   }
 
   function finish() {
+    const unanswered = total - answeredCount;
+    if (unanswered > 0) {
+      const proceed = window.confirm(
+        `Aún tienes ${unanswered} ${unanswered === 1 ? "reactivo sin responder" : "reactivos sin responder"}. Se calificarán sin puntos. ¿Quieres terminar?`,
+      );
+      if (!proceed) return;
+    }
     setResult(computeResult(answers, mode));
     setStep(4);
     toast.success("¡Examen calificado!");
@@ -385,56 +396,73 @@ function StartScreen({
   };
   const modes: ExamMode[] = ["quick", "full"];
   return (
-    <div className="mx-auto max-w-3xl">
-      {/* Encabezado */}
-      <div
-        className="relative isolate overflow-hidden rounded-3xl border border-border p-8 text-center shadow-[var(--shadow-elegant)] sm:p-10"
-        style={{ background: "var(--gradient-hero)" }}
-      >
-        <span aria-hidden className="tn-dots absolute inset-0 -z-10 opacity-25" />
-        <span
-          aria-hidden
-          className="absolute -right-10 -top-10 -z-10 h-40 w-40 rounded-full opacity-30 blur-2xl"
-          style={{ background: "var(--gradient-mint)" }}
-        />
-        <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium text-primary-foreground">
-          <Sparkles className="h-3.5 w-3.5 text-gold" /> Gratis · sin registro
-        </span>
-        <h1 className="mt-5 font-heading text-3xl font-bold text-primary-foreground sm:text-4xl">
-          Descubre tu nivel real de inglés
-        </h1>
-        <p className="mx-auto mt-3 max-w-xl text-sm text-primary-foreground/85 sm:text-base">
-          Cada pregunta tiene dos respuestas correctas de distinto nivel: elige la que realmente
-          usarías. Al terminar recibes tu <strong>Constancia de Nivel</strong> en PDF.
-        </p>
+    <div className="exam-start mx-auto max-w-4xl overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-elegant)]">
+      <div className="grid bg-exam-primary text-primary-foreground lg:grid-cols-[1.35fr_.65fr]">
+        <div className="p-7 sm:p-9">
+          <span className="inline-flex items-center gap-2 rounded-full bg-exam-yellow px-3 py-1 text-xs font-bold text-exam-ink">
+            <Sparkles className="h-3.5 w-3.5" /> Gratis · sin registro
+          </span>
+          <h1 className="mt-5 max-w-xl font-heading text-3xl font-bold sm:text-4xl">
+            Ubica tu nivel de inglés con mejor evidencia
+          </h1>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-primary-foreground/85 sm:text-base">
+            Evalúa Listening, Reading y Use of English. Obtendrás un rango MCER, el nivel de
+            confianza y un informe descargable con tus fortalezas.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-4 text-xs font-semibold text-primary-foreground/90">
+            <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-exam-yellow" /> Respuestas con clave única</span>
+            <span className="flex items-center gap-1.5"><ClipboardCheck className="h-4 w-4 text-exam-yellow" /> Resultado orientativo</span>
+          </div>
+        </div>
+        <div className="relative hidden min-h-64 overflow-hidden lg:block">
+          <img src={diagnosticStart} alt="Estudiante realizando una evaluación de inglés en línea" width={1200} height={912} className="h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-exam-primary to-transparent" />
+        </div>
       </div>
 
-      {/* Paso 1: versión */}
-      <div className="mt-10">
-        <StepTitle n={1} title="Elige la versión del examen" />
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-8 p-5 sm:p-8 lg:grid-cols-[1fr_1.35fr]">
+        <div className="space-y-5">
+          <div>
+            <label htmlFor="student-name" className="text-sm font-semibold">Nombre completo</label>
+            <Input id="student-name" value={name} onChange={(e) => onName(e.target.value)} placeholder="Ej. María López" onKeyDown={(e) => e.key === "Enter" && onStart()} className="mt-2 h-12 bg-background" />
+            <p className="mt-2 text-xs text-muted-foreground">Aparecerá en tu informe personal.</p>
+          </div>
+          <div className="rounded-xl bg-secondary p-4 text-sm">
+            <div className="font-heading font-bold">Antes de comenzar</div>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">Elige una sola respuesta por reactivo. Usa audífonos y responde sin traductor para obtener una estimación más fiel.</p>
+          </div>
+          <Button onClick={onStart} size="lg" className="h-12 w-full bg-exam-primary text-primary-foreground shadow-[var(--shadow-elegant)] hover:bg-exam-primary/90">
+            Comenzar evaluación <ArrowUpRight className="h-4 w-4" />
+          </Button>
+          {hasProgress && <Button variant="ghost" onClick={onReset} className="w-full"><RotateCcw className="mr-2 h-4 w-4" /> Reiniciar progreso</Button>}
+        </div>
+
+        <div>
+          <div className="mb-3 font-heading text-sm font-bold">Selecciona la modalidad</div>
+          <div className="grid gap-3 sm:grid-cols-2">
           {modes.map((m) => {
             const info = EXAM_MODES[m];
             const s = stats(m);
             const active = mode === m;
             return (
-              <button
+              <Button
                 key={m}
                 type="button"
+                variant="outline"
                 onClick={() => onMode(m)}
                 aria-pressed={active}
-                className={cn(
-                  "group relative overflow-hidden rounded-2xl border-2 p-5 text-left transition-all duration-300",
+                  className={cn(
+                    "group relative h-auto min-h-48 items-start justify-start whitespace-normal rounded-xl border-2 p-5 text-left transition-all duration-300",
                   active
-                    ? "border-mint bg-mint/10 shadow-[var(--glow-mint)]"
-                    : "border-border bg-card/85 hover:-translate-y-1 hover:border-mint/50 hover:shadow-[var(--shadow-soft)]",
+                    ? "border-exam-primary bg-exam-cyan/10 shadow-[var(--shadow-soft)]"
+                    : "border-border bg-card hover:border-exam-cyan",
                 )}
               >
                 <span
                   aria-hidden
                   className={cn(
                     "absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors",
-                    active ? "border-mint bg-mint text-white" : "border-border",
+                    active ? "border-exam-primary bg-exam-primary text-primary-foreground" : "border-border",
                   )}
                 >
                   {active && <Check className="h-3.5 w-3.5" />}
@@ -442,13 +470,16 @@ function StartScreen({
                 <div
                   className={cn(
                     "flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-500 group-hover:scale-105",
-                    active ? "bg-mint text-white" : "bg-muted text-primary",
+                    active ? "bg-exam-primary text-primary-foreground" : "bg-muted text-primary",
                   )}
                 >
                   {m === "quick" ? <Zap className="h-5 w-5" /> : <Clock className="h-5 w-5" />}
                 </div>
-                <div className="mt-4 font-heading text-lg font-bold">{info.label}</div>
-                <div className="text-sm font-semibold text-primary">{info.duration}</div>
+                <div className="mt-4 pr-2 font-heading text-lg font-bold">{info.label}</div>
+                <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                  <span className="text-sm font-semibold text-primary">{info.duration}</span>
+                  {m === "full" && <span className="inline-flex rounded-full bg-exam-yellow px-2 py-0.5 text-[9px] font-bold text-exam-ink">RECOMENDADO</span>}
+                </div>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
                   {info.description}
                 </p>
@@ -458,23 +489,18 @@ function StartScreen({
                   </span>
                   <span className="rounded-full bg-muted px-2.5 py-1">{s.total} preguntas</span>
                 </div>
-              </button>
+              </Button>
             );
           })}
-        </div>
-
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          </div>
+          <div className="mt-3 grid gap-2 sm:grid-cols-3">
           {blocks(mode).map((b, i) => {
-            const c = ["var(--primary)", "var(--teal)", "var(--gold)"][i];
             return (
               <div
                 key={b.title}
-                className="rounded-2xl border border-border bg-card/85 p-4 text-left shadow-[var(--shadow-soft)] backdrop-blur"
+                className="rounded-xl border border-border bg-background p-3 text-left"
               >
-                <div
-                  className="flex h-9 w-9 items-center justify-center rounded-full"
-                  style={{ background: `color-mix(in oklab, ${c} 16%, transparent)`, color: c }}
-                >
+                <div className={cn("flex h-8 w-8 items-center justify-center rounded-lg", i === 2 ? "bg-exam-yellow text-exam-ink" : "bg-exam-cyan/15 text-exam-primary")}>
                   <b.icon className="h-4.5 w-4.5" />
                 </div>
                 <div className="mt-3 font-heading text-sm font-bold">{b.title}</div>
@@ -482,53 +508,17 @@ function StartScreen({
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* Paso 2: nombre */}
-      <div className="mt-10">
-        <StepTitle n={2} title="Escribe tu nombre y comienza" />
-        <div className="mt-4 space-y-3 rounded-2xl border border-border bg-card/85 p-6 text-left shadow-[var(--shadow-soft)] backdrop-blur">
-          <label className="text-sm font-medium">¿Cuál es tu nombre?</label>
-          <Input
-            value={name}
-            onChange={(e) => onName(e.target.value)}
-            placeholder="Ej. María López"
-            onKeyDown={(e) => e.key === "Enter" && onStart()}
-          />
-          <div className="flex flex-col gap-2 pt-2 sm:flex-row">
-            <Button onClick={onStart} size="lg" className="w-full shadow-[var(--shadow-elegant)]">
-              Comenzar examen
-            </Button>
-            {hasProgress && (
-              <Button variant="ghost" onClick={onReset} size="lg" className="w-full sm:w-auto">
-                <RotateCcw className="mr-2 h-4 w-4" /> Reiniciar
-              </Button>
-            )}
           </div>
-          <p className="pt-2 text-xs text-muted-foreground">
-            Tu nombre aparecerá en la constancia final.
-          </p>
         </div>
       </div>
-
+      <div className="border-t border-border bg-secondary/50 px-5 py-3 text-center text-xs text-muted-foreground sm:px-8">
+        Este diagnóstico estima habilidades receptivas y uso del idioma. Speaking y Writing requieren evaluación adicional.
+      </div>
     </div>
   );
 }
 
 /* --------------------------- REUSABLE PIECES --------------------------- */
-
-function StepTitle({ n, title }: { n: number; title: string }) {
-  return (
-    <div className="flex items-center gap-3">
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary font-heading text-sm font-bold text-primary-foreground">
-        {n}
-      </span>
-      <h2 className="font-heading text-lg font-bold sm:text-xl">{title}</h2>
-      <span aria-hidden className="h-px flex-1 bg-border" />
-    </div>
-  );
-}
 
 function SectionHeading({ title, description }: { title: string; description: string }) {
   return (
@@ -687,6 +677,9 @@ function ReadingSection({
         {modeReading(mode).map((p) => (
           <div key={p.id} className="space-y-4">
             <div className="rounded-xl border border-mint/30 bg-secondary/40 p-5">
+              {p.image && (
+                <img src={p.image} alt={p.imageAlt ?? "Ilustración de apoyo para la lectura"} loading="lazy" width={1200} height={720} className="mb-4 aspect-[5/2] w-full rounded-lg object-cover" />
+              )}
               <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 {p.kind === "long" ? "Lectura larga" : "Lectura corta"} · {p.title}
               </div>
@@ -695,6 +688,19 @@ function ReadingSection({
                   <p key={i}>{para}</p>
                 ))}
               </div>
+              {p.visual && (
+                <div className="mt-4 overflow-hidden rounded-lg border border-border bg-card" role="figure" aria-label={`Información visual: ${p.visual.title}`}>
+                  <div className="bg-exam-primary px-4 py-2 font-heading text-sm font-bold text-primary-foreground">{p.visual.title}</div>
+                  <dl className="divide-y divide-border">
+                    {p.visual.rows.map((row) => (
+                      <div key={row.label} className="grid grid-cols-[1fr_1.2fr] gap-3 px-4 py-2.5 text-xs sm:text-sm">
+                        <dt className="font-semibold">{row.label}</dt>
+                        <dd className="text-muted-foreground">{row.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              )}
             </div>
             {p.questions.map((q) => {
               n += 1;
@@ -761,10 +767,10 @@ function ResultsScreen({
     <div>
       <div className="rounded-2xl border-2 border-mint bg-card p-8 text-center shadow-[var(--glow-mint)]">
         <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          Nivel general (MCER)
+          Estimación general (MCER)
         </div>
         <div className="mt-2 bg-[image:var(--gradient-hero)] bg-clip-text font-heading text-7xl font-black text-transparent">
-          {result.overall}
+          {result.band}
         </div>
         <div className="mt-2 text-lg">
           <strong>{studentName}</strong>
@@ -772,6 +778,10 @@ function ResultsScreen({
         <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
           {CEFR_DESCRIPTION[result.overall]}
         </p>
+        <div className="mt-4 inline-flex rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-primary">
+          Confianza {result.confidence.toLowerCase()} · {result.mode === "quick" ? "estimación inicial" : "evaluación ampliada"}
+        </div>
+        <p className="mx-auto mt-3 max-w-xl text-xs text-muted-foreground">Este resultado cubre Listening, Reading y Use of English. Speaking y Writing requieren una evaluación adicional.</p>
       </div>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-3">

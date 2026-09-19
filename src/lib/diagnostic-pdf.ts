@@ -129,7 +129,7 @@ export async function generateDiagnosticPdf({ studentName, result }: Payload) {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9);
   doc.setTextColor(...TEAL);
-  doc.text("CONSTANCIA DE NIVEL", W - 16, 19, { align: "right" });
+  doc.text("INFORME DIAGNÓSTICO", W - 16, 19, { align: "right" });
   doc.setFont("helvetica", "normal");
   doc.setFontSize(7.5);
   doc.setTextColor(...SLATE);
@@ -143,7 +143,7 @@ export async function generateDiagnosticPdf({ studentName, result }: Payload) {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(23);
   doc.setTextColor(...TEAL);
-  doc.text("Constancia de Nivel de Inglés", W / 2, 45, { align: "center" });
+  doc.text("Informe de Nivel de Inglés", W / 2, 45, { align: "center" });
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9.5);
@@ -306,10 +306,10 @@ export async function generateDiagnosticPdf({ studentName, result }: Payload) {
 
   // KPI row
   const kpis: [string, string][] = [
-    ["Nivel general", result.overall],
+    ["Rango estimado", result.band],
     ["Puntaje global", `${result.overallScore}/100`],
     ["Aciertos", `${result.totalCorrect}/${result.totalQuestions}`],
-    ["Modalidad", `${modeName} · ${modeTime}`],
+    ["Confianza", result.confidence],
   ];
   const kW = (W - 32 - 3 * 5) / 4;
   kpis.forEach(([label, value], i) => {
@@ -406,9 +406,10 @@ export async function generateDiagnosticPdf({ studentName, result }: Payload) {
   const best = [...result.sections].sort((a, b) => b.score - a.score)[0];
   const worst = [...result.sections].sort((a, b) => a.score - b.score)[0];
   const summary =
-    `Con ${result.totalCorrect} de ${result.totalQuestions} reactivos correctos (${result.overallScore}/100), tu nivel general es ${result.overall}. ` +
+    `Con ${result.totalCorrect} de ${result.totalQuestions} reactivos correctos (${result.overallScore}/100), tu rango estimado es ${result.band}. ` +
     `Tu habilidad más fuerte es ${best.label} (${best.level}) y la que más conviene reforzar es ${worst.label} (${worst.level}). ` +
-    RECOMMENDATION[result.overall];
+    RECOMMENDATION[result.overall] +
+    " Este resultado cubre Listening, Reading y Use of English; Speaking y Writing requieren evaluación adicional.";
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8.5);
   doc.setTextColor(...SLATE);
