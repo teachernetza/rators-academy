@@ -64,6 +64,10 @@ export type ReadingPassage = {
   text: string;
   image?: string;
   imageAlt?: string;
+  visual?: {
+    title: string;
+    rows: { label: string; value: string }[];
+  };
   quick?: boolean;
   questions: Question[];
 };
@@ -594,6 +598,14 @@ const reading: ReadingPassage[] = [
     text: "Next Thursday the city library will host a local author. Visitors can meet the writer, buy signed copies of her latest mystery novel and attend a free writing workshop. Places for the workshop are limited, so registration must be completed online before Friday. Those who miss the deadline may still attend the talk, but not the workshop.",
     image: readingLibrary,
     imageAlt: "Biblioteca durante una charla de autora y un taller de escritura.",
+    visual: {
+      title: "City Library · Thursday",
+      rows: [
+        { label: "Author talk", value: "Open entry" },
+        { label: "Writing workshop", value: "Online registration required" },
+        { label: "Registration deadline", value: "Friday" },
+      ],
+    },
     questions: [
       {
         id: "r2q1",
@@ -945,8 +957,37 @@ function shuffleOptions(q: Question): void {
     );
   const answer = keyed[0];
   if (answer?.option.level) {
-    q.level = answer.option.level;
-    q.evidence ??= "detail";
+    const authoredLevels: Record<string, Cefr> = {
+      csq1: "A1", csq2: "A1", csq3: "A1", csq4: "A2", csq5: "A2",
+      lcq1: "A2", lcq2: "A2", lcq3: "A2", lcq4: "B1", lcq5: "B1",
+      rsq1: "A2", rsq2: "B1", rsq3: "A2", rsq4: "B1", rsq5: "B1",
+      tsq1: "B1", tsq2: "B1", tsq3: "B1", tsq4: "B2", tsq5: "B2",
+      wrq1: "B1", wrq2: "B1", wrq3: "B2", wrq4: "B2", wrq5: "B2",
+      wpq1: "A2", wpq2: "A2", wpq3: "B1", wpq4: "B1", wpq5: "B1",
+      aiq1: "B2", aiq2: "B2", aiq3: "B2", aiq4: "C1", aiq5: "C1",
+      r1q1: "A2", r1q2: "B1", r1q3: "A2", r1q4: "B1",
+      r2q1: "A1", r2q2: "A2", r2q3: "B1", r2q4: "A2",
+      r4q1: "A2", r4q2: "B1", r4q3: "B2",
+      r3q1: "B1", r3q2: "B2", r3q3: "C1", r3q4: "B2",
+      v1: "A1", v2: "B1", v3: "B1", v4: "A2", v5: "B1", v6: "B1",
+      v7: "B2", v8: "B1", v9: "B1", v10: "B2", v11: "B2", v12: "B1",
+      v13: "B1", v14: "A2", v15: "B2", v16: "C1",
+    };
+    q.level = authoredLevels[q.id] ?? answer.option.level;
+    const lower = q.q.toLowerCase();
+    q.evidence ??= lower.includes("mean")
+      ? "meaning-in-context"
+      : lower.includes("summaris") || lower.includes("main ")
+        ? "main-idea"
+        : lower.includes("tone") || lower.startsWith("why")
+          ? "inference"
+          : q.id.startsWith("v")
+            ? lower.includes("formal") || lower.includes("politely")
+              ? "register"
+              : lower.includes("complete")
+                ? "grammar"
+                : "vocabulary"
+            : "detail";
     // Remove the second acceptable paraphrase. Three strong options are more
     // valid than four options containing two defensible answers.
     q.opts = q.opts
@@ -1055,6 +1096,27 @@ function resultBand(score: number, level: Cefr) {
   return score < nearest ? `${lower} alto · ${upper} en desarrollo` : `${upper} inicial · ${lower} consolidado`;
 }
 
+function evidenceAdjustedLevel(
+  score: number,
+  questions: Question[],
+  answers: Answers,
+): Cefr {
+  let level = levelFromScore(score);
+  const ratioAt = (target: Cefr) => {
+    const targetValue = CEFR_VALUE[target];
+    const stretch = questions.filter((q) => CEFR_VALUE[q.level ?? "A1"] >= targetValue);
+    if (!stretch.length) return 0;
+    const correct = stretch.filter((q) => {
+      const selected = answers[q.id];
+      return typeof selected === "number" && q.opts[selected]?.correct;
+    }).length;
+    return correct / stretch.length;
+  };
+  if (level === "C1" && ratioAt("C1") < 0.67) level = "B2";
+  if (level === "B2" && ratioAt("B2") < 0.6) level = "B1";
+  return level;
+}
+
 function scoreSection(key: SectionKey, mode: ExamMode): (answers: Answers) => SectionResult {
   return (answers) => {
     const qs = sectionQuestions(key, mode);
@@ -1072,7 +1134,7 @@ function scoreSection(key: SectionKey, mode: ExamMode): (answers: Answers) => Se
       }
     });
     const score = availablePoints ? Math.round((sum / availablePoints) * 100) : 0;
-    const level = levelFromScore(score);
+    const level = evidenceAdjustedLevel(score, qs, answers);
     return { key, label: SECTION_NAMES[key], correct, total: qs.length, score, level, earnedPoints: sum, availablePoints };
   };
 }
@@ -1082,7 +1144,8 @@ export function computeResult(answers: Answers, mode: ExamMode = "full"): ExamRe
   const earnedPoints = sections.reduce((a, s) => a + s.earnedPoints, 0);
   const availablePoints = sections.reduce((a, s) => a + s.availablePoints, 0);
   const overallScore = availablePoints ? Math.round((earnedPoints / availablePoints) * 100) : 0;
-  const overall = levelFromScore(overallScore);
+  const allQuestions = SECTION_ORDER.flatMap((key) => sectionQuestions(key, mode));
+  const overall = evidenceAdjustedLevel(overallScore, allQuestions, answers);
   const totalCorrect = sections.reduce((a, s) => a + s.correct, 0);
   const answered = Object.keys(answers).filter((id) =>
     SECTION_ORDER.some((key) => sectionQuestions(key, mode).some((q) => q.id === id)),

@@ -686,6 +686,19 @@ function ReadingSection({
                   <p key={i}>{para}</p>
                 ))}
               </div>
+              {p.visual && (
+                <div className="mt-4 overflow-hidden rounded-lg border border-border bg-card" role="figure" aria-label={`Información visual: ${p.visual.title}`}>
+                  <div className="bg-exam-primary px-4 py-2 font-heading text-sm font-bold text-primary-foreground">{p.visual.title}</div>
+                  <dl className="divide-y divide-border">
+                    {p.visual.rows.map((row) => (
+                      <div key={row.label} className="grid grid-cols-[1fr_1.2fr] gap-3 px-4 py-2.5 text-xs sm:text-sm">
+                        <dt className="font-semibold">{row.label}</dt>
+                        <dd className="text-muted-foreground">{row.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              )}
             </div>
             {p.questions.map((q) => {
               n += 1;
