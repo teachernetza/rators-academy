@@ -1497,7 +1497,7 @@ export function computeResult(answers: Answers, mode: ExamMode = "full"): ExamRe
   // Never more than one step above the weakest skill, and never above the band
   // the chance-corrected global score supports.
   overall = capLevel(overall, levelFromValue(weakestValue + 1));
-  overall = capLevel(overall, levelFromScore(overallScore));
+  overall = capLevel(overall, levelFromValue(CEFR_VALUE[levelFromScore(overallScore)] + 1));
   const uneven = strongestValue - weakestValue >= 2;
   const skillRange = `${levelFromValue(weakestValue)}–${levelFromValue(strongestValue)}`;
   // The short version is an initial estimate only: it never awards C1.
