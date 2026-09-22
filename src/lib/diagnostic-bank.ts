@@ -1415,9 +1415,10 @@ function masteryLevel(questions: Question[], answers: Answers): Cefr {
       questions.filter((q) => CEFR_VALUE[q.level ?? "A1"] < CEFR_VALUE[level]),
       answers,
     );
-    const atOk = at !== null && at >= MASTERY_AT;
+    // A level with no items in this set cannot prove or block anything.
+    if (at === null) continue;
     const belowOk = below === null || below >= MASTERY_BELOW;
-    if (atOk && belowOk) best = level;
+    if (at >= MASTERY_AT && belowOk) best = level;
     else break;
   }
   return best;
