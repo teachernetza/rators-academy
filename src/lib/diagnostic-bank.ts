@@ -100,8 +100,9 @@ export const EXAM_MODES: Record<
   },
   full: {
     label: "Examen completo",
-    duration: "15–20 minutos",
-    description: "Los 7 audios, todas las lecturas y la sección completa de uso del idioma.",
+    duration: "20–25 minutos",
+    description:
+      "Los 7 audios, todas las lecturas y la sección completa de uso del idioma. Es el único que puede otorgar C1.",
   },
 };
 
