@@ -1367,6 +1367,10 @@ export type ExamResult = {
   band: string;
   confidence: ResultConfidence;
   unanswered: number;
+  /** True when the strongest and weakest skills differ by 2+ CEFR steps. */
+  uneven: boolean;
+  /** Skill range, e.g. "A2–C1". Equal to the level itself when even. */
+  skillRange: string;
   version: 5;
 };
 
