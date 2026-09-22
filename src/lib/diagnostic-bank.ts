@@ -10,6 +10,9 @@ export const CEFR_SCALE: Cefr[] = ["A1", "A2", "B1", "B2", "C1"];
 
 export const CEFR_VALUE: Record<Cefr, number> = { A1: 1, A2: 2, B1: 3, B2: 4, C1: 5 };
 
+/** Every item offers four options, so blind guessing pays 25%. */
+export const OPTIONS_PER_QUESTION = 4;
+
 export function levelFromValue(v: number): Cefr {
   const i = Math.max(0, Math.min(4, Math.round(v) - 1));
   return CEFR_SCALE[i];
@@ -97,8 +100,9 @@ export const EXAM_MODES: Record<
   },
   full: {
     label: "Examen completo",
-    duration: "15–20 minutos",
-    description: "Los 7 audios, todas las lecturas y la sección completa de uso del idioma.",
+    duration: "20–25 minutos",
+    description:
+      "Los 7 audios, todas las lecturas y la sección completa de uso del idioma. Es el único que puede otorgar C1.",
   },
 };
 
@@ -738,6 +742,58 @@ const reading: ReadingPassage[] = [
       },
     ],
   },
+  {
+    id: "r5",
+    title: "The attention economy",
+    kind: "long",
+    text: `Few industries have been reshaped as quietly as the business of attention. Platforms rarely sell content; they sell the probability that a user will linger. Once engagement became the metric that mattered, design decisions followed accordingly: infinite feeds, variable rewards, notifications timed to arrive when interest is most likely to fade.
+
+Critics argue that this amounts to a form of extraction. Yet the picture is less tidy than the slogans suggest. Surveys consistently show that users report dissatisfaction with the very features they use most, and researchers caution that self-reported regret is a poor proxy for harm. What can be measured — time spent, clicks, returns — is not necessarily what matters, and what matters is stubbornly difficult to quantify.
+
+Regulators, for their part, have tended to target the symptoms. Rules on data collection and default settings may curb the worst practices, but they leave the underlying incentive untouched: as long as revenue scales with attention, products will be optimised for it. Some economists therefore propose changing what is sold rather than how it is sold, through subscriptions or public funding. Others counter that any model still needs an audience, and that shifting the payer merely relocates the pressure rather than removing it.`,
+    questions: [
+      {
+        id: "r5q1",
+        q: "What point does the writer make about engagement metrics?",
+        opts: [
+          { text: "They were introduced by regulators to protect users.", level: null },
+          { text: "They are the only metrics platforms have ever used.", level: null },
+          { text: "They measure how satisfied users feel with a service.", level: null },
+          { text: "Once they became central, product design was built around them.", level: "B2" },
+        ],
+      },
+      {
+        id: "r5q2",
+        q: 'What does the writer imply by "the picture is less tidy than the slogans suggest"?',
+        opts: [
+          { text: "Campaigners have deliberately falsified their evidence.", level: null },
+          { text: "The research on the topic has barely started.", level: null },
+          { text: "Platforms have already solved most of the problems raised.", level: null },
+          { text: "The criticism simplifies evidence that is genuinely mixed.", level: "C1" },
+        ],
+      },
+      {
+        id: "r5q3",
+        q: "Why does the writer mention self-reported regret?",
+        opts: [
+          { text: "To prove that users are harmed by the platforms they use.", level: null },
+          { text: "To show that surveys are the most reliable research method.", level: null },
+          { text: "To argue that users should be asked far more often.", level: null },
+          { text: "To question how far such reports can establish harm.", level: "C1" },
+        ],
+      },
+      {
+        id: "r5q4",
+        q: "What is the writer's attitude towards the proposed alternatives?",
+        opts: [
+          { text: "Enthusiastic: subscriptions clearly solve the problem.", level: null },
+          { text: "Dismissive: regulation has already proved sufficient.", level: null },
+          { text: "Indifferent: the writer avoids taking any position.", level: null },
+          { text: "Sceptical: they may displace the incentive rather than remove it.", level: "C1" },
+        ],
+      },
+    ],
+  },
 ];
 
 /* ------------------- VOCABULARY & USE OF LANGUAGE ------------------- */
@@ -911,6 +967,156 @@ const vocab: Question[] = [
       { text: "Dear Ms. Reed, I am writing regarding the invoice.", level: "C1" },
     ],
   },
+  {
+    id: "v17",
+    q: 'Complete: "No sooner ___ the door than the phone rang."',
+    opts: [
+      { text: "I had closed", level: null },
+      { text: "I closed", level: null },
+      { text: "did I close", level: null },
+      { text: "had I closed", level: "C1" },
+    ],
+  },
+  {
+    id: "v18",
+    q: 'Complete: "The proposal was rejected ___ the lack of funding."',
+    opts: [
+      { text: "despite", level: null },
+      { text: "although", level: null },
+      { text: "because", level: null },
+      { text: "owing to", level: "B2" },
+    ],
+  },
+  {
+    id: "v19",
+    q: 'What does "to take something with a pinch of salt" mean?',
+    opts: [
+      { text: "To accept it immediately without thinking.", level: null },
+      { text: "To find it slightly offensive.", level: null },
+      { text: "To add a small detail to a story.", level: null },
+      { text: "To treat it with some doubt.", level: "B2" },
+    ],
+  },
+  {
+    id: "v20",
+    q: 'Choose the best word: "The report was ___; almost nothing in it was relevant."',
+    opts: [
+      { text: "thorough", level: null },
+      { text: "concise", level: null },
+      { text: "compelling", level: null },
+      { text: "superfluous", level: "C1" },
+    ],
+  },
+  {
+    id: "v21",
+    q: 'Complete: "She insisted ___ the bill herself."',
+    opts: [
+      { text: "to pay", level: null },
+      { text: "in paying", level: null },
+      { text: "that pay", level: null },
+      { text: "on paying", level: "B2" },
+    ],
+  },
+  {
+    id: "v22",
+    q: 'Which sentence is the most diplomatic way to disagree in a meeting?',
+    opts: [
+      { text: "That's wrong and everybody knows it.", level: null },
+      { text: "No. I don't agree with this idea at all.", level: null },
+      { text: "Maybe, but I think my proposal is better.", level: null },
+      { text: "I see your point, though I'd approach it differently.", level: "B2" },
+    ],
+  },
+  {
+    id: "v23",
+    q: 'Complete: "Had the team prepared better, the launch ___ so badly."',
+    opts: [
+      { text: "would not go", level: null },
+      { text: "will not have gone", level: null },
+      { text: "had not gone", level: null },
+      { text: "would not have gone", level: "B2" },
+    ],
+  },
+  {
+    id: "v24",
+    q: 'Choose the correct collocation: "The new policy will ___ a significant impact on small businesses."',
+    opts: [
+      { text: "do", level: null },
+      { text: "make", level: null },
+      { text: "bring", level: null },
+      { text: "have", level: "B2" },
+    ],
+  },
+  {
+    id: "v25",
+    q: 'What does the speaker imply? "I would hardly call the event a success."',
+    opts: [
+      { text: "The event went extremely well.", level: null },
+      { text: "The event has not taken place yet.", level: null },
+      { text: "The speaker did not attend the event.", level: null },
+      { text: "The speaker thinks it went rather badly.", level: "C1" },
+    ],
+  },
+  {
+    id: "v26",
+    q: 'Complete: "It\'s high time we ___ this issue seriously."',
+    opts: [
+      { text: "take", level: null },
+      { text: "will take", level: null },
+      { text: "have taken", level: null },
+      { text: "took", level: "C1" },
+    ],
+  },
+  {
+    id: "v27",
+    q: 'Choose the best phrasal verb: "The negotiations ___ after months of disagreement."',
+    opts: [
+      { text: "broke into", level: null },
+      { text: "broke out", level: null },
+      { text: "broke in", level: null },
+      { text: "broke down", level: "B2" },
+    ],
+  },
+  {
+    id: "v28",
+    q: 'Choose the best word: "Her explanation was ___; nobody was quite sure what she meant."',
+    opts: [
+      { text: "blunt", level: null },
+      { text: "candid", level: null },
+      { text: "succinct", level: null },
+      { text: "ambiguous", level: "B2" },
+    ],
+  },
+  {
+    id: "v29",
+    q: 'Complete: "Little ___ that the decision would change the company."',
+    opts: [
+      { text: "they knew", level: null },
+      { text: "knew they", level: null },
+      { text: "they had known", level: null },
+      { text: "did they know", level: "C1" },
+    ],
+  },
+  {
+    id: "v30",
+    q: 'What does "to gloss over something" mean?',
+    opts: [
+      { text: "To explain it in careful detail.", level: null },
+      { text: "To repeat it several times.", level: null },
+      { text: "To write it down for later.", level: null },
+      { text: "To deal with it too quickly to avoid difficulty.", level: "C1" },
+    ],
+  },
+  {
+    id: "v31",
+    q: 'Complete: "The findings, ___ were published last week, contradict earlier research."',
+    opts: [
+      { text: "that", level: null },
+      { text: "what", level: null },
+      { text: "who", level: null },
+      { text: "which", level: "B2" },
+    ],
+  },
 ];
 
 /* --------------------- DETERMINISTIC OPTION SHUFFLE --------------------- */
@@ -943,6 +1149,84 @@ function shuffleOptions(q: Question): void {
   }
 }
 
+// Gap-fill items where the authored "higher level" paraphrase does not fit the
+// gap. The clean answer is forced instead.
+const ANSWER_OVERRIDES: Record<string, string> = {
+  v1: "is",
+  v4: "forward",
+  v8: "mind",
+};
+
+// A fourth plausible distractor per legacy item, so guessing pays 25%, not 33%.
+const EXTRA_DISTRACTORS: Record<string, string> = {
+  csq1: "A small black coffee with nothing to eat.",
+  csq2: "Only the muffin is to take away.",
+  csq3: "With a ten-dollar bill he had just withdrawn.",
+  csq4: "Please hurry up with my order.",
+  csq5: "By apologising for the long wait.",
+  lcq1: "A cheap place to have lunch nearby.",
+  lcq2: "About twenty minutes away by bus.",
+  lcq3: "A public library across the street.",
+  lcq4: "Directly in front of the bank entrance.",
+  lcq5: "It is closed at this time of day.",
+  rsq1: "A team training session in the afternoon.",
+  rsq2: "Her colleague asked her to change the time.",
+  rsq3: "Three thirty, half an hour later.",
+  rsq4: "He agrees only if it is the last change.",
+  rsq5: "To cancel it altogether.",
+  tsq1: "Her laptop is running unusually slowly.",
+  tsq2: "Her manager is waiting in a meeting room.",
+  tsq3: "Closing every program one by one.",
+  tsq4: "It works, but her file has been lost.",
+  tsq5: "Friendly, but clearly in a hurry.",
+  wrq1: "He spent the weekend cooking for his family.",
+  wrq2: "He had no money left to go out.",
+  wrq3: "Did you wake up feeling excited about something?",
+  wrq4: "He suggests going out together next weekend.",
+  wrq5: "Finishing work early to rest before Monday.",
+  wpq1: "Renting a boat with his brother.",
+  wpq2: "Whether he finishes a work project in time.",
+  wpq3: "With his partner, as they always travel together.",
+  wpq4: "He'll book the cabin for the following weekend.",
+  wpq5: "Because she wants Mark to invite her along.",
+  aiq1: "It is mainly used to train new nurses.",
+  aiq2: "Negotiating contracts with external suppliers.",
+  aiq3: "That it is only useful in very specific industries.",
+  aiq4: "Poor translation quality and slow response times.",
+  aiq5: "That regulation will soon make AI unnecessary.",
+  r1q1: "It closes too early in the evening.",
+  r1q2: "They include a small service charge.",
+  r1q3: "The loyalty card and the weekly discounts.",
+  r1q4: "A busy cafe that has lost its original character.",
+  r2q1: "Send an email to the author in advance.",
+  r2q2: "Because the library needs everyone's age.",
+  r2q3: "Watch a recording of the workshop online.",
+  r2q4: "A guide to writing short stories.",
+  r4q1: "To turn the market into a cultural centre.",
+  r4q2: "Because a private investor offered to buy it.",
+  r4q3: "They will be given a share of the new building.",
+  r3q1: "That teams communicated better than in the office.",
+  r3q2: "They were the first to be asked to return.",
+  r3q3: "When companies reduce the number of office days.",
+  r3q4: "By counting the messages sent in team chats.",
+  v1: "cost",
+  v2: "have living",
+  v3: "I will finish it yesterday, don't worry.",
+  v4: "up",
+  v5: "In a very confident way.",
+  v6: "would have",
+  v7: "generous",
+  v8: "brain",
+  v9: "You should ask somebody else instead.",
+  v10: "reluctant",
+  v11: "was starting",
+  v12: "To spend a whole day on one task.",
+  v13: "put away",
+  v14: "won",
+  v15: "would have missed",
+  v16: "Hi there, hope all good, about that invoice.",
+};
+
 [
   ...listening.flatMap((a) => a.questions),
   ...reading.flatMap((p) => p.questions),
@@ -955,7 +1239,10 @@ function shuffleOptions(q: Question): void {
       (a, b) =>
         CEFR_VALUE[b.option.level as Cefr] - CEFR_VALUE[a.option.level as Cefr],
     );
-  const answer = keyed[0];
+  const override = ANSWER_OVERRIDES[q.id];
+  const answer = override
+    ? (keyed.find(({ option }) => option.text === override) ?? keyed[0])
+    : keyed[0];
   if (answer?.option.level) {
     const authoredLevels: Record<string, Cefr> = {
       csq1: "A1", csq2: "A1", csq3: "A1", csq4: "A2", csq5: "A2",
@@ -988,14 +1275,18 @@ function shuffleOptions(q: Question): void {
                 ? "grammar"
                 : "vocabulary"
             : "detail";
-    // Remove the second acceptable paraphrase. Three strong options are more
-    // valid than four options containing two defensible answers.
+    // Keep exactly one keyed answer (the second authored paraphrase is dropped)
+    // and top the item back up to four options with an authored distractor.
     q.opts = q.opts
       .filter((_, index) => index === answer.index || !keyed.some((x) => x.index === index))
-      .map((option, index, options) => ({
+      .map((option) => ({
         ...option,
-        correct: option.text === answer.option.text && options.length > 0,
+        correct: option.text === answer.option.text,
       }));
+    const extra = EXTRA_DISTRACTORS[q.id];
+    if (extra && q.opts.length < OPTIONS_PER_QUESTION) {
+      q.opts.push({ text: extra, level: null, correct: false });
+    }
   }
   shuffleOptions(q);
 });
@@ -1076,45 +1367,79 @@ export type ExamResult = {
   band: string;
   confidence: ResultConfidence;
   unanswered: number;
-  version: 4;
+  version: 5;
 };
 
+/** Chance-corrected score: answering everything at random lands near 0. */
+function correctedScore(earned: number, available: number): number {
+  if (!available) return 0;
+  const raw = earned / available;
+  const chance = 1 / OPTIONS_PER_QUESTION;
+  return Math.max(0, Math.round(((raw - chance) / (1 - chance)) * 100));
+}
+
+const BAND_CUTS: { level: Cefr; min: number }[] = [
+  { level: "C1", min: 78 },
+  { level: "B2", min: 58 },
+  { level: "B1", min: 38 },
+  { level: "A2", min: 20 },
+  { level: "A1", min: 0 },
+];
+
 function levelFromScore(score: number): Cefr {
-  if (score >= 78) return "C1";
-  if (score >= 60) return "B2";
-  if (score >= 45) return "B1";
-  if (score >= 30) return "A2";
-  return "A1";
+  return (BAND_CUTS.find((cut) => score >= cut.min) ?? BAND_CUTS[BAND_CUTS.length - 1]).level;
 }
 
-function resultBand(score: number, level: Cefr) {
-  const boundaries = [30, 45, 60, 78];
-  const nearest = boundaries.find((boundary) => Math.abs(score - boundary) <= 3);
-  if (!nearest) return level;
-  const upper = levelFromScore(nearest + 1);
-  const lower = levelFromScore(nearest - 1);
-  return score < nearest ? `${lower} alto · ${upper} en desarrollo` : `${upper} inicial · ${lower} consolidado`;
+/** Minimum share of items required at the target level and below it. */
+const MASTERY_AT = 0.75;
+const MASTERY_BELOW = 0.85;
+
+function isCorrect(q: Question, answers: Answers): boolean {
+  const selected = answers[q.id];
+  return typeof selected === "number" && Boolean(q.opts[selected]?.correct);
 }
 
-function evidenceAdjustedLevel(
-  score: number,
-  questions: Question[],
-  answers: Answers,
-): Cefr {
-  let level = levelFromScore(score);
-  const ratioAt = (target: Cefr) => {
-    const targetValue = CEFR_VALUE[target];
-    const stretch = questions.filter((q) => CEFR_VALUE[q.level ?? "A1"] >= targetValue);
-    if (!stretch.length) return 0;
-    const correct = stretch.filter((q) => {
-      const selected = answers[q.id];
-      return typeof selected === "number" && q.opts[selected]?.correct;
-    }).length;
-    return correct / stretch.length;
-  };
-  if (level === "C1" && ratioAt("C1") < 0.67) level = "B2";
-  if (level === "B2" && ratioAt("B2") < 0.6) level = "B1";
-  return level;
+function ratio(questions: Question[], answers: Answers): number | null {
+  if (!questions.length) return null;
+  return questions.filter((q) => isCorrect(q, answers)).length / questions.length;
+}
+
+/**
+ * Cascade rule: a level is only granted when the learner masters the items of
+ * that level AND has consolidated every level below it.
+ */
+function masteryLevel(questions: Question[], answers: Answers): Cefr {
+  let best: Cefr = "A1";
+  for (const level of CEFR_SCALE) {
+    const at = ratio(questions.filter((q) => (q.level ?? "A1") === level), answers);
+    const below = ratio(
+      questions.filter((q) => CEFR_VALUE[q.level ?? "A1"] < CEFR_VALUE[level]),
+      answers,
+    );
+    // A level with no items in this set cannot prove or block anything.
+    if (at === null) continue;
+    const belowOk = below === null || below >= MASTERY_BELOW;
+    if (at >= MASTERY_AT && belowOk) best = level;
+    else break;
+  }
+  return best;
+}
+
+function capLevel(level: Cefr, ceiling: Cefr): Cefr {
+  return CEFR_VALUE[level] > CEFR_VALUE[ceiling] ? ceiling : level;
+}
+
+function strictLevel(score: number, questions: Question[], answers: Answers): Cefr {
+  return capLevel(levelFromScore(score), masteryLevel(questions, answers));
+}
+
+function resultBand(score: number, level: Cefr, mode: ExamMode, capped: boolean): string {
+  if (capped) return `${level}+ · requiere examen completo para confirmar`;
+  const cut = BAND_CUTS.find((b) => b.level === level);
+  const next = BAND_CUTS[BAND_CUTS.findIndex((b) => b.level === level) - 1];
+  if (cut && score - cut.min <= 4 && cut.min > 0) return `${level} inicial · en consolidación`;
+  if (next && next.min - score <= 4) return `${level} alto · ${next.level} en desarrollo`;
+  return mode === "quick" ? `${level} (estimación inicial)` : level;
 }
 
 function scoreSection(key: SectionKey, mode: ExamMode): (answers: Answers) => SectionResult {
@@ -1133,8 +1458,8 @@ function scoreSection(key: SectionKey, mode: ExamMode): (answers: Answers) => Se
         sum += weight;
       }
     });
-    const score = availablePoints ? Math.round((sum / availablePoints) * 100) : 0;
-    const level = evidenceAdjustedLevel(score, qs, answers);
+    const score = correctedScore(sum, availablePoints);
+    const level = strictLevel(score, qs, answers);
     return { key, label: SECTION_NAMES[key], correct, total: qs.length, score, level, earnedPoints: sum, availablePoints };
   };
 }
@@ -1143,9 +1468,18 @@ export function computeResult(answers: Answers, mode: ExamMode = "full"): ExamRe
   const sections = SECTION_ORDER.map((k) => scoreSection(k, mode)(answers));
   const earnedPoints = sections.reduce((a, s) => a + s.earnedPoints, 0);
   const availablePoints = sections.reduce((a, s) => a + s.availablePoints, 0);
-  const overallScore = availablePoints ? Math.round((earnedPoints / availablePoints) * 100) : 0;
+  const overallScore = correctedScore(earnedPoints, availablePoints);
   const allQuestions = SECTION_ORDER.flatMap((key) => sectionQuestions(key, mode));
-  const overall = evidenceAdjustedLevel(overallScore, allQuestions, answers);
+  let overall = strictLevel(overallScore, allQuestions, answers);
+  // The overall level can never sit more than one step above the weakest skill.
+  const weakest = sections.reduce(
+    (min, s) => (CEFR_VALUE[s.level] < CEFR_VALUE[min] ? s.level : min),
+    "C1" as Cefr,
+  );
+  overall = capLevel(overall, levelFromValue(CEFR_VALUE[weakest] + 1));
+  // The short version is an initial estimate only: it never awards C1.
+  const capped = mode === "quick" && CEFR_VALUE[overall] > CEFR_VALUE["B2"];
+  if (capped) overall = "B2";
   const totalCorrect = sections.reduce((a, s) => a + s.correct, 0);
   const answered = Object.keys(answers).filter((id) =>
     SECTION_ORDER.some((key) => sectionQuestions(key, mode).some((q) => q.id === id)),
@@ -1160,9 +1494,9 @@ export function computeResult(answers: Answers, mode: ExamMode = "full"): ExamRe
     totalCorrect,
     totalQuestions: totalQuestions(mode),
     mode,
-    band: resultBand(overallScore, overall),
+    band: resultBand(overallScore, overall, mode, capped),
     confidence,
     unanswered,
-    version: 4,
+    version: 5,
   };
 }

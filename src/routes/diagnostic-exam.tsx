@@ -75,7 +75,7 @@ type SavedState = {
   step: number;
   answers: Answers;
   mode: ExamMode;
-  version: 4;
+  version: 5;
 };
 
 function loadState(): SavedState | null {
@@ -84,7 +84,7 @@ function loadState(): SavedState | null {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as SavedState;
-    if (parsed?.version !== 4) return null;
+    if (parsed?.version !== 5) return null;
     return parsed;
   } catch {
     return null;
@@ -131,7 +131,7 @@ function DiagnosticExam() {
     if (step === 0 && !studentName) return;
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ studentName, step, answers, mode, version: 4 }),
+      JSON.stringify({ studentName, step, answers, mode, version: 5 }),
     );
   }, [studentName, step, answers, mode]);
 
@@ -789,7 +789,11 @@ function ResultsScreen({
         <div className="mt-4 inline-flex rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-primary">
           Confianza {result.confidence.toLowerCase()} · {result.mode === "quick" ? "estimación inicial" : "evaluación ampliada"}
         </div>
-        <p className="mx-auto mt-3 max-w-xl text-xs text-muted-foreground">Este resultado cubre Listening, Reading y Use of English. Speaking y Writing requieren una evaluación adicional.</p>
+        <p className="mx-auto mt-3 max-w-xl text-xs text-muted-foreground">
+          El nivel se otorga solo con dominio comprobado del nivel y de los anteriores, y el puntaje está ajustado por azar.
+          {result.mode === "quick" ? " El examen rápido llega como máximo a B2." : ""} Este resultado cubre Listening, Reading y Use of
+          English. Speaking y Writing requieren una evaluación adicional.
+        </p>
       </div>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-3">
