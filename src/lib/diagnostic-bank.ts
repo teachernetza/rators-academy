@@ -1366,42 +1366,75 @@ export type ExamResult = {
   version: 5;
 };
 
+/** Chance-corrected score: answering everything at random lands near 0. */
+function correctedScore(earned: number, available: number): number {
+  if (!available) return 0;
+  const raw = earned / available;
+  const chance = 1 / OPTIONS_PER_QUESTION;
+  return Math.max(0, Math.round(((raw - chance) / (1 - chance)) * 100));
+}
+
+const BAND_CUTS: { level: Cefr; min: number }[] = [
+  { level: "C1", min: 80 },
+  { level: "B2", min: 62 },
+  { level: "B1", min: 45 },
+  { level: "A2", min: 25 },
+  { level: "A1", min: 0 },
+];
+
 function levelFromScore(score: number): Cefr {
-  if (score >= 78) return "C1";
-  if (score >= 60) return "B2";
-  if (score >= 45) return "B1";
-  if (score >= 30) return "A2";
-  return "A1";
+  return (BAND_CUTS.find((cut) => score >= cut.min) ?? BAND_CUTS[BAND_CUTS.length - 1]).level;
 }
 
-function resultBand(score: number, level: Cefr) {
-  const boundaries = [30, 45, 60, 78];
-  const nearest = boundaries.find((boundary) => Math.abs(score - boundary) <= 3);
-  if (!nearest) return level;
-  const upper = levelFromScore(nearest + 1);
-  const lower = levelFromScore(nearest - 1);
-  return score < nearest ? `${lower} alto · ${upper} en desarrollo` : `${upper} inicial · ${lower} consolidado`;
+/** Minimum share of items required at the target level and below it. */
+const MASTERY_AT = 0.75;
+const MASTERY_BELOW = 0.85;
+
+function isCorrect(q: Question, answers: Answers): boolean {
+  const selected = answers[q.id];
+  return typeof selected === "number" && Boolean(q.opts[selected]?.correct);
 }
 
-function evidenceAdjustedLevel(
-  score: number,
-  questions: Question[],
-  answers: Answers,
-): Cefr {
-  let level = levelFromScore(score);
-  const ratioAt = (target: Cefr) => {
-    const targetValue = CEFR_VALUE[target];
-    const stretch = questions.filter((q) => CEFR_VALUE[q.level ?? "A1"] >= targetValue);
-    if (!stretch.length) return 0;
-    const correct = stretch.filter((q) => {
-      const selected = answers[q.id];
-      return typeof selected === "number" && q.opts[selected]?.correct;
-    }).length;
-    return correct / stretch.length;
-  };
-  if (level === "C1" && ratioAt("C1") < 0.67) level = "B2";
-  if (level === "B2" && ratioAt("B2") < 0.6) level = "B1";
-  return level;
+function ratio(questions: Question[], answers: Answers): number | null {
+  if (!questions.length) return null;
+  return questions.filter((q) => isCorrect(q, answers)).length / questions.length;
+}
+
+/**
+ * Cascade rule: a level is only granted when the learner masters the items of
+ * that level AND has consolidated every level below it.
+ */
+function masteryLevel(questions: Question[], answers: Answers): Cefr {
+  let best: Cefr = "A1";
+  for (const level of CEFR_SCALE) {
+    const at = ratio(questions.filter((q) => (q.level ?? "A1") === level), answers);
+    const below = ratio(
+      questions.filter((q) => CEFR_VALUE[q.level ?? "A1"] < CEFR_VALUE[level]),
+      answers,
+    );
+    const atOk = at !== null && at >= MASTERY_AT;
+    const belowOk = below === null || below >= MASTERY_BELOW;
+    if (atOk && belowOk) best = level;
+    else break;
+  }
+  return best;
+}
+
+function capLevel(level: Cefr, ceiling: Cefr): Cefr {
+  return CEFR_VALUE[level] > CEFR_VALUE[ceiling] ? ceiling : level;
+}
+
+function strictLevel(score: number, questions: Question[], answers: Answers): Cefr {
+  return capLevel(levelFromScore(score), masteryLevel(questions, answers));
+}
+
+function resultBand(score: number, level: Cefr, mode: ExamMode, capped: boolean): string {
+  if (capped) return `${level}+ · requiere examen completo para confirmar`;
+  const cut = BAND_CUTS.find((b) => b.level === level);
+  const next = BAND_CUTS[BAND_CUTS.findIndex((b) => b.level === level) - 1];
+  if (cut && score - cut.min <= 4 && cut.min > 0) return `${level} inicial · en consolidación`;
+  if (next && next.min - score <= 4) return `${level} alto · ${next.level} en desarrollo`;
+  return mode === "quick" ? `${level} (estimación inicial)` : level;
 }
 
 function scoreSection(key: SectionKey, mode: ExamMode): (answers: Answers) => SectionResult {
@@ -1420,8 +1453,8 @@ function scoreSection(key: SectionKey, mode: ExamMode): (answers: Answers) => Se
         sum += weight;
       }
     });
-    const score = availablePoints ? Math.round((sum / availablePoints) * 100) : 0;
-    const level = evidenceAdjustedLevel(score, qs, answers);
+    const score = correctedScore(sum, availablePoints);
+    const level = strictLevel(score, qs, answers);
     return { key, label: SECTION_NAMES[key], correct, total: qs.length, score, level, earnedPoints: sum, availablePoints };
   };
 }
@@ -1430,9 +1463,18 @@ export function computeResult(answers: Answers, mode: ExamMode = "full"): ExamRe
   const sections = SECTION_ORDER.map((k) => scoreSection(k, mode)(answers));
   const earnedPoints = sections.reduce((a, s) => a + s.earnedPoints, 0);
   const availablePoints = sections.reduce((a, s) => a + s.availablePoints, 0);
-  const overallScore = availablePoints ? Math.round((earnedPoints / availablePoints) * 100) : 0;
+  const overallScore = correctedScore(earnedPoints, availablePoints);
   const allQuestions = SECTION_ORDER.flatMap((key) => sectionQuestions(key, mode));
-  const overall = evidenceAdjustedLevel(overallScore, allQuestions, answers);
+  let overall = strictLevel(overallScore, allQuestions, answers);
+  // The overall level can never sit more than one step above the weakest skill.
+  const weakest = sections.reduce(
+    (min, s) => (CEFR_VALUE[s.level] < CEFR_VALUE[min] ? s.level : min),
+    "C1" as Cefr,
+  );
+  overall = capLevel(overall, levelFromValue(CEFR_VALUE[weakest] + 1));
+  // The short version is an initial estimate only: it never awards C1.
+  const capped = mode === "quick" && CEFR_VALUE[overall] > CEFR_VALUE["B2"];
+  if (capped) overall = "B2";
   const totalCorrect = sections.reduce((a, s) => a + s.correct, 0);
   const answered = Object.keys(answers).filter((id) =>
     SECTION_ORDER.some((key) => sectionQuestions(key, mode).some((q) => q.id === id)),
@@ -1447,9 +1489,9 @@ export function computeResult(answers: Answers, mode: ExamMode = "full"): ExamRe
     totalCorrect,
     totalQuestions: totalQuestions(mode),
     mode,
-    band: resultBand(overallScore, overall),
+    band: resultBand(overallScore, overall, mode, capped),
     confidence,
     unanswered,
-    version: 4,
+    version: 5,
   };
 }
