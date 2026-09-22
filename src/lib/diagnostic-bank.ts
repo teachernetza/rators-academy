@@ -1378,10 +1378,10 @@ function correctedScore(earned: number, available: number): number {
 }
 
 const BAND_CUTS: { level: Cefr; min: number }[] = [
-  { level: "C1", min: 80 },
-  { level: "B2", min: 62 },
-  { level: "B1", min: 45 },
-  { level: "A2", min: 25 },
+  { level: "C1", min: 78 },
+  { level: "B2", min: 58 },
+  { level: "B1", min: 38 },
+  { level: "A2", min: 20 },
   { level: "A1", min: 0 },
 ];
 
