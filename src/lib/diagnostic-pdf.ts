@@ -397,7 +397,7 @@ export async function generateDiagnosticPdf({ studentName, result }: Payload) {
   doc.setFillColor(255, 255, 255);
   doc.setDrawColor(...LINE);
   doc.setLineWidth(0.3);
-  doc.roundedRect(16, ty, W - 32, 34, 3, 3, "FD");
+  doc.roundedRect(16, ty, W - 32, 44, 3, 3, "FD");
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
   doc.setTextColor(...TEAL);
