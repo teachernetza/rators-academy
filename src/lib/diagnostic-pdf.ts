@@ -418,7 +418,7 @@ export async function generateDiagnosticPdf({ studentName, result }: Payload) {
   doc.setFontSize(8.5);
   doc.setTextColor(...SLATE);
   (doc.splitTextToSize(summary, W - 44) as string[])
-    .slice(0, 4)
+    .slice(0, 6)
     .forEach((line, i) => doc.text(line, 22, ty + 16 + i * 4.6));
 
   doc.setFontSize(7.5);
