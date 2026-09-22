@@ -738,6 +738,58 @@ const reading: ReadingPassage[] = [
       },
     ],
   },
+  {
+    id: "r5",
+    title: "The attention economy",
+    kind: "long",
+    text: `Few industries have been reshaped as quietly as the business of attention. Platforms rarely sell content; they sell the probability that a user will linger. Once engagement became the metric that mattered, design decisions followed accordingly: infinite feeds, variable rewards, notifications timed to arrive when interest is most likely to fade.
+
+Critics argue that this amounts to a form of extraction. Yet the picture is less tidy than the slogans suggest. Surveys consistently show that users report dissatisfaction with the very features they use most, and researchers caution that self-reported regret is a poor proxy for harm. What can be measured — time spent, clicks, returns — is not necessarily what matters, and what matters is stubbornly difficult to quantify.
+
+Regulators, for their part, have tended to target the symptoms. Rules on data collection and default settings may curb the worst practices, but they leave the underlying incentive untouched: as long as revenue scales with attention, products will be optimised for it. Some economists therefore propose changing what is sold rather than how it is sold, through subscriptions or public funding. Others counter that any model still needs an audience, and that shifting the payer merely relocates the pressure rather than removing it.`,
+    questions: [
+      {
+        id: "r5q1",
+        q: "What point does the writer make about engagement metrics?",
+        opts: [
+          { text: "They were introduced by regulators to protect users.", level: null },
+          { text: "They are the only metrics platforms have ever used.", level: null },
+          { text: "They measure how satisfied users feel with a service.", level: null },
+          { text: "Once they became central, product design was built around them.", level: "B2" },
+        ],
+      },
+      {
+        id: "r5q2",
+        q: 'What does the writer imply by "the picture is less tidy than the slogans suggest"?',
+        opts: [
+          { text: "Campaigners have deliberately falsified their evidence.", level: null },
+          { text: "The research on the topic has barely started.", level: null },
+          { text: "Platforms have already solved most of the problems raised.", level: null },
+          { text: "The criticism simplifies evidence that is genuinely mixed.", level: "C1" },
+        ],
+      },
+      {
+        id: "r5q3",
+        q: "Why does the writer mention self-reported regret?",
+        opts: [
+          { text: "To prove that users are harmed by the platforms they use.", level: null },
+          { text: "To show that surveys are the most reliable research method.", level: null },
+          { text: "To argue that users should be asked far more often.", level: null },
+          { text: "To question how far such reports can establish harm.", level: "C1" },
+        ],
+      },
+      {
+        id: "r5q4",
+        q: "What is the writer's attitude towards the proposed alternatives?",
+        opts: [
+          { text: "Enthusiastic: subscriptions clearly solve the problem.", level: null },
+          { text: "Dismissive: regulation has already proved sufficient.", level: null },
+          { text: "Indifferent: the writer avoids taking any position.", level: null },
+          { text: "Sceptical: they may displace the incentive rather than remove it.", level: "C1" },
+        ],
+      },
+    ],
+  },
 ];
 
 /* ------------------- VOCABULARY & USE OF LANGUAGE ------------------- */
