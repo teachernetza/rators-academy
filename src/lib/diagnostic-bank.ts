@@ -10,6 +10,9 @@ export const CEFR_SCALE: Cefr[] = ["A1", "A2", "B1", "B2", "C1"];
 
 export const CEFR_VALUE: Record<Cefr, number> = { A1: 1, A2: 2, B1: 3, B2: 4, C1: 5 };
 
+/** Every item offers four options, so blind guessing pays 25%. */
+export const OPTIONS_PER_QUESTION = 4;
+
 export function levelFromValue(v: number): Cefr {
   const i = Math.max(0, Math.min(4, Math.round(v) - 1));
   return CEFR_SCALE[i];
