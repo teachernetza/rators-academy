@@ -1481,14 +1481,19 @@ export function computeResult(answers: Answers, mode: ExamMode = "full"): ExamRe
   const earnedPoints = sections.reduce((a, s) => a + s.earnedPoints, 0);
   const availablePoints = sections.reduce((a, s) => a + s.availablePoints, 0);
   const overallScore = correctedScore(earnedPoints, availablePoints);
-  const allQuestions = SECTION_ORDER.flatMap((key) => sectionQuestions(key, mode));
-  let overall = strictLevel(overallScore, allQuestions, answers);
-  // The overall level can never sit more than one step above the weakest skill.
-  const weakest = sections.reduce(
-    (min, s) => (CEFR_VALUE[s.level] < CEFR_VALUE[min] ? s.level : min),
-    "C1" as Cefr,
-  );
-  overall = capLevel(overall, levelFromValue(CEFR_VALUE[weakest] + 1));
+  // The overall level is the average of the three skill levels, each of which
+  // was already granted under the strict mastery cascade.
+  const values = sections.map((s) => CEFR_VALUE[s.level]);
+  const weakestValue = Math.min(...values);
+  const strongestValue = Math.max(...values);
+  const average = values.reduce((a, b) => a + b, 0) / values.length;
+  let overall = levelFromValue(Math.round(average));
+  // Never more than one step above the weakest skill, and never above the band
+  // the chance-corrected global score supports.
+  overall = capLevel(overall, levelFromValue(weakestValue + 1));
+  overall = capLevel(overall, levelFromScore(overallScore));
+  const uneven = strongestValue - weakestValue >= 2;
+  const skillRange = `${levelFromValue(weakestValue)}–${levelFromValue(strongestValue)}`;
   // The short version is an initial estimate only: it never awards C1.
   const capped = mode === "quick" && CEFR_VALUE[overall] > CEFR_VALUE["B2"];
   if (capped) overall = "B2";
