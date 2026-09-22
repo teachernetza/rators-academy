@@ -1145,6 +1145,84 @@ function shuffleOptions(q: Question): void {
   }
 }
 
+// Gap-fill items where the authored "higher level" paraphrase does not fit the
+// gap. The clean answer is forced instead.
+const ANSWER_OVERRIDES: Record<string, string> = {
+  v1: "is",
+  v4: "forward",
+  v8: "mind",
+};
+
+// A fourth plausible distractor per legacy item, so guessing pays 25%, not 33%.
+const EXTRA_DISTRACTORS: Record<string, string> = {
+  csq1: "A small black coffee with nothing to eat.",
+  csq2: "Only the muffin is to take away.",
+  csq3: "With a ten-dollar bill he had just withdrawn.",
+  csq4: "Please hurry up with my order.",
+  csq5: "By apologising for the long wait.",
+  lcq1: "A cheap place to have lunch nearby.",
+  lcq2: "About twenty minutes away by bus.",
+  lcq3: "A public library across the street.",
+  lcq4: "Directly in front of the bank entrance.",
+  lcq5: "It is closed at this time of day.",
+  rsq1: "A team training session in the afternoon.",
+  rsq2: "Her colleague asked her to change the time.",
+  rsq3: "Three thirty, half an hour later.",
+  rsq4: "He agrees only if it is the last change.",
+  rsq5: "To cancel it altogether.",
+  tsq1: "Her laptop is running unusually slowly.",
+  tsq2: "Her manager is waiting in a meeting room.",
+  tsq3: "Closing every program one by one.",
+  tsq4: "It works, but her file has been lost.",
+  tsq5: "Friendly, but clearly in a hurry.",
+  wrq1: "He spent the weekend cooking for his family.",
+  wrq2: "He had no money left to go out.",
+  wrq3: "Did you wake up feeling excited about something?",
+  wrq4: "He suggests going out together next weekend.",
+  wrq5: "Finishing work early to rest before Monday.",
+  wpq1: "Renting a boat with his brother.",
+  wpq2: "Whether he finishes a work project in time.",
+  wpq3: "With his partner, as they always travel together.",
+  wpq4: "He'll book the cabin for the following weekend.",
+  wpq5: "Because she wants Mark to invite her along.",
+  aiq1: "It is mainly used to train new nurses.",
+  aiq2: "Negotiating contracts with external suppliers.",
+  aiq3: "That it is only useful in very specific industries.",
+  aiq4: "Poor translation quality and slow response times.",
+  aiq5: "That regulation will soon make AI unnecessary.",
+  r1q1: "It closes too early in the evening.",
+  r1q2: "They include a small service charge.",
+  r1q3: "The loyalty card and the weekly discounts.",
+  r1q4: "A busy cafe that has lost its original character.",
+  r2q1: "Send an email to the author in advance.",
+  r2q2: "Because the library needs everyone's age.",
+  r2q3: "Watch a recording of the workshop online.",
+  r2q4: "A guide to writing short stories.",
+  r4q1: "To turn the market into a cultural centre.",
+  r4q2: "Because a private investor offered to buy it.",
+  r4q3: "They will be given a share of the new building.",
+  r3q1: "That teams communicated better than in the office.",
+  r3q2: "They were the first to be asked to return.",
+  r3q3: "When companies reduce the number of office days.",
+  r3q4: "By counting the messages sent in team chats.",
+  v1: "cost",
+  v2: "have living",
+  v3: "I will finish it yesterday, don't worry.",
+  v4: "up",
+  v5: "In a very confident way.",
+  v6: "would have",
+  v7: "generous",
+  v8: "brain",
+  v9: "You should ask somebody else instead.",
+  v10: "reluctant",
+  v11: "was starting",
+  v12: "To spend a whole day on one task.",
+  v13: "put away",
+  v14: "won",
+  v15: "would have missed",
+  v16: "Hi there, hope all good, about that invoice.",
+};
+
 [
   ...listening.flatMap((a) => a.questions),
   ...reading.flatMap((p) => p.questions),
@@ -1157,7 +1235,10 @@ function shuffleOptions(q: Question): void {
       (a, b) =>
         CEFR_VALUE[b.option.level as Cefr] - CEFR_VALUE[a.option.level as Cefr],
     );
-  const answer = keyed[0];
+  const override = ANSWER_OVERRIDES[q.id];
+  const answer = override
+    ? (keyed.find(({ option }) => option.text === override) ?? keyed[0])
+    : keyed[0];
   if (answer?.option.level) {
     const authoredLevels: Record<string, Cefr> = {
       csq1: "A1", csq2: "A1", csq3: "A1", csq4: "A2", csq5: "A2",
@@ -1190,14 +1271,18 @@ function shuffleOptions(q: Question): void {
                 ? "grammar"
                 : "vocabulary"
             : "detail";
-    // Remove the second acceptable paraphrase. Three strong options are more
-    // valid than four options containing two defensible answers.
+    // Keep exactly one keyed answer (the second authored paraphrase is dropped)
+    // and top the item back up to four options with an authored distractor.
     q.opts = q.opts
       .filter((_, index) => index === answer.index || !keyed.some((x) => x.index === index))
-      .map((option, index, options) => ({
+      .map((option) => ({
         ...option,
-        correct: option.text === answer.option.text && options.length > 0,
+        correct: option.text === answer.option.text,
       }));
+    const extra = EXTRA_DISTRACTORS[q.id];
+    if (extra && q.opts.length < OPTIONS_PER_QUESTION) {
+      q.opts.push({ text: extra, level: null, correct: false });
+    }
   }
   shuffleOptions(q);
 });
