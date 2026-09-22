@@ -96,6 +96,29 @@ describe("strict scoring", () => {
     expect(result.unanswered).toBe(result.totalQuestions);
   });
 
+  it("averages the three skills instead of following the weakest one", () => {
+    const caps: Record<string, Cefr> = { listening: "C1", reading: "B1", vocab: "A2" };
+    const answers: Answers = {};
+    for (const section of ["listening", "reading", "vocab"] as const) {
+      for (const question of sectionQuestions(section, "full")) {
+        const within = CEFR_VALUE[question.level ?? "A1"] <= CEFR_VALUE[caps[section]];
+        answers[question.id] = within ? correctIndex(question) : wrongIndex(question);
+      }
+    }
+    const result = computeResult(answers, "full");
+    expect(result.overall).toBe("B1");
+    expect(result.uneven).toBe(true);
+    expect(result.skillRange).toBe("A2–C1");
+    expect(result.band).toContain("perfil desigual");
+  });
+
+  it("keeps an even B1 learner at B1 in every skill", () => {
+    const result = computeResult(profile("full", "B1"), "full");
+    expect(result.overall).toBe("B1");
+    expect(result.uneven).toBe(false);
+    for (const section of result.sections) expect(section.level).toBe("B1");
+  });
+
   it("does not award a level when the lower levels are not consolidated", () => {
     const answers: Answers = {};
     for (const question of modeQuestions("full")) {

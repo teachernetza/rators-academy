@@ -1367,6 +1367,10 @@ export type ExamResult = {
   band: string;
   confidence: ResultConfidence;
   unanswered: number;
+  /** True when the strongest and weakest skills differ by 2+ CEFR steps. */
+  uneven: boolean;
+  /** Skill range, e.g. "A2–C1". Equal to the level itself when even. */
+  skillRange: string;
   version: 5;
 };
 
@@ -1429,12 +1433,25 @@ function capLevel(level: Cefr, ceiling: Cefr): Cefr {
   return CEFR_VALUE[level] > CEFR_VALUE[ceiling] ? ceiling : level;
 }
 
-function strictLevel(score: number, questions: Question[], answers: Answers): Cefr {
-  return capLevel(levelFromScore(score), masteryLevel(questions, answers));
+/**
+ * Evidence first: the mastery cascade decides the level (guessing cannot pass
+ * 75%/85% thresholds). The chance-corrected score only blocks a level that sits
+ * more than one band above what the overall performance supports.
+ */
+function strictLevel(_score: number, questions: Question[], answers: Answers): Cefr {
+  return masteryLevel(questions, answers);
 }
 
-function resultBand(score: number, level: Cefr, mode: ExamMode, capped: boolean): string {
+function resultBand(
+  score: number,
+  level: Cefr,
+  mode: ExamMode,
+  capped: boolean,
+  uneven = false,
+  skillRange = "",
+): string {
   if (capped) return `${level}+ · requiere examen completo para confirmar`;
+  if (uneven) return `${level} · perfil desigual (${skillRange})`;
   const cut = BAND_CUTS.find((b) => b.level === level);
   const next = BAND_CUTS[BAND_CUTS.findIndex((b) => b.level === level) - 1];
   if (cut && score - cut.min <= 4 && cut.min > 0) return `${level} inicial · en consolidación`;
@@ -1469,14 +1486,19 @@ export function computeResult(answers: Answers, mode: ExamMode = "full"): ExamRe
   const earnedPoints = sections.reduce((a, s) => a + s.earnedPoints, 0);
   const availablePoints = sections.reduce((a, s) => a + s.availablePoints, 0);
   const overallScore = correctedScore(earnedPoints, availablePoints);
-  const allQuestions = SECTION_ORDER.flatMap((key) => sectionQuestions(key, mode));
-  let overall = strictLevel(overallScore, allQuestions, answers);
-  // The overall level can never sit more than one step above the weakest skill.
-  const weakest = sections.reduce(
-    (min, s) => (CEFR_VALUE[s.level] < CEFR_VALUE[min] ? s.level : min),
-    "C1" as Cefr,
-  );
-  overall = capLevel(overall, levelFromValue(CEFR_VALUE[weakest] + 1));
+  // The overall level is the average of the three skill levels, each of which
+  // was already granted under the strict mastery cascade.
+  const values = sections.map((s) => CEFR_VALUE[s.level]);
+  const weakestValue = Math.min(...values);
+  const strongestValue = Math.max(...values);
+  const average = values.reduce((a, b) => a + b, 0) / values.length;
+  let overall = levelFromValue(Math.round(average));
+  // Never more than one step above the weakest skill, and never above the band
+  // the chance-corrected global score supports.
+  overall = capLevel(overall, levelFromValue(weakestValue + 1));
+  overall = capLevel(overall, levelFromValue(CEFR_VALUE[levelFromScore(overallScore)] + 1));
+  const uneven = strongestValue - weakestValue >= 2;
+  const skillRange = `${levelFromValue(weakestValue)}–${levelFromValue(strongestValue)}`;
   // The short version is an initial estimate only: it never awards C1.
   const capped = mode === "quick" && CEFR_VALUE[overall] > CEFR_VALUE["B2"];
   if (capped) overall = "B2";
@@ -1494,9 +1516,11 @@ export function computeResult(answers: Answers, mode: ExamMode = "full"): ExamRe
     totalCorrect,
     totalQuestions: totalQuestions(mode),
     mode,
-    band: resultBand(overallScore, overall, mode, capped),
+    band: resultBand(overallScore, overall, mode, capped, uneven, skillRange),
     confidence,
     unanswered,
+    uneven,
+    skillRange,
     version: 5,
   };
 }

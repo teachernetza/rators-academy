@@ -789,8 +789,15 @@ function ResultsScreen({
         <div className="mt-4 inline-flex rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-primary">
           Confianza {result.confidence.toLowerCase()} · {result.mode === "quick" ? "estimación inicial" : "evaluación ampliada"}
         </div>
+        {result.uneven ? (
+          <p className="mx-auto mt-3 max-w-xl text-xs font-medium text-primary">
+            Tu perfil es desigual ({result.skillRange}): guíate por el nivel de cada habilidad y refuerza la más baja
+            antes de asumir el nivel general.
+          </p>
+        ) : null}
         <p className="mx-auto mt-3 max-w-xl text-xs text-muted-foreground">
-          El nivel se otorga solo con dominio comprobado del nivel y de los anteriores, y el puntaje está ajustado por azar.
+          El nivel general es el promedio de las tres habilidades; cada una se otorga solo con dominio comprobado del
+          nivel y de los anteriores, y el puntaje está ajustado por azar.
           {result.mode === "quick" ? " El examen rápido llega como máximo a B2." : ""} Este resultado cubre Listening, Reading y Use of
           English. Speaking y Writing requieren una evaluación adicional.
         </p>
