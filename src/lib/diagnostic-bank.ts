@@ -963,6 +963,156 @@ const vocab: Question[] = [
       { text: "Dear Ms. Reed, I am writing regarding the invoice.", level: "C1" },
     ],
   },
+  {
+    id: "v17",
+    q: 'Complete: "No sooner ___ the door than the phone rang."',
+    opts: [
+      { text: "I had closed", level: null },
+      { text: "I closed", level: null },
+      { text: "did I close", level: null },
+      { text: "had I closed", level: "C1" },
+    ],
+  },
+  {
+    id: "v18",
+    q: 'Complete: "The proposal was rejected ___ the lack of funding."',
+    opts: [
+      { text: "despite", level: null },
+      { text: "although", level: null },
+      { text: "because", level: null },
+      { text: "owing to", level: "B2" },
+    ],
+  },
+  {
+    id: "v19",
+    q: 'What does "to take something with a pinch of salt" mean?',
+    opts: [
+      { text: "To accept it immediately without thinking.", level: null },
+      { text: "To find it slightly offensive.", level: null },
+      { text: "To add a small detail to a story.", level: null },
+      { text: "To treat it with some doubt.", level: "B2" },
+    ],
+  },
+  {
+    id: "v20",
+    q: 'Choose the best word: "The report was ___; almost nothing in it was relevant."',
+    opts: [
+      { text: "thorough", level: null },
+      { text: "concise", level: null },
+      { text: "compelling", level: null },
+      { text: "superfluous", level: "C1" },
+    ],
+  },
+  {
+    id: "v21",
+    q: 'Complete: "She insisted ___ the bill herself."',
+    opts: [
+      { text: "to pay", level: null },
+      { text: "in paying", level: null },
+      { text: "that pay", level: null },
+      { text: "on paying", level: "B2" },
+    ],
+  },
+  {
+    id: "v22",
+    q: 'Which sentence is the most diplomatic way to disagree in a meeting?',
+    opts: [
+      { text: "That's wrong and everybody knows it.", level: null },
+      { text: "No. I don't agree with this idea at all.", level: null },
+      { text: "Maybe, but I think my proposal is better.", level: null },
+      { text: "I see your point, though I'd approach it differently.", level: "B2" },
+    ],
+  },
+  {
+    id: "v23",
+    q: 'Complete: "Had the team prepared better, the launch ___ so badly."',
+    opts: [
+      { text: "would not go", level: null },
+      { text: "will not have gone", level: null },
+      { text: "had not gone", level: null },
+      { text: "would not have gone", level: "B2" },
+    ],
+  },
+  {
+    id: "v24",
+    q: 'Choose the correct collocation: "The new policy will ___ a significant impact on small businesses."',
+    opts: [
+      { text: "do", level: null },
+      { text: "make", level: null },
+      { text: "bring", level: null },
+      { text: "have", level: "B2" },
+    ],
+  },
+  {
+    id: "v25",
+    q: 'What does the speaker imply? "I would hardly call the event a success."',
+    opts: [
+      { text: "The event went extremely well.", level: null },
+      { text: "The event has not taken place yet.", level: null },
+      { text: "The speaker did not attend the event.", level: null },
+      { text: "The speaker thinks it went rather badly.", level: "C1" },
+    ],
+  },
+  {
+    id: "v26",
+    q: 'Complete: "It\'s high time we ___ this issue seriously."',
+    opts: [
+      { text: "take", level: null },
+      { text: "will take", level: null },
+      { text: "have taken", level: null },
+      { text: "took", level: "C1" },
+    ],
+  },
+  {
+    id: "v27",
+    q: 'Choose the best phrasal verb: "The negotiations ___ after months of disagreement."',
+    opts: [
+      { text: "broke into", level: null },
+      { text: "broke out", level: null },
+      { text: "broke in", level: null },
+      { text: "broke down", level: "B2" },
+    ],
+  },
+  {
+    id: "v28",
+    q: 'Choose the best word: "Her explanation was ___; nobody was quite sure what she meant."',
+    opts: [
+      { text: "blunt", level: null },
+      { text: "candid", level: null },
+      { text: "succinct", level: null },
+      { text: "ambiguous", level: "B2" },
+    ],
+  },
+  {
+    id: "v29",
+    q: 'Complete: "Little ___ that the decision would change the company."',
+    opts: [
+      { text: "they knew", level: null },
+      { text: "knew they", level: null },
+      { text: "they had known", level: null },
+      { text: "did they know", level: "C1" },
+    ],
+  },
+  {
+    id: "v30",
+    q: 'What does "to gloss over something" mean?',
+    opts: [
+      { text: "To explain it in careful detail.", level: null },
+      { text: "To repeat it several times.", level: null },
+      { text: "To write it down for later.", level: null },
+      { text: "To deal with it too quickly to avoid difficulty.", level: "C1" },
+    ],
+  },
+  {
+    id: "v31",
+    q: 'Complete: "The findings, ___ were published last week, contradict earlier research."',
+    opts: [
+      { text: "that", level: null },
+      { text: "what", level: null },
+      { text: "who", level: null },
+      { text: "which", level: "B2" },
+    ],
+  },
 ];
 
 /* --------------------- DETERMINISTIC OPTION SHUFFLE --------------------- */
