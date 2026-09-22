@@ -406,8 +406,9 @@ export async function generateDiagnosticPdf({ studentName, result }: Payload) {
   const best = [...result.sections].sort((a, b) => b.score - a.score)[0];
   const worst = [...result.sections].sort((a, b) => a.score - b.score)[0];
   const summary =
-    `Con ${result.totalCorrect} de ${result.totalQuestions} reactivos correctos (${result.overallScore}/100), tu rango estimado es ${result.band}. ` +
+    `Con ${result.totalCorrect} de ${result.totalQuestions} reactivos correctos (${result.overallScore}/100, puntaje ajustado por azar), tu rango estimado es ${result.band}. ` +
     `Tu habilidad más fuerte es ${best.label} (${best.level}) y la que más conviene reforzar es ${worst.label} (${worst.level}). ` +
+    "El nivel solo se otorga cuando hay dominio comprobado del nivel y de los anteriores. " +
     RECOMMENDATION[result.overall] +
     " Este resultado cubre Listening, Reading y Use of English; Speaking y Writing requieren evaluación adicional.";
   doc.setFont("helvetica", "normal");
