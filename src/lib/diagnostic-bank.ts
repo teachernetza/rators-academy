@@ -1511,9 +1511,11 @@ export function computeResult(answers: Answers, mode: ExamMode = "full"): ExamRe
     totalCorrect,
     totalQuestions: totalQuestions(mode),
     mode,
-    band: resultBand(overallScore, overall, mode, capped),
+    band: resultBand(overallScore, overall, mode, capped, uneven, skillRange),
     confidence,
     unanswered,
+    uneven,
+    skillRange,
     version: 5,
   };
 }
