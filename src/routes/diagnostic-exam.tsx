@@ -75,7 +75,7 @@ type SavedState = {
   step: number;
   answers: Answers;
   mode: ExamMode;
-  version: 4;
+  version: 5;
 };
 
 function loadState(): SavedState | null {
@@ -84,7 +84,7 @@ function loadState(): SavedState | null {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as SavedState;
-    if (parsed?.version !== 4) return null;
+    if (parsed?.version !== 5) return null;
     return parsed;
   } catch {
     return null;
@@ -131,7 +131,7 @@ function DiagnosticExam() {
     if (step === 0 && !studentName) return;
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ studentName, step, answers, mode, version: 4 }),
+      JSON.stringify({ studentName, step, answers, mode, version: 5 }),
     );
   }, [studentName, step, answers, mode]);
 
