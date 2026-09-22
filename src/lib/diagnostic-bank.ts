@@ -1437,8 +1437,16 @@ function strictLevel(score: number, questions: Question[], answers: Answers): Ce
   return capLevel(levelFromScore(score), masteryLevel(questions, answers));
 }
 
-function resultBand(score: number, level: Cefr, mode: ExamMode, capped: boolean): string {
+function resultBand(
+  score: number,
+  level: Cefr,
+  mode: ExamMode,
+  capped: boolean,
+  uneven = false,
+  skillRange = "",
+): string {
   if (capped) return `${level}+ · requiere examen completo para confirmar`;
+  if (uneven) return `${level} · perfil desigual (${skillRange})`;
   const cut = BAND_CUTS.find((b) => b.level === level);
   const next = BAND_CUTS[BAND_CUTS.findIndex((b) => b.level === level) - 1];
   if (cut && score - cut.min <= 4 && cut.min > 0) return `${level} inicial · en consolidación`;
