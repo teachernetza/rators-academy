@@ -1438,9 +1438,8 @@ function capLevel(level: Cefr, ceiling: Cefr): Cefr {
  * 75%/85% thresholds). The chance-corrected score only blocks a level that sits
  * more than one band above what the overall performance supports.
  */
-function strictLevel(score: number, questions: Question[], answers: Answers): Cefr {
-  const mastery = masteryLevel(questions, answers);
-  return capLevel(mastery, levelFromValue(CEFR_VALUE[levelFromScore(score)] + 1));
+function strictLevel(_score: number, questions: Question[], answers: Answers): Cefr {
+  return masteryLevel(questions, answers);
 }
 
 function resultBand(
