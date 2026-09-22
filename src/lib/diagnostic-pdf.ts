@@ -408,7 +408,10 @@ export async function generateDiagnosticPdf({ studentName, result }: Payload) {
   const summary =
     `Con ${result.totalCorrect} de ${result.totalQuestions} reactivos correctos (${result.overallScore}/100, puntaje ajustado por azar), tu rango estimado es ${result.band}. ` +
     `Tu habilidad más fuerte es ${best.label} (${best.level}) y la que más conviene reforzar es ${worst.label} (${worst.level}). ` +
-    "El nivel solo se otorga cuando hay dominio comprobado del nivel y de los anteriores. " +
+    "El nivel general es el promedio de las tres habilidades; cada una se otorga solo con dominio comprobado del nivel y de los anteriores. " +
+    (result.uneven
+      ? `Tu perfil es desigual (${result.skillRange}): conviene guiarte por el nivel de cada habilidad y reforzar la más baja antes de asumir el nivel general. `
+      : "") +
     RECOMMENDATION[result.overall] +
     " Este resultado cubre Listening, Reading y Use of English; Speaking y Writing requieren evaluación adicional.";
   doc.setFont("helvetica", "normal");
