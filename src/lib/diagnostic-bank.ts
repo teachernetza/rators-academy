@@ -1363,7 +1363,7 @@ export type ExamResult = {
   band: string;
   confidence: ResultConfidence;
   unanswered: number;
-  version: 4;
+  version: 5;
 };
 
 function levelFromScore(score: number): Cefr {
