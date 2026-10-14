@@ -16,6 +16,7 @@ import { Route as DiagnosticExamRouteImport } from './routes/diagnostic-exam'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as RuletaRouteImport } from './routes/ruleta'
 import { Route as AdminActivitiesRouteImport } from './routes/admin/activities'
 import { Route as AdminCoursesRouteImport } from './routes/admin/courses'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
@@ -88,6 +89,11 @@ const LoginRoute = LoginRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RuletaRoute = RuletaRouteImport.update({
+  id: '/ruleta',
+  path: '/ruleta',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminActivitiesRoute = AdminActivitiesRouteImport.update({
@@ -291,6 +297,7 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/ruleta': typeof RuletaRoute
   '/admin/activities': typeof AdminActivitiesRouteWithChildren
   '/admin/courses': typeof AdminCoursesRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -338,6 +345,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/ruleta': typeof RuletaRoute
   '/admin/activities': typeof AdminActivitiesRouteWithChildren
   '/admin/courses': typeof AdminCoursesRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -386,6 +394,7 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/ruleta': typeof RuletaRoute
   '/admin/activities': typeof AdminActivitiesRouteWithChildren
   '/admin/courses': typeof AdminCoursesRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -435,6 +444,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/reset-password'
+    | '/ruleta'
     | '/admin/activities'
     | '/admin/courses'
     | '/admin/dashboard'
@@ -482,6 +492,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/reset-password'
+    | '/ruleta'
     | '/admin/activities'
     | '/admin/courses'
     | '/admin/dashboard'
@@ -529,6 +540,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/reset-password'
+    | '/ruleta'
     | '/admin/activities'
     | '/admin/courses'
     | '/admin/dashboard'
@@ -577,6 +589,7 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  RuletaRoute: typeof RuletaRoute
   AdminActivitiesRoute: typeof AdminActivitiesRouteWithChildren
   AdminCoursesRoute: typeof AdminCoursesRouteWithChildren
   AdminDashboardRoute: typeof AdminDashboardRoute
@@ -658,6 +671,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ruleta': {
+      id: '/ruleta'
+      path: '/ruleta'
+      fullPath: '/ruleta'
+      preLoaderRoute: typeof RuletaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/activities': {
@@ -1030,6 +1050,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  RuletaRoute: RuletaRoute,
   AdminActivitiesRoute: AdminActivitiesRouteWithChildren,
   AdminCoursesRoute: AdminCoursesRouteWithChildren,
   AdminDashboardRoute: AdminDashboardRoute,
