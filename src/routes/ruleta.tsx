@@ -19,20 +19,20 @@ export const Route = createFileRoute("/ruleta")({
 });
 
 const FILLS = [
-  "var(--primary)",
-  "var(--accent)",
-  "var(--primary-glow)",
-  "var(--secondary-foreground)",
-  "color-mix(in oklch, var(--accent) 55%, var(--primary))",
-  "color-mix(in oklch, var(--primary) 45%, var(--background))",
+  "var(--primary, #1649ff)",
+  "var(--accent, #f6d743)",
+  "var(--primary-glow, #5c86ff)",
+  "var(--secondary-foreground, #0b2b6b)",
+  "#35b7a0",
+  "#a9c0ff",
 ];
 const TEXT_ON = [
-  "var(--primary-foreground)",
-  "var(--accent-foreground)",
-  "var(--primary-foreground)",
-  "var(--primary-foreground)",
-  "var(--primary-foreground)",
-  "var(--foreground)",
+  "#ffffff",
+  "#0b2b6b",
+  "#ffffff",
+  "#ffffff",
+  "#ffffff",
+  "#0b2b6b",
 ];
 
 function randInt(max: number) {
@@ -97,7 +97,7 @@ function Wheel({
           className={`absolute left-1/2 -top-3 z-10 -translate-x-1/2 ${spinning ? "animate-[tick_.12s_ease-in-out_infinite]" : ""}`}
         >
           <svg width="34" height="40" viewBox="0 0 34 40">
-            <path d="M17 40 L2 6 Q17 -4 32 6 Z" fill="var(--accent)" stroke="var(--foreground)" strokeWidth="2.5" />
+            <path d="M17 40 L2 6 Q17 -4 32 6 Z" fill="var(--accent, #f6d743)" stroke="var(--foreground, #0b2b6b)" strokeWidth="2.5" />
           </svg>
         </div>
         <div className="rounded-full p-2 shadow-[0_30px_60px_-30px_var(--primary)] bg-card ring-4 ring-primary/20">
@@ -124,7 +124,7 @@ function Wheel({
                   <path
                     d={`M100 100 L${x0} ${y0} A98 98 0 ${large} 1 ${x1} ${y1} Z`}
                     fill={FILLS[c]}
-                    stroke="var(--card)"
+                    stroke="var(--card, #ffffff)"
                     strokeWidth="1.2"
                   />
                   <text
@@ -143,8 +143,8 @@ function Wheel({
                 </g>
               );
             })}
-            <circle cx="100" cy="100" r="15" fill="var(--card)" stroke="var(--primary)" strokeWidth="3" />
-            <circle cx="100" cy="100" r="5" fill="var(--accent)" />
+            <circle cx="100" cy="100" r="15" fill="var(--card, #ffffff)" stroke="var(--primary, #1649ff)" strokeWidth="3" />
+            <circle cx="100" cy="100" r="5" fill="var(--accent, #f6d743)" />
           </svg>
         </div>
       </div>
