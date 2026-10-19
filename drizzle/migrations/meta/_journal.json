@@ -8,6 +8,13 @@
       "when": 1792450366573,
       "tag": "0000_private_classes_hub",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792452047624,
+      "tag": "0001_fix_staff_create_user_identity_email",
+      "breakpoints": true
     }
   ]
 }
