@@ -324,6 +324,162 @@ export type Database = {
         }
         Relationships: []
       }
+      class_lesson_labs: {
+        Row: {
+          lab_file_id: string | null
+          lab_ref: string | null
+          lesson_id: string
+          student_id: string
+        }
+        Insert: {
+          lab_file_id?: string | null
+          lab_ref?: string | null
+          lesson_id: string
+          student_id: string
+        }
+        Update: {
+          lab_file_id?: string | null
+          lab_ref?: string | null
+          lesson_id?: string
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_lesson_labs_lab_file_id_fkey"
+            columns: ["lab_file_id"]
+            isOneToOne: false
+            referencedRelation: "lab_files"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_lesson_labs_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: true
+            referencedRelation: "class_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      class_lessons: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          homework_active: boolean
+          homework_lab_file_id: string | null
+          homework_lab_ref: string | null
+          id: string
+          material_url: string | null
+          notes: string | null
+          order_index: number
+          plan_id: string
+          slides_url: string | null
+          status: string
+          student_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          homework_active?: boolean
+          homework_lab_file_id?: string | null
+          homework_lab_ref?: string | null
+          id?: string
+          material_url?: string | null
+          notes?: string | null
+          order_index?: number
+          plan_id: string
+          slides_url?: string | null
+          status?: string
+          student_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          homework_active?: boolean
+          homework_lab_file_id?: string | null
+          homework_lab_ref?: string | null
+          id?: string
+          material_url?: string | null
+          notes?: string | null
+          order_index?: number
+          plan_id?: string
+          slides_url?: string | null
+          status?: string
+          student_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_lessons_homework_lab_file_id_fkey"
+            columns: ["homework_lab_file_id"]
+            isOneToOne: false
+            referencedRelation: "lab_files"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_lessons_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "student_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      class_sessions: {
+        Row: {
+          comment: string | null
+          created_at: string
+          hours: number
+          id: string
+          lesson_id: string | null
+          plan_id: string
+          session_date: string
+          student_id: string
+          teacher_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          hours: number
+          id?: string
+          lesson_id?: string | null
+          plan_id: string
+          session_date?: string
+          student_id: string
+          teacher_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          hours?: number
+          id?: string
+          lesson_id?: string | null
+          plan_id?: string
+          session_date?: string
+          student_id?: string
+          teacher_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_sessions_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "class_lessons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_sessions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "student_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       courses: {
         Row: {
           cover_image_url: string | null
@@ -397,6 +553,53 @@ export type Database = {
             columns: ["student_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      homework_submissions: {
+        Row: {
+          created_at: string
+          feedback: string | null
+          id: string
+          lesson_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          screenshot_path: string
+          status: string
+          student_id: string
+          student_note: string | null
+        }
+        Insert: {
+          created_at?: string
+          feedback?: string | null
+          id?: string
+          lesson_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          screenshot_path: string
+          status?: string
+          student_id: string
+          student_note?: string | null
+        }
+        Update: {
+          created_at?: string
+          feedback?: string | null
+          id?: string
+          lesson_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          screenshot_path?: string
+          status?: string
+          student_id?: string
+          student_note?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "homework_submissions_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "class_lessons"
             referencedColumns: ["id"]
           },
         ]
@@ -562,6 +765,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      lab_files: {
+        Row: {
+          block: string | null
+          created_at: string
+          id: string
+          kind: string
+          level: string
+          storage_path: string
+          title: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          block?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          level?: string
+          storage_path: string
+          title: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          block?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          level?: string
+          storage_path?: string
+          title?: string
+          uploaded_by?: string | null
+        }
+        Relationships: []
       }
       lesson_comments: {
         Row: {
@@ -849,6 +1085,75 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      student_plans: {
+        Row: {
+          carried_hours: number
+          carry_note: string | null
+          created_at: string
+          created_by: string | null
+          hours_contracted: number
+          id: string
+          lessons_total: number
+          month: string
+          plan_key: string
+          slides_url: string | null
+          status: string
+          student_id: string
+          updated_at: string
+        }
+        Insert: {
+          carried_hours?: number
+          carry_note?: string | null
+          created_at?: string
+          created_by?: string | null
+          hours_contracted: number
+          id?: string
+          lessons_total: number
+          month: string
+          plan_key: string
+          slides_url?: string | null
+          status?: string
+          student_id: string
+          updated_at?: string
+        }
+        Update: {
+          carried_hours?: number
+          carry_note?: string | null
+          created_at?: string
+          created_by?: string | null
+          hours_contracted?: number
+          id?: string
+          lessons_total?: number
+          month?: string
+          plan_key?: string
+          slides_url?: string | null
+          status?: string
+          student_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      student_teachers: {
+        Row: {
+          created_at: string
+          id: string
+          student_id: string
+          teacher_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          student_id: string
+          teacher_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          student_id?: string
+          teacher_id?: string
+        }
+        Relationships: []
       }
       submission_section_responses: {
         Row: {
