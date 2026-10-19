@@ -106,6 +106,6 @@ export function useAuth() {
 export function dashboardPathFor(role: AppRole | null | undefined): string {
   if (role === "admin") return "/admin/dashboard";
   if (role === "teacher") return "/teacher/dashboard";
-  if (role === "student") return "/student/dashboard";
+  if (role === "student") return "/student/hub";
   return "/login";
 }

@@ -7,7 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   LayoutDashboard, Users, BookOpen, Settings, LogOut,
   ClipboardList, UserCircle, Menu, BarChart3, Compass, Award,
-  Megaphone, CalendarDays, FileText, Inbox, FlaskConical,
+  Megaphone, CalendarDays, FlaskConical, Clock, Upload, Home,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -17,11 +17,14 @@ import { ThemeToggle } from "@/components/theme-toggle";
 type NavItem = { to: string; label: string; icon: React.ComponentType<{ className?: string }> };
 
 const NAV: Record<AppRole, NavItem[]> = {
+  // Cursos, actividades con revisión y certificados quedan ocultos del menú
+  // (clases 1 a 1); sus páginas y datos siguen existiendo.
   admin: [
     { to: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { to: "/admin/classes", label: "Clases y horas", icon: Clock },
+    { to: "/admin/lab-library", label: "Biblioteca de labs", icon: Upload },
     { to: "/admin/teachers", label: "Teachers", icon: UserCircle },
     { to: "/admin/students", label: "Students", icon: Users },
-    { to: "/admin/courses", label: "Courses", icon: BookOpen },
     { to: "/admin/activities", label: "Labs del LMS", icon: FlaskConical },
     { to: "/admin/labs", label: "Labs asignados", icon: FlaskConical },
     { to: "/admin/lab-progress", label: "Progreso de Labs", icon: BarChart3 },
@@ -30,28 +33,21 @@ const NAV: Record<AppRole, NavItem[]> = {
   ],
   teacher: [
     { to: "/teacher/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { to: "/teacher/courses", label: "My Courses", icon: BookOpen },
-    { to: "/teacher/students", label: "Students", icon: Users },
+    { to: "/teacher/classes", label: "Mis clases", icon: Clock },
     { to: "/teacher/activities", label: "Labs del LMS", icon: FlaskConical },
     { to: "/teacher/labs", label: "Labs asignados", icon: FlaskConical },
     { to: "/teacher/lab-progress", label: "Progreso de Labs", icon: BarChart3 },
-    { to: "/teacher/inbox", label: "Review Inbox", icon: Inbox },
-    { to: "/teacher/grading", label: "Grading", icon: ClipboardList },
     { to: "/calendar", label: "Calendar", icon: CalendarDays },
     { to: "/announcements", label: "Announcements", icon: Megaphone },
     { to: "/teacher/pending", label: "Pending", icon: ClipboardList },
     { to: "/teacher/profile", label: "Profile", icon: UserCircle },
   ],
   student: [
+    { to: "/student/hub", label: "Mi Hub", icon: Home },
     { to: "/student/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { to: "/student/courses", label: "My Courses", icon: BookOpen },
-    { to: "/student/activities", label: "Activities", icon: FileText },
     { to: "/student/labs", label: "Mis Labs", icon: FlaskConical },
-    { to: "/student/catalog", label: "Catalog", icon: Compass },
     { to: "/calendar", label: "Calendar", icon: CalendarDays },
     { to: "/announcements", label: "Announcements", icon: Megaphone },
-    { to: "/student/progress", label: "Progress", icon: BarChart3 },
-    { to: "/student/certificates", label: "Certificates", icon: Award },
     { to: "/student/pending", label: "Pending", icon: ClipboardList },
     { to: "/student/profile", label: "Profile", icon: UserCircle },
   ],
