@@ -219,3 +219,31 @@ export function homeworkState(lesson: ClassLesson, subs: HomeworkSubmission[]) {
 }
 
 export const HW_LABEL = { pending: "Pendiente", submitted: "Entregada", reviewed: "Revisada", done: "Terminada" } as const;
+
+/** Primera lección pendiente (en orden) = la próxima clase. */
+export function nextLesson(lessons: ClassLesson[]) {
+  return [...lessons].sort((a, b) => a.order_index - b.order_index).find((l) => l.status !== "done") ?? null;
+}
+export async function listLessonsForPlans(planIds: string[]) {
+  if (!planIds.length) return [] as ClassLesson[];
+  return check(await db.from("class_lessons").select("*").in("plan_id", planIds).order("order_index")) as ClassLesson[];
+}
+
+/* ---------- Mensajes por lección (teacher ↔ alumno) ---------- */
+export type LessonMessage = { id: string; lesson_id: string; student_id: string; author_id: string; body: string; created_at: string };
+export async function listLessonMessages(studentId: string) {
+  return check(await db.from("class_lesson_messages").select("*").eq("student_id", studentId).order("created_at")) as LessonMessage[];
+}
+export async function addLessonMessage(lesson: ClassLesson, authorId: string, body: string) {
+  check(await db.from("class_lesson_messages").insert({ lesson_id: lesson.id, student_id: lesson.student_id, author_id: authorId, body }));
+}
+export async function deleteLessonMessage(id: string) {
+  check(await db.from("class_lesson_messages").delete().eq("id", id));
+}
+
+/* ---------- Aviso más reciente ---------- */
+export async function latestAnnouncement() {
+  const { data } = await db.from("announcements").select("id, title, body, created_at").is("course_id", null)
+    .order("pinned", { ascending: false }).order("created_at", { ascending: false }).limit(1);
+  return ((data ?? [])[0] ?? null) as { id: string; title: string; body: string; created_at: string } | null;
+}
