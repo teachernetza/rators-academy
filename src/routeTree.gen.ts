@@ -37,6 +37,7 @@ import { Route as StudentLabsRouteImport } from './routes/student/labs'
 import { Route as StudentPendingRouteImport } from './routes/student/pending'
 import { Route as StudentProfileRouteImport } from './routes/student/profile'
 import { Route as StudentProgressRouteImport } from './routes/student/progress'
+import { Route as StudentTasksRouteImport } from './routes/student/tasks'
 import { Route as TeacherActivitiesRouteImport } from './routes/teacher/activities'
 import { Route as TeacherCoursesRouteImport } from './routes/teacher/courses'
 import { Route as TeacherDashboardRouteImport } from './routes/teacher/dashboard'
@@ -202,6 +203,11 @@ const StudentProgressRoute = StudentProgressRouteImport.update({
   path: '/student/progress',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudentTasksRoute = StudentTasksRouteImport.update({
+  id: '/student/tasks',
+  path: '/student/tasks',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TeacherActivitiesRoute = TeacherActivitiesRouteImport.update({
   id: '/teacher/activities',
   path: '/teacher/activities',
@@ -353,6 +359,7 @@ export interface FileRoutesByFullPath {
   '/student/pending': typeof StudentPendingRoute
   '/student/profile': typeof StudentProfileRoute
   '/student/progress': typeof StudentProgressRoute
+  '/student/tasks': typeof StudentTasksRoute
   '/teacher/activities': typeof TeacherActivitiesRouteWithChildren
   '/teacher/courses': typeof TeacherCoursesRouteWithChildren
   '/teacher/dashboard': typeof TeacherDashboardRoute
@@ -407,6 +414,7 @@ export interface FileRoutesByTo {
   '/student/pending': typeof StudentPendingRoute
   '/student/profile': typeof StudentProfileRoute
   '/student/progress': typeof StudentProgressRoute
+  '/student/tasks': typeof StudentTasksRoute
   '/teacher/activities': typeof TeacherActivitiesRouteWithChildren
   '/teacher/courses': typeof TeacherCoursesRouteWithChildren
   '/teacher/dashboard': typeof TeacherDashboardRoute
@@ -462,6 +470,7 @@ export interface FileRoutesById {
   '/student/pending': typeof StudentPendingRoute
   '/student/profile': typeof StudentProfileRoute
   '/student/progress': typeof StudentProgressRoute
+  '/student/tasks': typeof StudentTasksRoute
   '/teacher/activities': typeof TeacherActivitiesRouteWithChildren
   '/teacher/courses': typeof TeacherCoursesRouteWithChildren
   '/teacher/dashboard': typeof TeacherDashboardRoute
@@ -518,6 +527,7 @@ export interface FileRouteTypes {
     | '/student/pending'
     | '/student/profile'
     | '/student/progress'
+    | '/student/tasks'
     | '/teacher/activities'
     | '/teacher/courses'
     | '/teacher/dashboard'
@@ -572,6 +582,7 @@ export interface FileRouteTypes {
     | '/student/pending'
     | '/student/profile'
     | '/student/progress'
+    | '/student/tasks'
     | '/teacher/activities'
     | '/teacher/courses'
     | '/teacher/dashboard'
@@ -626,6 +637,7 @@ export interface FileRouteTypes {
     | '/student/pending'
     | '/student/profile'
     | '/student/progress'
+    | '/student/tasks'
     | '/teacher/activities'
     | '/teacher/courses'
     | '/teacher/dashboard'
@@ -681,6 +693,7 @@ export interface RootRouteChildren {
   StudentPendingRoute: typeof StudentPendingRoute
   StudentProfileRoute: typeof StudentProfileRoute
   StudentProgressRoute: typeof StudentProgressRoute
+  StudentTasksRoute: typeof StudentTasksRoute
   TeacherActivitiesRoute: typeof TeacherActivitiesRouteWithChildren
   TeacherCoursesRoute: typeof TeacherCoursesRouteWithChildren
   TeacherDashboardRoute: typeof TeacherDashboardRoute
@@ -896,6 +909,13 @@ declare module '@tanstack/react-router' {
       path: '/student/progress'
       fullPath: '/student/progress'
       preLoaderRoute: typeof StudentProgressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student/tasks': {
+      id: '/student/tasks'
+      path: '/student/tasks'
+      fullPath: '/student/tasks'
+      preLoaderRoute: typeof StudentTasksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/teacher/activities': {
@@ -1190,6 +1210,7 @@ const rootRouteChildren: RootRouteChildren = {
   StudentPendingRoute: StudentPendingRoute,
   StudentProfileRoute: StudentProfileRoute,
   StudentProgressRoute: StudentProgressRoute,
+  StudentTasksRoute: StudentTasksRoute,
   TeacherActivitiesRoute: TeacherActivitiesRouteWithChildren,
   TeacherCoursesRoute: TeacherCoursesRouteWithChildren,
   TeacherDashboardRoute: TeacherDashboardRoute,
