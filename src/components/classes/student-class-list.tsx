@@ -71,7 +71,7 @@ export function StudentClassList({ mode, title, subtitle }: { mode: "admin" | "t
       {data.error && <p className="text-sm text-destructive">{(data.error as Error).message}</p>}
       {data.data && rows.length === 0 && (
         <Card className="p-8 text-center text-sm text-muted-foreground">
-          {mode === "teacher" ? "Aún no tienes alumnos asignados. El admin te los asigna desde Clases y horas." : "No hay alumnos todavía. Créalos en Students."}
+          {mode === "teacher" ? "Aún no tienes alumnos asignados. El admin te los asigna desde Alumnos y clases." : "No hay alumnos todavía. Créalos en Students."}
         </Card>
       )}
 
@@ -96,6 +96,11 @@ export function StudentClassList({ mode, title, subtitle }: { mode: "admin" | "t
                 )}
                 {r.toReview > 0 && <Badge>{r.toReview} por revisar</Badge>}
               </div>
+              {r.plan && (
+                <p className="mt-3 rounded-md bg-muted px-2.5 py-1.5 text-sm">
+                  {r.next ? <>Próxima clase: <b>{r.next.title}</b></> : "Todas las lecciones del mes terminadas"}
+                </p>
+              )}
               {r.sum && (
                 <div className="mt-3 space-y-1 text-sm">
                   <div className="flex items-center gap-2">
