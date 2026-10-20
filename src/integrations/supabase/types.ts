@@ -1169,6 +1169,36 @@ export type Database = {
         }
         Relationships: []
       }
+      student_profiles_private: {
+        Row: {
+          cefr_level: string | null
+          diagnosis: string | null
+          goals_summary: string | null
+          phone: string | null
+          student_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          cefr_level?: string | null
+          diagnosis?: string | null
+          goals_summary?: string | null
+          phone?: string | null
+          student_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          cefr_level?: string | null
+          diagnosis?: string | null
+          goals_summary?: string | null
+          phone?: string | null
+          student_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       student_teachers: {
         Row: {
           created_at: string
