@@ -247,3 +247,17 @@ export async function latestAnnouncement() {
     .order("pinned", { ascending: false }).order("created_at", { ascending: false }).limit(1);
   return ((data ?? [])[0] ?? null) as { id: string; title: string; body: string; created_at: string } | null;
 }
+
+/* ---------- Ficha privada (solo staff) ---------- */
+export type StudentPrivateProfile = {
+  student_id: string; phone: string | null; goals_summary: string | null; diagnosis: string | null;
+  cefr_level: string | null; updated_by: string | null; updated_at: string;
+};
+export async function getStudentInfo(studentId: string) {
+  const p = check(await db.from("student_profiles_private").select("*").eq("student_id", studentId).maybeSingle()) as StudentPrivateProfile | null;
+  const e = check(await db.from("profiles").select("email").eq("id", studentId).maybeSingle()) as { email: string | null } | null;
+  return { profile: p, email: e?.email ?? null };
+}
+export async function saveStudentInfo(studentId: string, userId: string, patch: Pick<StudentPrivateProfile, "phone" | "goals_summary" | "diagnosis" | "cefr_level">) {
+  check(await db.from("student_profiles_private").upsert({ student_id: studentId, ...patch, updated_by: userId, updated_at: new Date().toISOString() }));
+}

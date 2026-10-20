@@ -26,6 +26,7 @@ import { PLAN_RULES, hoursSummary, currentMonth, nextMonth, monthLabel, carryOve
 import { ALL_LABS } from "@/lib/labs";
 import { OpenLabButton } from "./lab-frame";
 import { LessonThread } from "./lesson-thread";
+import { StudentInfoCard } from "./student-info-card";
 
 type Mode = "admin" | "teacher";
 
@@ -73,6 +74,7 @@ export function StaffStudentHub({ studentId, mode }: { studentId: string; mode: 
       </div>
 
       {isAdmin && <TeachersCard studentId={studentId} />}
+      <StudentInfoCard studentId={studentId} />
 
       {plansQ.isLoading && <Loader2 className="h-6 w-6 animate-spin text-primary" />}
       {plansQ.data?.length === 0 && (
