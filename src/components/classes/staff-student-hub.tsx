@@ -51,7 +51,7 @@ export function StaffStudentHub({ studentId, mode }: { studentId: string; mode: 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <Link to={isAdmin ? "/admin/classes" : "/teacher/classes"} className="mb-1 inline-flex items-center text-sm text-muted-foreground hover:text-primary">
-            <ArrowLeft className="mr-1 h-4 w-4" /> Clases y horas
+            <ArrowLeft className="mr-1 h-4 w-4" /> {isAdmin ? "Alumnos y clases" : "Mis alumnos"}
           </Link>
           <h1 className="truncate text-2xl font-bold">{nameQ.data ?? "…"}</h1>
         </div>
@@ -626,6 +626,8 @@ function LessonCard({ lesson, isAdmin, classLab, subs, files, onChanged }: {
           {subs.map((s) => <SubmissionRow key={s.id} sub={s} onChanged={onChanged} />)}
         </div>
       )}
+
+      <LessonThread lesson={lesson} />
 
       <div className="flex justify-end">
         {lesson.status === "done" ? (
