@@ -15,6 +15,13 @@
       "when": 1792452047624,
       "tag": "0001_fix_staff_create_user_identity_email",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792532192563,
+      "tag": "0002_class_lesson_messages",
+      "breakpoints": true
     }
   ]
 }
