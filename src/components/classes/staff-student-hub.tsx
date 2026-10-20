@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
-  ArrowLeft, Plus, Clock, Trash2, Pencil, CheckCircle2, Loader2, Presentation, FileText, X, CalendarClock, Image as ImageIcon,
+  ArrowLeft, Plus, Clock, Trash2, Pencil, CheckCircle2, Loader2, Presentation, FileText, X, CalendarClock, Image as ImageIcon, Upload,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
@@ -20,11 +20,12 @@ import {
   getProfileName, listPlans, listLessons, listSessions, addSession, deleteSession, createPlan, updatePlan,
   updateLesson, addLesson, deleteLesson, listClassLabs, setClassLab, listLabFiles, listSubmissions,
   reviewSubmission, signedShot, listStudentTeachers, listTeachers, assignTeacher, unassignTeacher, staffNames,
-  homeworkState, HW_LABEL, catalogLab, deletePlan,
+  homeworkState, HW_LABEL, catalogLab, deletePlan, nextLesson,
 } from "@/lib/classes";
 import { PLAN_RULES, hoursSummary, currentMonth, nextMonth, monthLabel, carryOver, type PlanKey } from "@/lib/plans";
 import { ALL_LABS } from "@/lib/labs";
 import { OpenLabButton } from "./lab-frame";
+import { LessonThread } from "./lesson-thread";
 
 type Mode = "admin" | "teacher";
 
@@ -50,7 +51,7 @@ export function StaffStudentHub({ studentId, mode }: { studentId: string; mode: 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <Link to={isAdmin ? "/admin/classes" : "/teacher/classes"} className="mb-1 inline-flex items-center text-sm text-muted-foreground hover:text-primary">
-            <ArrowLeft className="mr-1 h-4 w-4" /> Clases y horas
+            <ArrowLeft className="mr-1 h-4 w-4" /> {isAdmin ? "Alumnos y clases" : "Mis alumnos"}
           </Link>
           <h1 className="truncate text-2xl font-bold">{nameQ.data ?? "…"}</h1>
         </div>
@@ -182,9 +183,13 @@ function PlanView({ plan, isAdmin, userId, onChanged, onSelect }: {
   const done = lessons.filter((l) => l.status === "done").length;
   const closed = plan.status === "closed";
 
+  const next = nextLesson(lessons);
+  const teacherIds = (linksQ.data ?? []).map((l) => l.teacher_id);
+  const others = lessons.filter((l) => l.id !== next?.id);
+
   return (
     <div className="space-y-6">
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
         <Stat label="Horas dadas" value={`${sum.given} / ${sum.total} h`} />
         <Stat label="Horas restantes" value={`${sum.remaining} h`} />
         <Stat label="Por reponer a la fecha" value={`${sum.toMakeUp} h`} hint={plan.carried_hours > 0 ? `Incluye ${plan.carried_hours} h del mes anterior` : undefined} />
@@ -192,34 +197,208 @@ function PlanView({ plan, isAdmin, userId, onChanged, onSelect }: {
       </div>
       {plan.carry_note && <p className="text-sm text-muted-foreground">Nota de horas arrastradas: {plan.carry_note}</p>}
 
+      {next && !closed && (
+        <NextLessonPanel lesson={next} isAdmin={isAdmin} userId={userId} plan={plan}
+          classLab={(labsQ.data ?? []).find((c) => c.lesson_id === next.id) ?? null}
+          files={filesQ.data ?? []} teacherIds={teacherIds} names={namesQ.data ?? {}} onChanged={onChanged} />
+      )}
+      {!next && lessons.length > 0 && (
+        <Card className="p-4 text-sm text-muted-foreground">Todas las lecciones de este mes están terminadas.{isAdmin ? " Puedes cerrar el mes en el panel de la derecha." : ""}</Card>
+      )}
+
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,380px)]">
-        <div className="min-w-0 space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Lecciones</h2>
+        <details className="group min-w-0 space-y-3" open={!next}>
+          <summary className="flex cursor-pointer list-none items-center justify-between rounded-lg border border-border px-4 py-3">
+            <span className="font-semibold">Todas las lecciones ({lessons.length})</span>
+            <span className="text-xs text-muted-foreground group-open:hidden">Mostrar</span>
+            <span className="hidden text-xs text-muted-foreground group-open:inline">Ocultar</span>
+          </summary>
+          <div className="mt-3 space-y-3">
             {isAdmin && !closed && (
               <Button size="sm" variant="outline" onClick={async () => {
                 try { await addLesson(plan, (lessons.at(-1)?.order_index ?? 0) + 1); onChanged(); } catch (e: any) { toast.error(e.message); }
-              }}><Plus className="mr-1 h-4 w-4" />Lección</Button>
+              }}><Plus className="mr-1 h-4 w-4" />Agregar lección</Button>
             )}
+            {lessonsQ.isLoading && <Loader2 className="h-5 w-5 animate-spin text-primary" />}
+            {others.map((l) => (
+              <LessonCard key={l.id} lesson={l} isAdmin={isAdmin}
+                classLab={(labsQ.data ?? []).find((c) => c.lesson_id === l.id) ?? null}
+                subs={(subsQ.data ?? []).filter((s) => s.lesson_id === l.id)}
+                files={filesQ.data ?? []} onChanged={onChanged} />
+            ))}
           </div>
-          {lessonsQ.isLoading && <Loader2 className="h-5 w-5 animate-spin text-primary" />}
-          {lessons.map((l) => (
-            <LessonCard key={l.id} lesson={l} isAdmin={isAdmin}
-              classLab={(labsQ.data ?? []).find((c) => c.lesson_id === l.id) ?? null}
-              subs={(subsQ.data ?? []).filter((s) => s.lesson_id === l.id)}
-              files={filesQ.data ?? []} onChanged={onChanged} />
-          ))}
-        </div>
+        </details>
 
         <div className="min-w-0 space-y-3">
-          <SessionsPanel plan={plan} lessons={lessons} sessions={sessionsQ.data ?? []} isAdmin={isAdmin} userId={userId}
-            teacherIds={(linksQ.data ?? []).map((l) => l.teacher_id)} names={namesQ.data ?? {}} onChanged={onChanged} />
+          {next && (subsQ.data ?? []).some((s) => s.lesson_id === next.id) && (
+            <Card className="space-y-2 p-4">
+              <p className="font-semibold">Capturas de {next.title}</p>
+              {(subsQ.data ?? []).filter((s) => s.lesson_id === next.id).map((s) => <SubmissionRow key={s.id} sub={s} onChanged={onChanged} />)}
+            </Card>
+          )}
+          <SessionsPanel lessons={lessons} sessions={sessionsQ.data ?? []} isAdmin={isAdmin} userId={userId}
+            closed={closed} names={namesQ.data ?? {}} onChanged={onChanged} />
           {isAdmin && (
             <PlanAdmin plan={plan} remaining={carryOver(sum.total, sum.given)} userId={userId} onChanged={onChanged} onSelect={onSelect} />
           )}
         </div>
       </div>
     </div>
+  );
+}
+
+/* ---------------- Próxima clase ---------------- */
+function NextLessonPanel({ lesson, plan, isAdmin, userId, classLab, files, teacherIds, names, onChanged }: {
+  lesson: ClassLesson; plan: StudentPlan; isAdmin: boolean; userId: string;
+  classLab: { lab_file_id: string | null; lab_ref: string | null } | null; files: LabFile[];
+  teacherIds: string[]; names: Record<string, string>; onChanged: () => void;
+}) {
+  const [title, setTitle] = useState(lesson.title);
+  const [slides, setSlides] = useState(lesson.slides_url ?? "");
+  const [cls, setCls] = useState(toVal(classLab?.lab_file_id, classLab?.lab_ref));
+  const [hw, setHw] = useState(toVal(lesson.homework_lab_file_id, lesson.homework_lab_ref));
+  const [busy, setBusy] = useState(false);
+  const [logOpen, setLogOpen] = useState(false);
+  useEffect(() => {
+    setTitle(lesson.title); setSlides(lesson.slides_url ?? "");
+    setCls(toVal(classLab?.lab_file_id, classLab?.lab_ref)); setHw(toVal(lesson.homework_lab_file_id, lesson.homework_lab_ref));
+  }, [lesson.id, lesson.title, lesson.slides_url, lesson.homework_lab_file_id, lesson.homework_lab_ref, classLab?.lab_file_id, classLab?.lab_ref]);
+
+  const save = async () => {
+    setBusy(true);
+    try {
+      const h = fromVal(hw); const c = fromVal(cls);
+      await updateLesson(lesson.id, { title: title.trim() || lesson.title, slides_url: slides.trim() || null, homework_lab_file_id: h.file, homework_lab_ref: h.ref });
+      await setClassLab(lesson, c.file, c.ref);
+      toast.success("Próxima clase lista"); onChanged();
+    } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
+  };
+  const classLabName = labName(files, classLab?.lab_file_id, classLab?.lab_ref);
+  const hwName = labName(files, lesson.homework_lab_file_id, lesson.homework_lab_ref);
+
+  return (
+    <Card className="space-y-4 border-primary/40 p-5 shadow-[var(--shadow-soft)]">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Próxima clase</p>
+          <h2 className="truncate text-xl font-bold">{lesson.title}</h2>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <OpenLabButton labFileId={classLab?.lab_file_id} labRef={classLab?.lab_ref} label="Empezar clase" size="default" />
+          {lesson.slides_url && <Button asChild variant="outline"><a href={lesson.slides_url} target="_blank" rel="noreferrer"><Presentation className="mr-1 h-4 w-4" />Slides</a></Button>}
+          <Button variant="secondary" onClick={() => setLogOpen(true)}><Clock className="mr-1 h-4 w-4" />Registrar clase</Button>
+        </div>
+      </div>
+
+      {isAdmin ? (
+        <div className="space-y-3">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div><Label>Tema</Label><Input value={title} onChange={(e) => setTitle(e.target.value)} /></div>
+            <div><Label>Google Slides (opcional)</Label><Input value={slides} onChange={(e) => setSlides(e.target.value)} placeholder="https://docs.google.com/presentation/…" /></div>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="rounded-lg border border-border p-3">
+              <Label className="flex items-center gap-1"><Presentation className="h-4 w-4 text-primary" />Lab de clase <span className="font-normal text-muted-foreground">(solo staff)</span></Label>
+              <div className="mt-2"><LabSelect value={cls} onChange={setCls} files={files} kind="class" /></div>
+            </div>
+            <div className="rounded-lg border border-border p-3">
+              <Label className="flex items-center gap-1"><FileText className="h-4 w-4 text-primary" />Lab de tarea <span className="font-normal text-muted-foreground">(para el alumno)</span></Label>
+              <div className="mt-2"><LabSelect value={hw} onChange={setHw} files={files} kind="homework" /></div>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <Link to="/admin/lab-library" className="inline-flex items-center text-sm text-primary hover:underline"><Upload className="mr-1 h-4 w-4" />Subir un HTML nuevo a la biblioteca</Link>
+            <Button onClick={save} disabled={busy}>{busy && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}Guardar próxima clase</Button>
+          </div>
+        </div>
+      ) : (
+        <div className="grid gap-3 sm:grid-cols-2 text-sm">
+          <div className="rounded-lg border border-border p-3"><p className="text-xs text-muted-foreground">Lab de clase</p><p className="font-medium">{classLabName ?? "El admin aún no lo asigna"}</p></div>
+          <div className="rounded-lg border border-border p-3"><p className="text-xs text-muted-foreground">Lab de tarea</p><p className="font-medium">{hwName ?? "Sin tarea"}</p></div>
+        </div>
+      )}
+
+      <LessonThread lesson={lesson} />
+
+      <RegisterClassDialog open={logOpen} onOpenChange={setLogOpen} lesson={lesson} plan={plan} isAdmin={isAdmin} userId={userId}
+        teacherIds={teacherIds} names={names} labTitle={classLabName} hasHomework={!!(lesson.homework_lab_file_id || lesson.homework_lab_ref)} onChanged={onChanged} />
+    </Card>
+  );
+}
+
+function RegisterClassDialog({ open, onOpenChange, lesson, plan, isAdmin, userId, teacherIds, names, labTitle, hasHomework, onChanged }: {
+  open: boolean; onOpenChange: (v: boolean) => void; lesson: ClassLesson; plan: StudentPlan; isAdmin: boolean; userId: string;
+  teacherIds: string[]; names: Record<string, string>; labTitle: string | null; hasHomework: boolean; onChanged: () => void;
+}) {
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [hours, setHours] = useState("2");
+  const [comment, setComment] = useState("");
+  const [activateHw, setActivateHw] = useState(true);
+  const [finish, setFinish] = useState(true);
+  const [teacherId, setTeacherId] = useState(userId);
+  const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    if (!open) return;
+    setDate(new Date().toISOString().slice(0, 10)); setComment("");
+    setTeacherId(isAdmin ? (teacherIds[0] ?? userId) : userId);
+  }, [open]);
+
+  const save = async () => {
+    const h = Number(hours);
+    setBusy(true);
+    try {
+      const labLine = labTitle ? `Lab: ${labTitle}` : null;
+      await addSession({
+        plan_id: plan.id, student_id: plan.student_id, teacher_id: teacherId, session_date: date, hours: h,
+        lesson_id: lesson.id, comment: [labLine, comment.trim()].filter(Boolean).join("\n") || null,
+      });
+      const patch: Partial<ClassLesson> = {};
+      if (hasHomework && activateHw) patch.homework_active = true;
+      if (finish) patch.status = "done";
+      if (Object.keys(patch).length) await updateLesson(lesson.id, patch);
+      toast.success("Clase registrada"); onOpenChange(false); onChanged();
+    } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Registrar clase · {lesson.title}</DialogTitle>
+          <DialogDescription>{labTitle ? `Lab usado: ${labTitle}` : "Sin lab de clase asignado"}</DialogDescription>
+        </DialogHeader>
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-2">
+            <div><Label>Día</Label><Input type="date" value={date} onChange={(e) => setDate(e.target.value)} /></div>
+            <div>
+              <Label>Horas trabajadas</Label>
+              <Select value={hours} onValueChange={setHours}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>{["0.5", "1", "1.5", "2", "2.5", "3", "4"].map((h) => <SelectItem key={h} value={h}>{h} h</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+          </div>
+          {isAdmin && (
+            <div>
+              <Label>Quién dio la clase</Label>
+              <Select value={teacherId} onValueChange={setTeacherId}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={userId}>Yo (admin)</SelectItem>
+                  {teacherIds.filter((t) => t !== userId).map((t) => <SelectItem key={t} value={t}>{names[t] ?? "Teacher"}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+          <div><Label>Comentario</Label><Textarea rows={3} placeholder="Qué se vio, avances, acuerdos…" value={comment} onChange={(e) => setComment(e.target.value)} /></div>
+          {hasHomework && (
+            <label className="flex items-center justify-between gap-2 text-sm">Activar la tarea para el alumno<Switch checked={activateHw} onCheckedChange={setActivateHw} /></label>
+          )}
+          <label className="flex items-center justify-between gap-2 text-sm">Marcar lección como dada<Switch checked={finish} onCheckedChange={setFinish} /></label>
+        </div>
+        <DialogFooter><Button onClick={save} disabled={busy}>{busy && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}Registrar</Button></DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -233,77 +412,16 @@ function Stat({ label, value, hint }: { label: string; value: string; hint?: str
   );
 }
 
-/* ---------------- Registro de horas ---------------- */
-function SessionsPanel({ plan, lessons, sessions, isAdmin, userId, teacherIds, names, onChanged }: {
-  plan: StudentPlan; lessons: ClassLesson[]; sessions: { id: string; session_date: string; hours: number; comment: string | null; teacher_id: string; lesson_id: string | null }[];
-  isAdmin: boolean; userId: string; teacherIds: string[]; names: Record<string, string>; onChanged: () => void;
+/* ---------------- Historial de horas ---------------- */
+function SessionsPanel({ lessons, sessions, isAdmin, userId, closed, names, onChanged }: {
+  lessons: ClassLesson[]; sessions: { id: string; session_date: string; hours: number; comment: string | null; teacher_id: string; lesson_id: string | null }[];
+  isAdmin: boolean; userId: string; closed: boolean; names: Record<string, string>; onChanged: () => void;
 }) {
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
-  const [hours, setHours] = useState("1");
-  const [lessonId, setLessonId] = useState<string>("none");
-  const [comment, setComment] = useState("");
-  const [teacherId, setTeacherId] = useState<string>(isAdmin ? (teacherIds[0] ?? userId) : userId);
-  useEffect(() => { if (isAdmin && teacherIds[0]) setTeacherId(teacherIds[0]); }, [isAdmin, teacherIds.join()]);
-  const [busy, setBusy] = useState(false);
-  const closed = plan.status === "closed";
-
-  const save = async () => {
-    const h = Number(hours);
-    if (!(h > 0 && h <= 8)) return toast.error("Horas entre 0.5 y 8");
-    setBusy(true);
-    try {
-      await addSession({
-        plan_id: plan.id, student_id: plan.student_id, teacher_id: teacherId, session_date: date, hours: h,
-        lesson_id: lessonId === "none" ? null : lessonId, comment: comment.trim() || null,
-      });
-      toast.success("Clase registrada"); setComment(""); onChanged();
-    } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
-  };
-
   return (
     <Card className="space-y-4 p-4">
-      <h2 className="flex items-center gap-2 text-lg font-semibold"><Clock className="h-5 w-5 text-primary" />Confirmar clase</h2>
-      {!closed ? (
-        <div className="space-y-3">
-          <div className="grid grid-cols-2 gap-2">
-            <div><Label>Fecha</Label><Input type="date" value={date} onChange={(e) => setDate(e.target.value)} /></div>
-            <div>
-              <Label>Horas</Label>
-              <Select value={hours} onValueChange={setHours}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>{["0.5", "1", "1.5", "2", "2.5", "3", "4"].map((h) => <SelectItem key={h} value={h}>{h} h</SelectItem>)}</SelectContent>
-              </Select>
-            </div>
-          </div>
-          <div>
-            <Label>Lección vista</Label>
-            <Select value={lessonId} onValueChange={setLessonId}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">Sin lección específica</SelectItem>
-                {lessons.map((l) => <SelectItem key={l.id} value={l.id}>{l.title}</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </div>
-          {isAdmin && (
-            <div>
-              <Label>Teacher que dio la clase</Label>
-              <Select value={teacherId} onValueChange={setTeacherId}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={userId}>Yo (admin)</SelectItem>
-                  {teacherIds.filter((t) => t !== userId).map((t) => <SelectItem key={t} value={t}>{names[t] ?? "Teacher"}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-          <div><Label>Comentario</Label><Textarea rows={2} placeholder="Qué se vio, avances, acuerdos…" value={comment} onChange={(e) => setComment(e.target.value)} /></div>
-          <Button className="w-full" onClick={save} disabled={busy}>{busy && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}Confirmar horas</Button>
-        </div>
-      ) : <p className="text-sm text-muted-foreground">Este mes está cerrado.</p>}
-
+      <h2 className="flex items-center gap-2 text-lg font-semibold"><Clock className="h-5 w-5 text-primary" />Clases registradas</h2>
+      {closed && <p className="text-sm text-muted-foreground">Este mes está cerrado.</p>}
       <div className="space-y-2">
-        <p className="text-sm font-medium">Historial del mes</p>
         {sessions.length === 0 && <p className="text-sm text-muted-foreground">Sin clases registradas.</p>}
         {sessions.map((s) => {
           const canDelete = isAdmin || (s.teacher_id === userId && !closed);
@@ -508,6 +626,8 @@ function LessonCard({ lesson, isAdmin, classLab, subs, files, onChanged }: {
           {subs.map((s) => <SubmissionRow key={s.id} sub={s} onChanged={onChanged} />)}
         </div>
       )}
+
+      <LessonThread lesson={lesson} />
 
       <div className="flex justify-end">
         {lesson.status === "done" ? (

@@ -7,11 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Loader2, Search, ChevronRight, Clock, AlertTriangle } from "lucide-react";
 import {
   listStudents, listPlans, listSessionsForPlans, listStudentTeachers, staffNames, listPendingSubmissions,
+  listLessonsForPlans, nextLesson,
 } from "@/lib/classes";
 import { PLAN_RULES, hoursSummary, currentMonth } from "@/lib/plans";
 
 /** Tabla de alumnos con su plan del mes. Admin ve todos; teacher solo los suyos (lo filtra la base de datos). */
-export function StudentClassList({ mode }: { mode: "admin" | "teacher" }) {
+export function StudentClassList({ mode, title, subtitle }: { mode: "admin" | "teacher"; title?: string; subtitle?: string }) {
   const [q, setQ] = useState("");
   const data = useQuery({
     queryKey: ["classes", "overview", mode],
@@ -20,14 +21,16 @@ export function StudentClassList({ mode }: { mode: "admin" | "teacher" }) {
         listStudents(), listPlans(), listStudentTeachers(), staffNames(), listPendingSubmissions(),
       ]);
       const active = plans.filter((p) => p.status === "active");
-      const sessions = await listSessionsForPlans(active.map((p) => p.id));
-      return { students, plans: active, links, names, pending, sessions };
+      const [sessions, lessons] = await Promise.all([
+        listSessionsForPlans(active.map((p) => p.id)), listLessonsForPlans(active.map((p) => p.id)),
+      ]);
+      return { students, plans: active, links, names, pending, sessions, lessons };
     },
   });
 
   const rows = useMemo(() => {
     if (!data.data) return [];
-    const { students, plans, links, names, pending, sessions } = data.data;
+    const { students, plans, links, names, pending, sessions, lessons } = data.data;
     const mine = mode === "teacher" ? new Set(links.map((l) => l.student_id)) : null;
     return students
       .filter((s) => !mine || mine.has(s.id))
@@ -40,6 +43,7 @@ export function StudentClassList({ mode }: { mode: "admin" | "teacher" }) {
         }) : null;
         return {
           ...s, plan, sum,
+          next: plan ? nextLesson(lessons.filter((l) => l.plan_id === plan.id)) : null,
           teachers: links.filter((l) => l.student_id === s.id).map((l) => names[l.teacher_id] ?? "Teacher"),
           toReview: pending.filter((p) => p.student_id === s.id).length,
         };
@@ -52,9 +56,9 @@ export function StudentClassList({ mode }: { mode: "admin" | "teacher" }) {
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Clases y horas</h1>
+          <h1 className="text-2xl font-bold">{title ?? (mode === "admin" ? "Alumnos y clases" : "Mis alumnos")}</h1>
           <p className="text-sm text-muted-foreground">
-            {mode === "admin" ? "Planes, horas, lecciones y tareas de cada alumno." : "Tus alumnos asignados, su lección y tareas por revisar."}
+            {subtitle ?? (mode === "admin" ? "Abre un alumno para ponerle los labs de su próxima clase." : "Abre a tu alumno, da la clase con su lab y regístrala al terminar.")}
           </p>
         </div>
         <div className="relative w-full sm:w-72">
@@ -67,7 +71,7 @@ export function StudentClassList({ mode }: { mode: "admin" | "teacher" }) {
       {data.error && <p className="text-sm text-destructive">{(data.error as Error).message}</p>}
       {data.data && rows.length === 0 && (
         <Card className="p-8 text-center text-sm text-muted-foreground">
-          {mode === "teacher" ? "Aún no tienes alumnos asignados. El admin te los asigna desde Clases y horas." : "No hay alumnos todavía. Créalos en Students."}
+          {mode === "teacher" ? "Aún no tienes alumnos asignados. El admin te los asigna desde Alumnos y clases." : "No hay alumnos todavía. Créalos en Students."}
         </Card>
       )}
 
@@ -92,6 +96,11 @@ export function StudentClassList({ mode }: { mode: "admin" | "teacher" }) {
                 )}
                 {r.toReview > 0 && <Badge>{r.toReview} por revisar</Badge>}
               </div>
+              {r.plan && (
+                <p className="mt-3 rounded-md bg-muted px-2.5 py-1.5 text-sm">
+                  {r.next ? <>Próxima clase: <b>{r.next.title}</b></> : "Todas las lecciones del mes terminadas"}
+                </p>
+              )}
               {r.sum && (
                 <div className="mt-3 space-y-1 text-sm">
                   <div className="flex items-center gap-2">

@@ -360,6 +360,41 @@ export type Database = {
           },
         ]
       }
+      class_lesson_messages: {
+        Row: {
+          author_id: string
+          body: string
+          created_at: string
+          id: string
+          lesson_id: string
+          student_id: string
+        }
+        Insert: {
+          author_id?: string
+          body: string
+          created_at?: string
+          id?: string
+          lesson_id: string
+          student_id: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_lesson_messages_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "class_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       class_lessons: {
         Row: {
           completed_at: string | null
