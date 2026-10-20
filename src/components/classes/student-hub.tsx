@@ -9,12 +9,14 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
 import {
   type ClassLesson, type HomeworkSubmission, listPlans, listLessons, listSessions, listSubmissions,
-  uploadSubmission, slidesEmbed, homeworkState, HW_LABEL, signedShot,
+  uploadSubmission, slidesEmbed, homeworkState, HW_LABEL, signedShot, nextLesson,
 } from "@/lib/classes";
+import { Link } from "@tanstack/react-router";
+import { LessonThread, AnnouncementBanner } from "./lesson-thread";
 import { PLAN_RULES, hoursSummary, monthLabel } from "@/lib/plans";
 import { OpenLabButton } from "./lab-frame";
 
-export function StudentHub() {
+export function StudentHub({ view = "class" }: { view?: "class" | "tasks" }) {
   const { user, profile } = useAuth();
   const sid = user?.id ?? "";
   const plansQ = useQuery({ queryKey: ["classes", "plans", sid], queryFn: () => listPlans(sid), enabled: !!sid });
@@ -25,7 +27,8 @@ export function StudentHub() {
 
   const lessons = lessonsQ.data ?? [];
   const homework = lessons.filter((l) => l.homework_active && (l.homework_lab_file_id || l.homework_lab_ref));
-  const current = [...lessons].reverse().find((l) => l.slides_url) ?? null;
+  const next = nextLesson(lessons);
+  const current = (next?.slides_url ? next : null) ?? [...lessons].reverse().find((l) => l.slides_url) ?? null;
   const slidesUrl = current?.slides_url ?? plan?.slides_url ?? null;
   const embed = slidesEmbed(slidesUrl);
   const sum = plan ? hoursSummary({
@@ -38,13 +41,14 @@ export function StudentHub() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Hola, {profile?.full_name?.split(" ")[0] ?? "👋"}</h1>
-        <p className="text-sm text-muted-foreground">Tu presentación, tus tareas y tus horas del mes.</p>
+        <h1 className="text-2xl font-bold">{view === "tasks" ? "Mis tareas" : `Hola, ${profile?.full_name?.split(" ")[0] ?? ""}`}</h1>
+        <p className="text-sm text-muted-foreground">{view === "tasks" ? "Abre el lab, hazlo y sube la captura de tus resultados." : "Tu próxima clase, tus slides y tus horas del mes."}</p>
       </div>
+      {view === "class" && <AnnouncementBanner />}
 
       {!plan && <Card className="p-8 text-center text-sm text-muted-foreground">Tu plan de clases aparecerá aquí cuando tu teacher lo active.</Card>}
 
-      {plan && sum && (
+      {view === "class" && plan && sum && (
         <Card className="grid gap-4 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
           <div className="min-w-0 space-y-2">
             <p className="text-sm text-muted-foreground">{PLAN_RULES[plan.plan_key].name} · {monthLabel(plan.month)}</p>
@@ -60,7 +64,21 @@ export function StudentHub() {
         </Card>
       )}
 
-      {embed && (
+      {view === "class" && next && (
+        <Card className="space-y-3 border-primary/40 p-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-primary">Próxima clase</p>
+              <p className="text-lg font-bold">{next.title}</p>
+            </div>
+            {homework.length > 0 && <Button asChild variant="outline" size="sm"><Link to="/student/tasks">Ver mis tareas ({homework.filter((l) => homeworkState(l, subsQ.data ?? []) !== "done").length} pendientes)</Link></Button>}
+          </div>
+          {next.notes && <p className="whitespace-pre-wrap text-sm text-muted-foreground">{next.notes}</p>}
+          <LessonThread lesson={next} />
+        </Card>
+      )}
+
+      {view === "class" && embed && (
         <Card className="overflow-hidden p-0">
           <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-2">
             <p className="truncate text-sm font-medium">{current?.title ?? "Presentación"}</p>
@@ -72,9 +90,8 @@ export function StudentHub() {
         </Card>
       )}
 
-      {plan && (
+      {view === "tasks" && plan && (
         <div className="space-y-3">
-          <h2 className="text-lg font-semibold">Tareas</h2>
           {homework.length === 0 && <Card className="p-6 text-center text-sm text-muted-foreground">No tienes tareas activas por ahora.</Card>}
           <div className="grid gap-3 md:grid-cols-2">
             {homework.map((l) => <HomeworkCard key={l.id} lesson={l} subs={(subsQ.data ?? []).filter((s) => s.lesson_id === l.id)} />)}
@@ -82,10 +99,14 @@ export function StudentHub() {
         </div>
       )}
 
-      {lessons.some((l) => l.notes || l.material_url) && (
+      {view === "tasks" && (
+        <p className="text-sm text-muted-foreground">¿Te asignaron un lab extra del catálogo? Está en <Link to="/student/labs" className="text-primary underline">labs extra</Link>.</p>
+      )}
+
+      {view === "class" && lessons.some((l) => l.id !== next?.id && (l.notes || l.material_url)) && (
         <div className="space-y-3">
           <h2 className="text-lg font-semibold">Comentarios y material de tus clases</h2>
-          {lessons.filter((l) => l.notes || l.material_url).map((l) => (
+          {lessons.filter((l) => l.id !== next?.id && (l.notes || l.material_url)).map((l) => (
             <Card key={l.id} className="p-4 text-sm">
               <p className="font-medium">{l.title}</p>
               {l.notes && <p className="mt-1 whitespace-pre-wrap text-muted-foreground">{l.notes}</p>}
