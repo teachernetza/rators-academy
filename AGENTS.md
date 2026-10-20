@@ -4,3 +4,4 @@
 - The staff-only "class lab" lives in `class_lesson_labs`, separate from `class_lessons`, because RLS cannot hide columns from students.
 - Uploaded lab HTML is rendered via iframe `srcdoc` with sandbox (no allow-same-origin). Why: untrusted HTML must not reach the app session.
 - Plan/hour rules live in `src/lib/plans.ts` with tests in `src/lib/plans.test.ts`.
+- Teacher↔student lesson messages live in `class_lesson_messages` (not `lesson_comments`, which belongs to the legacy courses). Nav is class-centric; legacy pages stay routable but unlisted. Why: one simple flow around the next lesson.
