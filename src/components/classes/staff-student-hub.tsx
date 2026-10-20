@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
-  ArrowLeft, Plus, Clock, Trash2, Pencil, CheckCircle2, Loader2, Presentation, FileText, X, CalendarClock, Image as ImageIcon,
+  ArrowLeft, Plus, Clock, Trash2, Pencil, CheckCircle2, Loader2, Presentation, FileText, X, CalendarClock, Image as ImageIcon, Upload,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
@@ -20,11 +20,12 @@ import {
   getProfileName, listPlans, listLessons, listSessions, addSession, deleteSession, createPlan, updatePlan,
   updateLesson, addLesson, deleteLesson, listClassLabs, setClassLab, listLabFiles, listSubmissions,
   reviewSubmission, signedShot, listStudentTeachers, listTeachers, assignTeacher, unassignTeacher, staffNames,
-  homeworkState, HW_LABEL, catalogLab, deletePlan,
+  homeworkState, HW_LABEL, catalogLab, deletePlan, nextLesson,
 } from "@/lib/classes";
 import { PLAN_RULES, hoursSummary, currentMonth, nextMonth, monthLabel, carryOver, type PlanKey } from "@/lib/plans";
 import { ALL_LABS } from "@/lib/labs";
 import { OpenLabButton } from "./lab-frame";
+import { LessonThread } from "./lesson-thread";
 
 type Mode = "admin" | "teacher";
 
@@ -411,77 +412,16 @@ function Stat({ label, value, hint }: { label: string; value: string; hint?: str
   );
 }
 
-/* ---------------- Registro de horas ---------------- */
-function SessionsPanel({ plan, lessons, sessions, isAdmin, userId, teacherIds, names, onChanged }: {
-  plan: StudentPlan; lessons: ClassLesson[]; sessions: { id: string; session_date: string; hours: number; comment: string | null; teacher_id: string; lesson_id: string | null }[];
-  isAdmin: boolean; userId: string; teacherIds: string[]; names: Record<string, string>; onChanged: () => void;
+/* ---------------- Historial de horas ---------------- */
+function SessionsPanel({ lessons, sessions, isAdmin, userId, closed, names, onChanged }: {
+  lessons: ClassLesson[]; sessions: { id: string; session_date: string; hours: number; comment: string | null; teacher_id: string; lesson_id: string | null }[];
+  isAdmin: boolean; userId: string; closed: boolean; names: Record<string, string>; onChanged: () => void;
 }) {
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
-  const [hours, setHours] = useState("1");
-  const [lessonId, setLessonId] = useState<string>("none");
-  const [comment, setComment] = useState("");
-  const [teacherId, setTeacherId] = useState<string>(isAdmin ? (teacherIds[0] ?? userId) : userId);
-  useEffect(() => { if (isAdmin && teacherIds[0]) setTeacherId(teacherIds[0]); }, [isAdmin, teacherIds.join()]);
-  const [busy, setBusy] = useState(false);
-  const closed = plan.status === "closed";
-
-  const save = async () => {
-    const h = Number(hours);
-    if (!(h > 0 && h <= 8)) return toast.error("Horas entre 0.5 y 8");
-    setBusy(true);
-    try {
-      await addSession({
-        plan_id: plan.id, student_id: plan.student_id, teacher_id: teacherId, session_date: date, hours: h,
-        lesson_id: lessonId === "none" ? null : lessonId, comment: comment.trim() || null,
-      });
-      toast.success("Clase registrada"); setComment(""); onChanged();
-    } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
-  };
-
   return (
     <Card className="space-y-4 p-4">
-      <h2 className="flex items-center gap-2 text-lg font-semibold"><Clock className="h-5 w-5 text-primary" />Confirmar clase</h2>
-      {!closed ? (
-        <div className="space-y-3">
-          <div className="grid grid-cols-2 gap-2">
-            <div><Label>Fecha</Label><Input type="date" value={date} onChange={(e) => setDate(e.target.value)} /></div>
-            <div>
-              <Label>Horas</Label>
-              <Select value={hours} onValueChange={setHours}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>{["0.5", "1", "1.5", "2", "2.5", "3", "4"].map((h) => <SelectItem key={h} value={h}>{h} h</SelectItem>)}</SelectContent>
-              </Select>
-            </div>
-          </div>
-          <div>
-            <Label>Lección vista</Label>
-            <Select value={lessonId} onValueChange={setLessonId}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">Sin lección específica</SelectItem>
-                {lessons.map((l) => <SelectItem key={l.id} value={l.id}>{l.title}</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </div>
-          {isAdmin && (
-            <div>
-              <Label>Teacher que dio la clase</Label>
-              <Select value={teacherId} onValueChange={setTeacherId}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={userId}>Yo (admin)</SelectItem>
-                  {teacherIds.filter((t) => t !== userId).map((t) => <SelectItem key={t} value={t}>{names[t] ?? "Teacher"}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-          <div><Label>Comentario</Label><Textarea rows={2} placeholder="Qué se vio, avances, acuerdos…" value={comment} onChange={(e) => setComment(e.target.value)} /></div>
-          <Button className="w-full" onClick={save} disabled={busy}>{busy && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}Confirmar horas</Button>
-        </div>
-      ) : <p className="text-sm text-muted-foreground">Este mes está cerrado.</p>}
-
+      <h2 className="flex items-center gap-2 text-lg font-semibold"><Clock className="h-5 w-5 text-primary" />Clases registradas</h2>
+      {closed && <p className="text-sm text-muted-foreground">Este mes está cerrado.</p>}
       <div className="space-y-2">
-        <p className="text-sm font-medium">Historial del mes</p>
         {sessions.length === 0 && <p className="text-sm text-muted-foreground">Sin clases registradas.</p>}
         {sessions.map((s) => {
           const canDelete = isAdmin || (s.teacher_id === userId && !closed);
