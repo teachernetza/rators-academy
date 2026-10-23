@@ -94,7 +94,7 @@ export function StudentClassList({ mode, title, subtitle }: { mode: "admin" | "t
                 ) : (
                   <Badge variant="outline">Sin plan {currentMonth().slice(0, 7)}</Badge>
                 )}
-                {r.toReview > 0 && <Badge>{r.toReview} por revisar</Badge>}
+                {r.toReview > 0 && <Badge>{r.toReview} evidencias por revisar</Badge>}
               </div>
               {r.plan && (
                 <p className="mt-3 rounded-md bg-muted px-2.5 py-1.5 text-sm">
@@ -103,9 +103,9 @@ export function StudentClassList({ mode, title, subtitle }: { mode: "admin" | "t
               )}
               {r.sum && (
                 <div className="mt-3 space-y-1 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-primary" />
-                    <span><b>{r.sum.given}</b> / {r.sum.total} h dadas</span>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="flex items-center gap-2"><Clock className="h-4 w-4 text-primary" /><span><b>{r.sum.given}</b> / {r.sum.total} h dadas</span></span>
+                    <span className="text-xs font-semibold text-primary">Quedan {r.sum.remaining} h</span>
                   </div>
                   <div className="h-2 overflow-hidden rounded-full bg-muted">
                     <div className="h-full bg-primary" style={{ width: `${Math.min(100, (r.sum.given / Math.max(1, r.sum.total)) * 100)}%` }} />
