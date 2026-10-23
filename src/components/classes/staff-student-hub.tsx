@@ -226,18 +226,23 @@ function PlanView({ plan, isAdmin, userId, onChanged, onSelect }: {
               <LessonCard key={l.id} lesson={l} isAdmin={isAdmin}
                 classLab={(labsQ.data ?? []).find((c) => c.lesson_id === l.id) ?? null}
                 subs={(subsQ.data ?? []).filter((s) => s.lesson_id === l.id)}
-                files={filesQ.data ?? []} onChanged={onChanged} />
+                files={filesQ.data ?? []} sessions={sessionsQ.data ?? []} names={namesQ.data ?? {}} onChanged={onChanged} />
             ))}
           </div>
         </details>
 
         <div className="min-w-0 space-y-3">
-          {next && (subsQ.data ?? []).some((s) => s.lesson_id === next.id) && (
-            <Card className="space-y-2 p-4">
-              <p className="font-semibold">Capturas de {next.title}</p>
-              {(subsQ.data ?? []).filter((s) => s.lesson_id === next.id).map((s) => <SubmissionRow key={s.id} sub={s} onChanged={onChanged} />)}
-            </Card>
-          )}
+          {(() => {
+            const ids = new Set(lessons.map((l) => l.id));
+            const pend = (subsQ.data ?? []).filter((s) => ids.has(s.lesson_id) && (s.status === "submitted" || s.lesson_id === next?.id));
+            if (!pend.length) return null;
+            return (
+              <Card className="space-y-2 border-primary/40 p-4">
+                <p className="flex items-center gap-2 font-semibold"><ImageIcon className="h-5 w-5 text-primary" />Evidencias por revisar ({pend.filter((s) => s.status === "submitted").length})</p>
+                {pend.map((s) => <SubmissionRow key={s.id} sub={s} onChanged={onChanged} title={lessons.find((l) => l.id === s.lesson_id)?.title} />)}
+              </Card>
+            );
+          })()}
           <SessionsPanel lessons={lessons} sessions={sessionsQ.data ?? []} isAdmin={isAdmin} userId={userId}
             closed={closed} names={namesQ.data ?? {}} onChanged={onChanged} />
           {isAdmin && (
