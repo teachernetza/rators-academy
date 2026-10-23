@@ -184,12 +184,28 @@ export async function uploadSubmission(lesson: ClassLesson, file: File, note: st
     lesson_id: lesson.id, student_id: lesson.student_id, screenshot_path: path, student_note: note || null,
   }));
 }
+/** Sube varias capturas a la vez; la nota va solo en la primera. */
+export async function uploadSubmissions(lesson: ClassLesson, files: File[], note: string | null) {
+  for (let i = 0; i < files.length; i++) await uploadSubmission(lesson, files[i], i === 0 ? note : null);
+}
+export async function getLesson(id: string) {
+  return check(await db.from("class_lessons").select("*").eq("id", id).maybeSingle()) as ClassLesson | null;
+}
+export async function listStudentSessions(studentId: string) {
+  return check(await db.from("class_sessions").select("*").eq("student_id", studentId).order("session_date", { ascending: false })) as ClassSession[];
+}
 export async function reviewSubmission(id: string, status: "reviewed" | "done", feedback: string | null) {
   check(await db.from("homework_submissions").update({ status, feedback }).eq("id", id));
 }
 export async function signedShot(path: string) {
   const r = await supabase.storage.from("homework-shots").createSignedUrl(path, 3600);
   return r.data?.signedUrl ?? null;
+}
+/** Asegura que el HTML del lab se escale al ancho de la pantalla. */
+export function withViewport(html: string) {
+  if (/<meta[^>]+name=["']?viewport/i.test(html)) return html;
+  const tag = '<meta name="viewport" content="width=device-width, initial-scale=1">';
+  return /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, (m) => m + tag) : tag + html;
 }
 
 /* ---------- Utilidades ---------- */
@@ -218,7 +234,7 @@ export function homeworkState(lesson: ClassLesson, subs: HomeworkSubmission[]) {
   return "pending" as const;
 }
 
-export const HW_LABEL = { pending: "Pendiente", submitted: "Entregada", reviewed: "Revisada", done: "Terminada" } as const;
+export const HW_LABEL = { pending: "Sin evidencia", submitted: "Entregada", reviewed: "Corregir", done: "Terminada" } as const;
 
 /** Primera lección pendiente (en orden) = la próxima clase. */
 export function nextLesson(lessons: ClassLesson[]) {
