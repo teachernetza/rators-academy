@@ -26,6 +26,7 @@ import { Route as AdminLabsRouteImport } from './routes/admin/labs'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminStudentsRouteImport } from './routes/admin/students'
 import { Route as AdminTeachersRouteImport } from './routes/admin/teachers'
+import { Route as LabLabFileIdRouteImport } from './routes/lab.$labFileId'
 import { Route as LabsIndexRouteImport } from './routes/labs.index'
 import { Route as StudentActivitiesRouteImport } from './routes/student/activities'
 import { Route as StudentCatalogRouteImport } from './routes/student/catalog'
@@ -146,6 +147,11 @@ const AdminStudentsRoute = AdminStudentsRouteImport.update({
 const AdminTeachersRoute = AdminTeachersRouteImport.update({
   id: '/admin/teachers',
   path: '/admin/teachers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LabLabFileIdRoute = LabLabFileIdRouteImport.update({
+  id: '/lab/$labFileId',
+  path: '/lab/$labFileId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LabsIndexRoute = LabsIndexRouteImport.update({
@@ -349,6 +355,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/teachers': typeof AdminTeachersRoute
+  '/lab/$labFileId': typeof LabLabFileIdRoute
   '/student/activities': typeof StudentActivitiesRouteWithChildren
   '/student/catalog': typeof StudentCatalogRoute
   '/student/certificates': typeof StudentCertificatesRouteWithChildren
@@ -404,6 +411,7 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/teachers': typeof AdminTeachersRoute
+  '/lab/$labFileId': typeof LabLabFileIdRoute
   '/student/activities': typeof StudentActivitiesRouteWithChildren
   '/student/catalog': typeof StudentCatalogRoute
   '/student/certificates': typeof StudentCertificatesRouteWithChildren
@@ -460,6 +468,7 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/teachers': typeof AdminTeachersRoute
+  '/lab/$labFileId': typeof LabLabFileIdRoute
   '/student/activities': typeof StudentActivitiesRouteWithChildren
   '/student/catalog': typeof StudentCatalogRoute
   '/student/certificates': typeof StudentCertificatesRouteWithChildren
@@ -517,6 +526,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/students'
     | '/admin/teachers'
+    | '/lab/$labFileId'
     | '/student/activities'
     | '/student/catalog'
     | '/student/certificates'
@@ -572,6 +582,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/students'
     | '/admin/teachers'
+    | '/lab/$labFileId'
     | '/student/activities'
     | '/student/catalog'
     | '/student/certificates'
@@ -627,6 +638,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/students'
     | '/admin/teachers'
+    | '/lab/$labFileId'
     | '/student/activities'
     | '/student/catalog'
     | '/student/certificates'
@@ -683,6 +695,7 @@ export interface RootRouteChildren {
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminStudentsRoute: typeof AdminStudentsRoute
   AdminTeachersRoute: typeof AdminTeachersRoute
+  LabLabFileIdRoute: typeof LabLabFileIdRoute
   StudentActivitiesRoute: typeof StudentActivitiesRouteWithChildren
   StudentCatalogRoute: typeof StudentCatalogRoute
   StudentCertificatesRoute: typeof StudentCertificatesRouteWithChildren
@@ -832,6 +845,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/teachers'
       fullPath: '/admin/teachers'
       preLoaderRoute: typeof AdminTeachersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lab/$labFileId': {
+      id: '/lab/$labFileId'
+      path: '/lab/$labFileId'
+      fullPath: '/lab/$labFileId'
+      preLoaderRoute: typeof LabLabFileIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/labs/': {
@@ -1200,6 +1220,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminSettingsRoute: AdminSettingsRoute,
   AdminStudentsRoute: AdminStudentsRoute,
   AdminTeachersRoute: AdminTeachersRoute,
+  LabLabFileIdRoute: LabLabFileIdRoute,
   StudentActivitiesRoute: StudentActivitiesRouteWithChildren,
   StudentCatalogRoute: StudentCatalogRoute,
   StudentCertificatesRoute: StudentCertificatesRouteWithChildren,
