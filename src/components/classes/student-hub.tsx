@@ -9,7 +9,7 @@ import { Loader2, MessageSquare, ExternalLink, CheckCircle2, AlertCircle, Calend
 import { useAuth } from "@/lib/auth";
 import {
   type ClassLesson, type HomeworkSubmission, listPlans, listLessons, listSessions, listSubmissions,
-  slidesEmbed, homeworkState, HW_LABEL, signedShot, nextLesson, staffNames, listStudentSessions, catalogLab,
+  slidesEmbed, homeworkState, HW_LABEL, signedShot, nextLesson, staffNames, listStudentSessions, catalogLab, listLessonLabs, type LessonLabItem,
 } from "@/lib/classes";
 import { LessonThread, AnnouncementBanner } from "./lesson-thread";
 import { PLAN_RULES, hoursSummary, monthLabel } from "@/lib/plans";
@@ -28,6 +28,8 @@ export function StudentHub({ view = "class" }: { view?: "class" | "tasks" }) {
   const historyQ = useQuery({ queryKey: ["classes", "history", sid], queryFn: () => listStudentSessions(sid), enabled: !!sid && view === "class" });
   const subsQ = useQuery({ queryKey: ["classes", "subs", sid], queryFn: () => listSubmissions(sid), enabled: !!sid });
   const namesQ = useQuery({ queryKey: ["classes", "staffnames"], queryFn: staffNames });
+  const extrasQ = useQuery({ queryKey: ["classes", "lessonlabs", sid], queryFn: () => listLessonLabs(sid), enabled: !!sid });
+  const extras = extrasQ.data ?? [];
   const allLessonsQ = useQuery({ queryKey: ["classes", "alllessons", sid], queryFn: async () => {
     const plans = plansQ.data ?? [];
     return (await Promise.all(plans.map((p) => listLessons(p.id)))).flat();
@@ -35,7 +37,7 @@ export function StudentHub({ view = "class" }: { view?: "class" | "tasks" }) {
 
   const lessons = lessonsQ.data ?? [];
   const subs = subsQ.data ?? [];
-  const homework = lessons.filter((l) => l.homework_active && (l.homework_lab_file_id || l.homework_lab_ref));
+  const homework = lessons.filter((l) => l.homework_active && (l.homework_lab_file_id || l.homework_lab_ref || extras.some((i) => i.lesson_id === l.id)));
   const missing = homework.filter((l) => homeworkState(l, subs) === "pending" || homeworkState(l, subs) === "reviewed");
   const next = nextLesson(lessons);
   const current = (next?.slides_url ? next : null) ?? [...lessons].reverse().find((l) => l.slides_url) ?? null;
@@ -134,7 +136,7 @@ export function StudentHub({ view = "class" }: { view?: "class" | "tasks" }) {
         <div className="space-y-3">
           {homework.length === 0 && <Card className="p-6 text-center text-sm text-muted-foreground">No tienes tareas activas por ahora.</Card>}
           <div className="grid gap-3 md:grid-cols-2">
-            {homework.map((l) => <HomeworkCard key={l.id} lesson={l} subs={subs.filter((s) => s.lesson_id === l.id)} />)}
+            {homework.map((l) => <HomeworkCard key={l.id} lesson={l} subs={subs.filter((s) => s.lesson_id === l.id)} extras={extras.filter((i) => i.lesson_id === l.id)} />)}
           </div>
         </div>
       )}
@@ -172,7 +174,7 @@ function Shot({ path }: { path: string }) {
   );
 }
 
-function HomeworkCard({ lesson, subs }: { lesson: ClassLesson; subs: HomeworkSubmission[] }) {
+function HomeworkCard({ lesson, subs, extras }: { lesson: ClassLesson; subs: HomeworkSubmission[]; extras: LessonLabItem[] }) {
   const state = homeworkState(lesson, subs);
   const fb = subs.find((s) => s.feedback);
   return (
@@ -192,6 +194,11 @@ function HomeworkCard({ lesson, subs }: { lesson: ClassLesson; subs: HomeworkSub
       {subs.length > 0 && <div className="grid grid-cols-3 gap-2">{subs.slice(0, 6).map((s) => <Shot key={s.id} path={s.screenshot_path} />)}</div>}
       <div className="mt-auto space-y-2">
         <OpenLabButton labFileId={lesson.homework_lab_file_id} labRef={lesson.homework_lab_ref} lessonId={lesson.id} label="Hacer lab" size="default" variant="outline" />
+        {extras.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {extras.map((i, n) => <OpenLabButton key={i.id} labFileId={i.lab_file_id} lessonId={lesson.id} label={`Lab ${n + (lesson.homework_lab_file_id || lesson.homework_lab_ref ? 2 : 1)}`} variant="outline" />)}
+          </div>
+        )}
         {state !== "done" && <EvidenceUpload lesson={lesson} />}
       </div>
     </Card>

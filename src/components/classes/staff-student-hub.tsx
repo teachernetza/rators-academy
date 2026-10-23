@@ -27,6 +27,8 @@ import { ALL_LABS } from "@/lib/labs";
 import { OpenLabButton } from "./lab-frame";
 import { LessonThread } from "./lesson-thread";
 import { StudentInfoCard } from "./student-info-card";
+import { LessonLabs, lessonLabsKey } from "./lesson-labs";
+import { listLessonLabs } from "@/lib/classes";
 
 type Mode = "admin" | "teacher";
 
@@ -266,6 +268,7 @@ function NextLessonPanel({ lesson, plan, isAdmin, userId, classLab, files, teach
   const [hw, setHw] = useState(toVal(lesson.homework_lab_file_id, lesson.homework_lab_ref));
   const [busy, setBusy] = useState(false);
   const [logOpen, setLogOpen] = useState(false);
+  const extraQ = useQuery({ queryKey: lessonLabsKey(lesson.student_id), queryFn: () => listLessonLabs(lesson.student_id) });
   useEffect(() => {
     setTitle(lesson.title); setSlides(lesson.slides_url ?? "");
     setCls(toVal(classLab?.lab_file_id, classLab?.lab_ref)); setHw(toVal(lesson.homework_lab_file_id, lesson.homework_lab_ref));
@@ -325,10 +328,12 @@ function NextLessonPanel({ lesson, plan, isAdmin, userId, classLab, files, teach
         </div>
       )}
 
+      <LessonLabs lesson={lesson} files={files} userId={userId} />
+
       <LessonThread lesson={lesson} />
 
       <RegisterClassDialog open={logOpen} onOpenChange={setLogOpen} lesson={lesson} plan={plan} isAdmin={isAdmin} userId={userId}
-        teacherIds={teacherIds} names={names} labTitle={classLabName} hasHomework={!!(lesson.homework_lab_file_id || lesson.homework_lab_ref)} onChanged={onChanged} />
+        teacherIds={teacherIds} names={names} labTitle={classLabName} hasHomework={!!(lesson.homework_lab_file_id || lesson.homework_lab_ref) || (extraQ.data ?? []).some((i) => i.lesson_id === lesson.id && i.kind === "homework")} onChanged={onChanged} />
     </Card>
   );
 }
@@ -567,6 +572,7 @@ function LessonCard({ lesson, isAdmin, classLab, subs, files, sessions, names, o
   sessions: { session_date: string; teacher_id: string; lesson_id: string | null; hours: number }[];
   names: Record<string, string>; onChanged: () => void;
 }) {
+  const { user } = useAuth();
   const [edit, setEdit] = useState(false);
   const [openBody, setOpenBody] = useState(false);
   const [notes, setNotes] = useState(lesson.notes ?? "");
@@ -625,7 +631,8 @@ function LessonCard({ lesson, isAdmin, classLab, subs, files, sessions, names, o
           <p className="mt-1 truncate text-sm">{hwName ?? "Sin asignar"}</p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <OpenLabButton labFileId={lesson.homework_lab_file_id} labRef={lesson.homework_lab_ref} label="Ver" variant="outline" />
-            {hasHomework && (
+            {(
+
               <label className="flex items-center gap-2 text-sm">
                 <Switch checked={lesson.homework_active} onCheckedChange={(v) => run(() => updateLesson(lesson.id, { homework_active: v }), v ? "Tarea activada para el alumno" : "Tarea oculta")} />
                 {lesson.homework_active ? "Activa" : "Inactiva"}
@@ -634,6 +641,8 @@ function LessonCard({ lesson, isAdmin, classLab, subs, files, sessions, names, o
           </div>
         </div>
       </div>
+      {user && <LessonLabs lesson={lesson} files={files} userId={user.id} />}
+
 
       <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] sm:items-end">
         <div><Label className="text-xs">Comentarios / material de la clase</Label><Textarea rows={1} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Visible para el alumno" /></div>

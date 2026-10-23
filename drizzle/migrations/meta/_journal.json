@@ -29,6 +29,13 @@
       "when": 1792535579704,
       "tag": "0003_student_private_profile",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792725086541,
+      "tag": "0004_class_lesson_lab_items",
+      "breakpoints": true
     }
   ]
 }

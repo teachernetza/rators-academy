@@ -7,3 +7,4 @@
 - Teacher↔student lesson messages live in `class_lesson_messages` (not `lesson_comments`, which belongs to the legacy courses). Nav is class-centric; legacy pages stay routable but unlisted. Why: one simple flow around the next lesson.
 - Uploaded labs open in their own full-tab route `/lab/$labFileId` (optional `?lesson=` lets the student upload evidence from the lab bar). Why: labs need the whole screen; the sandboxed srcdoc rule still applies.
 - Homework state comes only from submissions (`homeworkState`, tested in `src/lib/homework-state.test.ts`); marking a lesson done never closes its homework. Why: students must still be able to send evidence after class.
+- Extra labs per class (one or more, class/homework) live in `class_lesson_lab_items`; admins and assigned teachers add them, students see homework items only once the lesson's homework is active. The original single lab fields stay as the main lab. Why: additive change, no data migration risk.

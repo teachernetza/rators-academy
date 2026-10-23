@@ -1,6 +1,7 @@
 # Several labs per class
 
 ## What changes
+
 - Each class can have **one or more Class Labs** (staff only) and **one or more Homework Labs** (the student sees them).
 - In the student's file, every class gets an **"Assign lab"** button for admins and teachers. It opens a list of the labs already uploaded to the app, filtered by level, with a search box. You can tick several at once and choose Class or Homework.
 - Assigned labs show up as small cards inside the class, each with "Open" (full tab) and "Remove".
@@ -9,6 +10,7 @@
 - The labs already attached to classes carry over automatically.
 
 ## Technical details
+
 - New table `class_lesson_lab_items` (lesson_id, student_id, lab_file_id, kind 'class'|'homework', position, added_by), with GRANT + RLS:
   - staff (`can_manage_student`) can read, add and delete;
   - students can read only `kind='homework'` rows that belong to them.

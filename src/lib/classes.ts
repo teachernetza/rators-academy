@@ -129,6 +129,22 @@ export async function setClassLab(lesson: ClassLesson, lab_file_id: string | nul
   }));
 }
 
+/* ---------- Labs extra por lección (uno o más) ---------- */
+export type LessonLabItem = { id: string; lesson_id: string; student_id: string; lab_file_id: string; kind: "class" | "homework"; position: number };
+export async function listLessonLabs(studentId: string) {
+  return check(await db.from("class_lesson_lab_items").select("*").eq("student_id", studentId).order("position").order("created_at")) as LessonLabItem[];
+}
+export async function addLessonLabs(lesson: Pick<ClassLesson, "id" | "student_id">, labFileIds: string[], kind: "class" | "homework", addedBy: string) {
+  if (!labFileIds.length) return;
+  check(await db.from("class_lesson_lab_items").upsert(
+    labFileIds.map((lab_file_id, i) => ({ lesson_id: lesson.id, student_id: lesson.student_id, lab_file_id, kind, position: i, added_by: addedBy })),
+    { onConflict: "lesson_id,lab_file_id,kind", ignoreDuplicates: true },
+  ));
+}
+export async function removeLessonLab(id: string) {
+  check(await db.from("class_lesson_lab_items").delete().eq("id", id));
+}
+
 /* ---------- Sesiones / horas ---------- */
 export async function listSessions(planId: string) {
   return check(await db.from("class_sessions").select("*").eq("plan_id", planId).order("session_date", { ascending: false })) as ClassSession[];
