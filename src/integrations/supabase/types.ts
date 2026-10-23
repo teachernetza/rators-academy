@@ -324,6 +324,54 @@ export type Database = {
         }
         Relationships: []
       }
+      class_lesson_lab_items: {
+        Row: {
+          added_by: string | null
+          created_at: string
+          id: string
+          kind: string
+          lab_file_id: string
+          lesson_id: string
+          position: number
+          student_id: string
+        }
+        Insert: {
+          added_by?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          lab_file_id: string
+          lesson_id: string
+          position?: number
+          student_id: string
+        }
+        Update: {
+          added_by?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          lab_file_id?: string
+          lesson_id?: string
+          position?: number
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_lesson_lab_items_lab_file_id_fkey"
+            columns: ["lab_file_id"]
+            isOneToOne: false
+            referencedRelation: "lab_files"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_lesson_lab_items_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "class_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       class_lesson_labs: {
         Row: {
           lab_file_id: string | null
