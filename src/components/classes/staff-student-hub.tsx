@@ -570,6 +570,7 @@ function LessonCard({ lesson, isAdmin, classLab, subs, files, sessions, names, o
   sessions: { session_date: string; teacher_id: string; lesson_id: string | null; hours: number }[];
   names: Record<string, string>; onChanged: () => void;
 }) {
+  const { user } = useAuth();
   const [edit, setEdit] = useState(false);
   const [openBody, setOpenBody] = useState(false);
   const [notes, setNotes] = useState(lesson.notes ?? "");
@@ -628,7 +629,8 @@ function LessonCard({ lesson, isAdmin, classLab, subs, files, sessions, names, o
           <p className="mt-1 truncate text-sm">{hwName ?? "Sin asignar"}</p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <OpenLabButton labFileId={lesson.homework_lab_file_id} labRef={lesson.homework_lab_ref} label="Ver" variant="outline" />
-            {hasHomework && (
+            {(
+
               <label className="flex items-center gap-2 text-sm">
                 <Switch checked={lesson.homework_active} onCheckedChange={(v) => run(() => updateLesson(lesson.id, { homework_active: v }), v ? "Tarea activada para el alumno" : "Tarea oculta")} />
                 {lesson.homework_active ? "Activa" : "Inactiva"}
