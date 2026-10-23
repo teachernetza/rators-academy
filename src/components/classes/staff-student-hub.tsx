@@ -27,6 +27,7 @@ import { ALL_LABS } from "@/lib/labs";
 import { OpenLabButton } from "./lab-frame";
 import { LessonThread } from "./lesson-thread";
 import { StudentInfoCard } from "./student-info-card";
+import { LessonLabs } from "./lesson-labs";
 
 type Mode = "admin" | "teacher";
 
@@ -324,6 +325,8 @@ function NextLessonPanel({ lesson, plan, isAdmin, userId, classLab, files, teach
           <div className="rounded-lg border border-border p-3"><p className="text-xs text-muted-foreground">Lab de tarea</p><p className="font-medium">{hwName ?? "Sin tarea"}</p></div>
         </div>
       )}
+
+      <LessonLabs lesson={lesson} files={files} userId={userId} />
 
       <LessonThread lesson={lesson} />
 
@@ -634,6 +637,8 @@ function LessonCard({ lesson, isAdmin, classLab, subs, files, sessions, names, o
           </div>
         </div>
       </div>
+      {user && <LessonLabs lesson={lesson} files={files} userId={user.id} />}
+
 
       <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] sm:items-end">
         <div><Label className="text-xs">Comentarios / material de la clase</Label><Textarea rows={1} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Visible para el alumno" /></div>
