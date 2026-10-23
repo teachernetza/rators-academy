@@ -23,7 +23,7 @@ export function OpenLabButton({
   if (!labFileId) return null;
   return (
     <Button asChild size={size} variant={variant}>
-      <Link to="/lab/$labFileId" params={{ labFileId }} search={lessonId ? { lesson: lessonId } : {}} target="_blank">
+      <Link to="/lab/$labFileId" params={{ labFileId }} search={{ lesson: lessonId }} target="_blank">
         <Play className="mr-1 h-4 w-4" />{label}
       </Link>
     </Button>
