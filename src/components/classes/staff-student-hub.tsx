@@ -27,7 +27,8 @@ import { ALL_LABS } from "@/lib/labs";
 import { OpenLabButton } from "./lab-frame";
 import { LessonThread } from "./lesson-thread";
 import { StudentInfoCard } from "./student-info-card";
-import { LessonLabs } from "./lesson-labs";
+import { LessonLabs, lessonLabsKey } from "./lesson-labs";
+import { listLessonLabs } from "@/lib/classes";
 
 type Mode = "admin" | "teacher";
 
@@ -267,6 +268,7 @@ function NextLessonPanel({ lesson, plan, isAdmin, userId, classLab, files, teach
   const [hw, setHw] = useState(toVal(lesson.homework_lab_file_id, lesson.homework_lab_ref));
   const [busy, setBusy] = useState(false);
   const [logOpen, setLogOpen] = useState(false);
+  const extraQ = useQuery({ queryKey: lessonLabsKey(lesson.student_id), queryFn: () => listLessonLabs(lesson.student_id) });
   useEffect(() => {
     setTitle(lesson.title); setSlides(lesson.slides_url ?? "");
     setCls(toVal(classLab?.lab_file_id, classLab?.lab_ref)); setHw(toVal(lesson.homework_lab_file_id, lesson.homework_lab_ref));
@@ -331,7 +333,7 @@ function NextLessonPanel({ lesson, plan, isAdmin, userId, classLab, files, teach
       <LessonThread lesson={lesson} />
 
       <RegisterClassDialog open={logOpen} onOpenChange={setLogOpen} lesson={lesson} plan={plan} isAdmin={isAdmin} userId={userId}
-        teacherIds={teacherIds} names={names} labTitle={classLabName} hasHomework={!!(lesson.homework_lab_file_id || lesson.homework_lab_ref)} onChanged={onChanged} />
+        teacherIds={teacherIds} names={names} labTitle={classLabName} hasHomework={!!(lesson.homework_lab_file_id || lesson.homework_lab_ref) || (extraQ.data ?? []).some((i) => i.lesson_id === lesson.id && i.kind === "homework")} onChanged={onChanged} />
     </Card>
   );
 }
