@@ -29,7 +29,7 @@ function LabPage() {
     <div ref={wrap} className="flex h-dvh w-full flex-col bg-background">
       <div className="flex items-center gap-2 border-b border-border px-3 py-1.5">
         <p className="min-w-0 flex-1 truncate text-sm font-semibold">{labQ.data?.title ?? "Lab"}</p>
-        {lessonQ.data && lessonQ.data.status !== "done" && (
+        {lessonQ.data && lessonQ.data.homework_active && (
           <Button size="sm" onClick={() => setUpload(true)}><Upload className="mr-1 h-4 w-4" />Subir evidencia</Button>
         )}
         <Button size="sm" variant="outline" aria-label="Pantalla completa" onClick={() => wrap.current?.requestFullscreen?.()}>

@@ -226,7 +226,7 @@ export function catalogLab(ref: string | null | undefined) {
 }
 
 export function homeworkState(lesson: ClassLesson, subs: HomeworkSubmission[]) {
-  if (lesson.status === "done") return "done" as const;
+  // La tarea es independiente de la lección: terminar la clase no cierra la tarea.
   const mine = subs.filter((s) => s.lesson_id === lesson.id);
   if (mine.some((s) => s.status === "done")) return "done" as const;
   if (mine.some((s) => s.status === "reviewed")) return "reviewed" as const;
