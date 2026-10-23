@@ -556,11 +556,14 @@ function labName(files: LabFile[], file: string | null | undefined, ref: string 
   return catalogLab(ref)?.title ?? null;
 }
 
-function LessonCard({ lesson, isAdmin, classLab, subs, files, onChanged }: {
+function LessonCard({ lesson, isAdmin, classLab, subs, files, sessions, names, onChanged }: {
   lesson: ClassLesson; isAdmin: boolean; classLab: { lab_file_id: string | null; lab_ref: string | null } | null;
-  subs: HomeworkSubmission[]; files: LabFile[]; onChanged: () => void;
+  subs: HomeworkSubmission[]; files: LabFile[];
+  sessions: { session_date: string; teacher_id: string; lesson_id: string | null; hours: number }[];
+  names: Record<string, string>; onChanged: () => void;
 }) {
   const [edit, setEdit] = useState(false);
+  const [openBody, setOpenBody] = useState(false);
   const [notes, setNotes] = useState(lesson.notes ?? "");
   const [material, setMaterial] = useState(lesson.material_url ?? "");
   useEffect(() => { setNotes(lesson.notes ?? ""); setMaterial(lesson.material_url ?? ""); }, [lesson.id, lesson.notes, lesson.material_url]);
@@ -571,19 +574,29 @@ function LessonCard({ lesson, isAdmin, classLab, subs, files, onChanged }: {
   const hasHomework = !!(lesson.homework_lab_file_id || lesson.homework_lab_ref);
   const classLabName = labName(files, classLab?.lab_file_id, classLab?.lab_ref);
   const hwName = labName(files, lesson.homework_lab_file_id, lesson.homework_lab_ref);
+  const given = sessions.filter((s) => s.lesson_id === lesson.id);
+  const toReview = subs.filter((s) => s.status === "submitted").length;
 
   return (
     <Card className={`space-y-3 p-4 ${lesson.status === "done" ? "border-primary/40 bg-primary/5" : ""}`}>
       <div className="flex flex-wrap items-start justify-between gap-2">
-        <div className="min-w-0">
-          <p className="font-semibold">{lesson.title}</p>
+        <button className="min-w-0 flex-1 text-left" onClick={() => setOpenBody((v) => !v)}>
+          <p className="font-semibold">{lesson.order_index}. {lesson.title}</p>
+          <p className="text-xs text-muted-foreground">
+            {given.length
+              ? given.map((s) => `${new Date(s.session_date + "T00:00:00").toLocaleDateString("es-MX", { day: "numeric", month: "short" })} · ${names[s.teacher_id] ?? "Teacher"} · ${s.hours} h`).join(" | ")
+              : "Aún no se da"}
+          </p>
           <div className="mt-1 flex flex-wrap gap-1.5">
-            <Badge variant={lesson.status === "done" ? "default" : "outline"}>{lesson.status === "done" ? "Lección terminada" : "Lección pendiente"}</Badge>
+            <Badge variant={lesson.status === "done" ? "default" : "outline"}>{lesson.status === "done" ? "Terminada" : "Pendiente"}</Badge>
             {hasHomework && <Badge variant="secondary">Tarea: {HW_LABEL[state]}</Badge>}
+            {toReview > 0 && <Badge>{toReview} por revisar</Badge>}
           </div>
-        </div>
-        <div className="flex gap-1">
-          {isAdmin && <Button size="sm" variant="ghost" onClick={() => setEdit(true)}><Pencil className="mr-1 h-4 w-4" />Editar</Button>}
+        </button>
+        <div className="flex flex-wrap gap-1">
+          <OpenLabButton labFileId={classLab?.lab_file_id} labRef={classLab?.lab_ref} label="Abrir lab" />
+          <Button size="sm" variant="outline" onClick={() => setOpenBody((v) => !v)}><ImageIcon className="mr-1 h-4 w-4" />Evidencias ({subs.length})</Button>
+          {isAdmin && <Button size="sm" variant="ghost" aria-label="Editar" onClick={() => setEdit(true)}><Pencil className="h-4 w-4" /></Button>}
           {isAdmin && (
             <Button size="sm" variant="ghost" aria-label="Borrar lección" onClick={() => confirm("¿Borrar esta lección?") && run(() => deleteLesson(lesson.id))}>
               <Trash2 className="h-4 w-4" />
@@ -592,6 +605,7 @@ function LessonCard({ lesson, isAdmin, classLab, subs, files, onChanged }: {
         </div>
       </div>
 
+      {openBody && (<>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="rounded-lg border border-border p-3">
           <p className="flex items-center gap-1 text-xs font-medium text-muted-foreground"><Presentation className="h-3.5 w-3.5" />Lab de Clase (solo staff)</p>
@@ -622,12 +636,11 @@ function LessonCard({ lesson, isAdmin, classLab, subs, files, onChanged }: {
         <Button size="sm" variant="outline" onClick={() => run(() => updateLesson(lesson.id, { notes: notes.trim() || null, material_url: material.trim() || null }), "Guardado")}>Guardar</Button>
       </div>
 
-      {subs.length > 0 && (
-        <div className="space-y-2">
-          <p className="text-sm font-medium">Capturas del alumno</p>
-          {subs.map((s) => <SubmissionRow key={s.id} sub={s} onChanged={onChanged} />)}
-        </div>
-      )}
+      <div className="space-y-2">
+        <p className="text-sm font-medium">Evidencias del alumno</p>
+        {subs.length === 0 && <p className="text-sm text-muted-foreground">{hasHomework ? (lesson.homework_active ? "El alumno aún no sube evidencia." : "Activa la tarea para que el alumno pueda subir evidencia.") : "Sin lab de tarea."}</p>}
+        {subs.map((s) => <SubmissionRow key={s.id} sub={s} onChanged={onChanged} />)}
+      </div>
 
       <LessonThread lesson={lesson} />
 
@@ -638,34 +651,45 @@ function LessonCard({ lesson, isAdmin, classLab, subs, files, onChanged }: {
           <Button size="sm" onClick={() => run(() => updateLesson(lesson.id, { status: "done" }), "Lección terminada")}><CheckCircle2 className="mr-1 h-4 w-4" />Marcar lección terminada</Button>
         )}
       </div>
+      </>)}
+
 
       {isAdmin && <EditLessonDialog open={edit} onOpenChange={setEdit} lesson={lesson} classLab={classLab} files={files} onChanged={onChanged} />}
     </Card>
   );
 }
 
-function SubmissionRow({ sub, onChanged }: { sub: HomeworkSubmission; onChanged: () => void }) {
+function SubmissionRow({ sub, onChanged, title }: { sub: HomeworkSubmission; onChanged: () => void; title?: string }) {
   const [url, setUrl] = useState<string | null>(null);
+  const [big, setBig] = useState(false);
   const [feedback, setFeedback] = useState(sub.feedback ?? "");
   useEffect(() => { signedShot(sub.screenshot_path).then(setUrl); }, [sub.screenshot_path]);
   const save = async (status: "reviewed" | "done") => {
-    try { await reviewSubmission(sub.id, status, feedback.trim() || null); toast.success(status === "done" ? "Tarea terminada" : "Revisión enviada"); onChanged(); }
+    if (status === "reviewed" && !feedback.trim()) return toast.error("Escribe qué debe corregir el alumno");
+    try { await reviewSubmission(sub.id, status, feedback.trim() || null); toast.success(status === "done" ? "Tarea terminada" : "Corrección enviada al alumno"); onChanged(); }
     catch (e: any) { toast.error(e.message); }
   };
   return (
     <div className="flex flex-col gap-3 rounded-lg border border-border p-3 sm:flex-row">
-      <a href={url ?? undefined} target="_blank" rel="noreferrer" className="block h-28 w-full shrink-0 overflow-hidden rounded-md bg-muted sm:w-40">
-        {url ? <img src={url} alt="Captura de resultados" className="h-full w-full object-cover" /> : <ImageIcon className="m-auto mt-10 h-6 w-6 text-muted-foreground" />}
-      </a>
+      <button onClick={() => url && setBig(true)} className="block h-28 w-full shrink-0 overflow-hidden rounded-md bg-muted sm:w-40" aria-label="Ver captura en grande">
+        {url ? <img src={url} alt="Captura de resultados" className="h-full w-full object-cover" /> : <ImageIcon className="m-auto h-6 w-6 text-muted-foreground" />}
+      </button>
+      <Dialog open={big} onOpenChange={setBig}>
+        <DialogContent className="max-w-5xl p-2">
+          <DialogHeader className="sr-only"><DialogTitle>Captura</DialogTitle></DialogHeader>
+          {url && <img src={url} alt="Captura de resultados" className="max-h-[85vh] w-full object-contain" />}
+        </DialogContent>
+      </Dialog>
       <div className="min-w-0 flex-1 space-y-2">
         <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-          <Badge variant={sub.status === "submitted" ? "default" : "secondary"}>{HW_LABEL[sub.status]}</Badge>
+          <Badge variant={sub.status === "submitted" ? "default" : "secondary"}>{sub.status === "submitted" ? "Por revisar" : HW_LABEL[sub.status]}</Badge>
+          {title && <span className="font-medium text-foreground">{title}</span>}
           {new Date(sub.created_at).toLocaleString("es-MX", { dateStyle: "medium", timeStyle: "short" })}
         </div>
         {sub.student_note && <p className="text-sm">“{sub.student_note}”</p>}
         <Textarea rows={2} placeholder="Comentario para el alumno" value={feedback} onChange={(e) => setFeedback(e.target.value)} />
         <div className="flex flex-wrap gap-2">
-          <Button size="sm" variant="outline" onClick={() => save("reviewed")}>Marcar revisada</Button>
+          <Button size="sm" variant="outline" onClick={() => save("reviewed")}>Pedir corrección</Button>
           <Button size="sm" onClick={() => save("done")}><CheckCircle2 className="mr-1 h-4 w-4" />Marcar terminada</Button>
         </div>
       </div>
