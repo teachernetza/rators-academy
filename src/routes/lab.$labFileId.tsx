@@ -18,7 +18,7 @@ export const Route = createFileRoute("/lab/$labFileId")({
 function LabPage() {
   const { labFileId } = Route.useParams();
   const { lesson: lessonId } = Route.useSearch();
-  const { profile, loading } = useAuth() as any;
+  const { profile, loading } = useAuth();
   const wrap = useRef<HTMLDivElement>(null);
   const [upload, setUpload] = useState(false);
   const labQ = useQuery({ queryKey: ["labhtml", labFileId], queryFn: () => loadLabHtml(labFileId), enabled: !loading, retry: false });
